@@ -1,0 +1,2679 @@
+/* =========================================================
+   AI PAGE
+   Nayla Seijin Shiki
+========================================================= */
+
+.ai-page {
+
+    min-height: 100vh;
+
+    overflow-x: hidden;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            180deg,
+            #071325,
+            #09182c
+        );
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.ai-hero {
+
+    position: relative;
+
+    min-height: 420px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            rgba(5,15,30,.82),
+            rgba(5,15,30,.88)
+        ),
+        url("../img/shrine.jpg")
+        center / cover no-repeat;
+
+}
+
+
+.ai-hero-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    max-width: 750px;
+
+    padding: 30px;
+
+}
+
+
+.ai-hero h1 {
+
+    margin: 20px 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 58px;
+
+    line-height: 1.15;
+
+    color: #f2d498;
+
+}
+
+
+.ai-hero p {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    line-height: 1.8;
+
+    color:
+        rgba(255,255,255,.7);
+
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.ai-section {
+
+    width: 100%;
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    padding: 100px 30px;
+
+    box-sizing: border-box;
+
+}
+
+
+.ai-intro {
+
+    width: 100%;
+
+    max-width: 700px;
+
+    margin: 0 auto;
+
+    text-align: center;
+
+}
+
+
+.ai-intro h2 {
+
+    margin: 18px 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 42px;
+
+    line-height: 1.25;
+
+}
+
+
+.ai-intro p {
+
+    margin: 0;
+
+    color:
+        rgba(255,255,255,.6);
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================================================
+   TOOLS GRID
+========================================================= */
+
+.ai-tools-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    gap: 22px;
+
+    margin-top: 60px;
+
+}
+
+
+/* =========================================================
+   TOOL CARD
+========================================================= */
+
+.ai-tool-card {
+
+    position: relative;
+
+    z-index: 1;
+
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 270px;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-radius: 22px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,.045);
+
+    font-family: inherit;
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    transition:
+        transform .35s ease,
+        background .35s ease,
+        border-color .35s ease,
+        box-shadow .35s ease;
+
+}
+
+
+.ai-tool-card:hover {
+
+    transform:
+        translateY(-8px);
+
+    background:
+        rgba(215,180,95,.08);
+
+    border-color:
+        rgba(215,180,95,.3);
+
+}
+
+
+.ai-tool-card:focus-visible {
+
+    outline:
+        2px solid
+        #d7b45f;
+
+    outline-offset: 4px;
+
+}
+
+
+.ai-tool-card:active {
+
+    transform:
+        translateY(-4px);
+
+}
+
+
+.ai-tool-card.active {
+
+    transform:
+        translateY(-8px);
+
+    background:
+        rgba(215,180,95,.10);
+
+    border-color:
+        #d7b45f;
+
+    box-shadow:
+        0 15px 35px
+        rgba(0,0,0,.25);
+
+}
+
+
+/* =========================================================
+   TOOL ICON
+========================================================= */
+
+.ai-tool-icon {
+
+    margin-bottom: 25px;
+
+    font-size: 42px;
+
+    line-height: 1;
+
+}
+
+
+/* =========================================================
+   TOOL TITLE
+========================================================= */
+
+.ai-tool-card h3 {
+
+    margin:
+        0 0 12px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 22px;
+
+    line-height: 1.35;
+
+}
+
+
+/* =========================================================
+   TOOL DESCRIPTION
+========================================================= */
+
+.ai-tool-card p {
+
+    min-height: 75px;
+
+    margin: 0;
+
+    color:
+        rgba(255,255,255,.55);
+
+    line-height: 1.7;
+
+}
+
+
+/* =========================================================
+   TOOL LINK
+========================================================= */
+
+.ai-tool-card span {
+
+    display: block;
+
+    margin-top: 20px;
+
+    color:
+        #d7b45f;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+}
+
+
+/* =========================================================
+   WORKSPACE
+========================================================= */
+
+.ai-workspace,
+.trivia-workspace {
+
+    width: 100%;
+
+    margin-top: 70px;
+
+    padding: 45px;
+
+    box-sizing: border-box;
+
+    border-radius: 25px;
+
+    background:
+        rgba(255,255,255,.045);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    box-shadow:
+        0 30px 70px
+        rgba(0,0,0,.3);
+
+}
+
+
+.ai-workspace {
+
+    display: none;
+
+}
+
+
+.ai-workspace.active {
+
+    display: block;
+
+    animation:
+        aiReveal .5s ease;
+
+}
+
+
+.trivia-workspace {
+
+    display: none;
+
+}
+
+
+.trivia-workspace.active {
+
+    display: block;
+
+    animation:
+        aiReveal .5s ease;
+
+}
+
+
+@keyframes aiReveal {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(25px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   AI WORKSPACE HEADER
+========================================================= */
+
+.ai-workspace-header {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: flex-start;
+
+    gap: 30px;
+
+    margin-bottom: 35px;
+
+}
+
+
+.ai-workspace-header h2 {
+
+    margin:
+        10px 0 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 34px;
+
+    line-height: 1.3;
+
+}
+
+
+.ai-close {
+
+    flex-shrink: 0;
+
+    width: 42px;
+
+    height: 42px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    font-size: 28px;
+
+    line-height: 42px;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,.08);
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+
+}
+
+
+.ai-close:hover {
+
+    background:
+        rgba(255,255,255,.15);
+
+    transform:
+        rotate(90deg);
+
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.ai-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    width: 100%;
+
+}
+
+
+.ai-form label {
+
+    display: block;
+
+    margin-top: 10px;
+
+    font-size: 14px;
+
+    color:
+        rgba(255,255,255,.7);
+
+}
+
+
+.ai-form input,
+.ai-form textarea,
+.ai-form select {
+
+    width: 100%;
+
+    padding:
+        15px 17px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    outline: none;
+
+    border-radius: 12px;
+
+    background:
+        #162337;
+
+    color: white;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 15px;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+.ai-form input:focus,
+.ai-form textarea:focus,
+.ai-form select:focus {
+
+    border-color:
+        rgba(215,180,95,.65);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(215,180,95,.08);
+
+}
+
+
+.ai-form textarea {
+
+    min-height: 150px;
+
+    resize: vertical;
+
+}
+
+
+.ai-form textarea::placeholder,
+.ai-form input::placeholder {
+
+    color:
+        rgba(255,255,255,.35);
+
+}
+
+
+/* =========================================================
+   CHARACTER COUNTER
+========================================================= */
+
+.ai-character-counter {
+
+    margin-top: -5px;
+
+    text-align: right;
+
+    font-size: 12px;
+
+    color:
+        rgba(255,255,255,.4);
+
+}
+
+
+.ai-character-counter.warning {
+
+    color:
+        #e6b86a;
+
+}
+
+
+/* =========================================================
+   GENERATE BUTTON
+========================================================= */
+
+.ai-generate-button {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 40px;
+
+    cursor: pointer;
+
+    background:
+        #d7b45f;
+
+    color:
+        #241805;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-weight: 600;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        opacity .3s ease;
+
+}
+
+
+.ai-generate-button:hover:not(:disabled) {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(215,180,95,.3);
+
+}
+
+
+.ai-generate-button:disabled {
+
+    cursor:
+        not-allowed;
+
+    opacity:
+        .65;
+
+}
+
+
+/* =========================================================
+   BUTTON SPINNER
+========================================================= */
+
+.ai-button-spinner {
+
+    display: inline-block;
+
+    width: 15px;
+
+    height: 15px;
+
+    margin-right: 8px;
+
+    vertical-align: -2px;
+
+    border:
+        2px solid
+        rgba(36,24,5,.25);
+
+    border-top-color:
+        currentColor;
+
+    border-radius: 50%;
+
+    animation:
+        aiSpin .7s linear infinite;
+
+}
+
+
+@keyframes aiSpin {
+
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.ai-loading {
+
+    padding: 30px;
+
+    text-align: center;
+
+}
+
+
+.ai-loading-icon {
+
+    font-size: 42px;
+
+    animation:
+        aiPulse 1.2s infinite ease-in-out;
+
+}
+
+
+.ai-loading p {
+
+    margin:
+        12px 0 5px;
+
+}
+
+
+.ai-loading small {
+
+    color:
+        rgba(255,255,255,.45);
+
+}
+
+
+@keyframes aiPulse {
+
+    0%,
+    100% {
+
+        transform:
+            scale(1);
+
+        opacity:
+            .7;
+
+    }
+
+    50% {
+
+        transform:
+            scale(1.15);
+
+        opacity:
+            1;
+
+    }
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.ai-error {
+
+    display: none;
+
+    margin-top: 15px;
+
+    padding:
+        14px 18px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(220,70,70,.12);
+
+    border:
+        1px solid
+        rgba(220,70,70,.25);
+
+    color:
+        #ffb5b5;
+
+    line-height: 1.6;
+
+    opacity: 0;
+
+    transform:
+        translateY(-5px);
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+
+}
+
+
+.ai-error.ai-error-show {
+
+    opacity: 1;
+
+    transform:
+        translateY(0);
+
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.ai-result {
+
+    width: 100%;
+
+    min-height: 220px;
+
+    margin-top: 40px;
+
+    padding: 35px;
+
+    box-sizing: border-box;
+
+    border-radius: 20px;
+
+    background:
+        #fffaf0;
+
+    color:
+        #513216;
+
+}
+
+
+.ai-result-placeholder {
+
+    min-height: 150px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    opacity: .5;
+
+}
+
+
+.ai-result-placeholder h3 {
+
+    margin:
+        0 0 10px;
+
+}
+
+
+.ai-result-placeholder p {
+
+    max-width: 600px;
+
+    margin: 0;
+
+    line-height: 1.7;
+
+}
+
+
+.ai-result-icon {
+
+    margin-bottom: 15px;
+
+    font-size: 45px;
+
+}
+
+
+/* =========================================================
+   GENERATED CONTAINER
+========================================================= */
+
+.ai-generated-container {
+
+    width: 100%;
+
+    height: auto;
+
+    display: none;
+
+    animation:
+        aiResultReveal .45s ease;
+
+}
+
+
+@keyframes aiResultReveal {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(10px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   RESULT HEADER
+========================================================= */
+
+.ai-result-header {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 15px;
+
+    font-size: 18px;
+
+}
+
+
+.ai-result-mode {
+
+    font-size: 13px;
+
+    opacity: .6;
+
+}
+
+
+/* =========================================================
+   GENERATED TEXT
+========================================================= */
+
+.ai-generated-text {
+
+    width: 100%;
+
+    height: auto;
+
+    box-sizing: border-box;
+
+    font-family:
+        "Noto Serif JP",
+        "Noto Serif",
+        serif;
+
+    font-size: 18px;
+
+    line-height: 2;
+
+    white-space: pre-wrap;
+
+    overflow-wrap: break-word;
+
+    word-break: normal;
+
+}
+
+
+.ai-generated-text.typing::after {
+
+    content:
+        "▋";
+
+    display: inline-block;
+
+    margin-left: 2px;
+
+    opacity: .65;
+
+    animation:
+        aiCursor .8s infinite;
+
+}
+
+
+@keyframes aiCursor {
+
+    0%,
+    45% {
+
+        opacity: 1;
+
+    }
+
+    46%,
+    100% {
+
+        opacity: 0;
+
+    }
+
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.ai-actions {
+
+    display: none;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+    opacity: 0;
+
+    transform:
+        translateY(8px);
+
+    transition:
+        opacity .35s ease,
+        transform .35s ease;
+
+}
+
+
+.ai-actions.show {
+
+    display: flex;
+
+    opacity: 1;
+
+    transform:
+        translateY(0);
+
+}
+
+
+.ai-action-button {
+
+    min-width: 140px;
+
+    padding:
+        12px 20px;
+
+    border:
+        1px solid
+        rgba(215,180,95,.2);
+
+    border-radius: 30px;
+
+    cursor: pointer;
+
+    background:
+        rgba(215,180,95,.12);
+
+    color:
+        #d7b45f;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    transition:
+        background .25s ease,
+        transform .25s ease,
+        border-color .25s ease;
+
+}
+
+
+.ai-action-button:hover:not(:disabled) {
+
+    transform:
+        translateY(-2px);
+
+    background:
+        rgba(215,180,95,.2);
+
+    border-color:
+        rgba(215,180,95,.45);
+
+}
+
+
+.ai-action-button:disabled {
+
+    cursor:
+        not-allowed;
+
+    opacity: .55;
+
+}
+
+
+.ai-action-button.success {
+
+    background:
+        rgba(100,180,120,.16);
+
+    border-color:
+        rgba(100,180,120,.4);
+
+    color:
+        #b8e6c2;
+
+}
+
+
+.ai-action-button.ai-primary-action {
+
+    background:
+        rgba(215,180,95,.15);
+
+    border-color:
+        rgba(215,180,95,.35);
+
+}
+
+
+.ai-action-button.ai-primary-action:hover {
+
+    background:
+        rgba(215,180,95,.25);
+
+    border-color:
+        rgba(215,180,95,.6);
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.ai-toast {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 30px;
+
+    z-index: 9999;
+
+    max-width:
+        min(90vw, 500px);
+
+    padding:
+        13px 22px;
+
+    border:
+        1px solid
+        rgba(215,180,95,.3);
+
+    border-radius: 40px;
+
+    background:
+        rgba(15,25,42,.95);
+
+    box-shadow:
+        0 15px 40px
+        rgba(0,0,0,.35);
+
+    color:
+        #f2d498;
+
+    font-size: 14px;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transform:
+        translate(-50%, 20px);
+
+    transition:
+        opacity .3s ease,
+        transform .3s ease;
+
+}
+
+
+.ai-toast.show {
+
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+
+}
+
+
+/* =========================================================
+   CLOSING
+========================================================= */
+
+.ai-closing {
+
+    padding:
+        80px 30px 120px;
+
+    text-align: center;
+
+}
+
+
+.ai-closing-symbol {
+
+    margin-bottom: 20px;
+
+    font-size: 50px;
+
+}
+
+
+.ai-closing h2 {
+
+    margin: 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 34px;
+
+    color:
+        #f2d498;
+
+}
+
+
+.ai-closing p {
+
+    max-width: 600px;
+
+    margin:
+        20px auto;
+
+    color:
+        rgba(255,255,255,.55);
+
+    line-height: 1.9;
+
+}
+
+
+/* =========================================================
+   NAYLA TRIVIA
+========================================================= */
+
+.trivia-header {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: flex-start;
+
+    gap: 30px;
+
+    margin-bottom: 45px;
+
+}
+
+
+.trivia-header h2 {
+
+    margin:
+        10px 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 36px;
+
+    color:
+        #f2d498;
+
+}
+
+
+.trivia-header p {
+
+    margin: 0;
+
+    color:
+        rgba(255,255,255,.55);
+
+}
+
+
+/* =========================================================
+   TRIVIA START
+========================================================= */
+
+.trivia-start {
+
+    max-width: 700px;
+
+    margin: 0 auto;
+
+    padding:
+        40px 20px;
+
+    text-align: center;
+
+}
+
+
+.trivia-robot {
+
+    margin-bottom: 20px;
+
+    font-size: 80px;
+
+    animation:
+        aiPulse 1.5s infinite;
+
+}
+
+
+.trivia-start h3 {
+
+    margin:
+        15px 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 34px;
+
+}
+
+
+.trivia-start p {
+
+    max-width: 600px;
+
+    margin:
+        0 auto 35px;
+
+    color:
+        rgba(255,255,255,.6);
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================================================
+   TRIVIA RULES
+========================================================= */
+
+.trivia-rules {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    margin-bottom: 35px;
+
+}
+
+
+.trivia-rules div {
+
+    min-width: 110px;
+
+    padding: 18px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,.04);
+
+}
+
+
+.trivia-rules strong {
+
+    display: block;
+
+    font-size: 25px;
+
+    color:
+        #d7b45f;
+
+}
+
+
+.trivia-rules span {
+
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 12px;
+
+    color:
+        rgba(255,255,255,.45);
+
+}
+
+
+/* =========================================================
+   TRIVIA START BUTTON
+========================================================= */
+
+.trivia-start-button {
+
+    padding:
+        15px 35px;
+
+    border: none;
+
+    border-radius: 40px;
+
+    cursor: pointer;
+
+    background:
+        #d7b45f;
+
+    color:
+        #241805;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-weight: 700;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+.trivia-start-button:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(215,180,95,.3);
+
+}
+
+
+/* =========================================================
+   TRIVIA STATUS
+========================================================= */
+
+.trivia-status {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.trivia-stat {
+
+    padding: 16px;
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    text-align: center;
+
+}
+
+
+.trivia-stat span {
+
+    display: block;
+
+    font-size: 11px;
+
+    color:
+        rgba(255,255,255,.4);
+
+    letter-spacing: 1px;
+
+}
+
+
+.trivia-stat strong {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color:
+        #d7b45f;
+
+    font-size: 18px;
+
+}
+
+
+/* =========================================================
+   TRIVIA PROGRESS
+========================================================= */
+
+.trivia-progress {
+
+    width: 100%;
+
+    height: 6px;
+
+    margin-bottom: 45px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,.08);
+
+}
+
+
+.trivia-progress-bar {
+
+    width: 0%;
+
+    height: 100%;
+
+    border-radius: 10px;
+
+    background:
+        #d7b45f;
+
+    transition:
+        width .4s ease;
+
+}
+
+
+/* =========================================================
+   TRIVIA AI QUESTION
+========================================================= */
+
+.trivia-ai {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 18px;
+
+    max-width: 850px;
+
+    margin:
+        0 auto 35px;
+
+}
+
+
+.trivia-ai-avatar {
+
+    flex-shrink: 0;
+
+    width: 55px;
+
+    height: 55px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(215,180,95,.12);
+
+    font-size: 28px;
+
+}
+
+
+.trivia-ai-bubble {
+
+    padding:
+        20px 25px;
+
+    border-radius:
+        18px 18px 18px 4px;
+
+    background:
+        rgba(255,255,255,.06);
+
+}
+
+
+.trivia-ai-bubble span {
+
+    font-size: 11px;
+
+    color:
+        #d7b45f;
+
+    letter-spacing: 1px;
+
+}
+
+
+.trivia-ai-bubble p {
+
+    margin:
+        8px 0 0;
+
+    font-size: 19px;
+
+    line-height: 1.7;
+
+}
+
+
+/* =========================================================
+   TRIVIA ANSWERS
+========================================================= */
+
+.trivia-answers {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+
+    max-width: 850px;
+
+    margin:
+        0 auto;
+
+}
+
+
+.trivia-answer {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding:
+        17px 20px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-radius: 15px;
+
+    cursor: pointer;
+
+    background:
+        rgba(255,255,255,.04);
+
+    color: white;
+
+    text-align: left;
+
+    font-family: inherit;
+
+    transition:
+        .25s ease;
+
+}
+
+
+.trivia-answer:hover:not(:disabled) {
+
+    transform:
+        translateY(-3px);
+
+    border-color:
+        rgba(215,180,95,.5);
+
+    background:
+        rgba(215,180,95,.08);
+
+}
+
+
+.trivia-answer:disabled {
+
+    cursor:
+        default;
+
+}
+
+
+.trivia-answer-letter {
+
+    width: 34px;
+
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(215,180,95,.12);
+
+    color:
+        #d7b45f;
+
+    font-weight: 600;
+
+}
+
+
+.trivia-answer.selected {
+
+    border-color:
+        #d7b45f;
+
+}
+
+
+.trivia-answer.correct {
+
+    border-color:
+        rgba(100,190,120,.7);
+
+    background:
+        rgba(100,190,120,.12);
+
+}
+
+
+.trivia-answer.wrong {
+
+    border-color:
+        rgba(220,80,80,.7);
+
+    background:
+        rgba(220,80,80,.12);
+
+}
+
+
+/* =========================================================
+   TRIVIA FEEDBACK
+========================================================= */
+
+.trivia-feedback {
+
+    display: none;
+
+    max-width: 850px;
+
+    margin:
+        20px auto;
+
+    padding:
+        18px 22px;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    border:
+        1px solid
+        rgba(215,180,95,.2);
+
+    border-radius: 15px;
+
+    background:
+        rgba(215,180,95,.08);
+
+    line-height: 1.6;
+
+}
+
+
+.trivia-feedback strong {
+
+    color:
+        #d7b45f;
+
+}
+
+
+/* =========================================================
+   TRIVIA NEXT
+========================================================= */
+
+.trivia-next {
+
+    display: none;
+
+    margin:
+        25px auto 0;
+
+    padding:
+        13px 25px;
+
+    border:
+        1px solid
+        rgba(215,180,95,.3);
+
+    border-radius: 30px;
+
+    cursor: pointer;
+
+    background:
+        rgba(215,180,95,.1);
+
+    color:
+        #f2d498;
+
+}
+
+
+.trivia-next:disabled {
+
+    cursor:
+        not-allowed;
+
+    opacity: .5;
+
+}
+
+
+/* =========================================================
+   TRIVIA FINAL
+========================================================= */
+
+.trivia-final {
+
+    padding:
+        50px 20px;
+
+    text-align: center;
+
+}
+
+
+.trivia-final-icon {
+
+    margin-bottom: 20px;
+
+    font-size: 75px;
+
+}
+
+
+.trivia-final h3 {
+
+    margin:
+        15px 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 38px;
+
+    color:
+        #f2d498;
+
+}
+
+
+.trivia-final p {
+
+    color:
+        rgba(255,255,255,.6);
+
+}
+
+
+.trivia-final-score {
+
+    display: flex;
+
+    flex-direction: column;
+
+    margin:
+        30px auto;
+
+}
+
+
+.trivia-final-score strong {
+
+    font-size: 50px;
+
+    color:
+        #d7b45f;
+
+}
+
+
+.trivia-final-score span {
+
+    color:
+        rgba(255,255,255,.4);
+
+}
+
+
+/* =========================================================
+   TRIVIA RANK
+========================================================= */
+
+.trivia-rank {
+
+    max-width: 600px;
+
+    margin:
+        30px auto;
+
+    padding:
+        25px;
+
+    border:
+        1px solid
+        rgba(215,180,95,.2);
+
+    border-radius: 20px;
+
+    background:
+        rgba(215,180,95,.06);
+
+    text-align: center;
+
+}
+
+
+.trivia-rank-icon {
+
+    font-size: 55px;
+
+}
+
+
+.trivia-rank-title {
+
+    margin:
+        10px 0 5px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 26px;
+
+    color:
+        #f2d498;
+
+}
+
+
+.trivia-rank p {
+
+    margin: 0;
+
+    color:
+        rgba(255,255,255,.55);
+
+}
+
+
+/* =========================================================
+   TRIVIA ACHIEVEMENTS
+========================================================= */
+
+.trivia-achievements {
+
+    max-width: 850px;
+
+    margin:
+        40px auto 0;
+
+}
+
+
+.trivia-achievements h4 {
+
+    margin:
+        0 0 20px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 22px;
+
+    color:
+        #f2d498;
+
+}
+
+
+.trivia-achievement-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+
+}
+
+
+.trivia-achievement {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding:
+        15px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,.04);
+
+}
+
+
+.trivia-achievement.unlocked {
+
+    border-color:
+        rgba(215,180,95,.25);
+
+    background:
+        rgba(215,180,95,.06);
+
+}
+
+
+.trivia-achievement-icon {
+
+    flex-shrink: 0;
+
+    font-size: 30px;
+
+}
+
+
+.trivia-achievement-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    flex: 1;
+
+}
+
+
+.trivia-achievement-content strong {
+
+    color:
+        #f2d498;
+
+}
+
+
+.trivia-achievement-content span {
+
+    color:
+        rgba(255,255,255,.5);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+}
+
+
+.trivia-achievement-check {
+
+    color:
+        #9fddb0;
+
+    font-weight: 700;
+
+}
+
+
+.trivia-achievement-empty {
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    text-align: center;
+
+    color:
+        rgba(255,255,255,.5);
+
+}
+
+
+.trivia-achievement-empty span {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 30px;
+
+}
+
+
+.trivia-achievement-empty p {
+
+    margin: 0;
+
+}
+
+
+/* =========================================================
+   NAYLA MEMORY
+========================================================= */
+
+.nayla-memory {
+
+    max-width: 850px;
+
+    margin:
+        45px auto 0;
+
+}
+
+
+.nayla-memory h4 {
+
+    margin:
+        0 0 20px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 22px;
+
+    color:
+        #f2d498;
+
+}
+
+
+.nayla-memory-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+
+}
+
+
+.nayla-memory-card {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 13px;
+
+    padding:
+        17px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+
+}
+
+
+.nayla-memory-card:hover {
+
+    transform:
+        translateY(-3px);
+
+    border-color:
+        rgba(215,180,95,.25);
+
+    background:
+        rgba(215,180,95,.05);
+
+}
+
+
+.nayla-memory-icon {
+
+    flex-shrink: 0;
+
+    font-size: 25px;
+
+}
+
+
+.nayla-memory-card p {
+
+    margin: 0;
+
+    color:
+        rgba(255,255,255,.58);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .ai-tools-grid {
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 1000px) {
+
+    .ai-tools-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .ai-hero {
+
+        min-height: 350px;
+
+    }
+
+
+    .ai-hero h1 {
+
+        font-size: 38px;
+
+    }
+
+
+    .ai-hero p {
+
+        font-size: 16px;
+
+    }
+
+
+    .ai-section {
+
+        padding:
+            70px 18px;
+
+    }
+
+
+    .ai-intro h2 {
+
+        font-size: 32px;
+
+    }
+
+
+    .ai-tools-grid {
+
+        grid-template-columns:
+            1fr;
+
+        gap: 16px;
+
+        margin-top: 40px;
+
+    }
+
+
+    .ai-tool-card {
+
+        min-height: 240px;
+
+        padding: 25px;
+
+    }
+
+
+    .ai-workspace,
+    .trivia-workspace {
+
+        margin-top: 50px;
+
+        padding:
+            25px 18px;
+
+        border-radius: 20px;
+
+    }
+
+
+    .ai-workspace-header {
+
+        gap: 15px;
+
+    }
+
+
+    .ai-workspace-header h2 {
+
+        font-size: 27px;
+
+    }
+
+
+    .ai-result {
+
+        padding:
+            25px 20px;
+
+        border-radius: 16px;
+
+    }
+
+
+    .ai-generated-text {
+
+        font-size: 16px;
+
+        line-height: 1.9;
+
+    }
+
+
+    .ai-result-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+    .ai-actions {
+
+        width: 100%;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .ai-action-button {
+
+        width: 100%;
+
+        min-width: 0;
+
+    }
+
+
+    .ai-toast {
+
+        bottom: 20px;
+
+        padding:
+            12px 18px;
+
+        font-size: 13px;
+
+    }
+
+
+    /* =====================================================
+       TRIVIA MOBILE
+    ===================================================== */
+
+    .trivia-header {
+
+        gap: 15px;
+
+    }
+
+
+    .trivia-header h2 {
+
+        font-size: 27px;
+
+    }
+
+
+    .trivia-start {
+
+        padding:
+            25px 5px;
+
+    }
+
+
+    .trivia-robot {
+
+        font-size: 65px;
+
+    }
+
+
+    .trivia-start h3 {
+
+        font-size: 28px;
+
+    }
+
+
+    .trivia-rules {
+
+        gap: 8px;
+
+    }
+
+
+    .trivia-rules div {
+
+        min-width: 0;
+
+        flex: 1;
+
+        padding:
+            13px 8px;
+
+    }
+
+
+    .trivia-status {
+
+        gap: 8px;
+
+    }
+
+
+    .trivia-stat {
+
+        padding:
+            12px 5px;
+
+    }
+
+
+    .trivia-stat strong {
+
+        font-size: 14px;
+
+    }
+
+
+    .trivia-ai {
+
+        gap: 10px;
+
+    }
+
+
+    .trivia-ai-avatar {
+
+        width: 42px;
+
+        height: 42px;
+
+        font-size: 22px;
+
+    }
+
+
+    .trivia-ai-bubble {
+
+        padding: 15px;
+
+    }
+
+
+    .trivia-ai-bubble p {
+
+        font-size: 16px;
+
+    }
+
+
+    .trivia-answers {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .trivia-final h3 {
+
+        font-size: 30px;
+
+    }
+
+
+    .trivia-achievement-list,
+    .nayla-memory-list {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .trivia-rank {
+
+        padding: 20px;
+
+    }
+
+
+    .trivia-rank-title {
+
+        font-size: 22px;
+
+    }
+
+}

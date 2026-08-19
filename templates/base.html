@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Araki Nayla Suji Aurelia | Seijin Shiki 2027
+    </title>
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Serif+JP:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet">
+
+
+<!-- GLOBAL CSS -->
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/variables.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/layout.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/components.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/utilities.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/animations.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/about.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/journey.css') }}">
+
+      <link rel="stylesheet"
+      href="{{ url_for(
+          'static',
+          filename='css/gallery.css'
+      ) }}">
+
+
+<!-- NAVIGATION -->
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/navbar.css') }}">
+
+
+<!-- FOOTER -->
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/footer.css') }}">
+
+
+<!-- HERO -->
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/hero.css') }}">
+
+
+<!-- OPENING -->
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/opening.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/opening-stars.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/opening-sakura.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/opening-torii.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/guestbook.css') }}">
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/omikuji.css') }}">
+    
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/hall-of-blessings.css') }}">
+    
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/developer-letter.css') }}">
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/closing-section-guestbook.css') }}">
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/ai.css') }}">
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/photobooth.css') }}">
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/countdown.css') }}">
+</head>
+
+
+
+<body>
+
+    {% if request.endpoint == 'home' %}
+
+        <div class="ceremony-page">
+
+            {% include "partials/opening.html" %}
+
+        </div>
+
+    {% endif %}
+
+
+    {% include "partials/navbar.html" %}
+
+
+    <main>
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+    {% include "partials/footer.html" %}
+
+            <script
+            src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+            </script>
+
+            <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+            <script src="{{ url_for('static', filename='js/guestbook.js') }}"></script>
+            
+            <script src="{{ url_for('static', filename='js/omikuji.js') }}"></script>
+
+            <script src="{{ url_for('static', filename='js/hall_of_blessings.js') }}"></script>
+
+            <script src="{{ url_for('static', filename='js/ai.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/ai-i18n.js.js') }}"></script>
+
+            <script
+            src="{{ url_for('static', filename='js/photobooth.js') }}"
+            ></script>
+                  <script
+            src="{{ url_for('static', filename='js/countdown.js') }}"
+            ></script>
+                              <script
+            src="{{ url_for('static', filename='js/navbar.js') }}"
+            ></script>
+      <script     
+      src="{{ url_for('static', filename='js/developer-letter.js') }}">
+      </script>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+      <script src="{{ url_for('static', filename='js/supabase.js') }}"></script>
+
+    {% if request.endpoint == 'home' %}
+
+        <script src="{{ url_for('static', filename='js/opening.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/stars.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/sakura.js') }}"></script>
+
+    {% endif %}
+
+
+    {% block js %}
+
+    {% endblock %}
+
+</body>
+
+</html>

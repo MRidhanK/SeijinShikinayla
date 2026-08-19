@@ -1,0 +1,922 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="ai-page">
+
+    <!-- ==========================================
+         HERO
+    ========================================== -->
+
+    <section class="ai-hero">
+
+        <div class="ai-hero-overlay"></div>
+
+        <div class="ai-hero-content">
+
+            <span
+                class="section-label"
+                data-i18n="ai.heroLabel">
+                人工知能 • AI SHRINE
+            </span>
+
+            <h1 data-i18n="ai.heroTitle">
+                A Little AI For Nayla
+            </h1>
+
+            <p data-i18n="ai.heroDescription">
+                Create a beautiful message, wish,
+                or letter for Nayla's Seijin Shiki.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         AI INTRO
+    ========================================== -->
+
+    <section class="ai-section">
+
+        <div class="ai-intro">
+
+            <span
+                class="section-label"
+                data-i18n="ai.introLabel">
+                ✦ CREATE SOMETHING SPECIAL ✦
+            </span>
+
+            <h2 data-i18n="ai.introTitle">
+                What would you like to write?
+            </h2>
+
+            <p data-i18n="ai.introDescription">
+                Let the AI help you turn your thoughts
+                into a meaningful message for Nayla.
+            </p>
+
+        </div>
+
+
+        <!-- ==========================================
+             AI TOOLS
+        ========================================== -->
+
+        <div class="ai-tools-grid">
+
+
+            <!-- ======================================
+                 WISH GENERATOR
+            ======================================= -->
+
+            <button
+                type="button"
+                class="ai-tool-card"
+                data-ai-mode="wish">
+
+                <div class="ai-tool-icon">
+                    🌸
+                </div>
+
+                <h3 data-i18n="ai.tools.wish.title">
+                    Wish Generator
+                </h3>
+
+                <p data-i18n="ai.tools.wish.description">
+                    Create a beautiful birthday
+                    or Seijin Shiki wish.
+                </p>
+
+                <span data-i18n="ai.tools.wish.button">
+                    Create Wish →
+                </span>
+
+            </button>
+
+
+            <!-- ======================================
+                 MESSAGE ENHANCER
+            ======================================= -->
+
+            <button
+                type="button"
+                class="ai-tool-card"
+                data-ai-mode="enhance">
+
+                <div class="ai-tool-icon">
+                    ✨
+                </div>
+
+                <h3 data-i18n="ai.tools.enhance.title">
+                    Message Enhancer
+                </h3>
+
+                <p data-i18n="ai.tools.enhance.description">
+                    Turn your simple message
+                    into something more heartfelt.
+                </p>
+
+                <span data-i18n="ai.tools.enhance.button">
+                    Enhance Message →
+                </span>
+
+            </button>
+
+
+            <!-- ======================================
+                 SEIJIN MESSAGE
+            ======================================= -->
+
+            <button
+                type="button"
+                class="ai-tool-card"
+                data-ai-mode="fortune">
+
+                <div class="ai-tool-icon">
+                    🎋
+                </div>
+
+                <h3 data-i18n="ai.tools.fortune.title">
+                    Seijin Message
+                </h3>
+
+                <p data-i18n="ai.tools.fortune.description">
+                    Receive a small message
+                    about growth and new beginnings.
+                </p>
+
+                <span data-i18n="ai.tools.fortune.button">
+                    Get Message →
+                </span>
+
+            </button>
+
+
+            <!-- ======================================
+                 LETTER GENERATOR
+            ======================================= -->
+
+            <button
+                type="button"
+                class="ai-tool-card"
+                data-ai-mode="letter">
+
+                <div class="ai-tool-icon">
+                    💌
+                </div>
+
+                <h3 data-i18n="ai.tools.letter.title">
+                    Letter Generator
+                </h3>
+
+                <p data-i18n="ai.tools.letter.description">
+                    Create a longer personal letter
+                    for Nayla.
+                </p>
+
+                <span data-i18n="ai.tools.letter.button">
+                    Write Letter →
+                </span>
+
+            </button>
+
+
+            <!-- ======================================
+                 NAYLA TRIVIA MASTER
+            ======================================= -->
+
+            <button
+                type="button"
+                class="ai-tool-card ai-trivia-card"
+                data-ai-mode="trivia">
+
+                <div class="ai-tool-icon">
+                    🤖
+                </div>
+
+                <h3 data-i18n="ai.tools.trivia.title">
+                    Nayla Trivia Master
+                </h3>
+
+                <p data-i18n="ai.tools.trivia.description">
+                    Challenge your knowledge about Nayla
+                    in an AI-powered quiz battle.
+                </p>
+
+                <span data-i18n="ai.tools.trivia.button">
+                    Start Trivia Battle →
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <!-- ==========================================
+             AI WORKSPACE
+        ========================================== -->
+
+        <section
+            id="aiWorkspace"
+            class="ai-workspace">
+
+
+            <!-- ======================================
+                 WORKSPACE HEADER
+            ======================================= -->
+
+            <div class="ai-workspace-header">
+
+                <div>
+
+                    <span
+                        id="aiModeLabel"
+                        class="section-label">
+                        🌸 AI WISH GENERATOR
+                    </span>
+
+                    <h2 id="aiWorkspaceTitle">
+                        Create Your Wish
+                    </h2>
+
+                    <p id="aiWorkspaceDescription">
+                        Write your thoughts and let AI
+                        turn them into a beautiful message.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="closeAI"
+                    class="ai-close"
+                    aria-label="Close AI workspace">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <!-- ======================================
+                 AI FORM
+            ======================================= -->
+
+            <div class="ai-form">
+
+
+                <!-- NAME -->
+
+                <div class="ai-field">
+
+                    <label
+                        for="aiName"
+                        data-i18n="ai.form.name">
+                        Your name
+                    </label>
+
+                    <input
+                        id="aiName"
+                        type="text"
+                        maxlength="50"
+                        autocomplete="name"
+                        data-i18n-placeholder="ai.form.namePlaceholder"
+                        placeholder="Your name (optional)">
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div class="ai-field">
+
+                    <label
+                        for="aiPrompt"
+                        data-i18n="ai.form.message">
+                        What would you like to say?
+                    </label>
+
+                    <textarea
+                        id="aiPrompt"
+                        maxlength="1000"
+                        rows="7"
+                        data-i18n-placeholder="ai.form.messagePlaceholder"
+                        placeholder="Write your thoughts here..."></textarea>
+
+                    <div class="ai-character-counter">
+
+                        <span id="aiCharCount">
+                            0
+                        </span>
+
+                        / 1000
+
+                    </div>
+
+                </div>
+
+
+                <!-- STYLE -->
+
+                <div class="ai-field">
+
+                    <label
+                        for="aiStyle"
+                        data-i18n="ai.form.style">
+                        Writing style
+                    </label>
+
+                    <select id="aiStyle">
+
+                        <option
+                            value="heartfelt"
+                            data-i18n="ai.styles.heartfelt">
+                            Heartfelt
+                        </option>
+
+                        <option
+                            value="sweet"
+                            data-i18n="ai.styles.sweet">
+                            Sweet & Cute
+                        </option>
+
+                        <option
+                            value="elegant"
+                            data-i18n="ai.styles.elegant">
+                            Elegant
+                        </option>
+
+                        <option
+                            value="simple"
+                            data-i18n="ai.styles.simple">
+                            Simple
+                        </option>
+
+                        <option
+                            value="poetic"
+                            data-i18n="ai.styles.poetic">
+                            Poetic
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- GENERATE -->
+
+                <button
+                    type="button"
+                    id="generateAI"
+                    class="ai-generate-button"
+                    data-i18n="ai.form.generate">
+
+                    ✨ Generate
+
+                </button>
+
+
+                <!-- ==================================
+                     LOADING
+                =================================== -->
+
+                <div
+                    id="aiLoading"
+                    class="ai-loading"
+                    style="display: none;">
+
+                    <div class="ai-loading-icon">
+                        🌸
+                    </div>
+
+                    <p data-i18n="ai.loading.title">
+                        Writing something special...
+                    </p>
+
+                    <small data-i18n="ai.loading.description">
+                        Please wait a moment.
+                    </small>
+
+                </div>
+
+
+                <!-- ==================================
+                     ERROR
+                =================================== -->
+
+                <div
+                    id="aiError"
+                    class="ai-error"
+                    style="display: none;">
+                </div>
+
+            </div>
+
+
+            <!-- ======================================
+                 RESULT
+            ======================================= -->
+
+            <div
+                id="aiResult"
+                class="ai-result">
+
+
+                <!-- INITIAL STATE -->
+
+                <div
+                    id="aiResultPlaceholder"
+                    class="ai-result-placeholder">
+
+                    <div class="ai-result-icon">
+                        ✉️
+                    </div>
+
+                    <h3 data-i18n="ai.result.placeholderTitle">
+                        Your message will appear here.
+                    </h3>
+
+                    <p data-i18n="ai.result.placeholderDescription">
+                        Choose an AI tool above,
+                        write your thoughts,
+                        and let the AI create something special.
+                    </p>
+
+                </div>
+
+
+                <!-- GENERATED RESULT -->
+
+                <div
+                    id="aiGeneratedContainer"
+                    class="ai-generated-container"
+                    style="display: none;">
+
+                    <div class="ai-result-header">
+
+                        <span data-i18n="ai.result.message">
+                            🌸 Your Message
+                        </span>
+
+                        <span
+                            id="aiResultMode"
+                            class="ai-result-mode">
+
+                            AI Generated
+
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="aiGeneratedText"
+                        class="ai-generated-text">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ======================================
+                 ACTIONS
+            ======================================= -->
+
+            <div
+                id="aiActions"
+                class="ai-actions">
+
+                <button
+                    type="button"
+                    id="copyAI"
+                    class="ai-action-button"
+                    data-i18n="ai.actions.copy">
+
+                    📋 Copy
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="regenerateAI"
+                    class="ai-action-button"
+                    data-i18n="ai.actions.regenerate">
+
+                    🔄 Regenerate
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="useGuestbook"
+                    class="ai-action-button ai-primary-action"
+                    data-i18n="ai.actions.guestbook">
+
+                    🌸 Use in Guestbook
+
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ==========================================
+             NAYLA TRIVIA MASTER
+        ========================================== -->
+
+        <section
+            id="triviaWorkspace"
+            class="trivia-workspace">
+
+
+            <!-- HEADER -->
+
+            <div class="trivia-header">
+
+                <div>
+
+                    <span
+                        class="section-label"
+                        data-i18n="trivia.header.label">
+                        🤖 AI TRIVIA BATTLE
+                    </span>
+
+                    <h2 data-i18n="trivia.header.title">
+                        Nayla Trivia Master
+                    </h2>
+
+                    <p data-i18n="trivia.header.description">
+                        How well do you really know Nayla?
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="closeTrivia"
+                    class="ai-close"
+                    aria-label="Close Trivia">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <!-- START SCREEN -->
+
+            <div
+                id="triviaStart"
+                class="trivia-start">
+
+                <div class="trivia-robot">
+                    🤖
+                </div>
+
+                <span
+                    class="section-label"
+                    data-i18n="trivia.start.label">
+                    NAYLA AI
+                </span>
+
+                <h3 data-i18n="trivia.start.title">
+                    I'll test your knowledge!
+                </h3>
+
+                <p data-i18n="trivia.start.description">
+                    Answer questions about Nayla,
+                    JKT48, her journey, performances,
+                    and memorable moments.
+                </p>
+
+
+                <div class="trivia-rules">
+
+                    <div>
+
+                        <strong>5</strong>
+
+                        <span data-i18n="trivia.rules.questions">
+                            Questions
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <strong>∞</strong>
+
+                        <span data-i18n="trivia.rules.challenges">
+                            Challenges
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <strong>👑</strong>
+
+                        <span data-i18n="trivia.rules.rank">
+                            Master Rank
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="startTrivia"
+                    class="trivia-start-button"
+                    data-i18n="trivia.start.button">
+
+                    ⚔️ START BATTLE
+
+                </button>
+
+            </div>
+
+
+            <!-- GAME -->
+
+            <div
+                id="triviaGame"
+                class="trivia-game"
+                style="display:none;">
+
+
+                <!-- STATUS -->
+
+                <div class="trivia-status">
+
+                    <div class="trivia-stat">
+
+                        <span data-i18n="trivia.game.question">
+                            QUESTION
+                        </span>
+
+                        <strong id="triviaQuestionNumber">
+                            1 / 5
+                        </strong>
+
+                    </div>
+
+                    <div class="trivia-stat">
+
+                        <span data-i18n="trivia.game.score">
+                            SCORE
+                        </span>
+
+                        <strong id="triviaScore">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div class="trivia-stat">
+
+                        <span data-i18n="trivia.game.level">
+                            LEVEL
+                        </span>
+
+                        <strong id="triviaDifficulty">
+                            EASY
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROGRESS -->
+
+                <div class="trivia-progress">
+
+                    <div
+                        id="triviaProgressBar"
+                        class="trivia-progress-bar">
+                    </div>
+
+                </div>
+
+
+                <!-- AI -->
+
+                <div class="trivia-ai">
+
+                    <div class="trivia-ai-avatar">
+                        🤖
+                    </div>
+
+                    <div class="trivia-ai-bubble">
+
+                        <span>
+                            NAYLA AI
+                        </span>
+
+                        <p
+                            id="triviaQuestion"
+                            data-i18n="trivia.game.defaultQuestion">
+                            I have a question for you...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ANSWERS -->
+
+                <div
+                    id="triviaAnswers"
+                    class="trivia-answers">
+                </div>
+
+
+                <!-- FEEDBACK -->
+
+                <div
+                    id="triviaFeedback"
+                    class="trivia-feedback"
+                    style="display:none;">
+                </div>
+
+
+                <!-- NEXT -->
+
+                <button
+                    type="button"
+                    id="nextTrivia"
+                    class="trivia-next"
+                    style="display:none;"
+                    data-i18n="trivia.game.next">
+
+                    Next Question →
+
+                </button>
+
+            </div>
+
+
+            <!-- RESULT -->
+
+            <div
+                id="triviaResult"
+                class="trivia-final"
+                style="display:none;">
+
+                <div class="trivia-final-icon">
+                    👑
+                </div>
+
+                <span
+                    class="section-label"
+                    data-i18n="trivia.result.label">
+                    TRIVIA COMPLETE
+                </span>
+
+                <h3 id="triviaFinalTitle">
+                    Nayla Master
+                </h3>
+
+                <p id="triviaFinalMessage">
+                    Amazing!
+                </p>
+
+
+                <div class="trivia-final-score">
+
+                    <strong id="triviaFinalScore">
+                        0 / 5
+                    </strong>
+
+                    <span data-i18n="trivia.result.finalScore">
+                        Final Score
+                    </span>
+
+                </div>
+
+
+                <!-- RANK -->
+
+                <div
+                    id="triviaRank"
+                    class="trivia-rank">
+
+                    <div
+                        id="triviaRankIcon"
+                        class="trivia-rank-icon">
+                        🌱
+                    </div>
+
+                    <h4
+                        id="triviaRankTitle"
+                        class="trivia-rank-title">
+                        Casual Fan
+                    </h4>
+
+                    <p id="triviaRankDescription">
+                        Keep exploring Nayla's journey!
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="triviaAchievements"
+                    class="trivia-achievements">
+
+                    <h4 data-i18n="trivia.result.achievements">
+                        🏆 Achievements
+                    </h4>
+
+                    <div
+                        id="triviaAchievementList"
+                        class="trivia-achievement-list">
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="naylaMemory"
+                    class="nayla-memory">
+
+                    <h4 data-i18n="trivia.result.memory">
+                        🌸 A Little More About Nayla
+                    </h4>
+
+                    <div
+                        id="naylaMemoryList"
+                        class="nayla-memory-list">
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="restartTrivia"
+                    class="trivia-start-button"
+                    data-i18n="trivia.result.playAgain">
+
+                    🔄 PLAY AGAIN
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </section>
+
+
+    <!-- ==========================================
+         CLOSING
+    ========================================== -->
+
+    <section class="ai-closing">
+
+        <div class="ai-closing-symbol">
+            ⛩️
+        </div>
+
+        <h2 data-i18n="ai.closing.title">
+            Words become memories.
+        </h2>
+
+        <p data-i18n="ai.closing.description">
+            Maybe your message is only a few lines,
+            but it may become a small memory
+            someone remembers for a long time.
+        </p>
+
+        <div class="ai-closing-decoration">
+            ✦　🌸　✦
+        </div>
+
+    </section>
+
+</section>
+
+
+<div
+    id="aiToast"
+    class="ai-toast"
+    role="status"
+    aria-live="polite">
+</div>
+
+
+{% endblock %}

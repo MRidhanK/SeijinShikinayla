@@ -1,0 +1,691 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="photobooth-page">
+
+    <div class="photobooth-shell">
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <header class="photobooth-header">
+
+            <div class="eyebrow">
+                NAYLA · BIRTHDAY PROJECT
+            </div>
+
+            <h1>
+                <span data-i18n="photobooth.title">
+                    Capture the Moment
+                </span>
+                <span>♡</span>
+            </h1>
+
+            <p data-i18n="photobooth.subtitle">
+                Take three photos and create your own little birthday memory.
+            </p>
+
+        </header>
+
+
+        <!-- =====================================================
+             MAIN
+        ====================================================== -->
+
+        <main class="photobooth-layout">
+
+
+            <!-- =================================================
+                 CAMERA
+            ================================================== -->
+
+            <section class="camera-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <div class="section-kicker">
+
+                            <span class="kicker-icon">◉</span>
+
+                            <span data-i18n="photobooth.camera">
+                                CAMERA
+                            </span>
+
+                        </div>
+
+                        <h2 data-i18n="photobooth.ready">
+                            Ready when you are
+                        </h2>
+
+                    </div>
+
+                    <div class="sparkle">
+                        ✦
+                    </div>
+
+                </div>
+
+
+                <!-- CAMERA PREVIEW -->
+
+                <div class="camera-wrapper">
+
+                    <video
+                        id="camera"
+                        autoplay
+                        playsinline
+                        muted>
+                    </video>
+
+
+                    <div
+                        id="cameraPlaceholder"
+                        class="camera-placeholder">
+
+                        <div class="camera-placeholder-icon">
+                            ◉
+                        </div>
+
+                        <strong data-i18n="photobooth.cameraPreview">
+                            Camera preview
+                        </strong>
+
+                        <span data-i18n="photobooth.startCameraHint">
+                            Klik "Start Camera" untuk memulai
+                        </span>
+
+                    </div>
+
+
+                    <div class="camera-badge">
+
+                        <span class="live-dot"></span>
+
+                        <span data-i18n="photobooth.camera">
+                            CAMERA
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="countdown"
+                        class="countdown hidden">
+                        3
+                    </div>
+
+
+                    <div
+                        id="captureFlash"
+                        class="capture-flash">
+                    </div>
+
+                </div>
+
+
+                <!-- CAMERA BUTTON -->
+
+                <div class="camera-controls">
+
+                    <button
+                        id="startCameraBtn"
+                        class="btn btn-outline"
+                        type="button">
+
+                        <span>▣</span>
+
+                        <span data-i18n="photobooth.startCamera">
+                            Start Camera
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        id="captureBtn"
+                        class="btn btn-capture"
+                        type="button"
+                        disabled>
+
+                        <span class="shutter-icon"></span>
+
+                        <span id="captureBtnText">
+                            Take Photo 1
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- SETTINGS -->
+
+                <div class="settings-card">
+
+                    <!-- COUNTDOWN -->
+
+                    <div class="setting-row">
+
+                        <div class="setting-label">
+
+                            <span class="setting-icon">
+                                ◷
+                            </span>
+
+                            <span data-i18n="photobooth.countdown">
+                                COUNTDOWN
+                            </span>
+
+                        </div>
+
+
+                        <div class="setting-options">
+
+                            <button
+                                class="setting-option active"
+                                data-countdown="3"
+                                type="button">
+                                3s
+                            </button>
+
+                            <button
+                                class="setting-option"
+                                data-countdown="5"
+                                type="button">
+                                5s
+                            </button>
+
+                            <button
+                                class="setting-option"
+                                data-countdown="10"
+                                type="button">
+                                10s
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MIRROR -->
+
+                    <div class="setting-row">
+
+                        <div class="setting-label">
+
+                            <span class="setting-icon">
+                                ◫
+                            </span>
+
+                            <span data-i18n="photobooth.mirror">
+                                MIRROR
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            id="mirrorBtn"
+                            class="toggle-button active"
+                            type="button">
+
+                            <span class="toggle-track">
+                                <span class="toggle-dot"></span>
+                            </span>
+
+                            <span
+                                class="toggle-text"
+                                id="mirrorText"
+                                data-i18n="common.on">
+                                ON
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- FILTER -->
+
+                    <div class="setting-row">
+
+                        <div class="setting-label">
+
+                            <span class="setting-icon">
+                                ✧
+                            </span>
+
+                            <span data-i18n="photobooth.filter">
+                                FILTER
+                            </span>
+
+                        </div>
+
+
+                        <div class="setting-options filter-options">
+
+                            <button
+                                class="filter-option active"
+                                data-filter="original"
+                                type="button"
+                                data-i18n="filters.original">
+                                Original
+                            </button>
+
+                            <button
+                                class="filter-option"
+                                data-filter="soft"
+                                type="button"
+                                data-i18n="filters.soft">
+                                Soft
+                            </button>
+
+                            <button
+                                class="filter-option"
+                                data-filter="warm"
+                                type="button"
+                                data-i18n="filters.warm">
+                                Warm
+                            </button>
+
+                            <button
+                                class="filter-option"
+                                data-filter="bw"
+                                type="button"
+                                data-i18n="filters.bw">
+                                B&W
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROGRESS -->
+
+                <div
+                    class="photo-progress"
+                    aria-label="Photo progress">
+
+                    <div
+                        class="progress-step active"
+                        data-step="1">
+                        <span>01</span>
+                    </div>
+
+                    <div class="progress-line"></div>
+
+                    <div
+                        class="progress-step"
+                        data-step="2">
+                        <span>02</span>
+                    </div>
+
+                    <div class="progress-line"></div>
+
+                    <div
+                        class="progress-step"
+                        data-step="3">
+                        <span>03</span>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 RESULT FRAME
+            ================================================== -->
+
+            <section class="result-panel">
+
+
+                <!-- RESULT HEADER -->
+
+                <div class="result-heading">
+
+                    <div>
+
+                        <div class="section-kicker"
+                             data-i18n="photobooth.yourFrame">
+                            YOUR FRAME
+                        </div>
+
+                        <h2 id="frameName">
+                            Seijin Sakura
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        id="changeFrameBtn"
+                        class="change-frame-btn"
+                        type="button">
+
+                        <span>✦</span>
+
+                        <span data-i18n="photobooth.changeFrame">
+                            Ganti Frame
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- =================================================
+                     FRAME
+                ================================================== -->
+
+                <div
+                    id="photoboothResult"
+                    class="photobooth-result"
+                    data-theme="seijin">
+
+
+                    <!-- FRAME TOP -->
+
+                    <div class="frame-top-decoration">
+
+                        <span class="flower flower-left">
+                            ✿
+                        </span>
+
+
+                        <div class="frame-brand">
+
+                            <span>
+                                NAYLA
+                            </span>
+
+                            <strong>
+                                SEIJIN
+                            </strong>
+
+                            <small>
+                                BIRTHDAY
+                            </small>
+
+                        </div>
+
+
+                        <span class="flower flower-right">
+                            ✿
+                        </span>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         PHOTOS
+                    ================================================== -->
+
+                    <div class="frame-photos">
+
+
+                        <!-- PHOTO 01 -->
+
+                        <div
+                            class="photo-slot"
+                            data-slot="1">
+
+                            <div class="slot-number">
+                                01
+                            </div>
+
+
+                            <div class="slot-placeholder">
+
+                                <span class="slot-camera">
+                                    ◉
+                                </span>
+
+                                <small data-i18n="photobooth.photo01">
+                                    PHOTO 01
+                                </small>
+
+                            </div>
+
+
+                            <img
+                                id="photo1"
+                                alt="Photo 01">
+
+                        </div>
+
+
+                        <!-- PHOTO 02 -->
+
+                        <div
+                            class="photo-slot"
+                            data-slot="2">
+
+                            <div class="slot-number">
+                                02
+                            </div>
+
+
+                            <div class="slot-placeholder">
+
+                                <span class="slot-camera">
+                                    ◉
+                                </span>
+
+                                <small data-i18n="photobooth.photo02">
+                                    PHOTO 02
+                                </small>
+
+                            </div>
+
+
+                            <img
+                                id="photo2"
+                                alt="Photo 02">
+
+                        </div>
+
+
+                        <!-- PHOTO 03 -->
+
+                        <div
+                            class="photo-slot"
+                            data-slot="3">
+
+                            <div class="slot-number">
+                                03
+                            </div>
+
+
+                            <div class="slot-placeholder">
+
+                                <span class="slot-camera">
+                                    ◉
+                                </span>
+
+                                <small data-i18n="photobooth.photo03">
+                                    PHOTO 03
+                                </small>
+
+                            </div>
+
+
+                            <img
+                                id="photo3"
+                                alt="Photo 03">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         FOOTER
+                    ================================================== -->
+
+                    <div class="frame-footer">
+
+                        <div
+                            class="sakura-branch"
+                            aria-hidden="true">
+                            ❀
+                        </div>
+
+
+                        <div class="footer-copy">
+
+                            <div class="frame-footer-name">
+                                Nayla
+                            </div>
+
+                            <div class="frame-footer-text">
+                                SEIJIN SHIKI · BIRTHDAY
+                            </div>
+
+                            <div class="frame-footer-date">
+                                20th Birthday
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="fuji-decoration"
+                            aria-hidden="true">
+
+                            <span class="sun"></span>
+
+                            <span class="mountain">
+                                ⌃
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     RETAKE
+                ================================================== -->
+
+                <div
+                    id="retakePanel"
+                    class="retake-panel hidden">
+
+                    <div>
+
+                        <div
+                            class="retake-title"
+                            data-i18n="photobooth.retakeTitle">
+                            RETAKE A PHOTO
+                        </div>
+
+                        <div
+                            class="retake-subtitle"
+                            data-i18n="photobooth.retakeSubtitle">
+                            Pilih foto yang ingin diambil ulang
+                        </div>
+
+                    </div>
+
+
+                    <div class="retake-buttons">
+
+                        <button
+                            class="retake-photo-btn"
+                            data-retake="0"
+                            type="button">
+                            ↻ Retake 01
+                        </button>
+
+                        <button
+                            class="retake-photo-btn"
+                            data-retake="1"
+                            type="button">
+                            ↻ Retake 02
+                        </button>
+
+                        <button
+                            class="retake-photo-btn"
+                            data-retake="2"
+                            type="button">
+                            ↻ Retake 03
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     FINISH
+                ================================================== -->
+
+                <div
+                    id="resultActions"
+                    class="result-actions hidden">
+
+                    <div class="result-message">
+
+                        <div class="result-message-icon">
+                            ♡
+                        </div>
+
+                        <div>
+
+                            <strong data-i18n="photobooth.finished">
+                                Photobooth selesai!
+                            </strong>
+
+                            <span data-i18n="photobooth.finishedDescription">
+                                Kamu bisa mengulang foto atau menyimpan hasilnya.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="result-buttons">
+
+                        <button
+                            id="retakeBtn"
+                            class="result-btn result-btn-secondary"
+                            type="button"
+                            data-i18n="photobooth.retakePhotos">
+                            ↻ Retake Photos
+                        </button>
+
+                        <button
+                            id="downloadBtn"
+                            class="result-btn result-btn-primary"
+                            type="button"
+                            data-i18n="photobooth.downloadPhoto">
+                            ↓ Download Photo
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+{% endblock %}

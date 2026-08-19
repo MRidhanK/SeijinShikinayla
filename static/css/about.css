@@ -1,0 +1,993 @@
+/* =========================================
+   ABOUT SECTION GLOBAL
+========================================= */
+
+.about-section {
+
+    position: relative;
+
+    padding: 140px 30px;
+
+    overflow: hidden;
+
+}
+
+
+.about-section-container {
+
+    position: relative;
+
+    z-index: 2;
+
+    width:
+        min(
+            1100px,
+            100%
+        );
+
+    margin: 0 auto;
+
+}
+
+
+/* =========================================
+   SECTION HEADING
+========================================= */
+
+.section-heading {
+
+    max-width: 700px;
+
+    margin-bottom: 80px;
+
+}
+
+
+.section-number {
+
+    display: block;
+
+    margin-bottom: 12px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 12px;
+
+    letter-spacing: .25em;
+
+    color:
+        #e5bd55;
+
+}
+
+
+.section-label {
+
+    display: block;
+
+    margin-bottom: 18px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 11px;
+
+    letter-spacing: .3em;
+
+    color:
+        rgba(
+            229,
+            189,
+            85,
+            .7
+        );
+
+}
+
+
+.section-heading h2 {
+
+    margin: 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size:
+        clamp(
+            35px,
+            5vw,
+            60px
+        );
+
+    font-weight: 500;
+
+    line-height: 1.2;
+
+}
+
+
+.section-line {
+
+    width: 80px;
+
+    height: 1px;
+
+    margin-top: 30px;
+
+    background:
+        #e5bd55;
+
+    box-shadow:
+        0 0 15px
+        rgba(
+            229,
+            189,
+            85,
+            .3
+        );
+
+}
+
+
+.section-line.centered {
+
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+
+/* =========================================
+   MEANING SECTION
+========================================= */
+
+.about-meaning {
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #102b49,
+            #0b1d34
+        );
+
+}
+
+
+.meaning-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1.2fr
+        .8fr;
+
+    gap: 100px;
+
+    align-items: center;
+
+}
+
+
+.meaning-text {
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    color:
+        rgba(
+            245,
+            241,
+            232,
+            .65
+        );
+
+    line-height: 2;
+
+}
+
+
+.meaning-text p {
+
+    margin-bottom: 28px;
+
+}
+
+
+.meaning-lead {
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 25px;
+
+    line-height: 1.6;
+
+    color:
+        #f5f1e8;
+
+}
+
+
+.meaning-symbol {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+
+.meaning-circle {
+
+    width: 320px;
+
+    height: 320px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(
+            229,
+            189,
+            85,
+            .25
+        );
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(
+                229,
+                189,
+                85,
+                .08
+            ),
+            transparent 70%
+        );
+
+    box-shadow:
+
+        0 0 80px
+        rgba(
+            229,
+            189,
+            85,
+            .06
+        );
+
+}
+
+
+.meaning-jp {
+
+    font-family:
+        "Noto Serif JP",
+        serif;
+
+    font-size: 75px;
+
+    color:
+        #e5bd55;
+
+}
+
+
+.meaning-small {
+
+    margin-top: 15px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 10px;
+
+    letter-spacing:
+        .3em;
+
+    color:
+        rgba(
+            245,
+            241,
+            232,
+            .45
+        );
+
+}
+
+
+/* =========================================
+   TWENTY YEARS
+========================================= */
+
+.twenty-section {
+
+    min-height: 700px;
+
+    display: flex;
+
+    align-items: center;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(
+                229,
+                189,
+                85,
+                .06
+            ),
+            transparent 50%
+        ),
+
+        #071426;
+
+}
+
+
+.twenty-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 700px;
+
+    text-align: center;
+
+    margin: 0 auto;
+
+}
+
+
+.twenty-content h2 {
+
+    margin: 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size:
+        clamp(
+            50px,
+            8vw,
+            90px
+        );
+
+    font-weight: 400;
+
+}
+
+
+.twenty-lead {
+
+    margin-top: 45px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 25px;
+
+    line-height: 1.7;
+
+    color:
+        #f5f1e8;
+
+}
+
+
+.twenty-content p {
+
+    max-width: 650px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    line-height: 2;
+
+    color:
+        rgba(
+            245,
+            241,
+            232,
+            .6
+        );
+
+}
+
+
+.twenty-background-number {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size:
+        min(
+            55vw,
+            700px
+        );
+
+    font-weight: 700;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            .018
+        );
+
+    pointer-events: none;
+
+    user-select: none;
+
+}
+
+
+/* =========================================
+   CHAPTER
+========================================= */
+
+.chapter-section {
+
+    background:
+        #0b1d34;
+
+}
+
+
+.chapter-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        .8fr
+        1.2fr;
+
+    gap: 100px;
+
+    align-items: center;
+
+}
+
+
+.chapter-card {
+
+    min-height: 430px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border:
+        1px solid
+        rgba(
+            229,
+            189,
+            85,
+            .18
+        );
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(
+                255,
+                255,
+                255,
+                .04
+            ),
+            rgba(
+                255,
+                255,
+                255,
+                .01
+            )
+        );
+
+    box-shadow:
+        0 30px 80px
+        rgba(
+            0,
+            0,
+            0,
+            .2
+        );
+
+}
+
+
+.chapter-number {
+
+    font-family:
+        "Noto Serif JP",
+        serif;
+
+    font-size: 90px;
+
+    color:
+        #e5bd55;
+
+}
+
+
+.chapter-card-label {
+
+    margin-top: 20px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 12px;
+
+    letter-spacing:
+        .4em;
+
+    color:
+        rgba(
+            245,
+            241,
+            232,
+            .5
+        );
+
+}
+
+
+.chapter-text h2 {
+
+    margin: 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size:
+        clamp(
+            35px,
+            5vw,
+            60px
+        );
+
+    font-weight: 500;
+
+    line-height: 1.2;
+
+}
+
+
+.chapter-text p {
+
+    max-width: 650px;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 16px;
+
+    line-height: 2;
+
+    color:
+        rgba(
+            245,
+            241,
+            232,
+            .62
+        );
+
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.message-section {
+
+    padding-top: 180px;
+
+    padding-bottom: 180px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #0b1d34,
+            #071426
+        );
+
+}
+
+
+.message-card {
+
+    position: relative;
+
+    max-width: 850px;
+
+    margin: 0 auto;
+
+    padding:
+        90px 70px;
+
+    text-align: center;
+
+    border:
+        1px solid
+        rgba(
+            229,
+            189,
+            85,
+            .2
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .025
+        );
+
+}
+
+
+.message-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 12px;
+
+    border:
+        1px solid
+        rgba(
+            229,
+            189,
+            85,
+            .07
+        );
+
+}
+
+
+.message-japanese {
+
+    position: relative;
+
+    display: block;
+
+    margin-bottom: 30px;
+
+    font-family:
+        "Noto Serif JP",
+        serif;
+
+    font-size: 35px;
+
+    color:
+        #e5bd55;
+
+}
+
+
+.message-card h2 {
+
+    position: relative;
+
+    margin: 0 auto 30px;
+
+    max-width: 650px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size:
+        clamp(
+            32px,
+            5vw,
+            55px
+        );
+
+    font-weight: 400;
+
+    line-height: 1.4;
+
+}
+
+
+.message-card p {
+
+    position: relative;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    color:
+        rgba(
+            245,
+            241,
+            232,
+            .6
+        );
+
+    line-height: 1.9;
+
+}
+
+
+.message-signature {
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    margin-top: 50px;
+
+}
+
+
+.message-signature span {
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 12px;
+
+    color:
+        rgba(
+            245,
+            241,
+            232,
+            .4
+        );
+
+}
+
+
+.message-signature strong {
+
+    margin-top: 8px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 18px;
+
+    color:
+        #e5bd55;
+
+}
+
+
+/* =========================================
+   NEXT
+========================================= */
+
+.about-next {
+
+    min-height: 180px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        #050f1d;
+
+}
+
+
+.about-next a {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 15px;
+
+    text-decoration: none;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 11px;
+
+    letter-spacing:
+        .2em;
+
+    text-transform: uppercase;
+
+    color:
+        rgba(
+            245,
+            241,
+            232,
+            .5
+        );
+
+    transition:
+        color .3s ease;
+
+}
+
+
+.about-next a:hover {
+
+    color:
+        #e5bd55;
+
+}
+
+
+.about-next strong {
+
+    font-size: 25px;
+
+    font-weight: 300;
+
+    color:
+        #e5bd55;
+
+    animation:
+        nextArrow 2s
+        ease-in-out
+        infinite;
+
+}
+
+
+@keyframes nextArrow {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(8px);
+
+    }
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .about-section {
+
+        padding:
+            100px 20px;
+
+    }
+
+
+    .meaning-grid,
+    .chapter-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 60px;
+
+    }
+
+
+    .meaning-circle {
+
+        width: 240px;
+
+        height: 240px;
+
+    }
+
+
+    .meaning-jp {
+
+        font-size: 55px;
+
+    }
+
+
+    .twenty-section {
+
+        min-height: 600px;
+
+    }
+
+
+    .twenty-lead {
+
+        font-size: 20px;
+
+    }
+
+
+    .chapter-card {
+
+        min-height: 300px;
+
+    }
+
+
+    .chapter-number {
+
+        font-size: 70px;
+
+    }
+
+
+    .message-card {
+
+        padding:
+            70px 25px;
+
+    }
+
+}

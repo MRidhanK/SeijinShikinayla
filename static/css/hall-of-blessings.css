@@ -1,0 +1,902 @@
+/* ==========================================
+   PHASE 7B
+   HALL OF BLESSINGS
+========================================== */
+
+.blessings-section {
+
+    margin: 100px 0;
+
+    padding: 60px 0;
+
+    position: relative;
+
+}
+
+
+.blessings-header {
+
+    text-align: center;
+
+    margin-bottom: 35px;
+
+}
+
+
+.blessings-header h2 {
+
+    margin: 15px 0;
+
+    font-family: "Cinzel", serif;
+
+    font-size: 42px;
+
+    color: #f2d498;
+
+}
+
+
+.blessings-header p {
+
+    max-width: 650px;
+
+    margin: auto;
+
+    line-height: 1.8;
+
+    color: rgba(255,255,255,.6);
+
+}
+
+
+/* ==========================================
+   FEATURED BLESSING
+========================================== */
+
+.featured-blessing {
+
+    max-width: 850px;
+
+    margin: 0 auto 35px;
+
+    padding: 22px 30px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid
+        rgba(215,180,95,.15);
+
+    backdrop-filter:
+        blur(12px);
+
+}
+
+
+.featured-blessing-text {
+
+    margin: 0;
+
+    line-height: 1.8;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 16px;
+
+    font-style: italic;
+
+    color: #f2d498;
+
+}
+
+
+/* ==========================================
+   CONTROLS
+========================================== */
+
+.blessings-controls {
+
+    max-width: 1050px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+
+.blessings-controls input,
+.blessings-controls select {
+
+    min-height: 44px;
+
+    padding: 0 15px;
+
+    border-radius: 12px;
+
+    border:
+        1px solid
+        rgba(215,180,95,.25);
+
+    background:
+        rgba(255,255,255,.045);
+
+    color: rgba(255,255,255,.85);
+
+    outline: none;
+
+    font-family: inherit;
+
+    transition: .25s;
+
+}
+
+
+.blessings-controls input {
+
+    flex: 1;
+
+}
+
+
+.blessings-controls select {
+
+    min-width: 180px;
+
+    cursor: pointer;
+
+}
+
+
+.blessings-controls input::placeholder {
+
+    color:
+        rgba(255,255,255,.4);
+
+}
+
+
+.blessings-controls input:focus,
+.blessings-controls select:focus {
+
+    border-color:
+        rgba(215,180,95,.65);
+
+    background:
+        rgba(255,255,255,.07);
+
+}
+
+
+.blessings-controls select option {
+
+    background: #101827;
+
+    color: #ffffff;
+
+}
+
+
+/* ==========================================
+   COUNT
+========================================== */
+
+.blessings-count {
+
+    max-width: 1050px;
+
+    margin: 0 auto 25px;
+
+    color:
+        rgba(255,255,255,.5);
+
+    font-size: 13px;
+
+    text-align: right;
+
+}
+
+
+.blessings-count span {
+
+    color: #f2d498;
+
+    font-weight: bold;
+
+}
+
+
+/* ==========================================
+   BLESSING GRID
+========================================== */
+
+.blessings-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 25px;
+
+    max-width: 1050px;
+
+    margin: auto;
+
+}
+
+
+/* ==========================================
+   BLESSING CARD
+========================================== */
+
+.blessing-card {
+
+    position: relative;
+
+    min-height: 300px;
+
+    padding: 35px 30px;
+
+    border-radius: 22px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            #f6e3b8,
+            #d8aa62
+        );
+
+    color: #5b3715;
+
+    box-shadow:
+
+        0 20px 45px
+        rgba(0,0,0,.3);
+
+    transition: .35s;
+
+    overflow: hidden;
+
+}
+
+
+.blessing-card:hover {
+
+    transform:
+        translateY(-8px);
+
+    box-shadow:
+
+        0 30px 60px
+        rgba(0,0,0,.4);
+
+}
+
+
+/* ==========================================
+   BLESSING CONTENT
+========================================== */
+
+.blessing-content {
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+.blessing-number {
+
+    position: absolute;
+
+    top: 18px;
+
+    right: 20px;
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border-radius: 50%;
+
+    background:
+
+        rgba(255,255,255,.3);
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-weight: bold;
+
+    font-size: 14px;
+
+}
+
+
+.blessing-mood {
+
+    font-size: 30px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.blessing-name {
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 22px;
+
+    margin-bottom: 15px;
+
+    text-transform: uppercase;
+
+}
+
+
+.blessing-message {
+
+    line-height: 1.8;
+
+    min-height: 100px;
+
+    font-size: 15px;
+
+    margin: 0;
+
+}
+
+
+/* ==========================================
+   MEMBER
+========================================== */
+
+.blessing-member {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    width: fit-content;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(80,40,10,.1);
+
+    font-size: 11px;
+
+}
+
+
+/* ==========================================
+   DATE
+========================================== */
+
+.blessing-date {
+
+    font-size: 11px;
+
+    opacity: .65;
+
+}
+
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.blessing-footer {
+
+    margin-top: auto;
+
+    padding-top: 15px;
+
+    border-top:
+
+        1px solid
+        rgba(80,40,10,.15);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 13px;
+
+}
+
+
+.blessing-meta {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.blessing-likes {
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.blessing-loading {
+
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    padding: 50px;
+
+    color:
+        rgba(255,255,255,.5);
+
+}
+
+
+/* ==========================================
+   EMPTY / ERROR
+========================================== */
+
+.blessing-empty,
+.blessing-error {
+
+    max-width: 850px;
+
+    margin: 30px auto;
+
+    padding: 30px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    color:
+        rgba(255,255,255,.55);
+
+    background:
+        rgba(255,255,255,.03);
+
+}
+
+
+.blessing-error {
+
+    color:
+        #ffb4b4;
+
+}
+
+
+/* ==========================================
+   RETRY
+========================================== */
+
+#blessingRetry {
+
+    display: block;
+
+    margin: 20px auto;
+
+    padding: 10px 20px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #d7b45f;
+
+    color: #291b0a;
+
+    cursor: pointer;
+
+}
+
+
+/* ==========================================
+   WISH TIMELINE
+========================================== */
+
+.wish-timeline-section {
+
+    margin: 100px 0;
+
+}
+
+
+.timeline-header {
+
+    text-align: center;
+
+    margin-bottom: 60px;
+
+}
+
+
+.timeline-header h2 {
+
+    margin: 15px 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 42px;
+
+    color: #f2d498;
+
+}
+
+
+.timeline-header p {
+
+    color:
+        rgba(255,255,255,.6);
+
+}
+
+
+/* ==========================================
+   TIMELINE
+========================================== */
+
+.wish-timeline {
+
+    position: relative;
+
+    max-width: 850px;
+
+    margin: auto;
+
+    padding: 20px 0;
+
+}
+
+
+.wish-timeline::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 0;
+
+    bottom: 0;
+
+    width: 2px;
+
+    background:
+
+        linear-gradient(
+            to bottom,
+            transparent,
+            rgba(215,180,95,.4),
+            transparent
+        );
+
+    transform:
+        translateX(-50%);
+
+}
+
+
+/* ==========================================
+   TIMELINE ITEM
+========================================== */
+
+.timeline-item {
+
+    position: relative;
+
+    width: 50%;
+
+    padding: 20px 40px;
+
+}
+
+
+.timeline-item:nth-child(odd) {
+
+    left: 0;
+
+    text-align: right;
+
+}
+
+
+.timeline-item:nth-child(even) {
+
+    left: 50%;
+
+    text-align: left;
+
+}
+
+
+/* ==========================================
+   TIMELINE DOT
+========================================== */
+
+.timeline-dot {
+
+    position: absolute;
+
+    top: 30px;
+
+    width: 14px;
+
+    height: 14px;
+
+    border-radius: 50%;
+
+    background: #d7b45f;
+
+    box-shadow:
+
+        0 0 0 5px
+        rgba(215,180,95,.1),
+
+        0 0 20px
+        rgba(215,180,95,.3);
+
+}
+
+
+.timeline-item:nth-child(odd)
+.timeline-dot {
+
+    right: -7px;
+
+}
+
+
+.timeline-item:nth-child(even)
+.timeline-dot {
+
+    left: -7px;
+
+}
+
+
+/* ==========================================
+   TIMELINE CARD
+========================================== */
+
+.timeline-card {
+
+    padding: 22px 25px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(255,255,255,.045);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    backdrop-filter:
+        blur(15px);
+
+    transition: .3s;
+
+}
+
+
+.timeline-card:hover {
+
+    background:
+        rgba(255,255,255,.07);
+
+    transform:
+        translateY(-3px);
+
+}
+
+
+.timeline-name {
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    color:
+        #f2d498;
+
+    font-size: 18px;
+
+}
+
+
+.timeline-message {
+
+    margin-top: 10px;
+
+    line-height: 1.7;
+
+    color:
+        rgba(255,255,255,.7);
+
+    font-size: 14px;
+
+}
+
+
+.timeline-date {
+
+    margin-top: 12px;
+
+    font-size: 11px;
+
+    color:
+        rgba(255,255,255,.35);
+
+}
+
+
+.timeline-loading {
+
+    text-align: center;
+
+    padding: 50px;
+
+    color:
+        rgba(255,255,255,.5);
+
+}
+
+
+/* ==========================================
+   TIMELINE EMPTY
+========================================== */
+
+.timeline-empty {
+
+    text-align: center;
+
+    padding: 50px;
+
+    color:
+        rgba(255,255,255,.5);
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:800px){
+
+    .blessings-controls {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .blessings-controls input,
+    .blessings-controls select {
+
+        width: 100%;
+
+    }
+
+
+    .blessings-count {
+
+        text-align: left;
+
+    }
+
+
+    .blessings-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .blessing-card {
+
+        max-width: 500px;
+
+        width: 100%;
+
+        margin: auto;
+
+    }
+
+
+    .wish-timeline::before {
+
+        left: 15px;
+
+    }
+
+
+    .timeline-item,
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
+
+        width: 100%;
+
+        left: 0;
+
+        padding-left: 50px;
+
+        padding-right: 10px;
+
+        text-align: left;
+
+    }
+
+
+    .timeline-item:nth-child(odd)
+    .timeline-dot,
+    .timeline-item:nth-child(even)
+    .timeline-dot {
+
+        left: 8px;
+
+        right: auto;
+
+    }
+
+
+    .blessings-header h2,
+    .timeline-header h2 {
+
+        font-size: 32px;
+
+    }
+
+}

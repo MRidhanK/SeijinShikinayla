@@ -1,0 +1,1686 @@
+/* ==========================================
+   GUESTBOOK PAGE
+========================================== */
+
+.guestbook-page {
+
+    background: #071325;
+
+    color: #fff;
+
+}
+
+
+/* ==========================================
+   HERO
+========================================== */
+
+.guestbook-hero {
+
+    position: relative;
+
+    min-height: 420px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            rgba(5, 15, 30, .82),
+            rgba(5, 15, 30, .82)
+        ),
+        url("../img/shrine.jpg")
+        center / cover no-repeat;
+
+}
+
+
+.guestbook-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle,
+            transparent,
+            rgba(0, 0, 0, .55)
+        );
+
+}
+
+
+.guestbook-container {
+
+    position: relative;
+
+    z-index: 5;
+
+    width: 100%;
+
+    max-width: 760px;
+
+    padding: 0 20px;
+
+    text-align: center;
+
+}
+
+
+.section-label {
+
+    display: inline-block;
+
+    color: #d7b45f;
+
+    letter-spacing: 4px;
+
+    text-transform: uppercase;
+
+    font-size: 14px;
+
+}
+
+
+.guestbook-container h1 {
+
+    margin: 18px 0;
+
+    font-size: 62px;
+
+    font-family: "Cinzel", serif;
+
+}
+
+
+.guestbook-container p {
+
+    font-size: 19px;
+
+    color:
+        rgba(255, 255, 255, .75);
+
+    line-height: 1.8;
+
+}
+
+
+/* ==========================================
+   HERO STATS
+========================================== */
+
+.guestbook-stats {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 45px;
+
+}
+
+
+.stat-box {
+
+    width: 160px;
+
+    height: 160px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    backdrop-filter: blur(20px);
+
+    background:
+        rgba(255, 255, 255, .05);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .08);
+
+}
+
+
+.stat-box span {
+
+    font-size: 58px;
+
+    color: #e3be63;
+
+    font-family: "Cinzel", serif;
+
+}
+
+
+.stat-box small {
+
+    margin-top: 10px;
+
+    opacity: .75;
+
+}
+
+
+/* ==========================================
+   MAIN SECTION
+========================================== */
+
+.guestbook-section {
+
+    padding: 90px 8%;
+
+    background:
+        linear-gradient(
+            #071325,
+            #09182c
+        );
+
+}
+
+
+.guestbook-layout {
+
+    width: 100%;
+
+    max-width: 1450px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        390px
+        minmax(0, 1fr);
+
+    gap: 70px;
+
+    align-items: start;
+
+}
+
+
+/* ==========================================
+   LEFT FORM
+========================================== */
+
+.guestbook-form {
+
+    position: sticky;
+
+    top: 110px;
+
+    background:
+        rgba(255, 255, 255, .05);
+
+    backdrop-filter: blur(18px);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .08);
+
+    border-radius: 24px;
+
+    padding: 35px;
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, .28);
+
+}
+
+
+.guestbook-form h2 {
+
+    margin: 0 0 12px;
+
+    font-size: 42px;
+
+    font-family: "Cinzel", serif;
+
+}
+
+
+.form-desc {
+
+    margin-bottom: 30px;
+
+    color:
+        rgba(255, 255, 255, .65);
+
+    line-height: 1.8;
+
+}
+
+
+/* ==========================================
+   INPUT
+========================================== */
+
+.guestbook-form input,
+.guestbook-form textarea {
+
+    display: block;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255, 255, 255, .07);
+
+    color: #fff;
+
+    padding: 16px 18px;
+
+    margin-bottom: 18px;
+
+    font-size: 15px;
+
+}
+
+
+.guestbook-form textarea {
+
+    resize: vertical;
+
+    min-height: 180px;
+
+    max-height: 320px;
+
+}
+
+
+.guestbook-form input::placeholder,
+.guestbook-form textarea::placeholder {
+
+    color:
+        rgba(255, 255, 255, .45);
+
+}
+
+
+/* ==========================================
+   BUTTON
+========================================== */
+
+.form-bottom {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+
+#charCounter {
+
+    color:
+        rgba(255, 255, 255, .55);
+
+    font-size: 14px;
+
+}
+
+
+.form-bottom button {
+
+    border: none;
+
+    cursor: pointer;
+
+    padding: 14px 28px;
+
+    border-radius: 40px;
+
+    background: #d7b45f;
+
+    color: #2b1a05;
+
+    font-family: "Cinzel", serif;
+
+    transition: .35s;
+
+}
+
+
+.form-bottom button:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 25px
+        rgba(215, 180, 95, .35);
+
+}
+
+
+.form-bottom button:disabled {
+
+    cursor: not-allowed;
+
+    opacity: .6;
+
+    transform: none;
+
+}
+
+
+/* ==========================================
+   PREVIEW
+========================================== */
+
+.ema-preview {
+
+    margin-top: 40px;
+
+    padding-top: 30px;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, .08);
+
+}
+
+
+.preview-title {
+
+    display: block;
+
+    margin-bottom: 15px;
+
+    letter-spacing: 2px;
+
+    opacity: .6;
+
+    font-size: 13px;
+
+}
+
+
+/* ==========================================
+   PREVIEW CARD
+========================================== */
+
+.preview-card {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 280px;
+
+    box-sizing: border-box;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f5dfb5,
+            #ddb36b
+        );
+
+    color: #5c3512;
+
+    box-shadow:
+        0 20px 35px
+        rgba(0, 0, 0, .25);
+
+    transform: rotate(-3deg);
+
+    transition: .35s;
+
+    overflow: hidden;
+
+}
+
+
+.preview-card:hover {
+
+    transform:
+        rotate(0deg)
+        scale(1.03);
+
+}
+
+
+.preview-card .ema-name {
+
+    position: relative;
+
+    margin-bottom: 14px;
+
+    font-family: "Cinzel", serif;
+
+    font-size: 20px;
+
+}
+
+
+.preview-card .ema-message {
+
+    position: relative;
+
+    max-height: 170px;
+
+    margin: 0;
+
+    overflow-y: auto;
+
+    line-height: 1.8;
+
+    word-break: normal;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+/* ==========================================
+   RIGHT CONTENT
+========================================== */
+
+.guestbook-content {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+.featured-wish {
+
+    margin-bottom: 70px;
+
+    text-align: center;
+
+}
+
+
+.featured-wish span {
+
+    color: #ff91b8;
+
+}
+
+
+.featured-wish blockquote {
+
+    margin: 20px 0 0;
+
+    font-family: "Cinzel", serif;
+
+    font-size: 42px;
+
+    color: #f2d498;
+
+    line-height: 1.5;
+
+}
+
+
+/* ==========================================
+   WALL HEADER
+========================================== */
+
+.wall-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    gap: 30px;
+
+    margin-bottom: 35px;
+
+}
+
+
+.ema-title h2 {
+
+    margin: 0;
+
+    font-size: 44px;
+
+    font-family: "Cinzel", serif;
+
+}
+
+
+.ema-title p {
+
+    margin-top: 6px;
+
+    color:
+        rgba(255, 255, 255, .55);
+
+}
+
+
+.wall-tools {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    flex-shrink: 0;
+
+}
+
+
+.wall-tools input,
+.wall-tools select {
+
+    height: 46px;
+
+    box-sizing: border-box;
+
+    background: #162337;
+
+    color: #fff;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .08);
+
+    border-radius: 12px;
+
+    padding: 13px 16px;
+
+    outline: none;
+
+}
+
+
+.wall-tools input {
+
+    width: 220px;
+
+}
+
+
+.wall-tools select {
+
+    min-width: 150px;
+
+}
+
+
+.wall-tools input:focus,
+.wall-tools select:focus {
+
+    border-color:
+        rgba(215, 180, 95, .55);
+
+}
+
+
+/* ==========================================
+   TOAST
+========================================== */
+
+.toast {
+
+    position: fixed;
+
+    right: 40px;
+
+    bottom: 40px;
+
+    padding: 18px 28px;
+
+    background: #d7b45f;
+
+    color: #111;
+
+    border-radius: 40px;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform: translateY(30px);
+
+    transition: .35s;
+
+    z-index: 99999;
+
+}
+
+
+.toast.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateY(0);
+
+}
+
+
+/* ==========================================
+   EMPTY WALL
+========================================== */
+
+.empty-wall {
+
+    width: 100%;
+
+    min-height: 400px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    box-sizing: border-box;
+
+    padding: 40px;
+
+    border:
+        2px dashed
+        rgba(255, 255, 255, .08);
+
+    border-radius: 30px;
+
+    color: #fff;
+
+    text-align: center;
+
+}
+
+
+.empty-wall h3 {
+
+    margin: 15px 0 8px;
+
+}
+
+
+.empty-wall p {
+
+    margin: 0;
+
+    color:
+        rgba(255, 255, 255, .55);
+
+}
+
+
+.empty-icon {
+
+    font-size: 60px;
+
+    animation:
+        pulse 3s infinite;
+
+}
+
+
+@keyframes pulse {
+
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+
+/* ==========================================
+   EMA WALL
+========================================== */
+
+.ema-wall-wrapper {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 500px;
+
+    box-sizing: border-box;
+
+    padding-top: 80px;
+
+}
+
+
+.ema-wall {
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 80px;
+
+    width: 100%;
+
+}
+
+
+.ema-wall::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 18px;
+
+    left: 0;
+
+    right: 0;
+
+    height: 6px;
+
+    background:
+        linear-gradient(
+            #b47a37,
+            #8b5b28
+        );
+
+    border-radius: 20px;
+
+    pointer-events: none;
+
+    z-index: 0;
+
+}
+
+
+/* ==========================================
+   EMA ROW
+========================================== */
+
+.ema-row {
+
+    position: relative;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding-top: 70px;
+
+}
+
+
+.ema-row-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 45px;
+
+    width: 100%;
+
+    align-items: start;
+
+    justify-items: center;
+
+}
+
+
+/* ==========================================
+   ROW ROPE
+========================================== */
+
+.rope-line {
+
+    position: absolute;
+
+    top: 35px;
+
+    left: 0;
+
+    right: 0;
+
+    height: 6px;
+
+    background:
+        linear-gradient(
+            #b8833a,
+            #8b5b27
+        );
+
+    border-radius: 10px;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+}
+
+
+/* ==========================================
+   EMA CARD
+========================================== */
+
+.ema-card {
+
+    position: relative;
+
+    width: 100%;
+
+    max-width: 330px;
+
+    height: 380px;
+
+    min-height: 380px;
+
+    max-height: 380px;
+
+    box-sizing: border-box;
+
+    padding: 0;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f6e3b8 0%,
+            #ead09a 55%,
+            #d8aa62 100%
+        );
+
+    color: #5b3715;
+
+    box-shadow:
+        0 20px 45px
+        rgba(0, 0, 0, .32);
+
+    overflow: hidden;
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease;
+
+    isolation: isolate;
+
+}
+
+
+.ema-card:hover {
+
+    box-shadow:
+        0 28px 55px
+        rgba(0, 0, 0, .4);
+
+}
+
+
+/* ==========================================
+   EMA STRING
+========================================== */
+
+.ema-string {
+
+    position: absolute;
+
+    top: -45px;
+
+    left: 50%;
+
+    width: 3px;
+
+    height: 45px;
+
+    background: #d8b16d;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 2;
+
+    pointer-events: none;
+
+}
+
+
+/* ==========================================
+   WOOD TOP
+========================================== */
+
+.wood-top {
+
+    position: absolute;
+
+    top: -12px;
+
+    left: 50%;
+
+    width: 90px;
+
+    height: 18px;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            #a36b34,
+            #6f4518
+        );
+
+    transform:
+        translateX(-50%);
+
+    z-index: 5;
+
+    pointer-events: none;
+
+    box-shadow:
+        0 4px 8px
+        rgba(0, 0, 0, .2);
+
+}
+
+
+/* ==========================================
+   EMA CONTENT
+========================================== */
+
+.ema-content {
+
+    position: relative;
+
+    z-index: 3;
+
+    display: flex;
+
+    flex-direction: column;
+
+    width: 100%;
+
+    height: 100%;
+
+    min-height: 0;
+
+    box-sizing: border-box;
+
+    padding:
+        42px
+        28px
+        74px;
+
+}
+
+
+/* ==========================================
+   EMA NAME
+========================================== */
+
+.ema-name {
+
+    flex-shrink: 0;
+
+    margin: 0 0 18px;
+
+    color: #5b3715;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 22px;
+
+    line-height: 1.25;
+
+    text-transform: uppercase;
+
+    word-break: normal;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+/* ==========================================
+   EMA MESSAGE
+========================================== */
+
+.ema-message {
+
+    flex: 1 1 auto;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    width: 100%;
+
+    max-width: 100%;
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding:
+        0
+        10px
+        0
+        0;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    color: #5b3715;
+
+    font-size: 15px;
+
+    line-height: 1.75;
+
+    text-align: left;
+
+    word-break: normal;
+
+    overflow-wrap: anywhere;
+
+    white-space: normal;
+
+}
+
+
+/* ==========================================
+   SCROLLBAR
+========================================== */
+
+.ema-message {
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(91, 55, 21, .35)
+        rgba(91, 55, 21, .08);
+
+}
+
+
+.ema-message::-webkit-scrollbar {
+
+    width: 6px;
+
+}
+
+
+.ema-message::-webkit-scrollbar-track {
+
+    background:
+        rgba(91, 55, 21, .08);
+
+    border-radius: 10px;
+
+}
+
+
+.ema-message::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(91, 55, 21, .35);
+
+    border-radius: 10px;
+
+}
+
+
+.ema-message::-webkit-scrollbar-thumb:hover {
+
+    background:
+        rgba(91, 55, 21, .55);
+
+}
+
+
+/* ==========================================
+   EMA FOOTER
+========================================== */
+
+.ema-footer {
+
+    position: absolute;
+
+    left: 28px;
+
+    right: 28px;
+
+    bottom: 28px;
+
+    z-index: 10;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 12px;
+
+    pointer-events: none;
+
+}
+
+
+.ema-footer > * {
+
+    pointer-events: auto;
+
+}
+
+
+/* ==========================================
+   DATE
+========================================== */
+
+.ema-date {
+
+    position: absolute;
+
+    right: 28px;
+
+    bottom: 8px;
+
+    z-index: 9;
+
+    color:
+        rgba(91, 55, 21, .65);
+
+    font-size: 12px;
+
+    line-height: 1;
+
+}
+
+
+/* ==========================================
+   LIKE BUTTON
+========================================== */
+
+.like-btn {
+
+    position: relative;
+
+    z-index: 20;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    border: none;
+
+    border-radius: 40px;
+
+    background: #f8dfb0;
+
+    color: #8c4b0f;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+.like-btn:hover {
+
+    transform: scale(1.08);
+
+    box-shadow:
+        0 8px 18px
+        rgba(91, 55, 21, .18);
+
+}
+
+
+.like-btn:disabled {
+
+    cursor: not-allowed;
+
+}
+
+
+.like-btn.liked {
+
+    animation:
+        likePop .35s ease;
+
+}
+
+
+@keyframes likePop {
+
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.35);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+
+.like-count {
+
+    min-width: 18px;
+
+    text-align: center;
+
+}
+
+
+/* ==========================================
+   FLOATING HEART
+========================================== */
+
+.floating-heart {
+
+    position: absolute;
+
+    pointer-events: none;
+
+    font-size: 20px;
+
+    animation:
+        floatHeart 1s ease-out forwards;
+
+    z-index: 999;
+
+}
+
+
+@keyframes floatHeart {
+
+    0% {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(.8);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-40px)
+            scale(1.3);
+
+    }
+
+    100% {
+
+        opacity: 0;
+
+        transform:
+            translateY(-90px)
+            scale(.5);
+
+    }
+
+}
+
+
+/* ==========================================
+   PREVENT DECORATIONS FROM BLOCKING CLICKS
+========================================== */
+
+.wood-top,
+.ema-string,
+.rope-line {
+
+    pointer-events: none;
+
+}
+
+
+/* ==========================================
+   RESPONSIVE - TABLET
+========================================== */
+
+@media (max-width: 1100px) {
+
+    .guestbook-layout {
+
+        grid-template-columns: 1fr;
+
+        gap: 60px;
+
+    }
+
+
+    .guestbook-form {
+
+        position: relative;
+
+        top: auto;
+
+    }
+
+
+    .ema-row-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 35px;
+
+    }
+
+
+    .ema-card {
+
+        max-width: 340px;
+
+    }
+
+
+    .wall-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .wall-tools {
+
+        width: 100%;
+
+    }
+
+
+    .wall-tools input {
+
+        flex: 1;
+
+        width: auto;
+
+    }
+
+}
+
+
+/* ==========================================
+   RESPONSIVE - MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+
+    .guestbook-section {
+
+        padding:
+            60px 20px;
+
+    }
+
+
+    .guestbook-container h1 {
+
+        font-size: 42px;
+
+    }
+
+
+    .guestbook-container p {
+
+        font-size: 16px;
+
+    }
+
+
+    .stat-box {
+
+        width: 130px;
+
+        height: 130px;
+
+    }
+
+
+    .stat-box span {
+
+        font-size: 45px;
+
+    }
+
+
+    .guestbook-form {
+
+        padding: 25px;
+
+        border-radius: 20px;
+
+    }
+
+
+    .guestbook-form h2 {
+
+        font-size: 34px;
+
+    }
+
+
+    .featured-wish blockquote {
+
+        font-size: 28px;
+
+    }
+
+
+    .ema-title h2 {
+
+        font-size: 34px;
+
+    }
+
+
+    .wall-tools {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 10px;
+
+    }
+
+
+    .wall-tools input,
+    .wall-tools select {
+
+        width: 100%;
+
+    }
+
+
+    .ema-row-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 55px;
+
+    }
+
+
+    .ema-card {
+
+        width: 100%;
+
+        max-width: 340px;
+
+        height: 360px;
+
+        min-height: 360px;
+
+        max-height: 360px;
+
+    }
+
+
+    .ema-content {
+
+        padding:
+            40px
+            24px
+            74px;
+
+    }
+
+
+    .ema-name {
+
+        font-size: 20px;
+
+    }
+
+
+    .ema-message {
+
+        font-size: 14px;
+
+        line-height: 1.7;
+
+    }
+
+
+    .ema-footer {
+
+        left: 24px;
+
+        right: 24px;
+
+    }
+
+
+    .ema-date {
+
+        right: 24px;
+
+    }
+
+
+    .toast {
+
+        left: 20px;
+
+        right: 20px;
+
+        bottom: 20px;
+
+        text-align: center;
+
+    }
+
+}
+
+
+/* ==========================================
+   VERY SMALL MOBILE
+========================================== */
+
+@media (max-width: 420px) {
+
+    .guestbook-container h1 {
+
+        font-size: 36px;
+
+    }
+
+
+    .ema-card {
+
+        max-width: 310px;
+
+    }
+
+
+    .ema-content {
+
+        padding:
+            38px
+            20px
+            72px;
+
+    }
+
+
+    .ema-footer {
+
+        left: 20px;
+
+        right: 20px;
+
+    }
+
+
+    .ema-date {
+
+        right: 20px;
+
+    }
+
+}

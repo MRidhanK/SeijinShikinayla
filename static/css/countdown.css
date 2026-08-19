@@ -1,0 +1,426 @@
+/* =========================================================
+   HOME COUNTDOWN TIMER
+========================================================= */
+
+.home-countdown {
+    position: relative;
+    width: 100%;
+    padding: 100px 24px;
+    overflow: hidden;
+}
+
+
+/* ---------------------------------------------------------
+   CONTAINER
+--------------------------------------------------------- */
+
+.countdown-container {
+    position: relative;
+
+    width: min(1100px, 100%);
+    margin: 0 auto;
+
+    padding: 70px 60px;
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 4px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.035),
+            rgba(255, 255, 255, 0.015)
+        );
+
+    overflow: hidden;
+
+    text-align: center;
+}
+
+
+/* ---------------------------------------------------------
+   DECORATION
+--------------------------------------------------------- */
+
+.countdown-decoration {
+    position: absolute;
+
+    font-size: 80px;
+
+    line-height: 1;
+
+    color: rgba(224, 133, 166, 0.16);
+
+    pointer-events: none;
+}
+
+.countdown-decoration-left {
+    top: 30px;
+    left: 35px;
+}
+
+.countdown-decoration-right {
+    right: 35px;
+    bottom: 30px;
+}
+
+
+/* ---------------------------------------------------------
+   CONTENT
+--------------------------------------------------------- */
+
+.countdown-content {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* Japanese */
+
+.countdown-japanese {
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-family:
+        "Times New Roman",
+        serif;
+
+    font-size: 22px;
+
+    letter-spacing: 8px;
+
+    color: #e486a8;
+}
+
+
+/* Label */
+
+.countdown-label {
+    display: block;
+
+    margin-bottom: 12px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+    color: #e486a8;
+}
+
+
+/* Title */
+
+.countdown-content h2 {
+    margin: 0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(32px, 5vw, 58px);
+
+    font-weight: 400;
+
+    line-height: 1.1;
+
+    color: #dcecf1;
+}
+
+
+/* Date */
+
+.countdown-date {
+    margin: 16px 0 0;
+
+    font-size: 14px;
+
+    letter-spacing: 3px;
+
+    color: rgba(220, 236, 241, 0.65);
+}
+
+
+/* Line */
+
+.countdown-line {
+    width: 80px;
+    height: 1px;
+
+    margin: 30px auto;
+
+    background: rgba(228, 134, 168, 0.65);
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+.countdown-timer {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: clamp(12px, 3vw, 35px);
+
+    width: 100%;
+
+    margin-top: 5px;
+}
+
+
+/* Individual item */
+
+.countdown-item {
+    min-width: 110px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Number */
+
+.countdown-number {
+    display: block;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(38px, 6vw, 70px);
+
+    font-weight: 400;
+
+    line-height: 1;
+
+    color: #e486a8;
+
+    font-variant-numeric: tabular-nums;
+
+    text-shadow:
+        0 0 20px rgba(228, 134, 168, 0.15);
+}
+
+
+/* Unit */
+
+.countdown-unit {
+    display: block;
+
+    margin-top: 12px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 3px;
+
+    color: rgba(220, 236, 241, 0.55);
+}
+
+
+/* Separator */
+
+.countdown-separator {
+    align-self: flex-start;
+
+    margin-top: 8px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 42px;
+
+    color: rgba(228, 134, 168, 0.55);
+}
+
+
+/* =========================================================
+   FINISHED STATE
+========================================================= */
+
+.countdown-finished {
+    display: none;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-top: 20px;
+}
+
+.countdown-finished.active {
+    display: flex;
+}
+
+.countdown-finished.active + * {
+    display: none;
+}
+
+.finished-japanese {
+    margin-bottom: 10px;
+
+    font-family:
+        "Times New Roman",
+        serif;
+
+    font-size: 28px;
+
+    letter-spacing: 8px;
+
+    color: #e486a8;
+}
+
+.countdown-finished strong {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 28px;
+
+    font-weight: 400;
+
+    color: #dcecf1;
+}
+
+.countdown-finished p {
+    margin-top: 10px;
+
+    color: rgba(220, 236, 241, 0.65);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .home-countdown {
+        padding: 70px 16px;
+    }
+
+
+    .countdown-container {
+        padding: 55px 20px;
+    }
+
+
+    .countdown-decoration {
+        font-size: 50px;
+    }
+
+
+    .countdown-decoration-left {
+        top: 20px;
+        left: 15px;
+    }
+
+
+    .countdown-decoration-right {
+        right: 15px;
+        bottom: 20px;
+    }
+
+
+    .countdown-timer {
+        gap: 8px;
+    }
+
+
+    .countdown-item {
+        min-width: 0;
+        flex: 1;
+    }
+
+
+    .countdown-number {
+        font-size: clamp(30px, 9vw, 48px);
+    }
+
+
+    .countdown-unit {
+        font-size: 7px;
+        letter-spacing: 1.5px;
+    }
+
+
+    .countdown-separator {
+        font-size: 28px;
+        margin-top: 3px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .countdown-container {
+        padding: 45px 12px;
+    }
+
+
+    .countdown-japanese {
+        font-size: 18px;
+        letter-spacing: 5px;
+    }
+
+
+    .countdown-label {
+        font-size: 8px;
+        letter-spacing: 2px;
+    }
+
+
+    .countdown-content h2 {
+        font-size: 30px;
+    }
+
+
+    .countdown-date {
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+
+
+    .countdown-timer {
+        gap: 4px;
+    }
+
+
+    .countdown-number {
+        font-size: 27px;
+    }
+
+
+    .countdown-unit {
+        margin-top: 8px;
+        font-size: 6px;
+        letter-spacing: 1px;
+    }
+
+
+    .countdown-separator {
+        font-size: 20px;
+    }
+
+}

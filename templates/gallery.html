@@ -1,0 +1,663 @@
+{% extends "base.html" %}
+
+{% block css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/gallery.css') }}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<!-- =========================================
+     GALLERY HERO
+========================================= -->
+
+<section class="gallery-hero">
+
+    <div class="gallery-hero-glow"></div>
+
+    <div class="gallery-hero-content">
+
+        <span
+            class="gallery-japanese"
+            data-i18n="gallery.hero_japanese">
+            思い出
+        </span>
+
+        <span
+            class="gallery-eyebrow"
+            data-i18n="gallery.hero_eyebrow">
+            MEMORY ARCHIVE
+        </span>
+
+        <h1 data-i18n="gallery.hero_title">
+            A Collection of Memories
+        </h1>
+
+        <p data-i18n="gallery.hero_description">
+            Every chapter leaves behind
+            something worth remembering.
+        </p>
+
+        <div class="gallery-hero-divider">
+
+            <span></span>
+
+            <small>20</small>
+
+            <span></span>
+
+        </div>
+
+    </div>
+
+    <div class="gallery-scroll">
+
+        <span data-i18n="gallery.scroll">
+            Scroll to explore
+        </span>
+
+        <div></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     MEMORY GALLERY
+========================================= -->
+
+<section class="gallery-section">
+
+    <div class="gallery-container">
+
+
+        <!-- =====================================
+             HEADER
+        ====================================== -->
+
+        <div class="gallery-heading">
+
+            <span class="section-number">
+                01
+            </span>
+
+            <span
+                class="section-label"
+                data-i18n="gallery.archive">
+                THE ARCHIVE
+            </span>
+
+            <h2 data-i18n="gallery.heading">
+                Nayla's Memories
+            </h2>
+
+            <p data-i18n="gallery.heading_description">
+                A visual journey through
+                the moments that shaped
+                the years before adulthood.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================
+             FILTER
+        ====================================== -->
+
+        <div class="gallery-filter">
+
+            <button
+                class="gallery-filter-btn active"
+                data-filter="all"
+                data-i18n="gallery.filter_all">
+                All
+            </button>
+
+
+            <button
+                class="gallery-filter-btn"
+                data-filter="2023">
+                2023
+            </button>
+
+
+            <button
+                class="gallery-filter-btn"
+                data-filter="2024">
+                2024
+            </button>
+
+
+            <button
+                class="gallery-filter-btn"
+                data-filter="2025">
+                2025
+            </button>
+
+
+            <button
+                class="gallery-filter-btn"
+                data-filter="2026">
+                2026
+            </button>
+
+
+            <button
+                class="gallery-filter-btn"
+                data-filter="2027">
+                2027
+            </button>
+
+        </div>
+
+
+        <!-- =====================================
+             MEMORY COUNTER
+        ====================================== -->
+
+        <div class="gallery-counter">
+
+            <span id="memoryCount">
+                5
+            </span>
+
+            <small
+                id="memoryCountLabel"
+                data-i18n="gallery.memories">
+                memories
+            </small>
+
+        </div>
+
+
+        <!-- =====================================
+             GALLERY GRID
+        ====================================== -->
+
+        <div
+            class="gallery-grid"
+            id="galleryGrid">
+
+
+            <!-- =================================
+                 2023
+            ================================== -->
+
+            <article
+                class="gallery-card"
+                data-year="2023"
+                data-index="0">
+
+                <div class="gallery-image">
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='img/2023.jpg'
+                        ) }}"
+                        alt="Nayla 2023"
+                        data-i18n-alt="gallery.memory_2023_alt"
+                        loading="lazy"
+                    >
+
+                    <div class="gallery-image-overlay"></div>
+
+                    <span class="gallery-year">
+                        2023
+                    </span>
+
+                    <button
+                        class="gallery-view"
+                        type="button"
+                        aria-label="View 2023 memory"
+                        data-i18n-aria="gallery.view_2023">
+
+                        <span>＋</span>
+
+                    </button>
+
+                </div>
+
+                <div class="gallery-info">
+
+                    <span data-i18n="gallery.chapter_01">
+                        CHAPTER 01
+                    </span>
+
+                    <h3 data-i18n="gallery.memory_2023_title">
+                        The Beginning
+                    </h3>
+
+                    <p data-i18n="gallery.memory_2023_description">
+                        The first step of a beautiful journey.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================
+                 2024
+            ================================== -->
+
+            <article
+                class="gallery-card"
+                data-year="2024"
+                data-index="1">
+
+                <div class="gallery-image">
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='img/2024.jpg'
+                        ) }}"
+                        alt="Nayla 2024"
+                        data-i18n-alt="gallery.memory_2024_alt"
+                        loading="lazy"
+                    >
+
+                    <div class="gallery-image-overlay"></div>
+
+                    <span class="gallery-year">
+                        2024
+                    </span>
+
+                    <button
+                        class="gallery-view"
+                        type="button"
+                        aria-label="View 2024 memory"
+                        data-i18n-aria="gallery.view_2024">
+
+                        <span>＋</span>
+
+                    </button>
+
+                </div>
+
+                <div class="gallery-info">
+
+                    <span data-i18n="gallery.chapter_02">
+                        CHAPTER 02
+                    </span>
+
+                    <h3 data-i18n="gallery.memory_2024_title">
+                        Growing
+                    </h3>
+
+                    <p data-i18n="gallery.memory_2024_description">
+                        Growing through JKT48 School.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================
+                 2025
+            ================================== -->
+
+            <article
+                class="gallery-card"
+                data-year="2025"
+                data-index="2">
+
+                <div class="gallery-image">
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='img/2025.jpg'
+                        ) }}"
+                        alt="Nayla 2025"
+                        data-i18n-alt="gallery.memory_2025_alt"
+                        loading="lazy"
+                    >
+
+                    <div class="gallery-image-overlay"></div>
+
+                    <span class="gallery-year">
+                        2025
+                    </span>
+
+                    <button
+                        class="gallery-view"
+                        type="button"
+                        aria-label="View 2025 memory"
+                        data-i18n-aria="gallery.view_2025">
+
+                        <span>＋</span>
+
+                    </button>
+
+                </div>
+
+                <div class="gallery-info">
+
+                    <span data-i18n="gallery.chapter_03">
+                        CHAPTER 03
+                    </span>
+
+                    <h3 data-i18n="gallery.memory_2025_title">
+                        A New Milestone
+                    </h3>
+
+                    <p data-i18n="gallery.memory_2025_description">
+                        Promoted to Core Member and
+                        trusted as a translator at
+                        Sister Reunion Festival.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================
+                 2026 REQUEST HOUR
+            ================================== -->
+
+            <article
+                class="gallery-card gallery-card-wide"
+                data-year="2026"
+                data-index="3">
+
+                <div class="gallery-image">
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='img/RHCONCERT.jpg'
+                        ) }}"
+                        alt="Nayla Request Hour 2026"
+                        data-i18n-alt="gallery.memory_2026_rh_alt"
+                        loading="lazy"
+                    >
+
+                    <div class="gallery-image-overlay"></div>
+
+                    <span class="gallery-year">
+                        2026
+                    </span>
+
+                    <button
+                        class="gallery-view"
+                        type="button"
+                        aria-label="View Request Hour 2026 memory"
+                        data-i18n-aria="gallery.view_2026_rh">
+
+                        <span>＋</span>
+
+                    </button>
+
+                </div>
+
+                <div class="gallery-info">
+
+                    <span data-i18n="gallery.special_moment">
+                        SPECIAL MOMENT
+                    </span>
+
+                    <h3 data-i18n="gallery.memory_2026_rh_title">
+                        Request Hour 2026
+                    </h3>
+
+                    <p data-i18n="gallery.memory_2026_rh_description">
+                        A special performance of
+                        <strong>Bird</strong>,
+                        ranked 15th in Request Hour 2026,
+                        alongside Aurelia and Aurhel Alana.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================
+                 2026 BIRTHDAY
+            ================================== -->
+
+            <article
+                class="gallery-card"
+                data-year="2026"
+                data-index="4">
+
+                <div class="gallery-image">
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='img/2026.jpg'
+                        ) }}"
+                        alt="Nayla 19th Birthday 2026"
+                        data-i18n-alt="gallery.memory_2026_birthday_alt"
+                        loading="lazy"
+                    >
+
+                    <div class="gallery-image-overlay"></div>
+
+                    <span class="gallery-year">
+                        2026
+                    </span>
+
+                    <button
+                        class="gallery-view"
+                        type="button"
+                        aria-label="View 2026 birthday memory"
+                        data-i18n-aria="gallery.view_2026_birthday">
+
+                        <span>＋</span>
+
+                    </button>
+
+                </div>
+
+                <div class="gallery-info">
+
+                    <span data-i18n="gallery.birthday">
+                        BIRTHDAY
+                    </span>
+
+                    <h3 data-i18n="gallery.memory_2026_birthday_title">
+                        #HappinessNaylalaland19
+                    </h3>
+
+                    <p data-i18n="gallery.memory_2026_birthday_description">
+                        A birthday filled with
+                        memories, love and happiness.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================
+                 2027 EMPTY
+            ================================== -->
+
+            <article
+                class="gallery-card gallery-card-future"
+                data-year="2027"
+                data-index="5">
+
+                <div class="gallery-future">
+
+                    <div class="future-symbol">
+                        2027
+                    </div>
+
+                    <div
+                        class="future-kanji"
+                        data-i18n="gallery.future_kanji">
+                        新章
+                    </div>
+
+                    <span data-i18n="gallery.future_label">
+                        THE NEXT CHAPTER
+                    </span>
+
+                    <div class="future-line"></div>
+
+                    <p data-i18n="gallery.future_description">
+                        This page is waiting
+                        for a new memory.
+                    </p>
+
+                    <small data-i18n="gallery.future_small">
+                        A new beginning.
+                    </small>
+
+                </div>
+
+                <div class="gallery-info">
+
+                    <span data-i18n="gallery.chapter_06">
+                        CHAPTER 06
+                    </span>
+
+                    <h3 data-i18n="gallery.future_title">
+                        The Beginning of Adulthood
+                    </h3>
+
+                    <p data-i18n="gallery.future_card_description">
+                        Some memories have not
+                        been written yet.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     CLOSING
+========================================= -->
+
+<section class="gallery-closing">
+
+    <div class="gallery-closing-content">
+
+        <span data-i18n="gallery.closing_japanese">
+            これからも
+        </span>
+
+        <h2 data-i18n="gallery.closing_title">
+            More memories are waiting.
+        </h2>
+
+        <p data-i18n="gallery.closing_description">
+            The story does not end here.
+        </p>
+
+        <div class="closing-mark">
+            ✦
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     LIGHTBOX
+========================================= -->
+
+<div
+    class="gallery-lightbox"
+    id="galleryLightbox"
+    aria-hidden="true">
+
+    <div class="lightbox-backdrop"></div>
+
+
+    <button
+        class="lightbox-close"
+        id="lightboxClose"
+        type="button"
+        aria-label="Close"
+        data-i18n-aria="gallery.close">
+        ×
+    </button>
+
+
+    <button
+        class="lightbox-prev"
+        id="lightboxPrev"
+        type="button"
+        aria-label="Previous"
+        data-i18n-aria="gallery.previous">
+        ‹
+    </button>
+
+
+    <div class="lightbox-content">
+
+        <div class="lightbox-image-wrapper">
+
+            <img
+                id="lightboxImage"
+                src=""
+                alt=""
+            >
+
+        </div>
+
+        <div class="lightbox-info">
+
+            <span id="lightboxYear">
+                2023
+            </span>
+
+            <h3 id="lightboxTitle">
+                The Beginning
+            </h3>
+
+            <p id="lightboxDescription">
+                The first step.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="lightbox-next"
+        id="lightboxNext"
+        type="button"
+        aria-label="Next"
+        data-i18n-aria="gallery.next">
+        ›
+    </button>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block js %}
+
+<script src="{{ url_for(
+    'static',
+    filename='js/gallery.js'
+) }}"></script>
+
+{% endblock %}

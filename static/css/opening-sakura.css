@@ -1,0 +1,159 @@
+/* ============================
+   Sakura Container
+============================ */
+
+.sakura-container{
+
+    position:absolute;
+
+    inset:0;
+
+    overflow:hidden;
+
+    pointer-events:none;
+
+    z-index:3;
+
+}
+
+/* ============================
+   Sakura Petal
+============================ */
+
+.petal{
+
+    position:absolute;
+
+    top:-60px;
+
+    width:18px;
+
+    height:18px;
+
+    background:linear-gradient(
+        145deg,
+        #ffe6ef,
+        #ffc6da
+    );
+
+    border-radius:70% 70% 70% 0;
+
+    transform:rotate(45deg);
+
+    opacity:.9;
+
+    will-change:transform;
+
+    box-shadow:
+    0 0 8px rgba(255,210,225,.3);
+
+}
+@keyframes sakuraFall{
+
+    0%{
+
+        transform:
+        translate3d(0,-100px,0)
+        rotate(0deg)
+        scale(var(--scale));
+
+        opacity:0;
+
+    }
+
+    10%{
+
+        opacity:1;
+
+    }
+
+    50%{
+
+        transform:
+        translate3d(
+            calc(var(--drift)/2),
+            50vh,
+            0)
+        rotate(360deg)
+        scale(var(--scale));
+
+    }
+
+    100%{
+
+        transform:
+        translate3d(
+            var(--drift),
+            120vh,
+            0)
+        rotate(720deg)
+        scale(var(--scale));
+
+        opacity:0;
+
+    }
+
+}
+.sakura-container{
+
+animation:
+
+windMove 10s ease-in-out infinite alternate;
+
+}
+
+@keyframes windMove{
+
+0%{
+
+transform:translateX(0px);
+
+}
+
+50%{
+
+transform:translateX(12px);
+
+}
+
+100%{
+
+transform:translateX(-12px);
+
+}
+
+}
+.petal::after{
+
+content:"";
+
+position:absolute;
+
+inset:0;
+
+border-radius:inherit;
+
+background:
+
+radial-gradient(
+
+rgba(255,255,255,.45),
+
+transparent
+
+);
+
+opacity:.5;
+
+}
+@media(max-width:768px){
+
+.petal{
+
+width:12px;
+
+height:12px;
+
+}
+
+}

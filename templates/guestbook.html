@@ -1,0 +1,660 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ==========================================
+HERO
+========================================== -->
+
+<section class="guestbook-hero">
+
+    <div class="guestbook-overlay"></div>
+
+    <div class="guestbook-sakura"></div>
+
+    <div class="guestbook-container">
+
+        <span
+            class="section-label"
+            data-i18n="emaShrine">
+            絵馬 • EMA SHRINE
+        </span>
+
+        <h1 data-i18n="wishesForNayla">
+            Wishes for Nayla
+        </h1>
+
+        <p data-i18n="heroDescription">
+            Every message becomes a wooden Ema
+            hanging inside the shrine.
+        </p>
+
+        <div class="guestbook-stats">
+
+            <div class="stat-box">
+
+                <span id="wishCount">
+                    0
+                </span>
+
+                <small data-i18n="wishes">
+                    Wishes
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+MAIN
+========================================== -->
+
+<section class="guestbook-section">
+
+<div class="guestbook-layout">
+
+
+<!-- ==========================================
+LEFT PANEL
+========================================== -->
+
+<aside class="guestbook-form">
+
+    <h2 data-i18n="hangYourEma">
+        Hang Your Ema
+    </h2>
+
+    <p
+        class="form-desc"
+        data-i18n="formDescription">
+        Leave your blessing for Nayla's
+        Seijin Shiki.
+    </p>
+
+
+    <form id="guestbookForm">
+
+        <input
+            id="guestName"
+            type="text"
+            maxlength="50"
+            placeholder="Your Name"
+            data-i18n-placeholder="yourName"
+            required>
+
+
+        <textarea
+            id="guestMessage"
+            maxlength="1000"
+            rows="6"
+            placeholder="Write your wish..."
+            data-i18n-placeholder="writeYourWish"
+            required></textarea>
+
+
+        <div class="form-bottom">
+
+            <span id="charCounter">
+                0 / 1000
+            </span>
+
+            <button
+                id="submitWish"
+                type="submit"
+                data-i18n="hangMyEma">
+                Hang My Ema
+            </button>
+
+        </div>
+
+    </form>
+
+
+    <!-- ======================================
+         PREVIEW
+    ======================================= -->
+
+    <div class="ema-preview">
+
+        <span
+            class="preview-title"
+            data-i18n="preview">
+            Preview
+        </span>
+
+
+        <div class="ema-card preview-card">
+
+            <div class="wood-top"></div>
+
+            <div class="ema-content">
+
+                <div
+                    class="ema-name"
+                    id="previewName">
+                    Your Name
+                </div>
+
+                <div
+                    class="ema-message"
+                    id="previewMessage">
+                    Your Message...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- ==========================================
+RIGHT PANEL
+========================================== -->
+
+<div class="guestbook-content">
+
+
+    <!-- ======================================
+         FEATURED
+    ======================================= -->
+
+    <section class="featured-wish">
+
+        <span data-i18n="featuredWishLabel">
+            🌸 Featured Wish
+        </span>
+
+        <!--
+            PENTING:
+            Isi ini adalah data user.
+            JANGAN diberi data-i18n.
+        -->
+
+        <blockquote id="featuredWish">
+
+            Every wish becomes
+            part of Nayla's story.
+
+        </blockquote>
+
+    </section>
+
+
+    <!-- ======================================
+         HEADER
+    ======================================= -->
+
+    <div class="wall-header">
+
+        <div class="ema-title">
+
+            <h2 data-i18n="emaWall">
+                EMA WALL
+            </h2>
+
+            <p data-i18n="wishesFromEveryone">
+                Wishes from Everyone
+            </p>
+
+        </div>
+
+
+        <div class="wall-tools">
+
+            <input
+                id="searchWish"
+                type="text"
+                placeholder="Search by name..."
+                data-i18n-placeholder="searchByName">
+
+            <select id="sortWish">
+
+                <option
+                    value="newest"
+                    data-i18n="newest">
+                    Newest
+                </option>
+
+                <option
+                    value="oldest"
+                    data-i18n="oldest">
+                    Oldest
+                </option>
+
+                <option
+                    value="longest"
+                    data-i18n="longest">
+                    Longest
+                </option>
+
+                <option
+                    value="shortest"
+                    data-i18n="shortest">
+                    Shortest
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+         WALL
+    ======================================= -->
+
+    <div class="ema-wall-wrapper">
+
+        <div
+            id="emaWall"
+            class="ema-wall">
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ==========================================
+TOAST
+========================================== -->
+
+<div
+    id="toast"
+    class="toast">
+
+    <span data-i18n="emaSuccess">
+        Your Ema has been hung successfully.
+    </span>
+
+</div>
+
+
+<!-- ==========================================
+OMIKUJI
+========================================== -->
+
+<section class="omikuji-section">
+
+    <div class="omikuji-header">
+
+        <span
+            class="section-label"
+            data-i18n="omikujiLabel">
+            おみくじ • OMIKUJI
+        </span>
+
+        <h2 data-i18n="drawYourFortune">
+            Draw Your Fortune
+        </h2>
+
+        <p data-i18n="omikujiDescription">
+            Take a moment, draw your fortune,
+            and receive a little blessing for
+            Nayla's Seijin Shiki.
+        </p>
+
+    </div>
+
+
+    <div class="omikuji-box">
+
+        <div class="omikuji-stick">
+
+            <span id="omikujiNumber">
+                ?
+            </span>
+
+        </div>
+
+
+        <div
+            id="omikujiPaper"
+            class="omikuji-paper">
+
+            <div class="omikuji-paper-inner">
+
+                <span class="omikuji-japanese">
+                    おみくじ
+                </span>
+
+                <h3
+                    id="fortuneTitle"
+                    data-i18n="yourFortune">
+                    Your Fortune
+                </h3>
+
+                <div
+                    id="fortuneIcon"
+                    class="fortune-icon">
+                    🎋
+                </div>
+
+                <p
+                    id="fortuneMessage"
+                    data-i18n="drawFortuneMessage">
+                    Draw your fortune to discover
+                    your blessing.
+                </p>
+
+                <small
+                    id="fortuneBlessing"
+                    data-i18n="fortuneBlessing">
+                    May your wish come true.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <button
+            id="drawOmikuji"
+            class="omikuji-button"
+            data-i18n="drawFortuneButton">
+
+            🎋 Draw Your Fortune
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+HALL OF BLESSINGS
+========================================== -->
+
+<section
+    id="hallOfBlessing"
+    class="blessings-section">
+
+    <div class="blessings-header">
+
+        <span
+            class="section-label"
+            data-i18n="blessingsLabel">
+            祝福 • BLESSINGS
+        </span>
+
+        <h2 data-i18n="hallOfBlessings">
+            Hall of Blessings
+        </h2>
+
+        <p data-i18n="blessingsDescription">
+            Wishes that received the most love
+            from everyone who visited this shrine.
+        </p>
+
+    </div>
+
+
+    <div class="featured-blessing">
+
+        <!-- User content / dynamic content -->
+        <p id="featuredBlessing"></p>
+
+    </div>
+
+
+    <!-- CONTROLS -->
+
+    <div class="blessings-controls">
+
+        <input
+            type="search"
+            id="blessingSearch"
+            placeholder="Search blessings..."
+            data-i18n-placeholder="searchBlessings"
+            autocomplete="off">
+
+
+        <select id="blessingSort">
+
+            <option
+                value="newest"
+                data-i18n="newest">
+                Newest
+            </option>
+
+            <option
+                value="oldest"
+                data-i18n="oldest">
+                Oldest
+            </option>
+
+            <option
+                value="liked"
+                data-i18n="mostLiked">
+                Most Liked
+            </option>
+
+            <option
+                value="longest"
+                data-i18n="longest">
+                Longest
+            </option>
+
+            <option
+                value="shortest"
+                data-i18n="shortest">
+                Shortest
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="blessings-count">
+
+        <span id="blessingCount">
+            0
+        </span>
+
+        <span data-i18n="blessings">
+            blessings
+        </span>
+
+    </div>
+
+
+    <div
+        id="blessingLoading"
+        class="blessing-loading"
+        data-i18n="loadingBlessings">
+
+        🌸 Loading blessings...
+
+    </div>
+
+
+    <div
+        id="blessingGrid"
+        class="blessings-grid">
+    </div>
+
+
+    <div
+        id="blessingEmpty"
+        class="blessing-empty"
+        style="display:none;"
+        data-i18n="noBlessingsFound">
+
+        No blessings found.
+
+    </div>
+
+
+    <div
+        id="blessingError"
+        class="blessing-error"
+        style="display:none;">
+    </div>
+
+
+    <button
+        id="blessingRetry"
+        type="button"
+        style="display:none;"
+        data-i18n="tryAgain">
+
+        Try Again
+
+    </button>
+
+</section>
+
+
+<!-- ==========================================
+WISH TIMELINE
+========================================== -->
+
+<section class="wish-timeline-section">
+
+    <div class="timeline-header">
+
+        <span
+            class="section-label"
+            data-i18n="wishTimelineLabel">
+            願いの軌跡 • WISH TIMELINE
+        </span>
+
+        <h2 data-i18n="journeyOfWishes">
+            The Journey of Wishes
+        </h2>
+
+        <p data-i18n="timelineDescription">
+            Every message marks a small moment
+            in Nayla's journey.
+        </p>
+
+    </div>
+
+
+    <div
+        id="wishTimeline"
+        class="wish-timeline">
+
+        <div
+            class="timeline-loading"
+            data-i18n="loadingWishes">
+
+            🌸 Loading wishes...
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+CLOSING
+========================================== -->
+
+<section class="shrine-closing">
+
+    <div class="closing-decoration">
+        ✦
+    </div>
+
+
+    <span
+        class="section-label"
+        data-i18n="untilNextChapterLabel">
+
+        🌸 旅の終わり • UNTIL THE NEXT CHAPTER
+
+    </span>
+
+
+    <h2 data-i18n="untilNextChapter">
+        Until The Next Chapter
+    </h2>
+
+
+    <div class="closing-divider">
+        <span>⛩️</span>
+    </div>
+
+
+    <div class="closing-content">
+
+        <p data-i18n="closing1">
+            This shrine was built from wishes,
+            memories, and gratitude.
+        </p>
+
+        <p data-i18n="closing2">
+            Every message written here,
+            every little blessing,
+            and every moment shared
+            has become part of its story.
+        </p>
+
+        <p data-i18n="closing3">
+            To every fan who left a message,
+            thank you for becoming part of it.
+        </p>
+
+        <p
+            class="closing-highlight"
+            data-i18n="closingToNayla">
+            And to Nayla,
+        </p>
+
+        <p data-i18n="closing4">
+            may every wish written here
+            find its way to you.
+        </p>
+
+
+        <div class="closing-shrine">
+            ⛩️
+        </div>
+
+
+        <p class="closing-final">
+
+            <span data-i18n="thankYouForVisiting">
+                Thank you for visiting
+            </span>
+
+            <br>
+
+            <strong data-i18n="shrineName">
+                Nayla's Seijin Shiki Shrine.
+            </strong>
+
+        </p>
+
+    </div>
+
+
+    <div class="closing-sakura">
+        🌸　🌸　🌸
+    </div>
+
+</section>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js">
+</script>
+
+{% endblock %}

@@ -1,0 +1,326 @@
+/* ==========================================
+   CLOSING
+   UNTIL THE NEXT CHAPTER
+========================================== */
+
+.shrine-closing {
+
+    position: relative;
+
+    margin-top: 100px;
+
+    padding: 120px 30px 110px;
+
+    text-align: center;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            #09182c 0%,
+            #071325 100%
+        );
+
+    border-top:
+        1px solid
+        rgba(215,180,95,.12);
+
+}
+
+
+/* ==========================================
+   TOP DECORATION
+========================================== */
+
+.closing-decoration {
+
+    margin-bottom: 25px;
+
+    font-size: 24px;
+
+    color: #d7b45f;
+
+    opacity: .7;
+
+}
+
+
+/* ==========================================
+   TITLE
+========================================== */
+
+.shrine-closing .section-label {
+
+    color: #d7b45f;
+
+    letter-spacing: 4px;
+
+    font-size: 12px;
+
+}
+
+
+.shrine-closing h2 {
+
+    margin: 18px 0 30px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 48px;
+
+    color: #f2d498;
+
+    text-transform: uppercase;
+
+    letter-spacing: 2px;
+
+}
+
+
+/* ==========================================
+   DIVIDER
+========================================== */
+
+.closing-divider {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin: 30px auto 45px;
+
+    color: #d7b45f;
+
+    opacity: .75;
+
+}
+
+
+.closing-divider::before,
+.closing-divider::after {
+
+    content: "";
+
+    width: 90px;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(215,180,95,.6)
+        );
+
+}
+
+
+.closing-divider::after {
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(215,180,95,.6),
+            transparent
+        );
+
+}
+
+
+/* ==========================================
+   CONTENT
+========================================== */
+
+.closing-content {
+
+    max-width: 650px;
+
+    margin: auto;
+
+    font-family:
+        "Noto Serif JP",
+        serif;
+
+    font-size: 17px;
+
+    line-height: 2;
+
+    color:
+        rgba(255,255,255,.68);
+
+}
+
+
+.closing-content p {
+
+    margin-bottom: 25px;
+
+}
+
+
+/* ==========================================
+   HIGHLIGHT
+========================================== */
+
+.closing-highlight {
+
+    margin-top: 45px;
+
+    margin-bottom: 5px !important;
+
+    font-size: 25px;
+
+    color: #f2d498;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+}
+
+
+/* ==========================================
+   SHRINE
+========================================== */
+
+.closing-shrine {
+
+    margin: 45px auto;
+
+    font-size: 55px;
+
+    filter:
+        drop-shadow(
+            0 10px 20px
+            rgba(0,0,0,.35)
+        );
+
+    animation:
+        closingFloat
+        4s ease-in-out infinite;
+
+}
+
+
+@keyframes closingFloat {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-7px);
+
+    }
+
+}
+
+
+/* ==========================================
+   FINAL MESSAGE
+========================================== */
+
+.closing-final {
+
+    margin-top: 40px;
+
+    color:
+        rgba(255,255,255,.55);
+
+    font-size: 15px;
+
+    line-height: 2;
+
+}
+
+
+.closing-final strong {
+
+    display: inline-block;
+
+    margin-top: 8px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 19px;
+
+    color: #f2d498;
+
+}
+
+
+/* ==========================================
+   SAKURA
+========================================== */
+
+.closing-sakura {
+
+    margin-top: 55px;
+
+    font-size: 18px;
+
+    letter-spacing: 8px;
+
+    opacity: .45;
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:600px){
+
+    .shrine-closing {
+
+        margin-top: 70px;
+
+        padding:
+            90px
+            20px
+            80px;
+
+    }
+
+    .shrine-closing h2 {
+
+        font-size: 34px;
+
+    }
+
+    .closing-content {
+
+        font-size: 15px;
+
+    }
+
+    .closing-divider::before,
+    .closing-divider::after {
+
+        width: 55px;
+
+    }
+
+    .closing-shrine {
+
+        font-size: 45px;
+
+    }
+
+}

@@ -1,0 +1,841 @@
+/* ==========================================
+   SECRET DEVELOPER LETTER
+========================================== */
+
+.developer-letter-section {
+
+    margin: 100px 0;
+
+    padding: 90px 30px;
+
+    text-align: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.035),
+            rgba(255,255,255,.01)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.developer-letter-header h2 {
+
+    margin: 15px 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 46px;
+
+    color: #f2d498;
+
+}
+
+.developer-letter-header p {
+
+    max-width: 650px;
+
+    margin: auto;
+
+    line-height: 1.8;
+
+    color:
+        rgba(255,255,255,.6);
+
+}
+
+
+/* ==========================================
+   LETTER BOX
+========================================== */
+
+.developer-letter {
+
+    max-width: 700px;
+
+    margin: 60px auto 0;
+
+    position: relative;
+
+}
+
+
+/* ==========================================
+   LOCKED
+========================================== */
+
+.letter-locked {
+
+    position: relative;
+
+    padding: 70px 50px;
+
+    min-height: 420px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            #16253b,
+            #0c1728
+        );
+
+    border:
+        1px solid
+        rgba(215,180,95,.2);
+
+    box-shadow:
+
+        0 30px 70px
+        rgba(0,0,0,.35);
+
+}
+
+
+/* ==========================================
+   LOCK ICON
+========================================== */
+
+.letter-lock-icon {
+
+    font-size: 65px;
+
+    margin-bottom: 20px;
+
+    filter:
+        drop-shadow(
+            0 10px 15px
+            rgba(0,0,0,.3)
+        );
+
+    animation:
+        lockFloat 3s ease-in-out infinite;
+
+}
+
+@keyframes lockFloat {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-8px);
+
+    }
+
+}
+
+
+.locked-japanese {
+
+    color:
+        #d7b45f;
+
+    letter-spacing: 4px;
+
+    font-size: 12px;
+
+}
+
+.letter-locked h3 {
+
+    margin: 15px 0;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 30px;
+
+}
+
+.letter-locked p {
+
+    max-width: 480px;
+
+    line-height: 1.8;
+
+    color:
+        rgba(255,255,255,.6);
+
+}
+
+
+/* ==========================================
+   COUNTDOWN
+========================================== */
+
+.letter-countdown {
+
+    margin-top: 25px;
+
+    padding: 14px 25px;
+
+    border-radius: 40px;
+
+    background:
+        rgba(215,180,95,.08);
+
+    border:
+        1px solid
+        rgba(215,180,95,.2);
+
+    color:
+        #f2d498;
+
+    font-size: 14px;
+
+}
+
+
+/* ==========================================
+   DEVELOPER WAX SEAL
+========================================== */
+
+.wax-seal {
+
+    margin-top: 30px;
+
+    width: 95px;
+    height: 95px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle,
+            #c33c45,
+            #7c1f28
+        );
+
+    border:
+        4px solid
+        rgba(255,255,255,.15);
+
+    box-shadow:
+
+        0 8px 20px
+        rgba(0,0,0,.4),
+
+        inset 0 0 12px
+        rgba(255,255,255,.15);
+
+    position: relative;
+
+}
+
+
+/* ==========================================
+   DEVELOPER IMAGE
+========================================== */
+
+.wax-seal img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    border-radius: 50%;
+
+}
+
+
+/* ==========================================
+   SEAL GLOW
+========================================== */
+
+.wax-seal::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            rgba(255,255,255,.25),
+            transparent 35%
+        );
+
+}
+
+/* ==========================================
+   UNLOCKED
+========================================== */
+
+.letter-unlocked {
+
+    display: none;
+
+    padding: 65px 60px 0;
+
+    text-align: left;
+
+    border-radius: 20px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #fffaf0,
+            #f1dfbd
+        );
+
+    color:
+        #513216;
+
+    box-shadow:
+
+        0 30px 70px
+        rgba(0,0,0,.4);
+
+    animation:
+        letterReveal
+        .8s
+        ease;
+
+}
+
+.letter-unlocked.show {
+
+    display: block;
+
+}
+
+@keyframes letterReveal {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(30px)
+            rotate(-1deg);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            rotate(0);
+
+    }
+
+}
+
+.letter-unlocked.show .wax-seal {
+
+    animation:
+        sealReveal .8s ease .4s both;
+
+}
+
+@keyframes sealReveal {
+
+    0% {
+
+        opacity: 0;
+
+        transform:
+            scale(.5)
+            rotate(-20deg);
+
+    }
+
+    70% {
+
+        transform:
+            scale(1.1)
+            rotate(5deg);
+
+    }
+
+    100% {
+
+        opacity: 1;
+
+        transform:
+            scale(1)
+            rotate(0);
+
+    }
+
+}
+
+/* ==========================================
+   OPEN ICON
+========================================== */
+
+.letter-open-icon {
+
+    text-align: center;
+
+    font-size: 55px;
+
+    margin-bottom: 10px;
+
+}
+
+.letter-unlocked
+> .locked-japanese {
+
+    display: block;
+
+    text-align: center;
+
+}
+
+.letter-unlocked h3 {
+
+    text-align: center;
+
+    font-family:
+        "Noto Serif JP",
+        serif;
+
+    font-size: 32px;
+
+    margin: 15px 0;
+
+}
+
+
+/* ==========================================
+   DIVIDER
+========================================== */
+
+.letter-divider {
+
+    text-align: center;
+
+    margin: 30px 0;
+
+    font-size: 24px;
+
+    opacity: .5;
+
+}
+
+
+/* ==========================================
+   LETTER CONTENT
+========================================== */
+
+.developer-letter-content {
+
+    font-family:
+        "Noto Serif JP",
+        serif;
+
+    font-size: 16px;
+
+    line-height: 2.1;
+
+}
+
+.developer-letter-content p {
+
+    margin-bottom: 22px;
+
+}
+
+
+/* ==========================================
+   SIGNATURE
+========================================== */
+
+.developer-signature {
+
+    margin-top: 50px;
+
+    padding-top: 30px;
+
+    border-top:
+        1px solid
+        rgba(80,40,10,.15);
+
+    text-align: right;
+
+    line-height: 1.8;
+
+}
+
+.developer-signature strong {
+
+    font-size: 20px;
+
+}
+
+.developer-signature small {
+
+    opacity: .6;
+
+}
+
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.letter-unlocked .letter-footer {
+
+    margin:
+        50px -60px 0;
+
+    padding: 25px;
+
+    text-align: center;
+
+    background:
+        rgba(180,130,60,.08);
+
+    font-family:
+        "Noto Serif JP",
+        serif;
+
+}
+
+.letter-footer small {
+
+    opacity: .55;
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:600px){
+
+    .developer-letter-header h2 {
+
+        font-size: 34px;
+
+    }
+
+    .letter-locked {
+
+        padding:
+            50px 25px;
+
+    }
+
+    .letter-unlocked {
+
+        padding:
+            45px 25px 0;
+
+    }
+
+    .developer-letter-content {
+
+        font-size: 15px;
+
+    }
+
+    .letter-unlocked
+    .letter-footer {
+
+        margin:
+            40px -25px 0;
+
+    }
+
+}
+/* =========================================================
+   SECRET LETTER COUNTDOWN
+========================================================= */
+
+.letter-countdown {
+
+    width: min(
+        440px,
+        calc(100% - 40px)
+    );
+
+    margin: 38px auto 0;
+
+    padding: 18px 22px;
+
+    border: 1px solid
+        rgba(229, 189, 85, .18);
+
+    border-radius: 14px;
+
+    background:
+        rgba(255, 255, 255, .025);
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255, 255, 255, .025);
+
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.countdown-date {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    flex-wrap: wrap;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    color:
+        rgba(245, 241, 232, .72);
+
+}
+
+
+.countdown-lock {
+
+    font-size: 14px;
+
+}
+
+
+.countdown-date strong {
+
+    color:
+        #e5bd55;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+.countdown-timer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 14px;
+
+}
+
+
+.countdown-timer > span:not(.countdown-separator) {
+
+    min-width: 54px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.countdown-timer strong {
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 20px;
+
+    line-height: 1.2;
+
+    font-weight: 600;
+
+    color:
+        #f5d77a;
+
+}
+
+
+.countdown-timer small {
+
+    margin-top: 3px;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 9px;
+
+    line-height: 1;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+
+    color:
+        rgba(245, 241, 232, .42);
+
+}
+
+
+.countdown-separator {
+
+    margin-top: -10px;
+
+    font-size: 18px;
+
+    color:
+        rgba(229, 189, 85, .35);
+
+}
+
+
+/* =========================================================
+   OPENED
+========================================================= */
+
+.countdown-opened {
+
+    display: block;
+
+    padding: 5px 0;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 14px;
+
+    color:
+        #e5bd55;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .letter-countdown {
+
+        width:
+            calc(100% - 30px);
+
+        padding:
+            16px 14px;
+
+    }
+
+
+    .countdown-date {
+
+        font-size: 12px;
+
+    }
+
+
+    .countdown-timer {
+
+        gap: 5px;
+
+    }
+
+
+    .countdown-timer > span:not(.countdown-separator) {
+
+        min-width: 45px;
+
+    }
+
+
+    .countdown-timer strong {
+
+        font-size: 17px;
+
+    }
+
+
+    .countdown-timer small {
+
+        font-size: 8px;
+
+    }
+
+
+    .countdown-separator {
+
+        font-size: 15px;
+
+    }
+
+}

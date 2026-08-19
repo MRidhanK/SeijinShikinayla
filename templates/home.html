@@ -1,0 +1,778 @@
+{% extends "base.html" %}
+
+
+{% block body_class %}
+home-page ceremony-page
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =========================================
+     ABOUT HERO
+========================================= -->
+
+<section class="hero about-hero" id="about">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+        <span
+            class="hero-japanese"
+            data-i18n="ceremony.hero.jp">
+            成人式
+        </span>
+
+        <h2
+            class="hero-subtitle"
+            data-i18n="ceremony.hero.subtitle">
+            Seijin Shiki Ceremony
+        </h2>
+
+        <h1>
+            Araki Nayla Suji Aurelia
+        </h1>
+
+        <p
+            class="about-intro"
+            data-i18n="ceremony.hero.intro">
+
+            A celebration of a new chapter,
+            a journey into adulthood,
+            and the memories that shape who we become.
+
+        </p>
+
+        <p
+            class="about-description"
+            data-i18n="ceremony.hero.description">
+
+            Inspired by the elegance and traditions of Japan,
+            this space was created to celebrate an important
+            milestone and the beginning of a beautiful new journey.
+
+        </p>
+
+        <div class="about-divider">
+
+            <span></span>
+
+            <small
+                data-i18n="ceremony.hero.divider">
+                成人
+            </small>
+
+            <span></span>
+
+        </div>
+
+    </div>
+
+    <div class="hero-scroll">
+
+        <span data-i18n="ceremony.hero.scroll">
+            Scroll to discover
+        </span>
+
+        <div class="scroll-line"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     WHAT IS SEIJIN SHIKI
+========================================= -->
+
+<section class="about-section about-meaning">
+
+    <div class="about-section-container">
+
+        <div class="section-heading">
+
+            <span class="section-number">
+                01
+            </span>
+
+            <span
+                class="section-label"
+                data-i18n="ceremony.meaning.label">
+                THE CEREMONY
+            </span>
+
+            <h2
+                data-i18n="ceremony.meaning.title">
+                What is Seijin Shiki?
+            </h2>
+
+            <div class="section-line"></div>
+
+        </div>
+
+
+        <div class="meaning-grid">
+
+            <div class="meaning-text">
+
+                <p
+                    class="meaning-lead"
+                    data-i18n="ceremony.meaning.lead">
+
+                    Seijin Shiki is a celebration
+                    of entering adulthood.
+
+                </p>
+
+                <p
+                    data-i18n="ceremony.meaning.paragraph1">
+
+                    It represents a meaningful transition
+                    from childhood into a new stage of life,
+                    filled with greater freedom, responsibility,
+                    dreams, and possibilities.
+
+                </p>
+
+                <p
+                    data-i18n="ceremony.meaning.paragraph2">
+
+                    More than simply a ceremony,
+                    it is a moment to pause,
+                    look back at the journey that has already
+                    been taken, and look forward to everything
+                    that is still waiting ahead.
+
+                </p>
+
+            </div>
+
+
+            <div class="meaning-symbol">
+
+                <div class="meaning-circle">
+
+                    <span class="meaning-jp">
+                        成人
+                    </span>
+
+                    <span
+                        class="meaning-small"
+                        data-i18n="ceremony.meaning.adulthood">
+                        ADULTHOOD
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     COUNTDOWN TIMER
+========================================= -->
+
+<section
+    class="home-countdown"
+    id="countdown">
+
+    <div class="countdown-container">
+
+        <div class="countdown-decoration countdown-decoration-left">
+            ✦
+        </div>
+
+        <div class="countdown-content">
+
+            <span class="countdown-japanese">
+                二十歳
+            </span>
+
+            <span
+                class="countdown-label"
+                data-i18n="ceremony.countdown.label">
+                COUNTING DOWN TO A NEW CHAPTER
+            </span>
+
+            <h2
+                data-i18n="ceremony.countdown.title">
+                Nayla's 20th Birthday
+            </h2>
+
+            <p class="countdown-date">
+                18 June 2027
+            </p>
+
+            <div class="countdown-line"></div>
+
+            <div class="countdown-timer">
+
+                <div class="countdown-item">
+
+                    <span
+                        class="countdown-number"
+                        id="countdown-days">
+                        00
+                    </span>
+
+                    <span
+                        class="countdown-unit"
+                        data-i18n="ceremony.countdown.days">
+                        DAYS
+                    </span>
+
+                </div>
+
+
+                <div class="countdown-separator">
+                    :
+                </div>
+
+
+                <div class="countdown-item">
+
+                    <span
+                        class="countdown-number"
+                        id="countdown-hours">
+                        00
+                    </span>
+
+                    <span
+                        class="countdown-unit"
+                        data-i18n="ceremony.countdown.hours">
+                        HOURS
+                    </span>
+
+                </div>
+
+
+                <div class="countdown-separator">
+                    :
+                </div>
+
+
+                <div class="countdown-item">
+
+                    <span
+                        class="countdown-number"
+                        id="countdown-minutes">
+                        00
+                    </span>
+
+                    <span
+                        class="countdown-unit"
+                        data-i18n="ceremony.countdown.minutes">
+                        MINUTES
+                    </span>
+
+                </div>
+
+
+                <div class="countdown-separator">
+                    :
+                </div>
+
+
+                <div class="countdown-item">
+
+                    <span
+                        class="countdown-number"
+                        id="countdown-seconds">
+                        00
+                    </span>
+
+                    <span
+                        class="countdown-unit"
+                        data-i18n="ceremony.countdown.seconds">
+                        SECONDS
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="countdown-finished"
+                id="countdown-finished">
+
+                <span class="finished-japanese">
+                    成人
+                </span>
+
+                <strong
+                    data-i18n="ceremony.countdown.finished">
+                    The new chapter has begun.
+                </strong>
+
+                <p
+                    data-i18n="ceremony.countdown.birthday">
+                    Happy 20th Birthday, Nayla.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="countdown-decoration countdown-decoration-right">
+            ✦
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     TWENTY YEARS
+========================================= -->
+
+<section class="about-section twenty-section">
+
+    <div class="twenty-background-number">
+        20
+    </div>
+
+    <div class="about-section-container">
+
+        <div class="twenty-content">
+
+            <span
+                class="section-label"
+                data-i18n="ceremony.twenty.label">
+                A MILESTONE
+            </span>
+
+            <h2
+                data-i18n="ceremony.twenty.title">
+                Twenty Years
+            </h2>
+
+            <div class="section-line centered"></div>
+
+            <p
+                class="twenty-lead"
+                data-i18n="ceremony.twenty.lead">
+
+                Twenty years of memories.
+                Twenty years of becoming.
+
+            </p>
+
+            <p
+                data-i18n="ceremony.twenty.paragraph1">
+
+                Every smile, every challenge,
+                every friendship, every dream,
+                and every little moment has helped
+                shape the person standing here today.
+
+            </p>
+
+            <p
+                data-i18n="ceremony.twenty.paragraph2">
+
+                And now, another chapter begins.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     NEW CHAPTER
+========================================= -->
+
+<section class="about-section chapter-section">
+
+    <div class="about-section-container">
+
+        <div class="chapter-grid">
+
+            <div class="chapter-card">
+
+                <span class="chapter-number">
+                    二十
+                </span>
+
+                <span
+                    class="chapter-card-label"
+                    data-i18n="ceremony.chapter.twenty">
+                    TWENTY
+                </span>
+
+            </div>
+
+
+            <div class="chapter-text">
+
+                <span
+                    class="section-label"
+                    data-i18n="ceremony.chapter.label">
+                    A NEW CHAPTER
+                </span>
+
+                <h2
+                    data-i18n="ceremony.chapter.title">
+                    The Journey Continues
+                </h2>
+
+                <div class="section-line"></div>
+
+                <p
+                    data-i18n="ceremony.chapter.paragraph1">
+
+                    Adulthood does not mean having
+                    every answer.
+
+                </p>
+
+                <p
+                    data-i18n="ceremony.chapter.paragraph2">
+
+                    It means having the courage to
+                    continue searching, learning,
+                    growing, and becoming.
+
+                </p>
+
+                <p
+                    data-i18n="ceremony.chapter.paragraph3">
+
+                    There will be new places to discover,
+                    new people to meet, new dreams to chase,
+                    and countless memories still waiting
+                    to be created.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     PERSONAL MESSAGE
+========================================= -->
+
+<section class="about-section message-section">
+
+    <div class="about-section-container">
+
+        <div class="message-card">
+
+            <span
+                class="message-japanese"
+                data-i18n="ceremony.message.jp">
+                これからも
+            </span>
+
+            <h2
+                data-i18n="ceremony.message.title">
+
+                May the journey ahead
+                be beautiful.
+
+            </h2>
+
+            <p
+                data-i18n="ceremony.message.paragraph1">
+
+                May every new chapter bring
+                another reason to smile.
+
+            </p>
+
+            <p
+                data-i18n="ceremony.message.paragraph2">
+
+                May every dream find its way
+                toward becoming reality.
+
+            </p>
+
+            <div class="message-signature">
+
+                <span
+                    data-i18n="ceremony.message.with">
+                    With love,
+                </span>
+
+                <strong
+                    data-i18n="ceremony.message.for">
+                    For Nayla
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     NEXT SECTION
+========================================= -->
+
+<section class="about-next">
+
+    <a href="#memories">
+
+        <span
+            data-i18n="ceremony.next">
+            Continue the journey
+        </span>
+
+        <strong>
+            ↓
+        </strong>
+
+    </a>
+
+</section>
+
+
+<!-- =========================================
+     JKT48 MEMORY ARCHIVE
+========================================= -->
+
+<section
+    class="memory-gallery"
+    id="memories">
+
+    <div class="memory-gallery-container">
+
+        <div class="section-heading memory-heading">
+
+            <span class="section-number">
+                03
+            </span>
+
+            <span
+                class="section-label"
+                data-i18n="ceremony.memories.label">
+                JKT48 MEMORIES
+            </span>
+
+            <h2
+                data-i18n="ceremony.memories.title">
+                A Journey With JKT48
+            </h2>
+
+            <div class="section-line"></div>
+
+            <p
+                class="memory-intro"
+                data-i18n="ceremony.memories.intro">
+
+                From the first steps to unforgettable
+                moments on stage, every chapter became
+                a part of the journey.
+
+            </p>
+
+        </div>
+
+
+        <!-- =========================================
+             GALLERY
+        ========================================= -->
+
+        <div class="gallery-grid">
+
+
+            <!-- 2023 -->
+
+            <div class="gallery-card">
+
+                <img
+                    src="{{ url_for('static', filename='img/2023.jpg') }}"
+                    alt="2023">
+
+                <div class="gallery-info">
+
+                    <h3>
+                        2023
+                    </h3>
+
+                    <p
+                        data-i18n="ceremony.gallery.2023">
+                        The First Step of a Beautiful Journey
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- 2024 -->
+
+            <div class="gallery-card">
+
+                <img
+                    src="{{ url_for('static', filename='img/2024.jpg') }}"
+                    alt="2024">
+
+                <div class="gallery-info">
+
+                    <h3>
+                        2024
+                    </h3>
+
+                    <p
+                        data-i18n="ceremony.gallery.2024">
+                        Growing Through JKT48 School
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- 2025 -->
+
+            <div class="gallery-card">
+
+                <img
+                    src="{{ url_for('static', filename='img/2025.jpg') }}"
+                    alt="2025">
+
+                <div class="gallery-info">
+
+                    <h3>
+                        2025
+                    </h3>
+
+                    <p
+                        data-i18n="ceremony.gallery.2025">
+                        Promoted to Core Member & Trusted
+                        Translator at Sister Reunion Festival
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- 13 JUNE 2026 -->
+
+            <div class="gallery-card">
+
+                <img
+                    src="{{ url_for('static', filename='img/RHCONCERT.jpg') }}"
+                    alt="13 June 2026">
+
+                <div class="gallery-info">
+
+                    <h3>
+                        13-06-2026
+                    </h3>
+
+                    <p
+                        data-i18n="ceremony.gallery.2026.rh">
+                        Nayla performed Bird, ranked 15th
+                        in Request Hour 2026, alongside Aurelia
+                        from Generation 10 and Aurhel Alana from
+                        Generation 12. A special and memorable
+                        performance that made many fans proud
+                        and emotional. 🕊️🩵
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- 18 JUNE 2026 -->
+
+            <div class="gallery-card">
+
+                <img
+                    src="{{ url_for('static', filename='img/2026.jpg') }}"
+                    alt="18 June 2026">
+
+                <div class="gallery-info">
+
+                    <h3>
+                        18-06-2026
+                    </h3>
+
+                    <p
+                        data-i18n="ceremony.gallery.2026.birthday">
+                        #HappinessNaylalaland19 🎂
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- 2027 -->
+
+            <div class="gallery-card gallery-card-2027">
+
+                <div class="gallery-placeholder">
+
+                    <span class="placeholder-year">
+                        2027
+                    </span>
+
+                    <span class="placeholder-japanese">
+                        二十歳
+                    </span>
+
+                    <span
+                        class="placeholder-text"
+                        data-i18n="ceremony.gallery.2027.placeholder">
+                        A new chapter is waiting...
+                    </span>
+
+                </div>
+
+                <div class="gallery-info">
+
+                    <h3>
+                        2027
+                    </h3>
+
+                    <p
+                        data-i18n="ceremony.gallery.2027">
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}
+
+
+{% block js %}
+
+<script src="{{ url_for('static', filename='js/ceremony.js') }}"></script>
+
+{% endblock %}

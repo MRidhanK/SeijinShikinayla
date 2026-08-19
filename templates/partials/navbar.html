@@ -1,0 +1,201 @@
+<nav class="navbar">
+
+    <div class="navbar-container">
+
+        <!-- LOGO -->
+
+        <a
+            href="{{ url_for('home') }}"
+            class="navbar-logo">
+
+            成人式
+
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <ul
+            class="navbar-links"
+            id="navbarLinks">
+
+            <li>
+                <a
+                    href="{{ url_for('home') }}"
+                    data-i18n="navbar.home">
+                    Home
+                </a>
+            </li>
+
+
+            <li>
+                <a
+                    href="{{ url_for('gallery') }}"
+                    data-i18n="navbar.gallery">
+                    Gallery
+                </a>
+            </li>
+
+
+            <li>
+                <a
+                    href="{{ url_for('guestbook') }}"
+                    data-i18n="navbar.guestbook">
+                    Guestbook
+                </a>
+            </li>
+
+
+            <li>
+                <a
+                    href="{{ url_for('ai') }}"
+                    data-i18n="navbar.ai">
+                    AI
+                </a>
+            </li>
+
+
+            <li>
+                <a
+                    href="{{ url_for('photobooth') }}"
+                    data-i18n="navbar.photobooth">
+                    Photobooth
+                </a>
+            </li>
+
+
+            <li>
+                <a
+                    href="{{ url_for('games') }}"
+                    data-i18n="navbar.games">
+                    Games
+                </a>
+            </li>
+
+
+            <li>
+                <a
+                    href="{{ url_for('secret_letter') }}"
+                    data-i18n="navbar.secretLetter">
+                    Secret Letter
+                </a>
+            </li>
+
+        </ul>
+
+
+        <!-- =================================================
+             LANGUAGE SWITCHER
+        ================================================== -->
+
+        <div class="language-switcher">
+
+            <button
+                type="button"
+                class="language-current"
+                id="languageCurrent"
+                aria-label="Select language"
+                aria-haspopup="true"
+                aria-expanded="false">
+
+                🌐
+
+                <span id="currentLanguageLabel">
+                    English
+                </span>
+
+                <span class="language-arrow">
+                    ▾
+                </span>
+
+            </button>
+
+
+            <div
+                class="language-menu"
+                id="languageMenu"
+                role="menu">
+
+                <button
+                    type="button"
+                    class="language-option"
+                    data-language="id"
+                    role="menuitem">
+
+                    🇮🇩
+                    <span>Indonesia</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="language-option"
+                    data-language="en"
+                    role="menuitem">
+
+                    🇬🇧
+                    <span>English</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="language-option"
+                    data-language="ja"
+                    role="menuitem">
+
+                    🇯🇵
+                    <span>日本語</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="language-option"
+                    data-language="zh"
+                    role="menuitem">
+
+                    🇨🇳
+                    <span>中文</span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="language-option"
+                    data-language="ko"
+                    role="menuitem">
+
+                    🇰🇷
+                    <span>한국어</span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- MOBILE MENU -->
+
+        <button
+            class="navbar-toggle"
+            id="navbarToggle"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="navbarLinks">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+</nav>
