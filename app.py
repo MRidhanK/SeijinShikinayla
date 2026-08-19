@@ -1108,32 +1108,32 @@ def secret_letter():
     return render_template("secret-letter.html")
 
 
-# =========================================================
-# FAVICON
-# =========================================================
+# # =========================================================
+# # FAVICON
+# # =========================================================
 
-@app.route("/favicon.ico")
-def favicon():
+# @app.route("/favicon.ico")
+# def favicon():
 
-    static_folder = app.static_folder
+#     static_folder = app.static_folder
 
-    if static_folder:
+#     if static_folder:
 
-        favicon_path = os.path.join(
-            static_folder,
-            "favicon.ico"
-        )
+#         favicon_path = os.path.join(
+#             static_folder,
+#             "favicon.ico"
+#         )
 
-        if os.path.isfile(
-            favicon_path
-        ):
+#         if os.path.isfile(
+#             favicon_path
+#         ):
 
-            return send_from_directory(
-                static_folder,
-                "favicon.ico"
-            )
+#             return send_from_directory(
+#                 static_folder,
+#                 "favicon.ico"
+#             )
 
-    return "", 204
+#     return "", 204
 
 
 # =========================================================
