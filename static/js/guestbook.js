@@ -1,34 +1,12 @@
 /* =========================================================
-   GUESTBOOK.JS
+   GUESTBOOK.JS — OPTIMIZED VERSION
    =========================================================
 
-   5 LANGUAGE SYSTEM
+   LANGUAGE:
    ID • EN • JA • ZH • KO
 
-   LANGUAGE SOURCE:
-   - localStorage.language
-   - localStorage.selectedLanguage
-   - localStorage.currentLanguage
-   - localStorage.lang
-   - document.documentElement.lang
+   DATA FLOW:
 
-   NAVBAR:
-   - .language-option[data-language]
-   - languageChanged
-   - languageChange
-   - langChanged
-
-   IMPORTANT:
-   Guestbook TIDAK melakukan INSERT langsung ke Supabase.
-
-   INSERT:
-       Browser
-          ↓
-       Flask /api/guestbook
-          ↓
-       Supabase
-
-   READ:
        Browser
           ↓
        Flask /api/guestbook
@@ -36,24 +14,35 @@
        Supabase
 
    LIKE:
+
        Browser
           ↓
        Supabase RPC
 
    REALTIME:
+
        Supabase Realtime
+
+   OPTIMIZATIONS:
+
+   ✓ No MutationObserver language loop
+   ✓ No repeated initial rendering
+   ✓ Main Ema rendering limited
+   ✓ Blessings lazy rendered
+   ✓ Timeline lazy rendered
+   ✓ DocumentFragment rendering
+   ✓ Sakura interval cleanup
+   ✓ Realtime initialized immediately
+   ✓ Language change does not refetch API
+   ✓ Load More support
 ========================================================= */
 
 
 /* =========================================================
-   01. TRANSLATION DICTIONARY
+   01. TRANSLATIONS
 ========================================================= */
 
 const GUESTBOOK_TRANSLATIONS = {
-
-    /* =====================================================
-       INDONESIAN
-    ===================================================== */
 
     id: {
 
@@ -67,6 +56,7 @@ const GUESTBOOK_TRANSLATIONS = {
 
         emaShrine: "絵馬 • EMA SHRINE",
         wishesForNayla: "Harapan untuk Nayla",
+
         heroDescription:
             "Setiap pesan akan menjadi sebuah Ema kayu yang tergantung di dalam kuil.",
 
@@ -306,13 +296,15 @@ const GUESTBOOK_TRANSLATIONS = {
             "Harapan",
 
         likes:
-            "suka"
+            "suka",
+
+        loadMore:
+            "Muat Lebih Banyak",
+
+        showing:
+            "Menampilkan {shown} dari {total} harapan"
     },
 
-
-    /* =====================================================
-       ENGLISH
-    ===================================================== */
 
     en: {
 
@@ -332,26 +324,20 @@ const GUESTBOOK_TRANSLATIONS = {
 
         wishes: "Wishes",
 
-        hangYourEma:
-            "Hang Your Ema",
+        hangYourEma: "Hang Your Ema",
 
         formDescription:
             "Leave your blessing for Nayla's Seijin Shiki.",
 
-        yourName:
-            "Your Name",
+        yourName: "Your Name",
 
-        yourMessage:
-            "Your Message...",
+        yourMessage: "Your Message...",
 
-        writeYourWish:
-            "Write your wish...",
+        writeYourWish: "Write your wish...",
 
-        hangMyEma:
-            "Hang My Ema",
+        hangMyEma: "Hang My Ema",
 
-        preview:
-            "Preview",
+        preview: "Preview",
 
         featuredWishLabel:
             "🌸 Featured Wish",
@@ -582,13 +568,15 @@ const GUESTBOOK_TRANSLATIONS = {
             "Wish",
 
         likes:
-            "likes"
+            "likes",
+
+        loadMore:
+            "Load More",
+
+        showing:
+            "Showing {shown} of {total} wishes"
     },
 
-
-    /* =====================================================
-       JAPANESE
-    ===================================================== */
 
     ja: {
 
@@ -862,13 +850,15 @@ const GUESTBOOK_TRANSLATIONS = {
             "願い",
 
         likes:
-            "いいね"
+            "いいね",
+
+        loadMore:
+            "もっと見る",
+
+        showing:
+            "{total}件中 {shown}件を表示"
     },
 
-
-    /* =====================================================
-       CHINESE
-    ===================================================== */
 
     zh: {
 
@@ -1142,13 +1132,15 @@ const GUESTBOOK_TRANSLATIONS = {
             "愿望",
 
         likes:
-            "喜欢"
+            "喜欢",
+
+        loadMore:
+            "加载更多",
+
+        showing:
+            "显示 {shown} / {total} 个愿望"
     },
 
-
-    /* =====================================================
-       KOREAN
-    ===================================================== */
 
     ko: {
 
@@ -1422,14 +1414,20 @@ const GUESTBOOK_TRANSLATIONS = {
             "소원",
 
         likes:
-            "좋아요"
+            "좋아요",
+
+        loadMore:
+            "더 보기",
+
+        showing:
+            "{total}개 중 {shown}개 표시"
     }
 
 };
 
 
 /* =========================================================
-   02. LANGUAGE SYSTEM
+   02. CONFIG
 ========================================================= */
 
 const SUPPORTED_GUESTBOOK_LANGUAGES = [
@@ -1440,12 +1438,238 @@ const SUPPORTED_GUESTBOOK_LANGUAGES = [
     "ko"
 ];
 
+const MAX_NAME_LENGTH = 50;
 
-function normalizeGuestbookLanguage(language) {
+const MAX_MESSAGE_LENGTH = 1000;
 
-    const value = String(language || "")
-        .toLowerCase()
-        .trim();
+const INITIAL_RENDER_COUNT = 30;
+
+const LOAD_MORE_COUNT = 30;
+
+const API_GUESTBOOK = "/api/guestbook";
+
+
+/* =========================================================
+   03. STATE
+========================================================= */
+
+let wishes = [];
+
+let isSubmitting = false;
+
+let realtimeChannel = null;
+
+let featuredInterval = null;
+
+let sakuraInterval = null;
+
+let currentRenderCount =
+    INITIAL_RENDER_COUNT;
+
+let blessingsInitialized = false;
+
+let timelineInitialized = false;
+
+let guestbookInitialized = false;
+
+
+/* =========================================================
+   04. ELEMENTS
+========================================================= */
+
+let form;
+let wall;
+let guestName;
+let guestMessage;
+let counter;
+let previewName;
+let previewMessage;
+let wishCount;
+let toast;
+let searchInput;
+let sortSelect;
+
+let blessingSearch;
+let blessingSort;
+let blessingGrid;
+let blessingCount;
+let blessingEmpty;
+let blessingLoading;
+let blessingError;
+let blessingRetry;
+
+let wishTimeline;
+let featuredWish;
+let featuredBlessing;
+
+let omikujiNumber;
+let fortuneTitle;
+let fortuneIcon;
+let fortuneMessage;
+let fortuneBlessing;
+let drawOmikuji;
+
+
+/* =========================================================
+   05. GET ELEMENTS
+========================================================= */
+
+function cacheGuestbookElements() {
+
+    form =
+        document.getElementById(
+            "guestbookForm"
+        );
+
+    wall =
+        document.getElementById(
+            "emaWall"
+        );
+
+    guestName =
+        document.getElementById(
+            "guestName"
+        );
+
+    guestMessage =
+        document.getElementById(
+            "guestMessage"
+        );
+
+    counter =
+        document.getElementById(
+            "charCounter"
+        );
+
+    previewName =
+        document.getElementById(
+            "previewName"
+        );
+
+    previewMessage =
+        document.getElementById(
+            "previewMessage"
+        );
+
+    wishCount =
+        document.getElementById(
+            "wishCount"
+        );
+
+    toast =
+        document.getElementById(
+            "toast"
+        );
+
+    searchInput =
+        document.getElementById(
+            "searchWish"
+        );
+
+    sortSelect =
+        document.getElementById(
+            "sortWish"
+        );
+
+    blessingSearch =
+        document.getElementById(
+            "blessingSearch"
+        );
+
+    blessingSort =
+        document.getElementById(
+            "blessingSort"
+        );
+
+    blessingGrid =
+        document.getElementById(
+            "blessingGrid"
+        );
+
+    blessingCount =
+        document.getElementById(
+            "blessingCount"
+        );
+
+    blessingEmpty =
+        document.getElementById(
+            "blessingEmpty"
+        );
+
+    blessingLoading =
+        document.getElementById(
+            "blessingLoading"
+        );
+
+    blessingError =
+        document.getElementById(
+            "blessingError"
+        );
+
+    blessingRetry =
+        document.getElementById(
+            "blessingRetry"
+        );
+
+    wishTimeline =
+        document.getElementById(
+            "wishTimeline"
+        );
+
+    featuredWish =
+        document.getElementById(
+            "featuredWish"
+        );
+
+    featuredBlessing =
+        document.getElementById(
+            "featuredBlessing"
+        );
+
+    omikujiNumber =
+        document.getElementById(
+            "omikujiNumber"
+        );
+
+    fortuneTitle =
+        document.getElementById(
+            "fortuneTitle"
+        );
+
+    fortuneIcon =
+        document.getElementById(
+            "fortuneIcon"
+        );
+
+    fortuneMessage =
+        document.getElementById(
+            "fortuneMessage"
+        );
+
+    fortuneBlessing =
+        document.getElementById(
+            "fortuneBlessing"
+        );
+
+    drawOmikuji =
+        document.getElementById(
+            "drawOmikuji"
+        );
+}
+
+
+/* =========================================================
+   06. LANGUAGE
+========================================================= */
+
+function normalizeGuestbookLanguage(
+    language
+) {
+
+    const value =
+        String(language || "")
+            .toLowerCase()
+            .trim();
 
     if (
         value === "id" ||
@@ -1502,17 +1726,14 @@ function getCurrentGuestbookLanguage() {
 
         if (value) {
 
-            const normalized =
-                normalizeGuestbookLanguage(value);
+            return normalizeGuestbookLanguage(
+                value
+            );
 
-            if (
-                SUPPORTED_GUESTBOOK_LANGUAGES
-                    .includes(normalized)
-            ) {
-                return normalized;
-            }
         }
+
     }
+
 
     const htmlLanguage =
         document.documentElement
@@ -1523,14 +1744,16 @@ function getCurrentGuestbookLanguage() {
         return normalizeGuestbookLanguage(
             htmlLanguage
         );
+
     }
+
 
     return "en";
 }
 
 
 /* =========================================================
-   03. TRANSLATION HELPER
+   07. TRANSLATION
 ========================================================= */
 
 function guestbookT(
@@ -1546,27 +1769,36 @@ function guestbookT(
             language
         ]?.[key];
 
+
     if (
         typeof text !== "string"
     ) {
 
         text =
-            GUESTBOOK_TRANSLATIONS.en?.[key];
+            GUESTBOOK_TRANSLATIONS
+                .en?.[key];
+
     }
+
 
     if (
         typeof text !== "string"
     ) {
 
         return key;
+
     }
 
-    Object.entries(
-        replacements
-    ).forEach(
-        ([name, value]) => {
 
-            text = text.replace(
+    for (
+        const [name, value]
+        of Object.entries(
+            replacements
+        )
+    ) {
+
+        text =
+            text.replace(
                 new RegExp(
                     `\\{${name}\\}`,
                     "g"
@@ -1574,185 +1806,15 @@ function guestbookT(
                 String(value)
             );
 
-        }
-    );
+    }
+
 
     return text;
 }
 
 
 /* =========================================================
-   04. ELEMENTS
-========================================================= */
-
-const form =
-    document.getElementById(
-        "guestbookForm"
-    );
-
-const wall =
-    document.getElementById(
-        "emaWall"
-    );
-
-const guestName =
-    document.getElementById(
-        "guestName"
-    );
-
-const guestMessage =
-    document.getElementById(
-        "guestMessage"
-    );
-
-const counter =
-    document.getElementById(
-        "charCounter"
-    );
-
-const previewName =
-    document.getElementById(
-        "previewName"
-    );
-
-const previewMessage =
-    document.getElementById(
-        "previewMessage"
-    );
-
-const wishCount =
-    document.getElementById(
-        "wishCount"
-    );
-
-const toast =
-    document.getElementById(
-        "toast"
-    );
-
-const searchInput =
-    document.getElementById(
-        "searchWish"
-    );
-
-const sortSelect =
-    document.getElementById(
-        "sortWish"
-    );
-
-const blessingSearch =
-    document.getElementById(
-        "blessingSearch"
-    );
-
-const blessingSort =
-    document.getElementById(
-        "blessingSort"
-    );
-
-const blessingGrid =
-    document.getElementById(
-        "blessingGrid"
-    );
-
-const blessingCount =
-    document.getElementById(
-        "blessingCount"
-    );
-
-const blessingEmpty =
-    document.getElementById(
-        "blessingEmpty"
-    );
-
-const blessingLoading =
-    document.getElementById(
-        "blessingLoading"
-    );
-
-const blessingError =
-    document.getElementById(
-        "blessingError"
-    );
-
-const blessingRetry =
-    document.getElementById(
-        "blessingRetry"
-    );
-
-const wishTimeline =
-    document.getElementById(
-        "wishTimeline"
-    );
-
-const featuredWish =
-    document.getElementById(
-        "featuredWish"
-    );
-
-const featuredBlessing =
-    document.getElementById(
-        "featuredBlessing"
-    );
-
-const omikujiNumber =
-    document.getElementById(
-        "omikujiNumber"
-    );
-
-const fortuneTitle =
-    document.getElementById(
-        "fortuneTitle"
-    );
-
-const fortuneIcon =
-    document.getElementById(
-        "fortuneIcon"
-    );
-
-const fortuneMessage =
-    document.getElementById(
-        "fortuneMessage"
-    );
-
-const fortuneBlessing =
-    document.getElementById(
-        "fortuneBlessing"
-    );
-
-const drawOmikuji =
-    document.getElementById(
-        "drawOmikuji"
-    );
-
-
-/* =========================================================
-   05. CONFIG
-========================================================= */
-
-const MAX_NAME_LENGTH = 50;
-
-const MAX_MESSAGE_LENGTH = 1000;
-
-const API_GUESTBOOK =
-    "/api/guestbook";
-
-
-/* =========================================================
-   06. STATE
-========================================================= */
-
-let wishes = [];
-
-let isSubmitting = false;
-
-let realtimeChannel = null;
-
-let featuredInterval = null;
-
-
-/* =========================================================
-   07. APPLY ALL TRANSLATIONS
+   08. APPLY TRANSLATIONS
 ========================================================= */
 
 function applyGuestbookTranslations() {
@@ -1767,12 +1829,12 @@ function applyGuestbookTranslations() {
                 const key =
                     element.dataset.i18n;
 
-                if (!key) {
-                    return;
-                }
+                if (key) {
 
-                element.textContent =
-                    guestbookT(key);
+                    element.textContent =
+                        guestbookT(key);
+
+                }
 
             }
         );
@@ -1789,12 +1851,12 @@ function applyGuestbookTranslations() {
                     element.dataset
                         .i18nPlaceholder;
 
-                if (!key) {
-                    return;
-                }
+                if (key) {
 
-                element.placeholder =
-                    guestbookT(key);
+                    element.placeholder =
+                        guestbookT(key);
+
+                }
 
             }
         );
@@ -1811,12 +1873,12 @@ function applyGuestbookTranslations() {
                     element.dataset
                         .i18nTitle;
 
-                if (!key) {
-                    return;
-                }
+                if (key) {
 
-                element.title =
-                    guestbookT(key);
+                    element.title =
+                        guestbookT(key);
+
+                }
 
             }
         );
@@ -1833,40 +1895,28 @@ function applyGuestbookTranslations() {
                     element.dataset
                         .i18nAriaLabel;
 
-                if (!key) {
-                    return;
-                }
+                if (key) {
 
-                element.setAttribute(
-                    "aria-label",
-                    guestbookT(key)
-                );
+                    element.setAttribute(
+                        "aria-label",
+                        guestbookT(key)
+                    );
+
+                }
 
             }
         );
 
 
-    updateGuestbookDynamicText();
-
-    updateLanguageAttribute();
-
-}
-
-
-/* =========================================================
-   08. HTML LANG
-========================================================= */
-
-function updateLanguageAttribute() {
-
-    const language =
-        getCurrentGuestbookLanguage();
-
     document.documentElement
         .setAttribute(
             "lang",
-            language
+            getCurrentGuestbookLanguage()
         );
+
+
+    updateGuestbookDynamicText();
+
 }
 
 
@@ -1914,13 +1964,7 @@ function updateGuestbookDynamicText() {
     }
 
 
-    if (counter && guestMessage) {
-
-        counter.textContent =
-            `${guestMessage.value.length} / ${MAX_MESSAGE_LENGTH}`;
-
-    }
-
+    updateCharacterCounter();
 
     updateLikeLabels();
 
@@ -1928,7 +1972,7 @@ function updateGuestbookDynamicText() {
 
 
 /* =========================================================
-   10. LIKE LABEL TRANSLATION
+   10. LIKE LABELS
 ========================================================= */
 
 function updateLikeLabels() {
@@ -1947,77 +1991,14 @@ function updateLikeLabels() {
                     )
                 );
 
-                const count =
-                    button.querySelector(
-                        ".like-count"
-                    );
-
-                if (!count) {
-                    return;
-                }
-
             }
         );
-}
-
-
-/* =========================================================
-   11. LANGUAGE CHANGE
-========================================================= */
-
-function handleGuestbookLanguageChange(
-    event
-) {
-
-    let requestedLanguage = null;
-
-    if (event?.detail) {
-
-        requestedLanguage =
-            event.detail.language ||
-            event.detail.lang ||
-            event.detail.value ||
-            null;
-    }
-
-    if (requestedLanguage) {
-
-        setGuestbookLanguage(
-            requestedLanguage,
-            false
-        );
-
-    } else {
-
-        applyGuestbookTranslations();
-
-    }
-
-
-    if (wishes.length) {
-
-        filterAndRender();
-
-        renderBlessings();
-
-        renderTimeline();
-
-        updateFeaturedWish();
-
-    } else {
-
-        renderGuestbook();
-
-    }
-
-
-    updateOmikujiText();
 
 }
 
 
 /* =========================================================
-   12. SET LANGUAGE
+   11. SET LANGUAGE
 ========================================================= */
 
 function setGuestbookLanguage(
@@ -2029,6 +2010,7 @@ function setGuestbookLanguage(
         normalizeGuestbookLanguage(
             language
         );
+
 
     if (
         !SUPPORTED_GUESTBOOK_LANGUAGES
@@ -2049,6 +2031,7 @@ function setGuestbookLanguage(
             "selectedLanguage",
             normalized
         );
+
     }
 
 
@@ -2064,60 +2047,95 @@ function setGuestbookLanguage(
 
     if (wishes.length) {
 
+        currentRenderCount =
+            INITIAL_RENDER_COUNT;
+
         filterAndRender();
 
-        renderBlessings();
+        if (blessingsInitialized) {
+            renderBlessings();
+        }
 
-        renderTimeline();
+        if (timelineInitialized) {
+            renderTimeline();
+        }
 
         updateFeaturedWish();
+
+    }
+
+
+    updateOmikujiText();
+
+}
+
+
+/* =========================================================
+   12. LANGUAGE EVENTS
+========================================================= */
+
+function handleGuestbookLanguageChange(
+    event
+) {
+
+    let language = null;
+
+
+    if (event?.detail) {
+
+        language =
+            event.detail.language ||
+            event.detail.lang ||
+            event.detail.value ||
+            null;
+
+    }
+
+
+    if (language) {
+
+        setGuestbookLanguage(
+            language,
+            false
+        );
+
+    } else {
+
+        setGuestbookLanguage(
+            getCurrentGuestbookLanguage(),
+            false
+        );
+
     }
 
 }
 
 
 /* =========================================================
-   13. NAVBAR DIRECT INTEGRATION
+   13. NAVBAR CLICK
 ========================================================= */
-
-/*
- * Ini bagian penting.
- *
- * Kalau navbar JS milikmu TIDAK mengirim:
- *
- * window.dispatchEvent(
- *     new CustomEvent("languageChanged")
- * );
- *
- * guestbook tetap bisa mendeteksi klik dropdown
- * secara langsung.
- */
 
 document.addEventListener(
     "click",
     event => {
 
-        const languageOption =
+        const option =
             event.target.closest(
                 ".language-option[data-language]"
             );
 
-        if (!languageOption) {
+        if (!option) {
             return;
         }
 
+
         const language =
-            languageOption.dataset.language;
+            option.dataset.language;
 
         if (!language) {
             return;
         }
 
-
-        /*
-         * Tunggu navbar utama menyelesaikan
-         * proses localStorage-nya.
-         */
 
         setTimeout(
             () => {
@@ -2136,7 +2154,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   14. NAVBAR CUSTOM EVENTS
+   14. CUSTOM LANGUAGE EVENTS
 ========================================================= */
 
 window.addEventListener(
@@ -2183,59 +2201,7 @@ window.addEventListener(
 
 
 /* =========================================================
-   16. HTML LANG OBSERVER
-========================================================= */
-
-const guestbookLanguageObserver =
-    new MutationObserver(
-        mutations => {
-
-            for (
-                const mutation
-                of mutations
-            ) {
-
-                if (
-                    mutation.attributeName ===
-                    "lang"
-                ) {
-
-                    applyGuestbookTranslations();
-
-                    if (wishes.length) {
-
-                        renderBlessings();
-
-                        renderTimeline();
-
-                    }
-
-                    break;
-                }
-            }
-        }
-    );
-
-
-if (
-    document.documentElement
-) {
-
-    guestbookLanguageObserver.observe(
-        document.documentElement,
-        {
-            attributes: true,
-            attributeFilter: [
-                "lang"
-            ]
-        }
-    );
-
-}
-
-
-/* =========================================================
-   17. INITIALIZATION
+   16. INITIALIZATION
 ========================================================= */
 
 document.addEventListener(
@@ -2244,44 +2210,72 @@ document.addEventListener(
 );
 
 
-async function initializeGuestbook() {
+function initializeGuestbook() {
+
+    if (guestbookInitialized) {
+        return;
+    }
+
+    guestbookInitialized = true;
+
+
+    cacheGuestbookElements();
+
 
     /*
-     * Ambil bahasa dari navbar/localStorage.
+     * Apply language immediately.
      */
 
-    const language =
-        getCurrentGuestbookLanguage();
-
     setGuestbookLanguage(
-        language,
+        getCurrentGuestbookLanguage(),
         false
     );
 
 
-    updateCharacterCounter();
+    initializeGuestbookInputs();
 
     initializePreview();
 
-    initializeGuestbookInputs();
-
     initializeOmikuji();
 
-    initializeBlessings();
 
-    await loadGuestbook();
+    /*
+     * Realtime does not need to wait
+     * for API loading.
+     */
 
     initGuestbookRealtime();
+
+
+    /*
+     * Load data asynchronously.
+     * No await here.
+     */
+
+    loadGuestbook();
+
+
+    /*
+     * Visual effects can start
+     * independently.
+     */
 
     startFeaturedRotation();
 
     createSakura();
 
+
+    /*
+     * Blessings and Timeline are lazy.
+     */
+
+    initializeLazySections();
+
 }
 
 
 /* =========================================================
-   18. INPUT INITIALIZATION
+   17. INPUT INITIALIZATION
 ========================================================= */
 
 function initializeGuestbookInputs() {
@@ -2302,6 +2296,7 @@ function initializeGuestbookInputs() {
                             0,
                             MAX_NAME_LENGTH
                         );
+
                 }
 
 
@@ -2337,6 +2332,7 @@ function initializeGuestbookInputs() {
                             0,
                             MAX_MESSAGE_LENGTH
                         );
+
                 }
 
 
@@ -2361,9 +2357,30 @@ function initializeGuestbookInputs() {
 
     if (searchInput) {
 
+        let searchTimer = null;
+
         searchInput.addEventListener(
             "input",
-            filterAndRender
+            () => {
+
+                clearTimeout(
+                    searchTimer
+                );
+
+                searchTimer =
+                    setTimeout(
+                        () => {
+
+                            currentRenderCount =
+                                INITIAL_RENDER_COUNT;
+
+                            filterAndRender();
+
+                        },
+                        120
+                    );
+
+            }
         );
 
     }
@@ -2373,7 +2390,14 @@ function initializeGuestbookInputs() {
 
         sortSelect.addEventListener(
             "change",
-            filterAndRender
+            () => {
+
+                currentRenderCount =
+                    INITIAL_RENDER_COUNT;
+
+                filterAndRender();
+
+            }
         );
 
     }
@@ -2383,7 +2407,10 @@ function initializeGuestbookInputs() {
 
         blessingSearch.addEventListener(
             "input",
-            renderBlessings
+            debounce(
+                renderBlessings,
+                120
+            )
         );
 
     }
@@ -2403,11 +2430,7 @@ function initializeGuestbookInputs() {
 
         blessingRetry.addEventListener(
             "click",
-            () => {
-
-                renderBlessings();
-
-            }
+            renderBlessings
         );
 
     }
@@ -2421,6 +2444,41 @@ function initializeGuestbookInputs() {
         );
 
     }
+
+}
+
+
+/* =========================================================
+   18. DEBOUNCE
+========================================================= */
+
+function debounce(
+    callback,
+    delay = 150
+) {
+
+    let timer = null;
+
+
+    return function (...args) {
+
+        clearTimeout(timer);
+
+
+        timer =
+            setTimeout(
+                () => {
+
+                    callback.apply(
+                        this,
+                        args
+                    );
+
+                },
+                delay
+            );
+
+    };
 
 }
 
@@ -2449,8 +2507,10 @@ function updateCharacterCounter() {
         return;
     }
 
+
     counter.textContent =
         `${guestMessage.value.length} / ${MAX_MESSAGE_LENGTH}`;
+
 }
 
 
@@ -2463,6 +2523,7 @@ async function handleGuestbookSubmit(
 ) {
 
     event.preventDefault();
+
 
     if (isSubmitting) {
         return;
@@ -2487,6 +2548,7 @@ async function handleGuestbookSubmit(
         guestName?.focus();
 
         return;
+
     }
 
 
@@ -2501,6 +2563,7 @@ async function handleGuestbookSubmit(
         guestMessage?.focus();
 
         return;
+
     }
 
 
@@ -2520,6 +2583,7 @@ async function handleGuestbookSubmit(
         );
 
         return;
+
     }
 
 
@@ -2539,6 +2603,7 @@ async function handleGuestbookSubmit(
         );
 
         return;
+
     }
 
 
@@ -2565,23 +2630,17 @@ async function handleGuestbookSubmit(
 
                     body:
                         JSON.stringify({
-
                             name,
-
                             message,
-
-                            member_type:
-                                "Fan",
-
-                            mood:
-                                "🌸"
-
+                            member_type: "Fan",
+                            mood: "🌸"
                         })
                 }
             );
 
 
         let result = null;
+
 
         try {
 
@@ -2603,6 +2662,7 @@ async function handleGuestbookSubmit(
             );
 
             return;
+
         }
 
 
@@ -2619,6 +2679,7 @@ async function handleGuestbookSubmit(
             );
 
             return;
+
         }
 
 
@@ -2627,7 +2688,8 @@ async function handleGuestbookSubmit(
         );
 
 
-        form.reset();
+        form?.reset();
+
 
         initializePreview();
 
@@ -2656,16 +2718,25 @@ async function handleGuestbookSubmit(
 
             }
 
-            filterAndRender();
+        }
 
+
+        currentRenderCount =
+            INITIAL_RENDER_COUNT;
+
+
+        filterAndRender();
+
+        updateFeaturedWish();
+
+
+        if (blessingsInitialized) {
             renderBlessings();
+        }
 
+
+        if (timelineInitialized) {
             renderTimeline();
-
-        } else {
-
-            await loadGuestbook();
-
         }
 
 
@@ -2676,11 +2747,13 @@ async function handleGuestbookSubmit(
             error
         );
 
+
         showGuestbookError(
             guestbookT(
                 "unableConnect"
             )
         );
+
 
     } finally {
 
@@ -2694,7 +2767,7 @@ async function handleGuestbookSubmit(
 
 
 /* =========================================================
-   22. SUBMIT BUTTON
+   22. SUBMIT STATE
 ========================================================= */
 
 function setSubmitState(
@@ -2734,23 +2807,12 @@ function setSubmitState(
 
         button.disabled = false;
 
-        if (
+        button.textContent =
             button.dataset
-                .originalText
-        ) {
-
-            button.textContent =
-                button.dataset
-                    .originalText;
-
-        } else {
-
-            button.textContent =
-                guestbookT(
-                    "hangMyEma"
-                );
-
-        }
+                .originalText ||
+            guestbookT(
+                "hangMyEma"
+            );
 
     }
 
@@ -2783,6 +2845,7 @@ function handleGuestbookApiError(
         );
 
         return;
+
     }
 
 
@@ -2796,6 +2859,7 @@ function handleGuestbookApiError(
         );
 
         return;
+
     }
 
 
@@ -2809,6 +2873,7 @@ function handleGuestbookApiError(
         );
 
         return;
+
     }
 
 
@@ -2822,6 +2887,7 @@ function handleGuestbookApiError(
         );
 
         return;
+
     }
 
 
@@ -2850,9 +2916,7 @@ async function loadGuestbook() {
         <div class="loading">
             <span class="loading-flower">🌸</span>
             <span>
-                ${guestbookT(
-                    "loadingWishes"
-                )}
+                ${guestbookT("loadingWishes")}
             </span>
         </div>
     `;
@@ -2869,12 +2933,15 @@ async function loadGuestbook() {
                     headers: {
                         "Accept":
                             "application/json"
-                    }
+                    },
+
+                    cache: "no-store"
                 }
             );
 
 
         let result = null;
+
 
         try {
 
@@ -2894,6 +2961,7 @@ async function loadGuestbook() {
                 result?.error ||
                 `Guestbook request failed (${response.status})`
             );
+
         }
 
 
@@ -2906,6 +2974,7 @@ async function loadGuestbook() {
                 result?.error ||
                 "Invalid guestbook response."
             );
+
         }
 
 
@@ -2917,13 +2986,28 @@ async function loadGuestbook() {
                 : [];
 
 
+        /*
+         * Render ONLY main Guestbook first.
+         */
+
+        currentRenderCount =
+            INITIAL_RENDER_COUNT;
+
+
         renderGuestbook();
 
-        renderBlessings();
 
-        renderTimeline();
+        /*
+         * Featured text is cheap.
+         */
 
         updateFeaturedWish();
+
+
+        /*
+         * Do not render Blessings/Timeline here.
+         * They will be rendered when visible.
+         */
 
 
     } catch (error) {
@@ -2956,7 +3040,7 @@ async function loadGuestbook() {
                 <button
                     type="button"
                     class="retry-button"
-                    onclick="loadGuestbook()">
+                    id="guestbookRetryButton">
 
                     ${guestbookT(
                         "tryAgain"
@@ -2966,6 +3050,18 @@ async function loadGuestbook() {
 
             </div>
         `;
+
+
+        const retry =
+            document.getElementById(
+                "guestbookRetryButton"
+            );
+
+
+        retry?.addEventListener(
+            "click",
+            loadGuestbook
+        );
 
     }
 
@@ -2988,159 +3084,401 @@ function renderGuestbook() {
     }
 
 
-    if (!wishes.length) {
-
-        if (wall) {
-
-            wall.innerHTML = `
-                <div class="empty-wall">
-
-                    <div class="empty-icon">
-                        🌸
-                    </div>
-
-                    <h3>
-                        ${guestbookT(
-                            "noWishesYet"
-                        )}
-                    </h3>
-
-                    <p>
-                        ${guestbookT(
-                            "beFirstToHang"
-                        )}
-                    </p>
-
-                </div>
-            `;
-
-        }
-
-        return;
-    }
-
-
     filterAndRender();
 
 }
 
 
 /* =========================================================
-   26. COUNTER ANIMATION
+   26. FILTER
 ========================================================= */
 
-function animateCounter(
-    target,
-    value
-) {
+function getFilteredWishes() {
 
-    if (!target) {
+    let filtered =
+        [...wishes];
+
+
+    const keyword =
+        searchInput?.value
+            .trim()
+            .toLowerCase() ||
+        "";
+
+
+    if (keyword) {
+
+        filtered =
+            filtered.filter(
+                item => {
+
+                    const name =
+                        String(
+                            item.name || ""
+                        ).toLowerCase();
+
+                    const message =
+                        String(
+                            item.message || ""
+                        ).toLowerCase();
+
+
+                    return (
+                        name.includes(keyword) ||
+                        message.includes(keyword)
+                    );
+
+                }
+            );
+
+    }
+
+
+    switch (
+        sortSelect?.value
+    ) {
+
+        case "newest":
+
+            filtered.sort(
+                (a, b) =>
+                    new Date(
+                        b.created_at
+                    ) -
+                    new Date(
+                        a.created_at
+                    )
+            );
+
+            break;
+
+
+        case "oldest":
+
+            filtered.sort(
+                (a, b) =>
+                    new Date(
+                        a.created_at
+                    ) -
+                    new Date(
+                        b.created_at
+                    )
+            );
+
+            break;
+
+
+        case "longest":
+
+            filtered.sort(
+                (a, b) =>
+                    String(
+                        b.message || ""
+                    ).length -
+                    String(
+                        a.message || ""
+                    ).length
+            );
+
+            break;
+
+
+        case "shortest":
+
+            filtered.sort(
+                (a, b) =>
+                    String(
+                        a.message || ""
+                    ).length -
+                    String(
+                        b.message || ""
+                    ).length
+            );
+
+            break;
+
+
+        case "liked":
+
+        case "mostLiked":
+
+            filtered.sort(
+                (a, b) =>
+                    Number(b.likes || 0) -
+                    Number(a.likes || 0)
+            );
+
+            break;
+
+    }
+
+
+    return filtered;
+
+}
+
+
+/* =========================================================
+   27. FILTER + RENDER
+========================================================= */
+
+function filterAndRender() {
+
+    if (!wall) {
         return;
     }
 
 
-    const numericValue =
-        Number(value) || 0;
+    const filtered =
+        getFilteredWishes();
 
 
-    if (
-        numericValue === 0
-    ) {
-
-        target.textContent = "0";
-
-        return;
-    }
-
-
-    const current =
-        Number(
-            target.textContent
-        ) || 0;
-
-
-    if (
-        current ===
-        numericValue
-    ) {
-
-        target.textContent =
-            String(
-                numericValue
-            );
-
-        return;
-    }
-
-
-    const duration = 500;
-
-    const startTime =
-        performance.now();
-
-
-    function updateCounter(
-        currentTime
-    ) {
-
-        const elapsed =
-            currentTime -
-            startTime;
-
-
-        const progress =
-            Math.min(
-                elapsed /
-                duration,
-                1
-            );
-
-
-        const eased =
-            1 -
-            Math.pow(
-                1 - progress,
-                3
-            );
-
-
-        const number =
-            Math.round(
-                current +
-                (
-                    numericValue -
-                    current
-                ) *
-                eased
-            );
-
-
-        target.textContent =
-            String(number);
-
-
-        if (
-            progress < 1
-        ) {
-
-            requestAnimationFrame(
-                updateCounter
-            );
-
-        }
-
-    }
-
-
-    requestAnimationFrame(
-        updateCounter
+    buildRows(
+        filtered
     );
 
 }
 
 
 /* =========================================================
-   27. CREATE EMA CARD
+   28. BUILD ROWS
+========================================================= */
+
+function buildRows(
+    data = wishes
+) {
+
+    if (!wall) {
+        return;
+    }
+
+
+    wall.innerHTML = "";
+
+
+    if (!data.length) {
+
+        wall.innerHTML = `
+            <div class="empty-wall">
+
+                <div class="empty-icon">
+                    🌸
+                </div>
+
+                <h3>
+                    ${
+                        wishes.length
+                            ? guestbookT(
+                                "noWishesFound"
+                            )
+                            : guestbookT(
+                                "noWishesYet"
+                            )
+                    }
+                </h3>
+
+                <p>
+                    ${
+                        wishes.length
+                            ? guestbookT(
+                                "tryAnotherSearch"
+                            )
+                            : guestbookT(
+                                "beFirstToHang"
+                            )
+                    }
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    const visibleData =
+        data.slice(
+            0,
+            currentRenderCount
+        );
+
+
+    const fragment =
+        document.createDocumentFragment();
+
+
+    const cardsPerRow = 3;
+
+
+    for (
+        let i = 0;
+        i < visibleData.length;
+        i += cardsPerRow
+    ) {
+
+        const row =
+            document.createElement(
+                "div"
+            );
+
+        row.className =
+            "ema-row";
+
+
+        const rope =
+            document.createElement(
+                "div"
+            );
+
+        rope.className =
+            "rope-line";
+
+
+        const grid =
+            document.createElement(
+                "div"
+            );
+
+        grid.className =
+            "ema-row-grid";
+
+
+        const rowFragment =
+            document.createDocumentFragment();
+
+
+        visibleData
+            .slice(
+                i,
+                i + cardsPerRow
+            )
+            .forEach(
+                item => {
+
+                    rowFragment.appendChild(
+                        createCard(item)
+                    );
+
+                }
+            );
+
+
+        grid.appendChild(
+            rowFragment
+        );
+
+
+        row.appendChild(
+            rope
+        );
+
+        row.appendChild(
+            grid
+        );
+
+
+        fragment.appendChild(
+            row
+        );
+
+    }
+
+
+    wall.appendChild(
+        fragment
+    );
+
+
+    /*
+     * Load More.
+     */
+
+    if (
+        visibleData.length <
+        data.length
+    ) {
+
+        const loadMore =
+            document.createElement(
+                "button"
+            );
+
+        loadMore.type =
+            "button";
+
+        loadMore.className =
+            "guestbook-load-more";
+
+        loadMore.textContent =
+            guestbookT(
+                "loadMore"
+            );
+
+
+        loadMore.addEventListener(
+            "click",
+            () => {
+
+                currentRenderCount +=
+                    LOAD_MORE_COUNT;
+
+                buildRows(data);
+
+            }
+        );
+
+
+        const info =
+            document.createElement(
+                "div"
+            );
+
+        info.className =
+            "guestbook-results-info";
+
+        info.textContent =
+            guestbookT(
+                "showing",
+                {
+                    shown:
+                        visibleData.length,
+
+                    total:
+                        data.length
+                }
+            );
+
+
+        const wrapper =
+            document.createElement(
+                "div"
+            );
+
+        wrapper.className =
+            "guestbook-load-more-wrap";
+
+
+        wrapper.appendChild(
+            info
+        );
+
+        wrapper.appendChild(
+            loadMore
+        );
+
+
+        wall.appendChild(
+            wrapper
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   29. CREATE EMA CARD
 ========================================================= */
 
 function createCard(
@@ -3162,7 +3500,6 @@ function createCard(
             "article"
         );
 
-
     card.className =
         "ema-card";
 
@@ -3182,18 +3519,6 @@ function createCard(
             ]
         }deg`
     );
-
-
-    card.dataset.name =
-        String(
-            item.name || ""
-        ).toLowerCase();
-
-
-    card.dataset.message =
-        String(
-            item.message || ""
-        ).toLowerCase();
 
 
     const string =
@@ -3223,40 +3548,36 @@ function createCard(
         "ema-content";
 
 
-    const nameElement =
+    const name =
         document.createElement(
             "h3"
         );
 
-    nameElement.className =
+    name.className =
         "ema-name";
 
-    nameElement.textContent =
+    name.textContent =
         item.name ||
         guestbookT(
             "anonymous"
         );
 
 
-    const messageElement =
+    const message =
         document.createElement(
             "p"
         );
 
-    messageElement.className =
+    message.className =
         "ema-message";
 
-    messageElement.textContent =
+    message.textContent =
         item.message || "";
 
 
-    content.appendChild(
-        nameElement
-    );
+    content.appendChild(name);
 
-    content.appendChild(
-        messageElement
-    );
+    content.appendChild(message);
 
 
     const footer =
@@ -3277,8 +3598,7 @@ function createCard(
         "ema-mood";
 
     mood.textContent =
-        item.mood ||
-        "🌸";
+        item.mood || "🌸";
 
 
     const likeButton =
@@ -3401,11 +3721,12 @@ function createCard(
 
 
     return card;
+
 }
 
 
 /* =========================================================
-   28. DATE
+   30. DATE
 ========================================================= */
 
 function formatDate(
@@ -3428,13 +3749,8 @@ function formatDate(
             date.getTime()
         )
     ) {
-
         return "";
     }
-
-
-    const language =
-        getCurrentGuestbookLanguage();
 
 
     const localeMap = {
@@ -3453,8 +3769,9 @@ function formatDate(
 
 
     return date.toLocaleDateString(
-        localeMap[language] ||
-        "en-US",
+        localeMap[
+            getCurrentGuestbookLanguage()
+        ] || "en-US",
         {
             month: "short",
             day: "numeric",
@@ -3466,250 +3783,31 @@ function formatDate(
 
 
 /* =========================================================
-   29. FILTER + SORT
+   31. COUNTER
 ========================================================= */
 
-function filterAndRender() {
-
-    if (!wall) {
-        return;
-    }
-
-
-    let filtered =
-        [...wishes];
-
-
-    const keyword =
-        searchInput?.value
-            .trim()
-            .toLowerCase() ||
-        "";
-
-
-    if (keyword) {
-
-        filtered =
-            filtered.filter(
-                item => {
-
-                    const name =
-                        String(
-                            item.name ||
-                            ""
-                        ).toLowerCase();
-
-                    const message =
-                        String(
-                            item.message ||
-                            ""
-                        ).toLowerCase();
-
-                    return (
-                        name.includes(
-                            keyword
-                        ) ||
-                        message.includes(
-                            keyword
-                        )
-                    );
-
-                }
-            );
-
-    }
-
-
-    switch (
-        sortSelect?.value
-    ) {
-
-        case "newest":
-
-            filtered.sort(
-                (a, b) =>
-                    new Date(
-                        b.created_at
-                    ) -
-                    new Date(
-                        a.created_at
-                    )
-            );
-
-            break;
-
-
-        case "oldest":
-
-            filtered.sort(
-                (a, b) =>
-                    new Date(
-                        a.created_at
-                    ) -
-                    new Date(
-                        b.created_at
-                    )
-            );
-
-            break;
-
-
-        case "longest":
-
-            filtered.sort(
-                (a, b) =>
-                    String(
-                        b.message || ""
-                    ).length -
-                    String(
-                        a.message || ""
-                    ).length
-            );
-
-            break;
-
-
-        case "shortest":
-
-            filtered.sort(
-                (a, b) =>
-                    String(
-                        a.message || ""
-                    ).length -
-                    String(
-                        b.message || ""
-                    ).length
-            );
-
-            break;
-
-    }
-
-
-    buildRows(
-        filtered
-    );
-
-}
-
-
-/* =========================================================
-   30. BUILD ROWS
-========================================================= */
-
-function buildRows(
-    data = wishes
+function animateCounter(
+    target,
+    value
 ) {
 
-    if (!wall) {
+    if (!target) {
         return;
     }
 
 
-    wall.innerHTML = "";
+    const numericValue =
+        Number(value) || 0;
 
 
-    if (!data.length) {
-
-        wall.innerHTML = `
-            <div class="empty-wall">
-
-                <div class="empty-icon">
-                    🌸
-                </div>
-
-                <h3>
-                    ${guestbookT(
-                        "noWishesFound"
-                    )}
-                </h3>
-
-                <p>
-                    ${guestbookT(
-                        "tryAnotherSearch"
-                    )}
-                </p>
-
-            </div>
-        `;
-
-        return;
-    }
-
-
-    const cardsPerRow = 3;
-
-
-    for (
-        let i = 0;
-        i < data.length;
-        i += cardsPerRow
-    ) {
-
-        const row =
-            document.createElement(
-                "div"
-            );
-
-        row.className =
-            "ema-row";
-
-
-        const rope =
-            document.createElement(
-                "div"
-            );
-
-        rope.className =
-            "rope-line";
-
-
-        const grid =
-            document.createElement(
-                "div"
-            );
-
-        grid.className =
-            "ema-row-grid";
-
-
-        data
-            .slice(
-                i,
-                i + cardsPerRow
-            )
-            .forEach(
-                item => {
-
-                    grid.appendChild(
-                        createCard(
-                            item
-                        )
-                    );
-
-                }
-            );
-
-
-        row.appendChild(
-            rope
-        );
-
-        row.appendChild(
-            grid
-        );
-
-        wall.appendChild(
-            row
-        );
-
-    }
+    target.textContent =
+        String(numericValue);
 
 }
 
 
 /* =========================================================
-   31. FEATURED WISH
+   32. FEATURED WISH
 ========================================================= */
 
 function updateFeaturedWish() {
@@ -3731,14 +3829,21 @@ function updateFeaturedWish() {
         ];
 
 
+    const text =
+        `"${random.message || ""}" — ${
+            random.name ||
+            guestbookT("anonymous")
+        }`;
+
+
     featuredWish.textContent =
-        `"${random.message || ""}" — ${random.name || guestbookT("anonymous")}`;
+        text;
 
 
     if (featuredBlessing) {
 
         featuredBlessing.textContent =
-            `"${random.message || ""}" — ${random.name || guestbookT("anonymous")}`;
+            text;
 
     }
 
@@ -3746,7 +3851,7 @@ function updateFeaturedWish() {
 
 
 /* =========================================================
-   32. FEATURED ROTATION
+   33. FEATURED ROTATION
 ========================================================= */
 
 function startFeaturedRotation() {
@@ -3762,15 +3867,26 @@ function startFeaturedRotation() {
 
     featuredInterval =
         setInterval(
-            updateFeaturedWish,
-            8000
+            () => {
+
+                if (
+                    document.hidden
+                ) {
+                    return;
+                }
+
+
+                updateFeaturedWish();
+
+            },
+            10000
         );
 
 }
 
 
 /* =========================================================
-   33. LIKE
+   34. LIKE
 ========================================================= */
 
 document.addEventListener(
@@ -3846,6 +3962,7 @@ async function handleLikeClick(
             throw new Error(
                 "Supabase client is not available."
             );
+
         }
 
 
@@ -3894,9 +4011,7 @@ async function handleLikeClick(
         const wish =
             wishes.find(
                 item =>
-                    String(
-                        item.id
-                    ) ===
+                    String(item.id) ===
                     String(id)
             );
 
@@ -3917,12 +4032,19 @@ async function handleLikeClick(
         );
 
 
-        spawnHeart(
-            button
+        button.classList.add(
+            "already-liked"
         );
 
 
-        renderBlessings();
+        spawnHeart(button);
+
+
+        if (blessingsInitialized) {
+
+            renderBlessings();
+
+        }
 
 
     } catch (error) {
@@ -3938,6 +4060,7 @@ async function handleLikeClick(
                 "failedToLike"
             )
         );
+
 
     } finally {
 
@@ -3961,17 +4084,12 @@ async function handleLikeClick(
 
 
 /* =========================================================
-   34. FLOATING HEART
+   35. FLOATING HEART
 ========================================================= */
 
 function spawnHeart(
     button
 ) {
-
-    if (!button) {
-        return;
-    }
-
 
     const heart =
         document.createElement(
@@ -3982,7 +4100,6 @@ function spawnHeart(
     heart.className =
         "floating-heart";
 
-
     heart.textContent =
         "❤️";
 
@@ -3992,16 +4109,10 @@ function spawnHeart(
 
 
     heart.style.left =
-        rect.left +
-        window.scrollX +
-        20 +
-        "px";
-
+        `${rect.left + window.scrollX + 20}px`;
 
     heart.style.top =
-        rect.top +
-        window.scrollY +
-        "px";
+        `${rect.top + window.scrollY}px`;
 
 
     document.body.appendChild(
@@ -4022,7 +4133,7 @@ function spawnHeart(
 
 
 /* =========================================================
-   35. REALTIME
+   36. REALTIME
 ========================================================= */
 
 function initGuestbookRealtime() {
@@ -4037,6 +4148,7 @@ function initGuestbookRealtime() {
         );
 
         return;
+
     }
 
 
@@ -4050,7 +4162,6 @@ function initGuestbookRealtime() {
             .channel(
                 "guestbook-realtime"
             )
-
 
             .on(
                 "postgres_changes",
@@ -4068,7 +4179,6 @@ function initGuestbookRealtime() {
                 }
             )
 
-
             .on(
                 "postgres_changes",
                 {
@@ -4085,14 +4195,13 @@ function initGuestbookRealtime() {
                 }
             )
 
-
             .subscribe();
 
 }
 
 
 /* =========================================================
-   36. REALTIME INSERT
+   37. REALTIME INSERT
 ========================================================= */
 
 function handleRealtimeInsert(
@@ -4124,27 +4233,36 @@ function handleRealtimeInsert(
 
     if (wishCount) {
 
-        animateCounter(
-            wishCount,
-            wishes.length
-        );
+        wishCount.textContent =
+            String(wishes.length);
 
     }
 
 
+    currentRenderCount =
+        INITIAL_RENDER_COUNT;
+
+
     filterAndRender();
 
-    renderBlessings();
-
-    renderTimeline();
 
     updateFeaturedWish();
+
+
+    if (blessingsInitialized) {
+        renderBlessings();
+    }
+
+
+    if (timelineInitialized) {
+        renderTimeline();
+    }
 
 }
 
 
 /* =========================================================
-   37. REALTIME UPDATE
+   38. REALTIME UPDATE
 ========================================================= */
 
 function handleRealtimeUpdate(
@@ -4160,9 +4278,7 @@ function handleRealtimeUpdate(
         wishes.findIndex(
             item =>
                 String(item.id) ===
-                String(
-                    updatedWish.id
-                )
+                String(updatedWish.id)
         );
 
 
@@ -4177,41 +4293,62 @@ function handleRealtimeUpdate(
     };
 
 
-    const button =
-        document.querySelector(
-            `.like-btn[data-id="${CSS.escape(String(updatedWish.id))}"]`
+    /*
+     * Update visible like counter
+     * without rebuilding whole Guestbook.
+     */
+
+    document
+        .querySelectorAll(
+            ".like-btn"
+        )
+        .forEach(
+            button => {
+
+                if (
+                    String(
+                        button.dataset.id
+                    ) !==
+                    String(
+                        updatedWish.id
+                    )
+                ) {
+                    return;
+                }
+
+
+                const count =
+                    button.querySelector(
+                        ".like-count"
+                    );
+
+
+                if (count) {
+
+                    count.textContent =
+                        String(
+                            Number(
+                                updatedWish.likes
+                            ) || 0
+                        );
+
+                }
+
+            }
         );
 
 
-    if (button) {
+    if (blessingsInitialized) {
 
-        const count =
-            button.querySelector(
-                ".like-count"
-            );
-
-
-        if (count) {
-
-            count.textContent =
-                String(
-                    Number(
-                        updatedWish.likes
-                    ) || 0
-                );
-
-        }
+        renderBlessings();
 
     }
-
-
-    renderBlessings();
 
 }
 
 
 /* =========================================================
-   38. OMikuji
+   39. OMikuji
 ========================================================= */
 
 const OMikujiResults = {
@@ -4285,15 +4422,25 @@ function updateOmikujiText() {
                 "yourFortune"
             );
 
-        fortuneMessage.textContent =
-            guestbookT(
-                "drawFortuneMessage"
-            );
 
-        fortuneBlessing.textContent =
-            guestbookT(
-                "fortuneBlessing"
-            );
+        if (fortuneMessage) {
+
+            fortuneMessage.textContent =
+                guestbookT(
+                    "drawFortuneMessage"
+                );
+
+        }
+
+
+        if (fortuneBlessing) {
+
+            fortuneBlessing.textContent =
+                guestbookT(
+                    "fortuneBlessing"
+                );
+
+        }
 
     }
 
@@ -4366,21 +4513,110 @@ function drawFortune() {
     }
 
 
-    if (drawOmikuji) {
+    drawOmikuji.classList.add(
+        "fortune-drawn"
+    );
 
-        drawOmikuji.classList.add(
-            "fortune-drawn"
-        );
 
-        setTimeout(
-            () => {
+    setTimeout(
+        () => {
 
-                drawOmikuji.classList.remove(
-                    "fortune-drawn"
+            drawOmikuji.classList.remove(
+                "fortune-drawn"
+            );
+
+        },
+        600
+    );
+
+}
+
+
+/* =========================================================
+   40. LAZY SECTIONS
+========================================================= */
+
+function initializeLazySections() {
+
+    if (
+        !("IntersectionObserver" in window)
+    ) {
+
+        initializeBlessings();
+
+        initializeTimeline();
+
+        return;
+
+    }
+
+
+    const observer =
+        new IntersectionObserver(
+            entries => {
+
+                entries.forEach(
+                    entry => {
+
+                        if (
+                            !entry.isIntersecting
+                        ) {
+                            return;
+                        }
+
+
+                        const element =
+                            entry.target;
+
+
+                        if (
+                            element ===
+                            blessingGrid
+                        ) {
+
+                            initializeBlessings();
+
+                        }
+
+
+                        if (
+                            element ===
+                            wishTimeline
+                        ) {
+
+                            initializeTimeline();
+
+                        }
+
+
+                        observer.unobserve(
+                            element
+                        );
+
+                    }
                 );
 
             },
-            600
+            {
+                rootMargin:
+                    "500px 0px"
+            }
+        );
+
+
+    if (blessingGrid) {
+
+        observer.observe(
+            blessingGrid
+        );
+
+    }
+
+
+    if (wishTimeline) {
+
+        observer.observe(
+            wishTimeline
         );
 
     }
@@ -4389,15 +4625,26 @@ function drawFortune() {
 
 
 /* =========================================================
-   39. BLESSINGS
+   41. BLESSINGS INITIALIZATION
 ========================================================= */
 
 function initializeBlessings() {
+
+    if (blessingsInitialized) {
+        return;
+    }
+
+
+    blessingsInitialized = true;
 
     renderBlessings();
 
 }
 
+
+/* =========================================================
+   42. BLESSINGS
+========================================================= */
 
 function renderBlessings() {
 
@@ -4449,23 +4696,18 @@ function renderBlessings() {
 
                     const name =
                         String(
-                            item.name ||
-                            ""
+                            item.name || ""
                         ).toLowerCase();
 
                     const message =
                         String(
-                            item.message ||
-                            ""
+                            item.message || ""
                         ).toLowerCase();
 
+
                     return (
-                        name.includes(
-                            keyword
-                        ) ||
-                        message.includes(
-                            keyword
-                        )
+                        name.includes(keyword) ||
+                        message.includes(keyword)
                     );
 
                 }
@@ -4510,13 +4752,15 @@ function renderBlessings() {
 
         case "liked":
 
+        case "mostLiked":
+
             data.sort(
                 (a, b) =>
                     Number(
-                        b.likes
+                        b.likes || 0
                     ) -
                     Number(
-                        a.likes
+                        a.likes || 0
                     )
             );
 
@@ -4567,6 +4811,7 @@ function renderBlessings() {
 
         blessingGrid.innerHTML = "";
 
+
         if (blessingEmpty) {
 
             blessingEmpty.style.display =
@@ -4579,7 +4824,9 @@ function renderBlessings() {
 
         }
 
+
         return;
+
     }
 
 
@@ -4591,17 +4838,25 @@ function renderBlessings() {
     }
 
 
-    blessingGrid.innerHTML = "";
+    /*
+     * Only top 12 blessings are rendered.
+     */
+
+    const visible =
+        data.slice(0, 12);
 
 
-    data.forEach(
+    const fragment =
+        document.createDocumentFragment();
+
+
+    visible.forEach(
         item => {
 
             const card =
                 document.createElement(
                     "article"
                 );
-
 
             card.className =
                 "blessing-card";
@@ -4616,8 +4871,7 @@ function renderBlessings() {
                 "blessing-icon";
 
             icon.textContent =
-                item.mood ||
-                "🌸";
+                item.mood || "🌸";
 
 
             const message =
@@ -4629,8 +4883,7 @@ function renderBlessings() {
                 "blessing-message";
 
             message.textContent =
-                item.message ||
-                "";
+                item.message || "";
 
 
             const name =
@@ -4661,33 +4914,34 @@ function renderBlessings() {
                     Number(
                         item.likes
                     ) || 0
-                } ${guestbookT(
-                    "likes"
-                )}`;
+                } ${
+                    guestbookT(
+                        "likes"
+                    )
+                }`;
 
 
-            card.appendChild(
-                icon
-            );
+            card.appendChild(icon);
 
-            card.appendChild(
-                message
-            );
+            card.appendChild(message);
 
-            card.appendChild(
-                name
-            );
+            card.appendChild(name);
 
-            card.appendChild(
-                meta
-            );
+            card.appendChild(meta);
 
 
-            blessingGrid.appendChild(
+            fragment.appendChild(
                 card
             );
 
         }
+    );
+
+
+    blessingGrid.innerHTML = "";
+
+    blessingGrid.appendChild(
+        fragment
     );
 
 
@@ -4700,10 +4954,10 @@ function renderBlessings() {
             [...data].sort(
                 (a, b) =>
                     Number(
-                        b.likes
+                        b.likes || 0
                     ) -
                     Number(
-                        a.likes
+                        a.likes || 0
                     )
             )[0];
 
@@ -4722,7 +4976,25 @@ function renderBlessings() {
 
 
 /* =========================================================
-   40. TIMELINE
+   43. TIMELINE INITIALIZATION
+========================================================= */
+
+function initializeTimeline() {
+
+    if (timelineInitialized) {
+        return;
+    }
+
+
+    timelineInitialized = true;
+
+    renderTimeline();
+
+}
+
+
+/* =========================================================
+   44. TIMELINE
 ========================================================= */
 
 function renderTimeline() {
@@ -4755,6 +5027,7 @@ function renderTimeline() {
         );
 
         return;
+
     }
 
 
@@ -4771,8 +5044,20 @@ function renderTimeline() {
             );
 
 
-    data.forEach(
-        (item, index) => {
+    /*
+     * Only render latest 30 timeline items.
+     */
+
+    const visible =
+        data.slice(-30);
+
+
+    const fragment =
+        document.createDocumentFragment();
+
+
+    visible.forEach(
+        item => {
 
             const itemElement =
                 document.createElement(
@@ -4836,44 +5121,38 @@ function renderTimeline() {
                 );
 
             message.textContent =
-                item.message ||
-                "";
+                item.message || "";
 
 
-            content.appendChild(
-                date
-            );
+            content.appendChild(date);
 
-            content.appendChild(
-                title
-            );
+            content.appendChild(title);
 
-            content.appendChild(
-                message
-            );
+            content.appendChild(message);
 
 
-            itemElement.appendChild(
-                dot
-            );
+            itemElement.appendChild(dot);
 
-            itemElement.appendChild(
-                content
-            );
+            itemElement.appendChild(content);
 
 
-            wishTimeline.appendChild(
+            fragment.appendChild(
                 itemElement
             );
 
         }
     );
 
+
+    wishTimeline.appendChild(
+        fragment
+    );
+
 }
 
 
 /* =========================================================
-   41. TOAST
+   45. TOAST
 ========================================================= */
 
 function showToast() {
@@ -4881,6 +5160,11 @@ function showToast() {
     if (!toast) {
         return;
     }
+
+
+    toast.classList.remove(
+        "toast-error"
+    );
 
 
     const content =
@@ -4926,7 +5210,7 @@ function showToast() {
 
 
 /* =========================================================
-   42. ERROR
+   46. ERROR TOAST
 ========================================================= */
 
 function showGuestbookError(
@@ -4938,6 +5222,7 @@ function showGuestbookError(
         alert(message);
 
         return;
+
     }
 
 
@@ -4959,10 +5244,6 @@ function showGuestbookError(
                 "toast-error"
             );
 
-            /*
-             * Kembalikan toast success
-             * supaya data-i18n bisa bekerja.
-             */
 
             toast.innerHTML = `
                 <span data-i18n="emaSuccess">
@@ -4980,7 +5261,7 @@ function showGuestbookError(
 
 
 /* =========================================================
-   43. SAKURA
+   47. SAKURA
 ========================================================= */
 
 function createSakura() {
@@ -4996,76 +5277,106 @@ function createSakura() {
     }
 
 
-    setInterval(
-        () => {
+    if (sakuraInterval) {
 
-            const petal =
-                document.createElement(
-                    "span"
+        clearInterval(
+            sakuraInterval
+        );
+
+    }
+
+
+    sakuraInterval =
+        setInterval(
+            () => {
+
+                /*
+                 * Do not animate when tab is hidden.
+                 */
+
+                if (
+                    document.hidden
+                ) {
+                    return;
+                }
+
+
+                const petal =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                petal.className =
+                    "petal";
+
+
+                petal.style.left =
+                    `${Math.random() * 100}%`;
+
+
+                petal.style.animationDuration =
+                    `${
+                        7 +
+                        Math.random() * 5
+                    }s`;
+
+
+                petal.style.animationDelay =
+                    `${
+                        Math.random() * 2
+                    }s`;
+
+
+                layer.appendChild(
+                    petal
                 );
 
 
-            petal.className =
-                "petal";
+                setTimeout(
+                    () => {
+
+                        petal.remove();
+
+                    },
+                    14000
+                );
 
 
-            petal.style.left =
-                Math.random() *
-                100 +
-                "%";
-
-
-            petal.style.animationDuration =
-                7 +
-                Math.random() *
-                5 +
-                "s";
-
-
-            petal.style.animationDelay =
-                Math.random() *
-                2 +
-                "s";
-
-
-            layer.appendChild(
-                petal
-            );
-
-
-            setTimeout(
-                () => {
-
-                    petal.remove();
-
-                },
-                14000
-            );
-
-        },
-        600
-    );
+            },
+            900
+        );
 
 }
 
 
 /* =========================================================
-   44. MANUAL REFRESH
+   48. MANUAL REFRESH
 ========================================================= */
 
 function resizeGuestbook() {
 
+    currentRenderCount =
+        INITIAL_RENDER_COUNT;
+
+
     filterAndRender();
 
-    renderBlessings();
 
-    renderTimeline();
+    if (blessingsInitialized) {
+        renderBlessings();
+    }
+
+
+    if (timelineInitialized) {
+        renderTimeline();
+    }
 
 }
 
 
 /* =========================================================
-   45. CLEANUP
+   49. CLEANUP
 ========================================================= */
 
 window.addEventListener(
@@ -5099,12 +5410,24 @@ window.addEventListener(
 
         }
 
+
+        if (sakuraInterval) {
+
+            clearInterval(
+                sakuraInterval
+            );
+
+            sakuraInterval =
+                null;
+
+        }
+
     }
 );
 
 
 /* =========================================================
-   46. GLOBAL FUNCTIONS
+   50. GLOBAL FUNCTIONS
 ========================================================= */
 
 window.loadGuestbook =

@@ -1,80 +1,89 @@
-/* ==========================================
+/* =========================================================
    GUESTBOOK PAGE
-========================================== */
+   FIXED / STABLE VERSION
+   ========================================================= */
 
 .guestbook-page {
-
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
     background: #071325;
-
     color: #fff;
-
+    overflow-x: hidden;
 }
 
 
-/* ==========================================
+/* =========================================================
    HERO
-========================================== */
+   ========================================================= */
 
 .guestbook-hero {
-
     position: relative;
+    isolation: isolate;
 
-    min-height: 420px;
+    width: 100%;
+    min-height: 430px;
 
     display: flex;
-
     justify-content: center;
-
     align-items: center;
+
+    box-sizing: border-box;
+
+    padding: 100px 20px 70px;
 
     overflow: hidden;
 
     background:
         linear-gradient(
-            rgba(5, 15, 30, .82),
-            rgba(5, 15, 30, .82)
+            rgba(5, 15, 30, .78),
+            rgba(5, 15, 30, .88)
         ),
         url("../img/shrine.jpg")
-        center / cover no-repeat;
-
+        center center / cover no-repeat;
 }
 
 
+/* overlay */
+
 .guestbook-overlay {
-
     position: absolute;
-
     inset: 0;
+
+    z-index: 0;
+
+    pointer-events: none;
 
     background:
         radial-gradient(
-            circle,
-            transparent,
-            rgba(0, 0, 0, .55)
+            circle at center,
+            rgba(10, 25, 45, .15),
+            rgba(0, 0, 0, .65)
         );
-
 }
 
 
-.guestbook-container {
+/* hero content */
 
+.guestbook-container {
     position: relative;
 
-    z-index: 5;
+    z-index: 2;
 
     width: 100%;
+    max-width: 900px;
 
-    max-width: 760px;
+    margin: 0 auto;
 
     padding: 0 20px;
 
-    text-align: center;
+    box-sizing: border-box;
 
+    text-align: center;
 }
 
 
 .section-label {
-
     display: inline-block;
 
     color: #d7b45f;
@@ -84,246 +93,268 @@
     text-transform: uppercase;
 
     font-size: 14px;
-
 }
 
 
 .guestbook-container h1 {
-
     margin: 18px 0;
 
-    font-size: 62px;
+    color: #fff;
 
     font-family: "Cinzel", serif;
 
+    font-size: clamp(42px, 6vw, 72px);
+
+    line-height: 1.1;
 }
 
 
 .guestbook-container p {
+    margin: 0 auto;
+
+    max-width: 760px;
+
+    color: rgba(255, 255, 255, .78);
 
     font-size: 19px;
 
-    color:
-        rgba(255, 255, 255, .75);
-
     line-height: 1.8;
-
 }
 
 
-/* ==========================================
-   HERO STATS
-========================================== */
+/* =========================================================
+   HERO STAT
+   ========================================================= */
 
 .guestbook-stats {
+    position: relative;
+
+    z-index: 2;
 
     display: flex;
 
     justify-content: center;
 
-    margin-top: 45px;
-
+    margin-top: 42px;
 }
 
 
 .stat-box {
+    width: 150px;
+    height: 150px;
 
-    width: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    height: 160px;
+    box-sizing: border-box;
 
     border-radius: 50%;
 
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    backdrop-filter: blur(20px);
-
     background:
-        rgba(255, 255, 255, .05);
+        rgba(255, 255, 255, .06);
 
     border:
         1px solid
-        rgba(255, 255, 255, .08);
+        rgba(255, 255, 255, .12);
 
+    backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, .25);
 }
 
 
 .stat-box span {
-
-    font-size: 58px;
-
     color: #e3be63;
 
     font-family: "Cinzel", serif;
 
+    font-size: 55px;
+
+    line-height: 1;
 }
 
 
 .stat-box small {
-
     margin-top: 10px;
 
-    opacity: .75;
-
+    color: rgba(255, 255, 255, .72);
 }
 
 
-/* ==========================================
+/* =========================================================
    MAIN SECTION
-========================================== */
+   ========================================================= */
 
 .guestbook-section {
+    position: relative;
 
-    padding: 90px 8%;
+    z-index: 1;
+
+    width: 100%;
+
+    padding: 85px 6% 110px;
+
+    box-sizing: border-box;
 
     background:
         linear-gradient(
-            #071325,
-            #09182c
+            180deg,
+            #071325 0%,
+            #08172b 100%
         );
-
 }
 
 
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
 .guestbook-layout {
+    position: relative;
 
     width: 100%;
 
     max-width: 1450px;
 
-    margin: auto;
+    margin: 0 auto;
 
     display: grid;
 
     grid-template-columns:
-        390px
+        minmax(320px, 390px)
         minmax(0, 1fr);
 
-    gap: 70px;
+    gap: 65px;
 
     align-items: start;
-
 }
 
 
-/* ==========================================
-   LEFT FORM
-========================================== */
+/* =========================================================
+   FORM
+   ========================================================= */
 
 .guestbook-form {
-
     position: sticky;
 
-    top: 110px;
+    top: 105px;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 32px;
+
+    border-radius: 24px;
 
     background:
-        rgba(255, 255, 255, .05);
-
-    backdrop-filter: blur(18px);
+        rgba(255, 255, 255, .045);
 
     border:
         1px solid
         rgba(255, 255, 255, .08);
 
-    border-radius: 24px;
-
-    padding: 35px;
+    backdrop-filter: blur(18px);
 
     box-shadow:
         0 20px 50px
-        rgba(0, 0, 0, .28);
-
+        rgba(0, 0, 0, .25);
 }
 
 
 .guestbook-form h2 {
-
     margin: 0 0 12px;
-
-    font-size: 42px;
 
     font-family: "Cinzel", serif;
 
+    font-size: 38px;
+
+    line-height: 1.2;
 }
 
 
 .form-desc {
+    margin: 0 0 28px;
 
-    margin-bottom: 30px;
+    color: rgba(255, 255, 255, .65);
 
-    color:
-        rgba(255, 255, 255, .65);
-
-    line-height: 1.8;
-
+    line-height: 1.7;
 }
 
 
-/* ==========================================
+/* =========================================================
    INPUT
-========================================== */
+   ========================================================= */
 
 .guestbook-form input,
 .guestbook-form textarea {
-
     display: block;
 
     width: 100%;
 
     box-sizing: border-box;
 
-    border: none;
+    border: 1px solid
+        rgba(255, 255, 255, .06);
 
     outline: none;
 
     border-radius: 14px;
 
     background:
-        rgba(255, 255, 255, .07);
+        rgba(255, 255, 255, .065);
 
     color: #fff;
 
-    padding: 16px 18px;
+    padding: 15px 17px;
 
-    margin-bottom: 18px;
+    margin-bottom: 16px;
+
+    font-family: inherit;
 
     font-size: 15px;
 
+    transition:
+        border-color .25s ease,
+        background .25s ease;
 }
 
 
-.guestbook-form textarea {
+.guestbook-form input:focus,
+.guestbook-form textarea:focus {
+    border-color:
+        rgba(215, 180, 95, .55);
 
-    resize: vertical;
-
-    min-height: 180px;
-
-    max-height: 320px;
-
+    background:
+        rgba(255, 255, 255, .085);
 }
 
 
 .guestbook-form input::placeholder,
 .guestbook-form textarea::placeholder {
-
     color:
-        rgba(255, 255, 255, .45);
-
+        rgba(255, 255, 255, .42);
 }
 
 
-/* ==========================================
-   BUTTON
-========================================== */
+.guestbook-form textarea {
+    min-height: 170px;
+
+    max-height: 320px;
+
+    resize: vertical;
+}
+
+
+/* =========================================================
+   FORM BOTTOM
+   ========================================================= */
 
 .form-bottom {
-
     display: flex;
 
     justify-content: space-between;
@@ -331,27 +362,23 @@
     align-items: center;
 
     gap: 15px;
-
 }
 
 
 #charCounter {
-
     color:
-        rgba(255, 255, 255, .55);
+        rgba(255, 255, 255, .5);
 
-    font-size: 14px;
-
+    font-size: 13px;
 }
 
 
 .form-bottom button {
-
     border: none;
 
     cursor: pointer;
 
-    padding: 14px 28px;
+    padding: 13px 25px;
 
     border-radius: 40px;
 
@@ -361,80 +388,75 @@
 
     font-family: "Cinzel", serif;
 
-    transition: .35s;
+    font-weight: 600;
 
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
 }
 
 
 .form-bottom button:hover {
-
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 
     box-shadow:
-        0 12px 25px
-        rgba(215, 180, 95, .35);
-
+        0 10px 25px
+        rgba(215, 180, 95, .3);
 }
 
 
 .form-bottom button:disabled {
-
     cursor: not-allowed;
 
-    opacity: .6;
+    opacity: .55;
 
     transform: none;
 
+    box-shadow: none;
 }
 
 
-/* ==========================================
+/* =========================================================
    PREVIEW
-========================================== */
+   ========================================================= */
 
 .ema-preview {
+    margin-top: 35px;
 
-    margin-top: 40px;
-
-    padding-top: 30px;
+    padding-top: 25px;
 
     border-top:
         1px solid
         rgba(255, 255, 255, .08);
-
 }
 
 
 .preview-title {
-
     display: block;
 
     margin-bottom: 15px;
 
+    color:
+        rgba(255, 255, 255, .55);
+
+    font-size: 12px;
+
     letter-spacing: 2px;
 
-    opacity: .6;
-
-    font-size: 13px;
-
+    text-transform: uppercase;
 }
 
 
-/* ==========================================
-   PREVIEW CARD
-========================================== */
-
 .preview-card {
-
     position: relative;
 
     width: 100%;
 
-    min-height: 280px;
+    min-height: 260px;
 
     box-sizing: border-box;
 
-    padding: 30px;
+    padding: 28px;
 
     border-radius: 20px;
 
@@ -451,107 +473,206 @@
         0 20px 35px
         rgba(0, 0, 0, .25);
 
-    transform: rotate(-3deg);
+    transform: rotate(-2deg);
 
-    transition: .35s;
+    transition: transform .3s ease;
+
+    overflow: hidden;
+}
+
+
+.preview-card:hover {
+    transform: rotate(0deg);
+}
+
+
+.preview-card .ema-name {
+    margin: 0 0 14px;
+
+    font-family: "Cinzel", serif;
+
+    font-size: 20px;
+}
+
+
+.preview-card .ema-message {
+    margin: 0;
+
+    max-height: 160px;
+
+    overflow-y: auto;
+
+    line-height: 1.75;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   RIGHT CONTENT
+   ========================================================= */
+
+.guestbook-content {
+    position: relative;
+
+    min-width: 0;
+
+    width: 100%;
+
+    display: block;
+}
+
+
+/* ==========================================
+   FEATURED WISH
+========================================== */
+
+.featured-wish {
+
+    width: 100%;
+
+    max-width: 100%;
+
+    box-sizing: border-box;
+
+    margin-bottom: 55px;
+
+    text-align: center;
 
     overflow: hidden;
 
 }
 
 
-.preview-card:hover {
+/* ==========================================
+   FEATURED LABEL
+========================================== */
 
-    transform:
-        rotate(0deg)
-        scale(1.03);
+.featured-wish span {
 
-}
+    display: block;
 
+    margin-bottom: 18px;
 
-.preview-card .ema-name {
+    color: #ff91b8;
 
-    position: relative;
-
-    margin-bottom: 14px;
-
-    font-family: "Cinzel", serif;
-
-    font-size: 20px;
-
-}
-
-
-.preview-card .ema-message {
-
-    position: relative;
-
-    max-height: 170px;
-
-    margin: 0;
-
-    overflow-y: auto;
-
-    line-height: 1.8;
-
-    word-break: normal;
-
-    overflow-wrap: anywhere;
+    font-size: 18px;
 
 }
 
 
 /* ==========================================
-   RIGHT CONTENT
+   FEATURED MESSAGE SCROLL
+========================================== */
+
+.featured-wish blockquote {
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    height: 360px;
+
+    max-height: 360px;
+
+    box-sizing: border-box;
+
+    margin: 0 auto;
+
+    padding: 10px 35px 25px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    font-family: "Cinzel", serif;
+
+    font-size: clamp(28px, 3vw, 46px);
+
+    font-weight: 400;
+
+    color: #f2d498;
+
+    line-height: 1.65;
+
+    text-align: center;
+
+    word-break: normal;
+
+    overflow-wrap: anywhere;
+
+    white-space: normal;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(215, 180, 95, .55)
+        rgba(255, 255, 255, .05);
+
+}
+
+
+/* ==========================================
+   FEATURED SCROLLBAR
+========================================== */
+
+.featured-wish blockquote::-webkit-scrollbar {
+
+    width: 7px;
+
+}
+
+
+.featured-wish blockquote::-webkit-scrollbar-track {
+
+    background:
+        rgba(255, 255, 255, .04);
+
+    border-radius: 10px;
+
+}
+
+
+.featured-wish blockquote::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(215, 180, 95, .55);
+
+    border-radius: 10px;
+
+}
+
+
+.featured-wish blockquote::-webkit-scrollbar-thumb:hover {
+
+    background:
+        rgba(215, 180, 95, .8);
+
+}
+
+
+/* ==========================================
+   PREVENT FEATURED FROM BREAKING LAYOUT
 ========================================== */
 
 .guestbook-content {
 
     min-width: 0;
 
-    display: flex;
+    max-width: 100%;
 
-    flex-direction: column;
-
-}
-
-
-.featured-wish {
-
-    margin-bottom: 70px;
-
-    text-align: center;
+    overflow: hidden;
 
 }
 
-
-.featured-wish span {
-
-    color: #ff91b8;
-
-}
-
-
-.featured-wish blockquote {
-
-    margin: 20px 0 0;
-
-    font-family: "Cinzel", serif;
-
-    font-size: 42px;
-
-    color: #f2d498;
-
-    line-height: 1.5;
-
-}
-
-
-/* ==========================================
+/* =========================================================
    WALL HEADER
-========================================== */
+   ========================================================= */
 
 .wall-header {
+    position: relative;
+
+    width: 100%;
 
     display: flex;
 
@@ -559,352 +680,229 @@
 
     align-items: flex-end;
 
-    gap: 30px;
+    gap: 25px;
 
     margin-bottom: 35px;
 
+    box-sizing: border-box;
 }
 
 
 .ema-title h2 {
-
     margin: 0;
-
-    font-size: 44px;
 
     font-family: "Cinzel", serif;
 
+    font-size: 44px;
+
+    line-height: 1.15;
 }
 
 
 .ema-title p {
-
-    margin-top: 6px;
+    margin: 8px 0 0;
 
     color:
         rgba(255, 255, 255, .55);
-
 }
 
 
 .wall-tools {
-
     display: flex;
 
     align-items: center;
 
-    gap: 18px;
+    gap: 12px;
 
     flex-shrink: 0;
-
 }
 
 
 .wall-tools input,
 .wall-tools select {
-
     height: 46px;
 
     box-sizing: border-box;
-
-    background: #162337;
-
-    color: #fff;
 
     border:
         1px solid
         rgba(255, 255, 255, .08);
 
-    border-radius: 12px;
-
-    padding: 13px 16px;
-
     outline: none;
 
+    border-radius: 12px;
+
+    background: #162337;
+
+    color: #fff;
+
+    padding: 0 15px;
+
+    font-family: inherit;
 }
 
 
 .wall-tools input {
-
     width: 220px;
-
 }
 
 
 .wall-tools select {
-
-    min-width: 150px;
-
+    width: 150px;
 }
 
 
 .wall-tools input:focus,
 .wall-tools select:focus {
-
     border-color:
         rgba(215, 180, 95, .55);
-
 }
 
 
-/* ==========================================
-   TOAST
-========================================== */
-
-.toast {
-
-    position: fixed;
-
-    right: 40px;
-
-    bottom: 40px;
-
-    padding: 18px 28px;
-
-    background: #d7b45f;
-
-    color: #111;
-
-    border-radius: 40px;
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    transform: translateY(30px);
-
-    transition: .35s;
-
-    z-index: 99999;
-
-}
-
-
-.toast.show {
-
-    opacity: 1;
-
-    visibility: visible;
-
-    transform: translateY(0);
-
-}
-
-
-/* ==========================================
-   EMPTY WALL
-========================================== */
-
-.empty-wall {
-
-    width: 100%;
-
-    min-height: 400px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    box-sizing: border-box;
-
-    padding: 40px;
-
-    border:
-        2px dashed
-        rgba(255, 255, 255, .08);
-
-    border-radius: 30px;
-
-    color: #fff;
-
-    text-align: center;
-
-}
-
-
-.empty-wall h3 {
-
-    margin: 15px 0 8px;
-
-}
-
-
-.empty-wall p {
-
-    margin: 0;
-
-    color:
-        rgba(255, 255, 255, .55);
-
-}
-
-
-.empty-icon {
-
-    font-size: 60px;
-
-    animation:
-        pulse 3s infinite;
-
-}
-
-
-@keyframes pulse {
-
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.15);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-
-}
-
-
-/* ==========================================
-   EMA WALL
-========================================== */
+/* =========================================================
+   EMA WALL WRAPPER
+   IMPORTANT:
+   TIDAK MENGGUNAKAN POSITION ABSOLUTE UNTUK WALL
+   ========================================================= */
 
 .ema-wall-wrapper {
-
     position: relative;
 
     width: 100%;
 
-    min-height: 500px;
+    min-height: 0;
+
+    margin: 0;
+
+    padding: 25px 0 20px;
 
     box-sizing: border-box;
 
-    padding-top: 80px;
-
+    overflow: visible;
 }
 
 
 .ema-wall {
-
     position: relative;
+
+    width: 100%;
+
+    min-height: 0;
 
     display: flex;
 
     flex-direction: column;
 
-    gap: 80px;
+    gap: 65px;
 
-    width: 100%;
-
+    box-sizing: border-box;
 }
 
 
-.ema-wall::before {
+/* =========================================================
+   ROPE
+   ========================================================= */
 
+.ema-wall::before {
     content: "";
 
     position: absolute;
 
-    top: 18px;
+    top: 0;
 
     left: 0;
 
     right: 0;
 
-    height: 6px;
+    height: 5px;
+
+    border-radius: 10px;
 
     background:
         linear-gradient(
-            #b47a37,
+            90deg,
+            #8b5b28,
+            #c08a3d,
             #8b5b28
         );
-
-    border-radius: 20px;
 
     pointer-events: none;
 
     z-index: 0;
-
 }
 
 
-/* ==========================================
+/* =========================================================
    EMA ROW
-========================================== */
+   ========================================================= */
 
 .ema-row {
-
     position: relative;
 
     width: 100%;
 
     box-sizing: border-box;
 
-    padding-top: 70px;
-
+    padding-top: 45px;
 }
 
 
 .ema-row-grid {
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
 
     display: grid;
 
     grid-template-columns:
         repeat(3, minmax(0, 1fr));
 
-    gap: 45px;
-
-    width: 100%;
+    gap: 40px;
 
     align-items: start;
 
     justify-items: center;
-
 }
 
 
-/* ==========================================
+/* =========================================================
    ROW ROPE
-========================================== */
+   ========================================================= */
 
 .rope-line {
-
     position: absolute;
 
-    top: 35px;
+    top: 15px;
 
     left: 0;
 
     right: 0;
 
-    height: 6px;
-
-    background:
-        linear-gradient(
-            #b8833a,
-            #8b5b27
-        );
+    height: 5px;
 
     border-radius: 10px;
 
-    z-index: 1;
+    background:
+        linear-gradient(
+            90deg,
+            #8b5b28,
+            #b8833a,
+            #8b5b28
+        );
 
     pointer-events: none;
 
+    z-index: 1;
 }
 
 
-/* ==========================================
+/* =========================================================
    EMA CARD
-========================================== */
+   ========================================================= */
 
 .ema-card {
-
     position: relative;
 
     width: 100%;
@@ -915,11 +913,7 @@
 
     min-height: 380px;
 
-    max-height: 380px;
-
     box-sizing: border-box;
-
-    padding: 0;
 
     border-radius: 22px;
 
@@ -939,30 +933,28 @@
 
     overflow: hidden;
 
-    transition:
-        transform .35s ease,
-        box-shadow .35s ease;
-
     isolation: isolate;
 
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
 }
 
 
 .ema-card:hover {
+    transform: translateY(-5px);
 
     box-shadow:
         0 28px 55px
         rgba(0, 0, 0, .4);
-
 }
 
 
-/* ==========================================
-   EMA STRING
-========================================== */
+/* =========================================================
+   STRING
+   ========================================================= */
 
 .ema-string {
-
     position: absolute;
 
     top: -45px;
@@ -973,33 +965,32 @@
 
     height: 45px;
 
+    transform: translateX(-50%);
+
     background: #d8b16d;
 
-    transform:
-        translateX(-50%);
-
-    z-index: 2;
+    z-index: 4;
 
     pointer-events: none;
-
 }
 
 
-/* ==========================================
+/* =========================================================
    WOOD TOP
-========================================== */
+   ========================================================= */
 
 .wood-top {
-
     position: absolute;
 
-    top: -12px;
+    top: -10px;
 
     left: 50%;
 
     width: 90px;
 
     height: 18px;
+
+    transform: translateX(-50%);
 
     border-radius: 8px;
 
@@ -1009,33 +1000,24 @@
             #6f4518
         );
 
-    transform:
-        translateX(-50%);
-
-    z-index: 5;
-
-    pointer-events: none;
-
     box-shadow:
         0 4px 8px
         rgba(0, 0, 0, .2);
 
+    z-index: 5;
+
+    pointer-events: none;
 }
 
 
-/* ==========================================
+/* =========================================================
    EMA CONTENT
-========================================== */
+   ========================================================= */
 
 .ema-content {
-
     position: relative;
 
     z-index: 3;
-
-    display: flex;
-
-    flex-direction: column;
 
     width: 100%;
 
@@ -1043,70 +1025,59 @@
 
     min-height: 0;
 
+    display: flex;
+
+    flex-direction: column;
+
     box-sizing: border-box;
 
     padding:
         42px
         28px
-        74px;
-
+        72px;
 }
 
 
-/* ==========================================
-   EMA NAME
-========================================== */
+/* =========================================================
+   NAME
+   ========================================================= */
 
 .ema-name {
-
     flex-shrink: 0;
 
-    margin: 0 0 18px;
+    margin: 0 0 16px;
 
     color: #5b3715;
 
-    font-family:
-        "Cinzel",
-        serif;
+    font-family: "Cinzel", serif;
 
-    font-size: 22px;
+    font-size: 21px;
 
     line-height: 1.25;
 
     text-transform: uppercase;
 
-    word-break: normal;
-
     overflow-wrap: anywhere;
-
 }
 
 
-/* ==========================================
-   EMA MESSAGE
-========================================== */
+/* =========================================================
+   MESSAGE
+   ========================================================= */
 
 .ema-message {
-
     flex: 1 1 auto;
 
     min-width: 0;
-
     min-height: 0;
 
     width: 100%;
-
-    max-width: 100%;
 
     box-sizing: border-box;
 
     margin: 0;
 
-    padding:
-        0
-        10px
-        0
-        0;
+    padding: 0 8px 0 0;
 
     overflow-y: auto;
 
@@ -1120,78 +1091,51 @@
 
     text-align: left;
 
-    word-break: normal;
-
     overflow-wrap: anywhere;
 
     white-space: normal;
-
-}
-
-
-/* ==========================================
-   SCROLLBAR
-========================================== */
-
-.ema-message {
 
     scrollbar-width: thin;
 
     scrollbar-color:
         rgba(91, 55, 21, .35)
         rgba(91, 55, 21, .08);
-
 }
 
 
 .ema-message::-webkit-scrollbar {
-
-    width: 6px;
-
+    width: 5px;
 }
 
 
 .ema-message::-webkit-scrollbar-track {
-
     background:
         rgba(91, 55, 21, .08);
 
     border-radius: 10px;
-
 }
 
 
 .ema-message::-webkit-scrollbar-thumb {
-
     background:
         rgba(91, 55, 21, .35);
 
     border-radius: 10px;
-
 }
 
 
-.ema-message::-webkit-scrollbar-thumb:hover {
-
-    background:
-        rgba(91, 55, 21, .55);
-
-}
-
-
-/* ==========================================
-   EMA FOOTER
-========================================== */
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
 .ema-footer {
-
     position: absolute;
 
     left: 28px;
 
     right: 28px;
 
-    bottom: 28px;
+    bottom: 27px;
 
     z-index: 10;
 
@@ -1201,26 +1145,22 @@
 
     align-items: center;
 
-    gap: 12px;
+    gap: 10px;
 
     pointer-events: none;
-
 }
 
 
 .ema-footer > * {
-
     pointer-events: auto;
-
 }
 
 
-/* ==========================================
+/* =========================================================
    DATE
-========================================== */
+   ========================================================= */
 
 .ema-date {
-
     position: absolute;
 
     right: 28px;
@@ -1232,19 +1172,17 @@
     color:
         rgba(91, 55, 21, .65);
 
-    font-size: 12px;
+    font-size: 11px;
 
     line-height: 1;
-
 }
 
 
-/* ==========================================
-   LIKE BUTTON
-========================================== */
+/* =========================================================
+   LIKE
+   ========================================================= */
 
 .like-btn {
-
     position: relative;
 
     z-index: 20;
@@ -1255,7 +1193,7 @@
 
     gap: 8px;
 
-    padding: 10px 16px;
+    padding: 9px 15px;
 
     border: none;
 
@@ -1265,422 +1203,500 @@
 
     color: #8c4b0f;
 
-    font-size: 14px;
+    font-size: 13px;
 
     font-weight: 600;
 
     cursor: pointer;
 
     transition:
-        transform .25s ease,
-        box-shadow .25s ease;
-
+        transform .2s ease,
+        box-shadow .2s ease;
 }
 
 
 .like-btn:hover {
-
-    transform: scale(1.08);
+    transform: scale(1.06);
 
     box-shadow:
         0 8px 18px
         rgba(91, 55, 21, .18);
-
 }
 
 
 .like-btn:disabled {
-
     cursor: not-allowed;
-
 }
 
 
 .like-btn.liked {
-
     animation:
         likePop .35s ease;
+}
 
+
+.like-count {
+    min-width: 18px;
+
+    text-align: center;
 }
 
 
 @keyframes likePop {
-
     0% {
         transform: scale(1);
     }
 
     40% {
-        transform: scale(1.35);
+        transform: scale(1.3);
     }
 
     100% {
         transform: scale(1);
     }
-
 }
 
 
-.like-count {
+/* =========================================================
+   EMPTY WALL
+   ========================================================= */
 
-    min-width: 18px;
+.empty-wall {
+    width: 100%;
+
+    min-height: 300px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    box-sizing: border-box;
+
+    padding: 40px;
+
+    border:
+        2px dashed
+        rgba(255, 255, 255, .09);
+
+    border-radius: 25px;
+
+    color: #fff;
 
     text-align: center;
-
 }
 
 
-/* ==========================================
-   FLOATING HEART
-========================================== */
+.empty-icon {
+    font-size: 55px;
 
-.floating-heart {
+    margin-bottom: 10px;
+}
 
-    position: absolute;
 
-    pointer-events: none;
+.empty-wall h3 {
+    margin: 10px 0 7px;
 
-    font-size: 20px;
+    font-family: "Cinzel", serif;
+}
 
+
+.empty-wall p {
+    margin: 0;
+
+    color:
+        rgba(255, 255, 255, .55);
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.guestbook-loading {
+    width: 100%;
+
+    min-height: 120px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color:
+        rgba(255, 255, 255, .65);
+
+    text-align: center;
+}
+
+
+.guestbook-loading::before {
+    content: "🌸";
+    
     animation:
-        floatHeart 1s ease-out forwards;
-
-    z-index: 999;
-
+        loadingFlower 1s ease-in-out infinite;
 }
 
 
-@keyframes floatHeart {
-
+@keyframes loadingFlower {
     0% {
-
-        opacity: 1;
-
-        transform:
-            translateY(0)
-            scale(.8);
-
+        transform: scale(.9);
     }
 
     50% {
-
-        transform:
-            translateY(-40px)
-            scale(1.3);
-
+        transform: scale(1.2);
     }
 
     100% {
-
-        opacity: 0;
-
-        transform:
-            translateY(-90px)
-            scale(.5);
-
+        transform: scale(.9);
     }
-
 }
 
 
-/* ==========================================
-   PREVENT DECORATIONS FROM BLOCKING CLICKS
-========================================== */
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast {
+    position: fixed;
+
+    right: 30px;
+
+    bottom: 30px;
+
+    z-index: 99999;
+
+    padding: 16px 24px;
+
+    border-radius: 40px;
+
+    background: #d7b45f;
+
+    color: #111;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform: translateY(20px);
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease,
+        visibility .25s ease;
+}
+
+
+.toast.show {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   DECORATIONS
+   ========================================================= */
 
 .wood-top,
 .ema-string,
 .rope-line {
-
     pointer-events: none;
-
 }
 
 
-/* ==========================================
-   RESPONSIVE - TABLET
-========================================== */
+/* =========================================================
+   TABLET
+   ========================================================= */
 
 @media (max-width: 1100px) {
 
-    .guestbook-layout {
+    .guestbook-section {
+        padding-left: 35px;
+        padding-right: 35px;
+    }
 
+
+    .guestbook-layout {
         grid-template-columns: 1fr;
 
-        gap: 60px;
-
+        gap: 65px;
     }
 
 
     .guestbook-form {
-
         position: relative;
 
         top: auto;
 
+        max-width: 650px;
+
+        margin: 0 auto;
     }
 
 
     .ema-row-grid {
-
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
 
         gap: 35px;
-
     }
 
 
     .ema-card {
-
-        max-width: 340px;
-
+        max-width: 350px;
     }
 
 
     .wall-header {
-
         align-items: flex-start;
 
         flex-direction: column;
-
     }
 
 
     .wall-tools {
-
         width: 100%;
-
     }
 
 
     .wall-tools input {
-
         flex: 1;
 
         width: auto;
-
     }
-
 }
 
 
-/* ==========================================
-   RESPONSIVE - MOBILE
-========================================== */
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media (max-width: 700px) {
 
-    .guestbook-section {
+    .guestbook-hero {
+        min-height: 400px;
 
         padding:
-            60px 20px;
+            95px
+            18px
+            60px;
+    }
 
+
+    .guestbook-container {
+        padding: 0 10px;
     }
 
 
     .guestbook-container h1 {
-
-        font-size: 42px;
-
+        font-size: 40px;
     }
 
 
     .guestbook-container p {
-
         font-size: 16px;
 
+        line-height: 1.7;
     }
 
 
     .stat-box {
-
-        width: 130px;
-
-        height: 130px;
-
+        width: 125px;
+        height: 125px;
     }
 
 
     .stat-box span {
+        font-size: 44px;
+    }
 
-        font-size: 45px;
 
+    .guestbook-section {
+        padding:
+            60px
+            20px
+            80px;
     }
 
 
     .guestbook-form {
-
         padding: 25px;
 
         border-radius: 20px;
-
     }
 
 
     .guestbook-form h2 {
+        font-size: 32px;
+    }
 
-        font-size: 34px;
 
+    .featured-wish {
+        margin-bottom: 45px;
     }
 
 
     .featured-wish blockquote {
-
-        font-size: 28px;
-
+        font-size: 27px;
     }
 
 
     .ema-title h2 {
-
         font-size: 34px;
-
     }
 
 
     .wall-tools {
-
         flex-direction: column;
 
         align-items: stretch;
 
-        gap: 10px;
-
+        width: 100%;
     }
 
 
     .wall-tools input,
     .wall-tools select {
-
         width: 100%;
+    }
 
+
+    .ema-wall {
+        gap: 50px;
     }
 
 
     .ema-row-grid {
-
         grid-template-columns: 1fr;
 
-        gap: 55px;
-
+        gap: 50px;
     }
 
 
     .ema-card {
-
         width: 100%;
 
-        max-width: 340px;
+        max-width: 350px;
 
         height: 360px;
 
         min-height: 360px;
-
-        max-height: 360px;
-
     }
 
 
     .ema-content {
-
         padding:
             40px
             24px
-            74px;
-
+            72px;
     }
 
 
     .ema-name {
-
         font-size: 20px;
-
     }
 
 
     .ema-message {
-
         font-size: 14px;
 
         line-height: 1.7;
-
     }
 
 
     .ema-footer {
-
         left: 24px;
-
         right: 24px;
-
     }
 
 
     .ema-date {
-
         right: 24px;
-
     }
 
 
     .toast {
-
         left: 20px;
-
         right: 20px;
 
         bottom: 20px;
 
         text-align: center;
-
     }
-
 }
 
 
-/* ==========================================
-   VERY SMALL MOBILE
-========================================== */
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
 
 @media (max-width: 420px) {
 
+    .guestbook-hero {
+        min-height: 370px;
+    }
+
+
     .guestbook-container h1 {
+        font-size: 34px;
+    }
 
-        font-size: 36px;
 
+    .stat-box {
+        width: 115px;
+        height: 115px;
+    }
+
+
+    .stat-box span {
+        font-size: 40px;
+    }
+
+
+    .guestbook-section {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+
+    .guestbook-form {
+        padding: 20px;
     }
 
 
     .ema-card {
-
         max-width: 310px;
 
+        height: 350px;
+
+        min-height: 350px;
     }
 
 
     .ema-content {
-
         padding:
             38px
             20px
-            72px;
-
+            70px;
     }
 
 
     .ema-footer {
-
         left: 20px;
-
         right: 20px;
-
     }
 
 
     .ema-date {
-
         right: 20px;
-
     }
-
 }
