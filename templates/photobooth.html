@@ -127,39 +127,56 @@
                 </div>
 
 
-                <!-- CAMERA BUTTON -->
+            <!-- CAMERA BUTTON -->
 
-                <div class="camera-controls">
+            <div class="camera-controls">
 
-                    <button
-                        id="startCameraBtn"
-                        class="btn btn-outline"
-                        type="button">
+                <button
+                    id="startCameraBtn"
+                    class="btn btn-outline"
+                    type="button">
 
-                        <span>▣</span>
+                    <span>▣</span>
 
-                        <span data-i18n="photobooth.startCamera">
-                            Start Camera
-                        </span>
+                    <span id="cameraButtonText" data-i18n="photobooth.startCamera">
+                        Start Camera
+                    </span>
 
-                    </button>
+                </button>
 
 
-                    <button
-                        id="captureBtn"
-                        class="btn btn-capture"
-                        type="button"
-                        disabled>
+                <button
+                    id="stopCameraBtn"
+                    class="btn btn-outline"
+                    type="button"
+                    disabled>
 
-                        <span class="shutter-icon"></span>
+                    <span>■</span>
 
-                        <span id="captureBtnText">
-                            Take Photo 1
-                        </span>
+                    <span
+                        id="stopCameraButtonText"
+                        data-i18n="photobooth.stopCamera">
+                        Matikan Kamera
+                    </span>
 
-                    </button>
+                </button>
 
-                </div>
+
+                <button
+                    id="captureBtn"
+                    class="btn btn-capture"
+                    type="button"
+                    disabled>
+
+                    <span class="shutter-icon"></span>
+
+                    <span id="captureBtnText">
+                        Take Photo 1
+                    </span>
+
+                </button>
+
+            </div>
 
 
                 <!-- SETTINGS -->

@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        TRANSLATION
-       TAMBAHAN BARU
        ========================================================= */
 
     const photoboothTranslations = {
@@ -29,6 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             "photobooth.startCamera":
                 "Mulai Kamera",
+
+            "photobooth.stopCamera":
+                "Matikan Kamera",
 
             "photobooth.startCameraHint":
                 'Klik "Mulai Kamera" untuk memulai',
@@ -143,6 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
             "photobooth.startCamera":
                 "Start Camera",
 
+            "photobooth.stopCamera":
+                "Turn Off Camera",
+
             "photobooth.startCameraHint":
                 'Click "Start Camera" to begin',
 
@@ -255,6 +260,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             "photobooth.startCamera":
                 "カメラを起動",
+
+            "photobooth.stopCamera":
+                "カメラを停止",
 
             "photobooth.startCameraHint":
                 "「カメラを起動」をクリックして開始",
@@ -369,6 +377,9 @@ document.addEventListener("DOMContentLoaded", () => {
             "photobooth.startCamera":
                 "启动相机",
 
+            "photobooth.stopCamera":
+                "关闭相机",
+
             "photobooth.startCameraHint":
                 '点击“启动相机”开始',
 
@@ -482,6 +493,9 @@ document.addEventListener("DOMContentLoaded", () => {
             "photobooth.startCamera":
                 "카메라 시작",
 
+            "photobooth.stopCamera":
+                "카메라 끄기",
+
             "photobooth.startCameraHint":
                 '"카메라 시작"을 눌러 시작하세요',
 
@@ -578,7 +592,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-       CURRENT LANGUAGE
+       LANGUAGE
        ========================================================= */
 
     let currentLanguage =
@@ -596,16 +610,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =========================================================
-       TRANSLATE STATIC HTML
-       ========================================================= */
-
     function translatePhotobooth(language) {
 
         if (
             !photoboothTranslations[language]
         ) {
+
             language = "id";
+
         }
 
 
@@ -646,24 +658,18 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-        /*
-         * Dynamic text.
-         */
-
         updateCaptureButton();
 
         updateMirrorText();
 
         updateFrameName();
 
+        updateCameraUI();
+
         updateRetakeButtons();
 
     }
 
-
-    /* =========================================================
-       LISTEN TO NAVBAR
-       ========================================================= */
 
     window.addEventListener(
         "languageChanged",
@@ -696,6 +702,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const startCameraBtn =
         document.getElementById(
             "startCameraBtn"
+        );
+
+    const stopCameraBtn =
+        document.getElementById(
+            "stopCameraBtn"
+        );
+
+    const cameraButtonText =
+        document.getElementById(
+            "cameraButtonText"
+        );
+
+    const stopCameraButtonText =
+        document.getElementById(
+            "stopCameraButtonText"
         );
 
     const captureBtn =
@@ -805,6 +826,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let countdownTimer = null;
 
+    let isStartingCamera = false;
+
 
     const photos = [
         null,
@@ -906,13 +929,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =========================================================
-       FRAME
-       ========================================================= */
-
-    function applyFrame(
-        frame
-    ) {
+    function applyFrame(frame) {
 
         if (!frame) {
             return;
@@ -934,6 +951,106 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
+       CAMERA STATE
+       ========================================================= */
+
+    function isCameraActive() {
+
+        if (!stream) {
+            return false;
+        }
+
+
+        const tracks =
+            stream.getVideoTracks();
+
+
+        if (!tracks.length) {
+            return false;
+        }
+
+
+        return tracks.some(
+            track =>
+                track.readyState === "live"
+        );
+
+    }
+
+
+    function updateCameraUI() {
+
+        const active =
+            isCameraActive();
+
+
+        if (startCameraBtn) {
+
+            startCameraBtn.disabled =
+                active;
+
+            startCameraBtn.classList.toggle(
+                "active",
+                active
+            );
+
+        }
+
+
+        if (stopCameraBtn) {
+
+            stopCameraBtn.disabled =
+                !active;
+
+        }
+
+
+        if (captureBtn) {
+
+            captureBtn.disabled =
+                !active || isCapturing;
+
+        }
+
+
+        if (cameraButtonText) {
+
+            cameraButtonText.textContent =
+                active
+                    ? t("photobooth.cameraActive")
+                    : t("photobooth.startCamera");
+
+        }
+
+
+        if (stopCameraButtonText) {
+
+            stopCameraButtonText.textContent =
+                t("photobooth.stopCamera");
+
+        }
+
+
+        if (cameraPlaceholder) {
+
+            cameraPlaceholder.classList.toggle(
+                "hidden",
+                active
+            );
+
+        }
+
+
+        if (active) {
+
+            updateCaptureButton();
+
+        }
+
+    }
+
+
+    /* =========================================================
        CAMERA RATIO
        ========================================================= */
 
@@ -943,7 +1060,9 @@ document.addEventListener("DOMContentLoaded", () => {
             !video.videoWidth ||
             !video.videoHeight
         ) {
+
             return;
+
         }
 
 
@@ -982,29 +1101,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function getCssFilter() {
 
-        switch (
-            currentFilter
-        ) {
+        switch (currentFilter) {
 
             case "soft":
+
                 return (
                     "brightness(1.05) " +
                     "contrast(.95) " +
                     "saturate(.85)"
                 );
 
+
             case "warm":
+
                 return (
                     "sepia(.18) " +
                     "saturate(1.15) " +
                     "brightness(1.03)"
                 );
 
+
             case "bw":
+
                 return "grayscale(1)";
 
+
             case "original":
+
             default:
+
                 return "none";
 
         }
@@ -1036,7 +1161,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (
             countdownSeconds <= 0
         ) {
+
             return;
+
         }
 
 
@@ -1085,6 +1212,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                 );
 
 
+                                countdownTimer =
+                                    null;
+
+
                                 if (countdown) {
 
                                     countdown.classList.add(
@@ -1118,6 +1249,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    function cancelCountdown() {
+
+        if (countdownTimer) {
+
+            clearInterval(
+                countdownTimer
+            );
+
+            countdownTimer =
+                null;
+
+        }
+
+
+        if (countdown) {
+
+            countdown.classList.add(
+                "hidden"
+            );
+
+        }
+
+    }
+
+
     /* =========================================================
        WAIT VIDEO
        ========================================================= */
@@ -1126,6 +1282,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return new Promise(
             resolve => {
+
+                if (
+                    video.videoWidth &&
+                    video.videoHeight
+                ) {
+
+                    resolve();
+
+                    return;
+
+                }
+
 
                 let attempts = 0;
 
@@ -1176,18 +1344,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-       CAMERA
+       START CAMERA
        ========================================================= */
 
     async function startCamera() {
 
-        if (stream) {
+        if (isStartingCamera) {
+
+            return;
+
+        }
+
+
+        /*
+         * Kalau kamera masih aktif,
+         * jangan request kamera lagi.
+         */
+
+        if (isCameraActive()) {
 
             try {
 
-                if (
-                    video.paused
-                ) {
+                video.muted =
+                    true;
+
+                video.playsInline =
+                    true;
+
+                video.autoplay =
+                    true;
+
+
+                if (video.paused) {
 
                     await video.play();
 
@@ -1202,7 +1390,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
             }
 
+
+            updateCameraUI();
+
             return;
+
+        }
+
+
+        /*
+         * Kalau ada stream lama tetapi track
+         * sudah mati, bersihkan dahulu.
+         */
+
+        if (stream) {
+
+            stream
+                .getTracks()
+                .forEach(
+                    track => {
+
+                        try {
+
+                            track.stop();
+
+                        } catch (error) {
+
+                            console.warn(
+                                error
+                            );
+
+                        }
+
+                    }
+                );
+
+
+            stream =
+                null;
 
         }
 
@@ -1223,9 +1448,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
+        isStartingCamera =
+            true;
+
+
         try {
 
-            stream =
+            /*
+             * Request kamera.
+             */
+
+            const newStream =
                 await navigator
                     .mediaDevices
                     .getUserMedia({
@@ -1255,6 +1488,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
 
 
+            stream =
+                newStream;
+
+
+            /*
+             * Pasang stream ke video.
+             */
+
             video.srcObject =
                 stream;
 
@@ -1274,16 +1515,36 @@ document.addEventListener("DOMContentLoaded", () => {
             updateVideoFilter();
 
 
+            /*
+             * Tunggu video benar-benar play.
+             */
+
             await video.play();
 
 
-            if (
-                video.readyState >= 1
-            ) {
+            /*
+             * Tunggu ukuran video tersedia.
+             */
 
-                syncCameraRatio();
+            await waitForVideoSize();
 
-            }
+
+            syncCameraRatio();
+
+
+            /*
+             * Listener hanya sekali.
+             */
+
+            video.removeEventListener(
+                "loadedmetadata",
+                syncCameraRatio
+            );
+
+            video.removeEventListener(
+                "resize",
+                syncCameraRatio
+            );
 
 
             video.addEventListener(
@@ -1291,53 +1552,46 @@ document.addEventListener("DOMContentLoaded", () => {
                 syncCameraRatio
             );
 
-
             video.addEventListener(
                 "resize",
                 syncCameraRatio
             );
 
 
-            if (
-                cameraPlaceholder
-            ) {
+            /*
+             * Jika track mati secara tiba-tiba,
+             * update UI.
+             */
 
-                cameraPlaceholder.classList.add(
-                    "hidden"
+            stream
+                .getVideoTracks()
+                .forEach(
+                    track => {
+
+                        track.addEventListener(
+                            "ended",
+                            () => {
+
+                                if (
+                                    stream
+                                ) {
+
+                                    stream =
+                                        null;
+
+                                }
+
+
+                                updateCameraUI();
+
+                            }
+                        );
+
+                    }
                 );
 
-            }
 
-
-            if (
-                startCameraBtn
-            ) {
-
-                startCameraBtn.innerHTML = `
-                    <span>✓</span>
-                    <span data-camera-active-text>
-                        ${t("photobooth.cameraActive")}
-                    </span>
-                `;
-
-                startCameraBtn.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            if (
-                captureBtn
-            ) {
-
-                captureBtn.disabled =
-                    false;
-
-            }
-
-
-            updateCaptureButton();
+            updateCameraUI();
 
 
         } catch (error) {
@@ -1348,7 +1602,40 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-            stream = null;
+            if (stream) {
+
+                stream
+                    .getTracks()
+                    .forEach(
+                        track => {
+
+                            try {
+
+                                track.stop();
+
+                            } catch (stopError) {
+
+                                console.warn(
+                                    stopError
+                                );
+
+                            }
+
+                        }
+                    );
+
+            }
+
+
+            stream =
+                null;
+
+
+            video.srcObject =
+                null;
+
+
+            updateCameraUI();
 
 
             alert(
@@ -1357,18 +1644,164 @@ document.addEventListener("DOMContentLoaded", () => {
                 )
             );
 
+        } finally {
+
+            isStartingCamera =
+                false;
+
         }
 
     }
 
 
-    if (
-        startCameraBtn
-    ) {
+    /* =========================================================
+       STOP CAMERA
+       ========================================================= */
+
+    function stopCamera() {
+
+        /*
+         * Batalkan countdown.
+         */
+
+        cancelCountdown();
+
+
+        /*
+         * Hentikan semua track kamera.
+         */
+
+        if (stream) {
+
+            stream
+                .getTracks()
+                .forEach(
+                    track => {
+
+                        try {
+
+                            track.stop();
+
+                        } catch (error) {
+
+                            console.warn(
+                                "Track stop error:",
+                                error
+                            );
+
+                        }
+
+                    }
+                );
+
+        }
+
+
+        /*
+         * Hapus stream dari variable.
+         */
+
+        stream =
+            null;
+
+
+        /*
+         * Lepaskan stream dari video.
+         */
+
+        video.pause();
+
+        video.srcObject =
+            null;
+
+
+        /*
+         * Reset UI kamera.
+         */
+
+        if (cameraPlaceholder) {
+
+            cameraPlaceholder.classList.remove(
+                "hidden"
+            );
+
+        }
+
+
+        if (startCameraBtn) {
+
+            startCameraBtn.disabled =
+                false;
+
+            startCameraBtn.classList.remove(
+                "active"
+            );
+
+        }
+
+
+        if (stopCameraBtn) {
+
+            stopCameraBtn.disabled =
+                true;
+
+        }
+
+
+        if (captureBtn) {
+
+            captureBtn.disabled =
+                true;
+
+        }
+
+
+        if (cameraButtonText) {
+
+            cameraButtonText.textContent =
+                t(
+                    "photobooth.startCamera"
+                );
+
+        }
+
+
+        if (stopCameraButtonText) {
+
+            stopCameraButtonText.textContent =
+                t(
+                    "photobooth.stopCamera"
+                );
+
+        }
+
+
+        console.log(
+            "Photobooth camera stopped."
+        );
+
+    }
+
+
+    /* =========================================================
+       CAMERA BUTTON EVENTS
+       ========================================================= */
+
+    if (startCameraBtn) {
 
         startCameraBtn.addEventListener(
             "click",
             startCamera
+        );
+
+    }
+
+
+    if (stopCameraBtn) {
+
+        stopCameraBtn.addEventListener(
+            "click",
+            stopCamera
         );
 
     }
@@ -1403,9 +1836,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    if (
-        mirrorBtn
-    ) {
+    if (mirrorBtn) {
 
         mirrorBtn.addEventListener(
             "click",
@@ -1519,24 +1950,97 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
+       ENSURE CAMERA READY
+       ========================================================= */
+
+    async function ensureCameraReady() {
+
+        /*
+         * Kalau kamera aktif, langsung gunakan.
+         */
+
+        if (isCameraActive()) {
+
+            if (video.paused) {
+
+                try {
+
+                    await video.play();
+
+                } catch (error) {
+
+                    console.warn(
+                        "Could not resume video:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            await waitForVideoSize();
+
+
+            return true;
+
+        }
+
+
+        /*
+         * Kalau kamera mati,
+         * hidupkan otomatis.
+         */
+
+        await startCamera();
+
+
+        /*
+         * Cek sekali lagi setelah startCamera.
+         */
+
+        if (!isCameraActive()) {
+
+            return false;
+
+        }
+
+
+        await waitForVideoSize();
+
+
+        return (
+            !!video.videoWidth &&
+            !!video.videoHeight
+        );
+
+    }
+
+
+    /* =========================================================
        CAPTURE PHOTO
        ========================================================= */
 
     async function capturePhoto() {
 
-        if (
-            isCapturing
-        ) {
+        if (isCapturing) {
 
             return;
 
         }
 
 
-        if (
-            !video.videoWidth ||
-            !video.videoHeight
-        ) {
+        /*
+         * Pastikan kamera aktif.
+         *
+         * INI BAGIAN PENTING UNTUK RETAKE.
+         */
+
+        const cameraReady =
+            await ensureCameraReady();
+
+
+        if (!cameraReady) {
 
             alert(
                 t(
@@ -1553,9 +2057,7 @@ document.addEventListener("DOMContentLoaded", () => {
             true;
 
 
-        if (
-            captureBtn
-        ) {
+        if (captureBtn) {
 
             captureBtn.disabled =
                 true;
@@ -1565,15 +2067,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
 
+            /*
+             * Countdown.
+             */
+
             await runCountdown();
+
+
+            /*
+             * Pastikan kamera masih aktif
+             * setelah countdown.
+             */
+
+            if (!isCameraActive()) {
+
+                const restarted =
+                    await ensureCameraReady();
+
+
+                if (!restarted) {
+
+                    throw new Error(
+                        "Camera became unavailable."
+                    );
+
+                }
+
+            }
 
 
             await waitForVideoSize();
 
 
             if (
-                captureFlash
+                !video.videoWidth ||
+                !video.videoHeight
             ) {
+
+                throw new Error(
+                    "Video dimensions are unavailable."
+                );
+
+            }
+
+
+            /*
+             * Flash.
+             */
+
+            if (captureFlash) {
 
                 captureFlash.classList.remove(
                     "active"
@@ -1600,6 +2142,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 video.videoHeight;
 
 
+            /*
+             * Canvas.
+             */
+
             const canvas =
                 document.createElement(
                     "canvas"
@@ -1619,13 +2165,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
 
+            if (!ctx) {
+
+                throw new Error(
+                    "Canvas context unavailable."
+                );
+
+            }
+
+
+            /*
+             * Filter.
+             */
+
             ctx.filter =
                 getCanvasFilter();
 
 
-            if (
-                mirrorEnabled
-            ) {
+            /*
+             * Mirror.
+             */
+
+            if (mirrorEnabled) {
 
                 ctx.save();
 
@@ -1653,7 +2214,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 ctx.restore();
 
-
             } else {
 
                 ctx.drawImage(
@@ -1667,6 +2227,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
+            /*
+             * Convert to image.
+             */
+
             const imageData =
                 canvas.toDataURL(
                     "image/jpeg",
@@ -1674,15 +2238,33 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
 
+            /*
+             * Tentukan target foto.
+             *
+             * Kalau retake:
+             * gunakan retakeIndex.
+             *
+             * Kalau foto normal:
+             * gunakan currentPhoto.
+             */
+
             const targetIndex =
                 retakeIndex !== null
                     ? retakeIndex
                     : currentPhoto;
 
 
+            /*
+             * Simpan foto.
+             */
+
             photos[targetIndex] =
                 imageData;
 
+
+            /*
+             * Update tampilan foto.
+             */
 
             updatePhotoSlot(
                 targetIndex,
@@ -1690,24 +2272,45 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
+            /* =================================================
+               RETAKE MODE
+               ================================================= */
+
             if (
                 retakeIndex !== null
             ) {
+
+                console.log(
+                    `Retake photo ${targetIndex + 1} completed.`
+                );
+
+
+                /*
+                 * Keluar dari retake mode.
+                 */
 
                 retakeIndex =
                     null;
 
 
-                updateCaptureButton();
+                /*
+                 * Jangan menaikkan currentPhoto.
+                 *
+                 * Ini sangat penting.
+                 */
 
                 updateProgress();
 
-                refreshRetakeButtons();
+                updateRetakeButtons();
+
+                updateCaptureButton();
 
 
-                if (
-                    captureBtn
-                ) {
+                /*
+                 * Kamera TETAP AKTIF.
+                 */
+
+                if (captureBtn) {
 
                     captureBtn.disabled =
                         false;
@@ -1720,14 +2323,22 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
+            /* =================================================
+               NORMAL PHOTO MODE
+               ================================================= */
+
             currentPhoto +=
                 1;
 
 
             updateProgress();
 
-            refreshRetakeButtons();
+            updateRetakeButtons();
 
+
+            /*
+             * Sudah 3 foto.
+             */
 
             if (
                 currentPhoto >= 3
@@ -1737,9 +2348,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             } else {
 
-                if (
-                    captureBtn
-                ) {
+                if (captureBtn) {
 
                     captureBtn.disabled =
                         false;
@@ -1767,9 +2376,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-            if (
-                captureBtn
-            ) {
+            if (captureBtn) {
 
                 captureBtn.disabled =
                     false;
@@ -1781,14 +2388,25 @@ document.addEventListener("DOMContentLoaded", () => {
             isCapturing =
                 false;
 
+
+            /*
+             * Jangan matikan kamera di sini.
+             */
+
+            if (
+                isCameraActive()
+            ) {
+
+                updateCameraUI();
+
+            }
+
         }
 
     }
 
 
-    if (
-        captureBtn
-    ) {
+    if (captureBtn) {
 
         captureBtn.addEventListener(
             "click",
@@ -1831,10 +2449,8 @@ document.addEventListener("DOMContentLoaded", () => {
         image.style.width =
             "100%";
 
-
         image.style.height =
             "100%";
-
 
         image.style.objectFit =
             "fill";
@@ -1856,10 +2472,8 @@ document.addEventListener("DOMContentLoaded", () => {
             slot.style.aspectRatio =
                 "var(--photo-ratio, 4 / 3)";
 
-
             slot.style.width =
                 "100%";
-
 
             slot.style.height =
                 "auto";
@@ -1931,9 +2545,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateCaptureButton() {
 
-        if (
-            !captureBtnText
-        ) {
+        if (!captureBtnText) {
 
             return;
 
@@ -1991,9 +2603,7 @@ document.addEventListener("DOMContentLoaded", () => {
        CHANGE FRAME
        ========================================================= */
 
-    if (
-        changeFrameBtn
-    ) {
+    if (changeFrameBtn) {
 
         changeFrameBtn.addEventListener(
             "click",
@@ -2078,7 +2688,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 button.addEventListener(
                     "click",
-                    () => {
+                    async () => {
 
                         const index =
                             Number(
@@ -2095,13 +2705,48 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
 
 
+                        /*
+                         * Tentukan foto yang akan
+                         * diambil ulang.
+                         */
+
                         retakeIndex =
                             index;
 
 
-                        if (
-                            captureBtn
-                        ) {
+                        /*
+                         * Pastikan kamera hidup.
+                         *
+                         * Kalau kamera mati,
+                         * akan otomatis hidup.
+                         */
+
+                        const cameraReady =
+                            await ensureCameraReady();
+
+
+                        if (!cameraReady) {
+
+                            retakeIndex =
+                                null;
+
+
+                            alert(
+                                t(
+                                    "photobooth.cameraNotReady"
+                                )
+                            );
+
+                            return;
+
+                        }
+
+
+                        /*
+                         * Aktifkan tombol capture.
+                         */
+
+                        if (captureBtn) {
 
                             captureBtn.disabled =
                                 false;
@@ -2111,6 +2756,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         updateCaptureButton();
 
+
+                        /*
+                         * Scroll ke kamera.
+                         */
 
                         document
                             .querySelector(
@@ -2136,9 +2785,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function finishPhotobooth() {
 
-        if (
-            retakePanel
-        ) {
+        if (retakePanel) {
 
             retakePanel.classList.remove(
                 "hidden"
@@ -2147,9 +2794,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        if (
-            resultActions
-        ) {
+        if (resultActions) {
 
             resultActions.classList.remove(
                 "hidden"
@@ -2158,9 +2803,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        refreshRetakeButtons();
+        updateRetakeButtons();
 
         updateCaptureButton();
+
+
+        /*
+         * Kamera TIDAK dimatikan.
+         *
+         * User bisa langsung retake.
+         */
+
+        updateCameraUI();
 
     }
 
@@ -2169,13 +2823,15 @@ document.addEventListener("DOMContentLoaded", () => {
        RETAKE ALL
        ========================================================= */
 
-    if (
-        retakeBtn
-    ) {
+    if (retakeBtn) {
 
         retakeBtn.addEventListener(
             "click",
-            () => {
+            async () => {
+
+                /*
+                 * Reset progress.
+                 */
 
                 currentPhoto =
                     0;
@@ -2185,10 +2841,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     null;
 
 
+                /*
+                 * Hapus data foto.
+                 */
+
                 photos.fill(
                     null
                 );
 
+
+                /*
+                 * Hapus gambar.
+                 */
 
                 document
                     .querySelectorAll(
@@ -2210,6 +2874,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
 
+                /*
+                 * Tampilkan placeholder.
+                 */
+
                 document
                     .querySelectorAll(
                         ".slot-placeholder"
@@ -2225,9 +2893,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
 
-                if (
-                    resultActions
-                ) {
+                /*
+                 * Sembunyikan result actions.
+                 */
+
+                if (resultActions) {
 
                     resultActions.classList.add(
                         "hidden"
@@ -2236,9 +2906,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
 
-                if (
-                    retakePanel
-                ) {
+                /*
+                 * Sembunyikan retake panel.
+                 */
+
+                if (retakePanel) {
 
                     retakePanel.classList.add(
                         "hidden"
@@ -2249,9 +2921,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 updateProgress();
 
-                refreshRetakeButtons();
+                updateRetakeButtons();
 
                 updateCaptureButton();
+
+
+                /*
+                 * Kamera tetap hidup.
+                 *
+                 * Kalau ternyata kamera mati,
+                 * hidupkan otomatis.
+                 */
+
+                await ensureCameraReady();
+
+
+                updateCameraUI();
 
             }
         );
@@ -2263,9 +2948,7 @@ document.addEventListener("DOMContentLoaded", () => {
        DOWNLOAD
        ========================================================= */
 
-    if (
-        downloadBtn
-    ) {
+    if (downloadBtn) {
 
         downloadBtn.addEventListener(
             "click",
@@ -2336,7 +3019,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     link.click();
 
-
                 } catch (error) {
 
                     console.error(
@@ -2366,6 +3048,9 @@ document.addEventListener("DOMContentLoaded", () => {
         "beforeunload",
         () => {
 
+            cancelCountdown();
+
+
             if (!stream) {
                 return;
             }
@@ -2376,14 +3061,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 .forEach(
                     track => {
 
-                        track.stop();
+                        try {
+
+                            track.stop();
+
+                        } catch (error) {
+
+                            console.warn(
+                                error
+                            );
+
+                        }
 
                     }
                 );
 
+
+            stream =
+                null;
+
         }
     );
 
+
+    /* =========================================================
+       VISIBILITY CHANGE
+       ========================================================= */
 
     document.addEventListener(
         "visibilitychange",
@@ -2395,7 +3098,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ) {
 
                 if (
-                    stream &&
+                    isCameraActive() &&
                     video.paused
                 ) {
 
@@ -2427,8 +3130,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateProgress();
 
-    refreshRetakeButtons();
+    updateRetakeButtons();
 
     updateCaptureButton();
+
+    updateCameraUI();
 
 });
