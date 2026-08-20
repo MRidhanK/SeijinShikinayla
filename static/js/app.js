@@ -62,7 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
         ================================================= */
 
         id: {
-
+           
+            "gallery.nayla_name":
+                "Araki Nayla Suji Aurelia",
+            
             "ceremony.hero.jp":
                 "成人式",
 
@@ -215,6 +218,9 @@ document.addEventListener("DOMContentLoaded", () => {
         ================================================= */
 
         en: {
+
+            "gallery.nayla_name":
+                "Araki Nayla Suji Aurelia",
 
             "ceremony.hero.jp":
                 "成人式",
@@ -369,6 +375,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         ja: {
 
+            "gallery.nayla_name":
+                "荒木・ナイラ・スジ・アウレリア",
+
             "ceremony.hero.jp":
                 "成人式",
 
@@ -522,6 +531,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         zh: {
 
+            "gallery.nayla_name":
+                "阿拉基·奈拉·苏吉·奥蕾莉娅",
+
             "ceremony.hero.jp":
                 "成人式",
 
@@ -674,6 +686,9 @@ document.addEventListener("DOMContentLoaded", () => {
         ================================================= */
 
         ko: {
+
+            "gallery.nayla_name":
+                "아라키 나일라 수지 아우렐리아",
 
             "ceremony.hero.jp":
                 "成人式",

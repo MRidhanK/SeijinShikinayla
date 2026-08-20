@@ -1,977 +1,1528 @@
 /* =========================================================
-   GUESTBOOK.JS
-   =========================================================
+   GALLERY.JS
+   Nayla Seijin Shiki
+   ========================================================= */
 
-   5 LANGUAGE SYSTEM
-   ID • EN • JA • KO • ZH
-
-   LANGUAGE SOURCE:
-   - localStorage.language
-   - localStorage.selectedLanguage
-   - localStorage.currentLanguage
-   - localStorage.lang
-   - document.documentElement.lang
-
-   NAVBAR EVENTS:
-   - languageChanged
-   - languageChange
-   - langChanged
-
-   FLOW:
-
-   Browser
-      ↓
-   Flask /api/guestbook
-      ↓
-   Validation + Moderation + Rate Limit
-      ↓
-   Supabase
-      ↓
-   Guestbook
-
-   Supabase tetap digunakan untuk:
-   - realtime update
-   - like melalui RPC
-
-   INSERT guestbook TIDAK dilakukan langsung
-   ke Supabase dari browser.
-========================================================= */
+"use strict";
 
 
 /* =========================================================
-   01. TRANSLATION DICTIONARY
-========================================================= */
+   01. TRANSLATIONS
+   ========================================================= */
 
-const GUESTBOOK_TRANSLATIONS = {
+const GALLERY_TRANSLATIONS = {
 
     /* =====================================================
        INDONESIAN
-    ===================================================== */
+       ===================================================== */
 
     id: {
+        gallery: {
 
-        yourName: "Nama Kamu",
-        yourMessage: "Pesanmu...",
+            hero_japanese: "思い出",
+            hero_eyebrow: "ARSIP KENANGAN",
+            hero_title: "Kumpulan Kenangan",
+            hero_description:
+                "Setiap bab meninggalkan sesuatu yang layak dikenang.",
+            scroll: "Gulir untuk menjelajah",
 
-        loadingWishes: "Memuat Harapan...",
+            archive: "ARSIP",
+            heading: "Kenangan Nayla",
+            heading_description:
+                "Perjalanan visual melalui momen-momen yang membentuk tahun-tahun sebelum dewasa.",
 
-        unableToLoadWishes:
-            "Tidak Dapat Memuat Harapan",
+            filter_all: "Semua",
+            memories: "kenangan",
 
-        pleaseTryAgainLater:
-            "Silakan coba lagi nanti.",
+            chapter_01: "BAB 01",
+            chapter_02: "BAB 02",
+            chapter_03: "BAB 03",
+            chapter_06: "BAB 06",
 
-        tryAgain:
-            "Coba Lagi",
+            memory_2023_alt:
+                "Kenangan Nayla tahun 2023",
+            memory_2023_title:
+                "Awal Perjalanan",
+            memory_2023_description:
+                "Langkah pertama dari sebuah perjalanan yang indah.",
 
-        noWishesYet:
-            "Belum Ada Harapan",
+            memory_2024_alt:
+                "Kenangan Nayla tahun 2024",
+            memory_2024_title:
+                "Bertumbuh",
+            memory_2024_description:
+                "Bertumbuh melalui JKT48 School.",
 
-        beFirstToHang:
-            "Jadilah yang pertama menggantung Ema.",
+            memory_2025_alt:
+                "Kenangan Nayla tahun 2025",
+            memory_2025_title:
+                "Sebuah Pencapaian Baru",
+            memory_2025_description:
+                "Dipromosikan menjadi Core Member dan dipercaya sebagai penerjemah di Sister Reunion Festival.",
 
-        noWishesFound:
-            "Harapan Tidak Ditemukan",
+            memory_2026_rh_alt:
+                "Kenangan Request Hour Nayla tahun 2026",
+            view_2026_rh:
+                "Lihat kenangan Request Hour 2026",
+            special_moment:
+                "MOMEN SPESIAL",
+            memory_2026_rh_title:
+                "Request Hour 2026",
+            memory_2026_rh_description:
+                "Penampilan spesial <strong>Bird</strong>, berada di peringkat ke-15 Request Hour 2026, bersama Aurelia dan Aurhel Alana.",
 
-        tryAnotherSearch:
-            "Coba pencarian lain.",
+            memory_2026_birthday_alt:
+                "Kenangan ulang tahun Nayla ke-19 tahun 2026",
+            view_2026_birthday:
+                "Lihat kenangan ulang tahun 2026",
+            birthday:
+                "ULANG TAHUN",
+            memory_2026_birthday_title:
+                "#HappinessNaylalaland19",
+            memory_2026_birthday_description:
+                "Ulang tahun yang dipenuhi kenangan, cinta, dan kebahagiaan.",
 
-        likeThisWish:
-            "Sukai harapan ini",
+            view_2023:
+                "Lihat kenangan tahun 2023",
+            view_2024:
+                "Lihat kenangan tahun 2024",
+            view_2025:
+                "Lihat kenangan tahun 2025",
 
-        alreadyLiked:
-            "Kamu sudah menyukai harapan ini ❤️",
+            future_kanji:
+                "新章",
+            future_label:
+                "BAB BERIKUTNYA",
+            future_description:
+                "Halaman ini sedang menunggu kenangan baru.",
+            future_small:
+                "Sebuah awal yang baru.",
+            future_title:
+                "Awal Masa Dewasa",
+            future_card_description:
+                "Beberapa kenangan belum dituliskan.",
 
-        failedToLike:
-            "Gagal menyukai harapan ini. Silakan coba lagi.",
+            closing_japanese:
+                "これからも",
+            closing_title:
+                "Masih banyak kenangan yang menanti.",
+            closing_description:
+                "Cerita ini belum berakhir.",
 
-        enterName:
-            "Silakan masukkan nama kamu.",
+            close: "Tutup",
+            previous: "Sebelumnya",
+            next: "Berikutnya"
 
-        writeMessage:
-            "Silakan tuliskan pesan kamu.",
-
-        nameTooLong:
-            "Nama harus maksimal {max} karakter.",
-
-        messageTooLong:
-            "Pesan harus maksimal {max} karakter.",
-
-        hangingEma:
-            "Sedang menggantung Ema... 🌸",
-
-        failedSubmit:
-            "Gagal mengirim harapan. Silakan coba lagi.",
-
-        unableConnect:
-            "Tidak dapat terhubung ke server. Silakan coba lagi.",
-
-        wordsNotAllowed:
-            "Pesan kamu mengandung kata-kata yang tidak diperbolehkan.",
-
-        tooManyRequests:
-            "Terlalu banyak permintaan. Silakan tunggu sebentar.",
-
-        checkMessage:
-            "Silakan periksa kembali pesan kamu.",
-
-        serverError:
-            "Server tidak dapat memproses harapan kamu.",
-
-        somethingWrong:
-            "Terjadi kesalahan. Silakan coba lagi.",
-
-        anonymous:
-            "Anonim",
-
-        searchPlaceholder:
-            "Cari harapan..."
+        }
     },
 
 
     /* =====================================================
        ENGLISH
-    ===================================================== */
+       ===================================================== */
 
     en: {
+        gallery: {
 
-        yourName:
-            "Your Name",
+            hero_japanese: "思い出",
+            hero_eyebrow: "MEMORY ARCHIVE",
+            hero_title: "A Collection of Memories",
+            hero_description:
+                "Every chapter leaves behind something worth remembering.",
+            scroll: "Scroll to explore",
 
-        yourMessage:
-            "Your message...",
+            archive: "THE ARCHIVE",
+            heading: "Nayla's Memories",
+            heading_description:
+                "A visual journey through the moments that shaped the years before adulthood.",
 
-        loadingWishes:
-            "Loading Wishes...",
+            filter_all: "All",
+            memories: "memories",
 
-        unableToLoadWishes:
-            "Unable to Load Wishes",
+            chapter_01: "CHAPTER 01",
+            chapter_02: "CHAPTER 02",
+            chapter_03: "CHAPTER 03",
+            chapter_06: "CHAPTER 06",
 
-        pleaseTryAgainLater:
-            "Please try again later.",
+            memory_2023_alt:
+                "Nayla 2023",
+            memory_2023_title:
+                "The Beginning",
+            memory_2023_description:
+                "The first step of a beautiful journey.",
 
-        tryAgain:
-            "Try Again",
+            memory_2024_alt:
+                "Nayla 2024",
+            memory_2024_title:
+                "Growing",
+            memory_2024_description:
+                "Growing through JKT48 School.",
 
-        noWishesYet:
-            "No Wishes Yet",
+            memory_2025_alt:
+                "Nayla 2025",
+            memory_2025_title:
+                "A New Milestone",
+            memory_2025_description:
+                "Promoted to Core Member and trusted as a translator at Sister Reunion Festival.",
 
-        beFirstToHang:
-            "Be the first to hang an Ema.",
+            memory_2026_rh_alt:
+                "Nayla Request Hour 2026",
+            view_2026_rh:
+                "View Request Hour 2026 memory",
+            special_moment:
+                "SPECIAL MOMENT",
+            memory_2026_rh_title:
+                "Request Hour 2026",
+            memory_2026_rh_description:
+                "A special performance of <strong>Bird</strong>, ranked 15th in Request Hour 2026, alongside Aurelia and Aurhel Alana.",
 
-        noWishesFound:
-            "No Wishes Found",
+            memory_2026_birthday_alt:
+                "Nayla's 19th Birthday 2026",
+            view_2026_birthday:
+                "View 2026 birthday memory",
+            birthday:
+                "BIRTHDAY",
+            memory_2026_birthday_title:
+                "#HappinessNaylalaland19",
+            memory_2026_birthday_description:
+                "A birthday filled with memories, love and happiness.",
 
-        tryAnotherSearch:
-            "Try another search.",
+            view_2023:
+                "View 2023 memory",
+            view_2024:
+                "View 2024 memory",
+            view_2025:
+                "View 2025 memory",
 
-        likeThisWish:
-            "Like this wish",
+            future_kanji:
+                "新章",
+            future_label:
+                "THE NEXT CHAPTER",
+            future_description:
+                "This page is waiting for a new memory.",
+            future_small:
+                "A new beginning.",
+            future_title:
+                "The Beginning of Adulthood",
+            future_card_description:
+                "Some memories have not been written yet.",
 
-        alreadyLiked:
-            "You already liked this wish ❤️",
+            closing_japanese:
+                "これからも",
+            closing_title:
+                "More memories are waiting.",
+            closing_description:
+                "The story does not end here.",
 
-        failedToLike:
-            "Failed to like this wish. Please try again.",
+            close: "Close",
+            previous: "Previous",
+            next: "Next"
 
-        enterName:
-            "Please enter your name.",
-
-        writeMessage:
-            "Please write your message.",
-
-        nameTooLong:
-            "Name must be {max} characters or less.",
-
-        messageTooLong:
-            "Message must be {max} characters or less.",
-
-        hangingEma:
-            "Hanging your Ema... 🌸",
-
-        failedSubmit:
-            "Failed to submit your wish. Please try again.",
-
-        unableConnect:
-            "Unable to connect to the server. Please try again.",
-
-        wordsNotAllowed:
-            "Your message contains words that are not allowed.",
-
-        tooManyRequests:
-            "Too many requests. Please wait a moment.",
-
-        checkMessage:
-            "Please check your message and try again.",
-
-        serverError:
-            "The server could not process your wish.",
-
-        somethingWrong:
-            "Something went wrong. Please try again.",
-
-        anonymous:
-            "Anonymous",
-
-        searchPlaceholder:
-            "Search wishes..."
+        }
     },
 
 
     /* =====================================================
        JAPANESE
-    ===================================================== */
+       ===================================================== */
 
     ja: {
+        gallery: {
 
-        yourName:
-            "あなたの名前",
+            hero_japanese: "思い出",
+            hero_eyebrow: "思い出のアーカイブ",
+            hero_title: "思い出のコレクション",
+            hero_description:
+                "すべての章には、心に残る大切な思い出があります。",
+            scroll: "スクロールしてご覧ください",
 
-        yourMessage:
-            "あなたのメッセージ...",
+            archive: "アーカイブ",
+            heading: "ナイラの思い出",
+            heading_description:
+                "大人になるまでの時間を彩った瞬間を振り返るビジュアル・ジャーニー。",
 
-        loadingWishes:
-            "願いを読み込んでいます...",
+            filter_all: "すべて",
+            memories: "思い出",
 
-        unableToLoadWishes:
-            "願いを読み込めません",
+            chapter_01: "第01章",
+            chapter_02: "第02章",
+            chapter_03: "第03章",
+            chapter_06: "第06章",
 
-        pleaseTryAgainLater:
-            "後でもう一度お試しください。",
+            memory_2023_alt:
+                "ナイラ 2023",
+            memory_2023_title:
+                "はじまり",
+            memory_2023_description:
+                "美しい旅の最初の一歩。",
 
-        tryAgain:
-            "もう一度試す",
+            memory_2024_alt:
+                "ナイラ 2024",
+            memory_2024_title:
+                "成長",
+            memory_2024_description:
+                "JKT48 Schoolを通して成長した日々。",
 
-        noWishesYet:
-            "まだ願いはありません",
+            memory_2025_alt:
+                "ナイラ 2025",
+            memory_2025_title:
+                "新たな節目",
+            memory_2025_description:
+                "Core Memberへ昇格し、Sister Reunion Festivalで翻訳を担当しました。",
 
-        beFirstToHang:
-            "最初の絵馬を掛けてみましょう。",
+            memory_2026_rh_alt:
+                "ナイラ Request Hour 2026",
+            view_2026_rh:
+                "Request Hour 2026の思い出を見る",
+            special_moment:
+                "特別な瞬間",
+            memory_2026_rh_title:
+                "Request Hour 2026",
+            memory_2026_rh_description:
+                "<strong>Bird</strong>の特別なパフォーマンス。Request Hour 2026で15位にランクインし、AureliaとAurhel Alanaと共に出演しました。",
 
-        noWishesFound:
-            "願いが見つかりません",
+            memory_2026_birthday_alt:
+                "ナイラ 19歳の誕生日 2026",
+            view_2026_birthday:
+                "2026年の誕生日の思い出を見る",
+            birthday:
+                "誕生日",
+            memory_2026_birthday_title:
+                "#HappinessNaylalaland19",
+            memory_2026_birthday_description:
+                "思い出と愛、そして幸せに満ちた誕生日。",
 
-        tryAnotherSearch:
-            "別のキーワードで検索してください。",
+            view_2023:
+                "2023年の思い出を見る",
+            view_2024:
+                "2024年の思い出を見る",
+            view_2025:
+                "2025年の思い出を見る",
 
-        likeThisWish:
-            "この願いにいいね",
+            future_kanji:
+                "新章",
+            future_label:
+                "次の章",
+            future_description:
+                "このページは新しい思い出を待っています。",
+            future_small:
+                "新しい始まり。",
+            future_title:
+                "大人への第一歩",
+            future_card_description:
+                "まだ書かれていない思い出があります。",
 
-        alreadyLiked:
-            "この願いにはすでにいいねしています ❤️",
+            closing_japanese:
+                "これからも",
+            closing_title:
+                "これからも新しい思い出が待っています。",
+            closing_description:
+                "物語はここで終わりません。",
 
-        failedToLike:
-            "いいねに失敗しました。もう一度お試しください。",
+            close: "閉じる",
+            previous: "前へ",
+            next: "次へ"
 
-        enterName:
-            "名前を入力してください。",
-
-        writeMessage:
-            "メッセージを書いてください。",
-
-        nameTooLong:
-            "名前は{max}文字以内で入力してください。",
-
-        messageTooLong:
-            "メッセージは{max}文字以内で入力してください。",
-
-        hangingEma:
-            "絵馬を掛けています... 🌸",
-
-        failedSubmit:
-            "願いを送信できませんでした。もう一度お試しください。",
-
-        unableConnect:
-            "サーバーに接続できません。もう一度お試しください。",
-
-        wordsNotAllowed:
-            "使用できない言葉が含まれています。",
-
-        tooManyRequests:
-            "リクエストが多すぎます。少しお待ちください。",
-
-        checkMessage:
-            "メッセージを確認してください。",
-
-        serverError:
-            "サーバーで願いを処理できませんでした。",
-
-        somethingWrong:
-            "問題が発生しました。もう一度お試しください。",
-
-        anonymous:
-            "匿名",
-
-        searchPlaceholder:
-            "願いを検索..."
+        }
     },
 
 
     /* =====================================================
        KOREAN
-    ===================================================== */
+       ===================================================== */
 
     ko: {
+        gallery: {
 
-        yourName:
-            "이름",
+            hero_japanese: "思い出",
+            hero_eyebrow: "추억 아카이브",
+            hero_title: "추억의 컬렉션",
+            hero_description:
+                "모든 순간에는 기억할 가치가 있는 소중한 이야기가 남습니다.",
+            scroll: "스크롤하여 둘러보기",
 
-        yourMessage:
-            "메시지...",
+            archive: "아카이브",
+            heading: "나일라의 추억",
+            heading_description:
+                "성인이 되기 전의 시간을 채운 소중한 순간들을 돌아보는 여정입니다.",
 
-        loadingWishes:
-            "소원을 불러오는 중...",
+            filter_all: "전체",
+            memories: "추억",
 
-        unableToLoadWishes:
-            "소원을 불러올 수 없습니다",
+            chapter_01: "CHAPTER 01",
+            chapter_02: "CHAPTER 02",
+            chapter_03: "CHAPTER 03",
+            chapter_06: "CHAPTER 06",
 
-        pleaseTryAgainLater:
-            "잠시 후 다시 시도해주세요.",
+            memory_2023_alt:
+                "나일라 2023",
+            memory_2023_title:
+                "시작",
+            memory_2023_description:
+                "아름다운 여정의 첫걸음.",
 
-        tryAgain:
-            "다시 시도",
+            memory_2024_alt:
+                "나일라 2024",
+            memory_2024_title:
+                "성장",
+            memory_2024_description:
+                "JKT48 School과 함께 성장한 시간.",
 
-        noWishesYet:
-            "아직 소원이 없습니다",
+            memory_2025_alt:
+                "나일라 2025",
+            memory_2025_title:
+                "새로운 이정표",
+            memory_2025_description:
+                "Core Member로 승격되었고 Sister Reunion Festival에서 통역을 맡았습니다.",
 
-        beFirstToHang:
-            "첫 번째 에마를 걸어보세요.",
+            memory_2026_rh_alt:
+                "나일라 Request Hour 2026",
+            view_2026_rh:
+                "Request Hour 2026 추억 보기",
+            special_moment:
+                "특별한 순간",
+            memory_2026_rh_title:
+                "Request Hour 2026",
+            memory_2026_rh_description:
+                "<strong>Bird</strong>의 특별한 공연으로 Request Hour 2026에서 15위를 기록했으며 Aurelia와 Aurhel Alana와 함께했습니다.",
 
-        noWishesFound:
-            "소원을 찾을 수 없습니다",
+            memory_2026_birthday_alt:
+                "나일라 19번째 생일 2026",
+            view_2026_birthday:
+                "2026년 생일 추억 보기",
+            birthday:
+                "생일",
+            memory_2026_birthday_title:
+                "#HappinessNaylalaland19",
+            memory_2026_birthday_description:
+                "추억과 사랑, 행복으로 가득했던 생일.",
 
-        tryAnotherSearch:
-            "다른 검색어를 입력해보세요.",
+            view_2023:
+                "2023년 추억 보기",
+            view_2024:
+                "2024년 추억 보기",
+            view_2025:
+                "2025년 추억 보기",
 
-        likeThisWish:
-            "이 소원 좋아요",
+            future_kanji:
+                "新章",
+            future_label:
+                "다음 장",
+            future_description:
+                "이 페이지는 새로운 추억을 기다리고 있습니다.",
+            future_small:
+                "새로운 시작.",
+            future_title:
+                "성인의 시작",
+            future_card_description:
+                "아직 기록되지 않은 추억들이 있습니다.",
 
-        alreadyLiked:
-            "이미 이 소원에 좋아요를 눌렀습니다 ❤️",
+            closing_japanese:
+                "これからも",
+            closing_title:
+                "더 많은 추억이 기다리고 있습니다.",
+            closing_description:
+                "이 이야기는 여기서 끝나지 않습니다.",
 
-        failedToLike:
-            "좋아요를 누르지 못했습니다. 다시 시도해주세요.",
+            close: "닫기",
+            previous: "이전",
+            next: "다음"
 
-        enterName:
-            "이름을 입력해주세요.",
-
-        writeMessage:
-            "메시지를 작성해주세요.",
-
-        nameTooLong:
-            "이름은 최대 {max}자까지 입력할 수 있습니다.",
-
-        messageTooLong:
-            "메시지는 최대 {max}자까지 입력할 수 있습니다.",
-
-        hangingEma:
-            "에마를 걸고 있습니다... 🌸",
-
-        failedSubmit:
-            "소원을 제출하지 못했습니다. 다시 시도해주세요.",
-
-        unableConnect:
-            "서버에 연결할 수 없습니다. 다시 시도해주세요.",
-
-        wordsNotAllowed:
-            "사용할 수 없는 단어가 포함되어 있습니다.",
-
-        tooManyRequests:
-            "요청이 너무 많습니다. 잠시 기다려주세요.",
-
-        checkMessage:
-            "메시지를 확인해주세요.",
-
-        serverError:
-            "서버에서 소원을 처리할 수 없습니다.",
-
-        somethingWrong:
-            "문제가 발생했습니다. 다시 시도해주세요.",
-
-        anonymous:
-            "익명",
-
-        searchPlaceholder:
-            "소원 검색..."
+        }
     },
 
 
     /* =====================================================
        CHINESE
-    ===================================================== */
+       ===================================================== */
 
     zh: {
+        gallery: {
 
-        yourName:
-            "你的名字",
+            hero_japanese: "思い出",
+            hero_eyebrow: "回忆档案",
+            hero_title: "珍贵回忆集",
+            hero_description:
+                "每一个篇章都会留下值得珍藏的美好回忆。",
+            scroll: "滚动探索",
 
-        yourMessage:
-            "你的留言...",
+            archive: "档案",
+            heading: "Nayla 的回忆",
+            heading_description:
+                "回顾那些塑造成年之前岁月的珍贵瞬间。",
 
-        loadingWishes:
-            "正在加载愿望...",
+            filter_all: "全部",
+            memories: "回忆",
 
-        unableToLoadWishes:
-            "无法加载愿望",
+            chapter_01: "第01章",
+            chapter_02: "第02章",
+            chapter_03: "第03章",
+            chapter_06: "第06章",
 
-        pleaseTryAgainLater:
-            "请稍后再试。",
+            memory_2023_alt:
+                "Nayla 2023",
+            memory_2023_title:
+                "开始",
+            memory_2023_description:
+                "一段美好旅程的第一步。",
 
-        tryAgain:
-            "重试",
+            memory_2024_alt:
+                "Nayla 2024",
+            memory_2024_title:
+                "成长",
+            memory_2024_description:
+                "在 JKT48 School 中不断成长。",
 
-        noWishesYet:
-            "还没有愿望",
+            memory_2025_alt:
+                "Nayla 2025",
+            memory_2025_title:
+                "新的里程碑",
+            memory_2025_description:
+                "晋升为 Core Member，并在 Sister Reunion Festival 中担任翻译。",
 
-        beFirstToHang:
-            "成为第一个挂上绘马的人。",
+            memory_2026_rh_alt:
+                "Nayla Request Hour 2026",
+            view_2026_rh:
+                "查看 Request Hour 2026 回忆",
+            special_moment:
+                "特别时刻",
+            memory_2026_rh_title:
+                "Request Hour 2026",
+            memory_2026_rh_description:
+                "<strong>Bird</strong> 的特别演出，在 Request Hour 2026 中排名第15位，与 Aurelia 和 Aurhel Alana 一同出演。",
 
-        noWishesFound:
-            "没有找到愿望",
+            memory_2026_birthday_alt:
+                "Nayla 2026 年 19 岁生日",
+            view_2026_birthday:
+                "查看 2026 年生日回忆",
+            birthday:
+                "生日",
+            memory_2026_birthday_title:
+                "#HappinessNaylalaland19",
+            memory_2026_birthday_description:
+                "一个充满回忆、爱与幸福的生日。",
 
-        tryAnotherSearch:
-            "请尝试其他搜索内容。",
+            view_2023:
+                "查看 2023 年回忆",
+            view_2024:
+                "查看 2024 年回忆",
+            view_2025:
+                "查看 2025 年回忆",
 
-        likeThisWish:
-            "喜欢这个愿望",
+            future_kanji:
+                "新章",
+            future_label:
+                "下一篇章",
+            future_description:
+                "这个页面正在等待新的回忆。",
+            future_small:
+                "新的开始。",
+            future_title:
+                "成年之始",
+            future_card_description:
+                "还有一些回忆尚未被记录。",
 
-        alreadyLiked:
-            "你已经喜欢过这个愿望了 ❤️",
+            closing_japanese:
+                "これからも",
+            closing_title:
+                "还有更多美好的回忆在等待。",
+            closing_description:
+                "故事并不会在这里结束。",
 
-        failedToLike:
-            "点赞失败，请再试一次。",
+            close: "关闭",
+            previous: "上一张",
+            next: "下一张"
 
-        enterName:
-            "请输入你的名字。",
-
-        writeMessage:
-            "请输入你的留言。",
-
-        nameTooLong:
-            "名字最多只能输入 {max} 个字符。",
-
-        messageTooLong:
-            "留言最多只能输入 {max} 个字符。",
-
-        hangingEma:
-            "正在挂上绘马... 🌸",
-
-        failedSubmit:
-            "愿望提交失败，请再试一次。",
-
-        unableConnect:
-            "无法连接服务器，请再试一次。",
-
-        wordsNotAllowed:
-            "你的留言包含不允许使用的词语。",
-
-        tooManyRequests:
-            "请求过于频繁，请稍等片刻。",
-
-        checkMessage:
-            "请检查你的留言后再试。",
-
-        serverError:
-            "服务器无法处理你的愿望。",
-
-        somethingWrong:
-            "发生了一些问题，请再试一次。",
-
-        anonymous:
-            "匿名",
-
-        searchPlaceholder:
-            "搜索愿望..."
+        }
     }
 
 };
 
 
 /* =========================================================
-   02. LANGUAGE DETECTION
-========================================================= */
+   02. LANGUAGE
+   ========================================================= */
 
-function normalizeGuestbookLanguage(
-    language
-) {
+function normalizeGalleryLanguage(language) {
 
     const value =
-        String(
-            language || ""
-        )
+        String(language || "")
             .toLowerCase()
             .trim();
 
-
-    if (
-        value === "id" ||
-        value.startsWith("id-")
-    ) {
-
+    if (value === "id" || value.startsWith("id-"))
         return "id";
 
-    }
-
-
-    if (
-        value === "en" ||
-        value.startsWith("en-")
-    ) {
-
+    if (value === "en" || value.startsWith("en-"))
         return "en";
 
-    }
-
-
-    if (
-        value === "ja" ||
-        value.startsWith("ja-")
-    ) {
-
+    if (value === "ja" || value.startsWith("ja-"))
         return "ja";
 
-    }
-
-
-    if (
-        value === "ko" ||
-        value.startsWith("ko-")
-    ) {
-
+    if (value === "ko" || value.startsWith("ko-"))
         return "ko";
 
-    }
-
-
-    if (
-        value === "zh" ||
-        value.startsWith("zh-")
-    ) {
-
+    if (value === "zh" || value.startsWith("zh-"))
         return "zh";
 
-    }
-
-
     return "en";
-
 }
 
 
-function getCurrentGuestbookLanguage() {
+function getGalleryLanguage() {
 
-    const storedLanguage =
-        localStorage.getItem(
-            "language"
-        ) ||
-        localStorage.getItem(
-            "selectedLanguage"
-        ) ||
-        localStorage.getItem(
-            "currentLanguage"
-        ) ||
-        localStorage.getItem(
-            "lang"
-        );
-
+    const stored =
+        localStorage.getItem("language") ||
+        localStorage.getItem("selectedLanguage") ||
+        localStorage.getItem("currentLanguage") ||
+        localStorage.getItem("lang");
 
     const htmlLanguage =
         document.documentElement
             ?.getAttribute("lang");
 
-
-    return normalizeGuestbookLanguage(
-        storedLanguage ||
+    return normalizeGalleryLanguage(
+        stored ||
         htmlLanguage ||
         "en"
     );
-
 }
 
 
 /* =========================================================
-   03. TRANSLATION HELPER
-========================================================= */
+   03. NESTED TRANSLATION
+   ========================================================= */
 
-function guestbookT(
-    key,
-    replacements = {}
-) {
+function getNestedValue(object, path) {
+
+    if (!object || !path)
+        return undefined;
+
+    return String(path)
+        .split(".")
+        .reduce(
+            (current, key) => {
+
+                if (
+                    current === null ||
+                    current === undefined
+                ) {
+                    return undefined;
+                }
+
+                return current[key];
+
+            },
+            object
+        );
+}
+
+
+function galleryT(key) {
+
+    if (!key)
+        return "";
 
     const language =
-        getCurrentGuestbookLanguage();
+        getGalleryLanguage();
 
+    let value =
+        getNestedValue(
+            GALLERY_TRANSLATIONS[language],
+            key
+        );
 
-    let text =
-        GUESTBOOK_TRANSLATIONS[
-            language
-        ]?.[key];
-
+    /*
+     * Fallback English.
+     */
 
     if (
-        typeof text !==
-        "string"
+        typeof value !== "string"
     ) {
 
-        text =
-            GUESTBOOK_TRANSLATIONS
-                .en?.[key];
+        value =
+            getNestedValue(
+                GALLERY_TRANSLATIONS.en,
+                key
+            );
 
     }
 
+    /*
+     * Jangan pernah tampilkan raw key.
+     */
 
     if (
-        typeof text !==
-        "string"
+        typeof value !== "string"
     ) {
-
-        text = key;
-
+        return "";
     }
 
-
-    Object.entries(
-        replacements
-    ).forEach(
-        ([name, value]) => {
-
-            text =
-                text.replace(
-                    new RegExp(
-                        `\\{${name}\\}`,
-                        "g"
-                    ),
-                    String(value)
-                );
-
-        }
-    );
-
-
-    return text;
-
+    return value;
 }
 
 
 /* =========================================================
-   04. STATIC HTML TRANSLATION
-========================================================= */
+   04. APPLY TRANSLATIONS
+   ========================================================= */
 
-function applyGuestbookTranslations() {
+function applyGalleryTranslations() {
 
     /*
-     * Elemen HTML:
-     *
-     * <span data-i18n="yourName"></span>
-     *
-     * akan mengambil:
-     *
-     * GUESTBOOK_TRANSLATIONS[currentLanguage]
+     * TEXT
+     */
+
+    document
+        .querySelectorAll("[data-i18n]")
+        .forEach(element => {
+
+            const key =
+                element.dataset.i18n;
+
+            const text =
+                galleryT(key);
+
+            if (text) {
+
+                /*
+                 * data-i18n-html untuk HTML.
+                 */
+
+                if (
+                    element.hasAttribute(
+                        "data-i18n-html"
+                    )
+                ) {
+
+                    element.innerHTML =
+                        text;
+
+                } else {
+
+                    element.textContent =
+                        text;
+
+                }
+
+            }
+
+        });
+
+
+    /*
+     * HTML
      */
 
     document
         .querySelectorAll(
-            "[data-i18n]"
+            "[data-i18n-html]"
         )
-        .forEach(
-            element => {
+        .forEach(element => {
 
-                const key =
-                    element.dataset.i18n;
+            const key =
+                element.dataset.i18nHtml;
 
+            const text =
+                galleryT(key);
 
-                if (!key) {
-                    return;
-                }
+            if (text) {
 
-
-                element.textContent =
-                    guestbookT(key);
+                element.innerHTML =
+                    text;
 
             }
-        );
+
+        });
 
 
     /*
-     * Placeholder
-     *
-     * <input
-     *     data-i18n-placeholder="yourName"
-     * >
+     * PLACEHOLDER
      */
 
     document
         .querySelectorAll(
             "[data-i18n-placeholder]"
         )
-        .forEach(
-            element => {
+        .forEach(element => {
 
-                const key =
-                    element.dataset
-                        .i18nPlaceholder;
+            const key =
+                element.dataset.i18nPlaceholder;
 
+            const text =
+                galleryT(key);
 
-                if (!key) {
-                    return;
-                }
-
+            if (text) {
 
                 element.placeholder =
-                    guestbookT(key);
+                    text;
 
             }
+
+        });
+
+
+    /*
+     * TITLE
+     */
+
+    document
+        .querySelectorAll(
+            "[data-i18n-title]"
+        )
+        .forEach(element => {
+
+            const key =
+                element.dataset.i18nTitle;
+
+            const text =
+                galleryT(key);
+
+            if (text) {
+
+                element.title =
+                    text;
+
+            }
+
+        });
+
+
+    /*
+     * ARIA
+     *
+     * Support:
+     * data-i18n-aria
+     * data-i18n-aria-label
+     */
+
+    document
+        .querySelectorAll(
+            "[data-i18n-aria], [data-i18n-aria-label]"
+        )
+        .forEach(element => {
+
+            const key =
+                element.dataset.i18nAria ||
+                element.dataset.i18nAriaLabel;
+
+            const text =
+                galleryT(key);
+
+            if (text) {
+
+                element.setAttribute(
+                    "aria-label",
+                    text
+                );
+
+            }
+
+        });
+
+
+    /*
+     * IMAGE ALT
+     */
+
+    document
+        .querySelectorAll(
+            "[data-i18n-alt]"
+        )
+        .forEach(element => {
+
+            const key =
+                element.dataset.i18nAlt;
+
+            const text =
+                galleryT(key);
+
+            if (text) {
+
+                element.alt =
+                    text;
+
+            }
+
+        });
+
+
+    /*
+     * Update lightbox if currently open.
+     */
+
+    if (
+        currentGalleryIndex >= 0
+    ) {
+
+        updateLightbox(
+            currentGalleryIndex
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   05. GALLERY FILTER
+   ========================================================= */
+
+let currentFilter = "all";
+
+
+function filterGallery(year) {
+
+    currentFilter =
+        year;
+
+    const cards =
+        document.querySelectorAll(
+            ".gallery-card"
+        );
+
+    let visibleCount = 0;
+
+
+    cards.forEach(card => {
+
+        const cardYear =
+            card.dataset.year;
+
+        const visible =
+            year === "all" ||
+            cardYear === year;
+
+        card.style.display =
+            visible
+                ? ""
+                : "none";
+
+        if (visible) {
+            visibleCount++;
+        }
+
+    });
+
+
+    const counter =
+        document.getElementById(
+            "memoryCount"
+        );
+
+    if (counter) {
+
+        counter.textContent =
+            visibleCount;
+
+    }
+
+
+    /*
+     * Active button.
+     */
+
+    document
+        .querySelectorAll(
+            ".gallery-filter-btn"
+        )
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.filter === year
+            );
+
+        });
+
+}
+
+
+function initializeFilters() {
+
+    document
+        .querySelectorAll(
+            ".gallery-filter-btn"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    filterGallery(
+                        button.dataset.filter
+                    );
+
+                }
+            );
+
+        });
+
+
+    filterGallery("all");
+
+}
+
+
+/* =========================================================
+   06. LIGHTBOX
+   ========================================================= */
+
+let currentGalleryIndex = -1;
+
+
+function getGalleryCards() {
+
+    return Array.from(
+        document.querySelectorAll(
+            ".gallery-card:not(.gallery-card-future)"
+        )
+    );
+
+}
+
+
+function getGalleryData(index) {
+
+    const cards =
+        getGalleryCards();
+
+    const card =
+        cards[index];
+
+    if (!card)
+        return null;
+
+
+    const image =
+        card.querySelector(
+            ".gallery-image img"
+        );
+
+    const title =
+        card.querySelector(
+            ".gallery-info h3"
+        );
+
+    const description =
+        card.querySelector(
+            ".gallery-info p"
+        );
+
+    const year =
+        card.querySelector(
+            ".gallery-year"
         );
 
 
-    updateGuestbookDynamicText();
+    return {
+
+        index,
+
+        image:
+            image?.src || "",
+
+        alt:
+            image?.alt || "",
+
+        title:
+            title?.textContent.trim() || "",
+
+        description:
+            description?.innerHTML || "",
+
+        year:
+            year?.textContent.trim() || ""
+
+    };
 
 }
 
 
 /* =========================================================
-   05. NAVBAR LANGUAGE SYNC
-========================================================= */
+   OPEN LIGHTBOX
+   ========================================================= */
 
-function handleGuestbookLanguageChange() {
+function openLightbox(index) {
 
-    applyGuestbookTranslations();
+    const lightbox =
+        document.getElementById(
+            "galleryLightbox"
+        );
+
+    if (!lightbox)
+        return;
+
+
+    const data =
+        getGalleryData(index);
+
+    if (!data)
+        return;
+
+
+    currentGalleryIndex =
+        index;
+
+
+    updateLightbox(index);
+
+
+    lightbox.classList.add(
+        "active"
+    );
+
+    lightbox.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.classList.add(
+        "lightbox-open"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+function updateLightbox(index) {
+
+    const data =
+        getGalleryData(index);
+
+    if (!data)
+        return;
+
+
+    const image =
+        document.getElementById(
+            "lightboxImage"
+        );
+
+    const year =
+        document.getElementById(
+            "lightboxYear"
+        );
+
+    const title =
+        document.getElementById(
+            "lightboxTitle"
+        );
+
+    const description =
+        document.getElementById(
+            "lightboxDescription"
+        );
+
+
+    if (image) {
+
+        image.src =
+            data.image;
+
+        image.alt =
+            data.alt;
+
+    }
+
+
+    if (year) {
+
+        year.textContent =
+            data.year;
+
+    }
+
+
+    if (title) {
+
+        title.textContent =
+            data.title;
+
+    }
+
+
+    if (description) {
+
+        description.innerHTML =
+            data.description;
+
+    }
+
+}
+
+
+/* =========================================================
+   CLOSE
+   ========================================================= */
+
+function closeLightbox() {
+
+    const lightbox =
+        document.getElementById(
+            "galleryLightbox"
+        );
+
+    if (!lightbox)
+        return;
+
+
+    lightbox.classList.remove(
+        "active"
+    );
+
+    lightbox.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.classList.remove(
+        "lightbox-open"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+
+    currentGalleryIndex =
+        -1;
+
+}
+
+
+/* =========================================================
+   NEXT
+   ========================================================= */
+
+function nextGalleryImage() {
+
+    const cards =
+        getGalleryCards();
+
+    if (!cards.length)
+        return;
+
+
+    let next =
+        currentGalleryIndex + 1;
+
+
+    if (
+        next >= cards.length
+    ) {
+
+        next = 0;
+
+    }
+
+
+    currentGalleryIndex =
+        next;
+
+
+    updateLightbox(
+        currentGalleryIndex
+    );
+
+}
+
+
+/* =========================================================
+   PREVIOUS
+   ========================================================= */
+
+function previousGalleryImage() {
+
+    const cards =
+        getGalleryCards();
+
+    if (!cards.length)
+        return;
+
+
+    let previous =
+        currentGalleryIndex - 1;
+
+
+    if (previous < 0) {
+
+        previous =
+            cards.length - 1;
+
+    }
+
+
+    currentGalleryIndex =
+        previous;
+
+
+    updateLightbox(
+        currentGalleryIndex
+    );
+
+}
+
+
+/* =========================================================
+   07. LIGHTBOX EVENTS
+   ========================================================= */
+
+function initializeLightbox() {
+
+    const cards =
+        getGalleryCards();
 
 
     /*
-     * Preview harus langsung berubah.
+     * Card buttons
      */
 
-    initializePreview();
+    cards.forEach(
+        (card, index) => {
+
+            const button =
+                card.querySelector(
+                    ".gallery-view"
+                );
+
+
+            if (button) {
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.preventDefault();
+
+                        openLightbox(
+                            index
+                        );
+
+                    }
+                );
+
+            }
+
+
+            /*
+             * Optional: clicking image
+             */
+
+            const image =
+                card.querySelector(
+                    ".gallery-image img"
+                );
+
+
+            if (image) {
+
+                image.style.cursor =
+                    "pointer";
+
+                image.addEventListener(
+                    "click",
+                    () => {
+
+                        openLightbox(
+                            index
+                        );
+
+                    }
+                );
+
+            }
+
+        }
+    );
 
 
     /*
-     * Placeholder search.
+     * Close
      */
 
-    if (searchInput) {
+    document
+        .getElementById(
+            "lightboxClose"
+        )
+        ?.addEventListener(
+            "click",
+            closeLightbox
+        );
 
-        searchInput.placeholder =
-            guestbookT(
-                "searchPlaceholder"
+
+    /*
+     * Backdrop
+     */
+
+    document
+        .querySelector(
+            ".lightbox-backdrop"
+        )
+        ?.addEventListener(
+            "click",
+            closeLightbox
+        );
+
+
+    /*
+     * Previous
+     */
+
+    document
+        .getElementById(
+            "lightboxPrev"
+        )
+        ?.addEventListener(
+            "click",
+            previousGalleryImage
+        );
+
+
+    /*
+     * Next
+     */
+
+    document
+        .getElementById(
+            "lightboxNext"
+        )
+        ?.addEventListener(
+            "click",
+            nextGalleryImage
+        );
+
+
+    /*
+     * Keyboard
+     */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            const lightbox =
+                document.getElementById(
+                    "galleryLightbox"
+                );
+
+
+            if (
+                !lightbox ||
+                !lightbox.classList.contains(
+                    "active"
+                )
+            ) {
+                return;
+            }
+
+
+            switch (
+                event.key
+            ) {
+
+                case "Escape":
+
+                    closeLightbox();
+
+                    break;
+
+
+                case "ArrowLeft":
+
+                    previousGalleryImage();
+
+                    break;
+
+
+                case "ArrowRight":
+
+                    nextGalleryImage();
+
+                    break;
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   08. LANGUAGE EVENTS
+   ========================================================= */
+
+function handleGalleryLanguageChange(
+    event
+) {
+
+    const language =
+        event?.detail?.language;
+
+
+    if (language) {
+
+        const normalized =
+            normalizeGalleryLanguage(
+                language
+            );
+
+
+        localStorage.setItem(
+            "language",
+            normalized
+        );
+
+
+        document.documentElement
+            .setAttribute(
+                "lang",
+                normalized
             );
 
     }
 
 
-    /*
-     * Card harus dirender ulang
-     * karena beberapa teks card
-     * bersifat dynamic.
-     */
-
-    if (wishes.length) {
-
-        filterAndRender();
-
-    } else {
-
-        renderGuestbook();
-
-    }
+    applyGalleryTranslations();
 
 }
 
 
-/* =========================================================
-   06. DYNAMIC TRANSLATION
-========================================================= */
-
-function updateGuestbookDynamicText() {
-
-    if (previewName) {
-
-        previewName.textContent =
-            guestName?.value.trim() ||
-            guestbookT("yourName");
-
-    }
-
-
-    if (previewMessage) {
-
-        previewMessage.textContent =
-            guestMessage?.value.trim() ||
-            guestbookT("yourMessage");
-
-    }
-
-
-    if (searchInput) {
-
-        searchInput.placeholder =
-            guestbookT(
-                "searchPlaceholder"
-            );
-
-    }
-
-}
-
-
-/* =========================================================
-   07. ELEMENTS
-========================================================= */
-
-const form =
-    document.getElementById(
-        "guestbookForm"
-    );
-
-
-const wall =
-    document.getElementById(
-        "emaWall"
-    );
-
-
-const guestName =
-    document.getElementById(
-        "guestName"
-    );
-
-
-const guestMessage =
-    document.getElementById(
-        "guestMessage"
-    );
-
-
-const counter =
-    document.getElementById(
-        "charCounter"
-    );
-
-
-const previewName =
-    document.getElementById(
-        "previewName"
-    );
-
-
-const previewMessage =
-    document.getElementById(
-        "previewMessage"
-    );
-
-
-const wishCount =
-    document.getElementById(
-        "wishCount"
-    );
-
-
-const toast =
-    document.getElementById(
-        "toast"
-    );
-
-
-const searchInput =
-    document.getElementById(
-        "searchWish"
-    );
-
-
-const sortSelect =
-    document.getElementById(
-        "sortWish"
-    );
-
-
-/* =========================================================
-   08. CONFIG
-========================================================= */
-
-const MAX_NAME_LENGTH =
-    50;
-
-
-const MAX_MESSAGE_LENGTH =
-    1000;
-
-
-const API_GUESTBOOK =
-    "/api/guestbook";
-
-
-/* =========================================================
-   09. STATE
-========================================================= */
-
-let wishes = [];
-
-let isSubmitting = false;
-
-let realtimeChannel = null;
-
-
-/* =========================================================
-   10. INITIALIZATION
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initializeGuestbook();
-
-    }
-);
-
-
-async function initializeGuestbook() {
-
-    /*
-     * Terapkan bahasa navbar terlebih dahulu.
-     */
-
-    applyGuestbookTranslations();
-
-
-    updateCharacterCounter();
-
-    initializePreview();
-
-
-    await loadGuestbook();
-
-
-    initGuestbookRealtime();
-
-}
-
-
-/* =========================================================
-   NAVBAR EVENTS
-========================================================= */
+/*
+ * Support multiple existing
+ * navbar event names.
+ */
 
 window.addEventListener(
     "languageChanged",
-    handleGuestbookLanguageChange
+    handleGalleryLanguageChange
 );
-
 
 window.addEventListener(
     "languageChange",
-    handleGuestbookLanguageChange
+    handleGalleryLanguageChange
 );
-
 
 window.addEventListener(
     "langChanged",
-    handleGuestbookLanguageChange
+    handleGalleryLanguageChange
+);
+
+window.addEventListener(
+    "galleryLanguageChanged",
+    handleGalleryLanguageChange
 );
 
 
-/* =========================================================
-   STORAGE EVENT
-========================================================= */
+/*
+ * Storage
+ */
 
 window.addEventListener(
     "storage",
@@ -988,7 +1539,7 @@ window.addEventListener(
             )
         ) {
 
-            handleGuestbookLanguageChange();
+            applyGalleryTranslations();
 
         }
 
@@ -997,2362 +1548,96 @@ window.addEventListener(
 
 
 /* =========================================================
-   HTML LANG OBSERVER
-========================================================= */
+   09. PUBLIC API
+   ========================================================= */
 
-const guestbookLanguageObserver =
-    new MutationObserver(
-        mutations => {
+window.GalleryI18n = {
 
-            for (
-                const mutation
-                of mutations
-            ) {
+    translate:
+        galleryT,
 
-                if (
-                    mutation.attributeName ===
-                    "lang"
-                ) {
+    apply:
+        applyGalleryTranslations,
 
-                    handleGuestbookLanguageChange();
+    getLanguage:
+        getGalleryLanguage,
 
-                    break;
+    setLanguage:
+        function(language) {
 
-                }
-
-            }
-
-        }
-    );
-
-
-if (
-    document.documentElement
-) {
-
-    guestbookLanguageObserver.observe(
-        document.documentElement,
-        {
-            attributes: true,
-            attributeFilter: [
-                "lang"
-            ]
-        }
-    );
-
-}
-
-
-/* =========================================================
-   11. PREVIEW
-========================================================= */
-
-function initializePreview() {
-
-    updateGuestbookDynamicText();
-
-}
-
-
-/* =========================================================
-   NAME INPUT
-========================================================= */
-
-if (guestName) {
-
-    guestName.addEventListener(
-        "input",
-        () => {
-
-            let value =
-                guestName.value;
-
-
-            if (
-                value.length >
-                MAX_NAME_LENGTH
-            ) {
-
-                value =
-                    value.substring(
-                        0,
-                        MAX_NAME_LENGTH
-                    );
-
-
-                guestName.value =
-                    value;
-
-            }
-
-
-            if (previewName) {
-
-                previewName.textContent =
-                    value.trim() ||
-                    guestbookT(
-                        "yourName"
-                    );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   MESSAGE INPUT
-========================================================= */
-
-if (guestMessage) {
-
-    guestMessage.addEventListener(
-        "input",
-        () => {
-
-            if (
-                guestMessage.value.length >
-                MAX_MESSAGE_LENGTH
-            ) {
-
-                guestMessage.value =
-                    guestMessage.value.substring(
-                        0,
-                        MAX_MESSAGE_LENGTH
-                    );
-
-            }
-
-
-            updateCharacterCounter();
-
-
-            if (previewMessage) {
-
-                previewMessage.textContent =
-                    guestMessage.value.trim() ||
-                    guestbookT(
-                        "yourMessage"
-                    );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   CHARACTER COUNTER
-========================================================= */
-
-function updateCharacterCounter() {
-
-    if (
-        !counter ||
-        !guestMessage
-    ) {
-
-        return;
-
-    }
-
-
-    counter.textContent =
-        `${guestMessage.value.length}/${MAX_MESSAGE_LENGTH}`;
-
-}
-
-
-/* =========================================================
-   11. FORM SUBMIT
-========================================================= */
-
-if (form) {
-
-    form.addEventListener(
-        "submit",
-        handleGuestbookSubmit
-    );
-
-}
-
-
-async function handleGuestbookSubmit(
-    event
-) {
-
-    event.preventDefault();
-
-
-    if (isSubmitting) {
-        return;
-    }
-
-
-    const name =
-        guestName?.value.trim() ||
-        "";
-
-
-    const message =
-        guestMessage?.value.trim() ||
-        "";
-
-
-    /* =====================================================
-       CLIENT VALIDATION
-    ===================================================== */
-
-    if (!name) {
-
-        showGuestbookError(
-            guestbookT(
-                "enterName"
-            )
-        );
-
-
-        guestName?.focus();
-
-        return;
-
-    }
-
-
-    if (!message) {
-
-        showGuestbookError(
-            guestbookT(
-                "writeMessage"
-            )
-        );
-
-
-        guestMessage?.focus();
-
-        return;
-
-    }
-
-
-    if (
-        name.length >
-        MAX_NAME_LENGTH
-    ) {
-
-        showGuestbookError(
-            guestbookT(
-                "nameTooLong",
-                {
-                    max:
-                        MAX_NAME_LENGTH
-                }
-            )
-        );
-
-
-        return;
-
-    }
-
-
-    if (
-        message.length >
-        MAX_MESSAGE_LENGTH
-    ) {
-
-        showGuestbookError(
-            guestbookT(
-                "messageTooLong",
-                {
-                    max:
-                        MAX_MESSAGE_LENGTH
-                }
-            )
-        );
-
-
-        return;
-
-    }
-
-
-    /* =====================================================
-       SUBMIT
-    ===================================================== */
-
-    isSubmitting = true;
-
-    setSubmitState(true);
-
-
-    try {
-
-        const response =
-            await fetch(
-                API_GUESTBOOK,
-                {
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json",
-
-                        "Accept":
-                            "application/json"
-
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            name,
-
-                            message,
-
-                            member_type:
-                                "Fan",
-
-                            mood:
-                                "🌸"
-
-                        })
-
-                }
-            );
-
-
-        let result =
-            null;
-
-
-        try {
-
-            result =
-                await response.json();
-
-        } catch {
-
-            result =
-                null;
-
-        }
-
-
-        /* =================================================
-           HTTP ERROR
-        ================================================= */
-
-        if (!response.ok) {
-
-            handleGuestbookApiError(
-                response,
-                result
-            );
-
-            return;
-
-        }
-
-
-        /* =================================================
-           APPLICATION ERROR
-        ================================================= */
-
-        if (
-            !result ||
-            result.success !== true
-        ) {
-
-            showGuestbookError(
-                result?.error ||
-                guestbookT(
-                    "failedSubmit"
-                )
-            );
-
-            return;
-
-        }
-
-
-        /* =================================================
-           SUCCESS
-        ================================================= */
-
-        sessionStorage.removeItem(
-            "prayerBellRung"
-        );
-
-
-        form.reset();
-
-
-        initializePreview();
-
-
-        updateCharacterCounter();
-
-
-        showToast();
-
-
-        /* =================================================
-           ADD NEW WISH LOCALLY
-        ================================================= */
-
-        if (result.wish) {
-
-            const existing =
-                wishes.some(
-                    item =>
-                        String(
-                            item.id
-                        ) ===
-                        String(
-                            result.wish.id
-                        )
+            const normalized =
+                normalizeGalleryLanguage(
+                    language
                 );
 
 
-            if (!existing) {
+            localStorage.setItem(
+                "language",
+                normalized
+            );
 
-                wishes.unshift(
-                    result.wish
+            localStorage.setItem(
+                "selectedLanguage",
+                normalized
+            );
+
+
+            document.documentElement
+                .setAttribute(
+                    "lang",
+                    normalized
                 );
 
-            }
 
-
-            filterAndRender();
-
-        } else {
-
-            await loadGuestbook();
+            applyGalleryTranslations();
 
         }
 
-
-    } catch (error) {
-
-        console.error(
-            "Guestbook submission error:",
-            error
-        );
-
-
-        showGuestbookError(
-            guestbookT(
-                "unableConnect"
-            )
-        );
-
-
-    } finally {
-
-        isSubmitting =
-            false;
-
-
-        setSubmitState(
-            false
-        );
-
-    }
-
-}
+};
 
 
 /* =========================================================
-   SUBMIT BUTTON STATE
-========================================================= */
+   10. INITIALIZATION
+   ========================================================= */
 
-function setSubmitState(
-    loading
-) {
-
-    if (!form) {
-        return;
-    }
-
-
-    const submitButton =
-        form.querySelector(
-            'button[type="submit"], input[type="submit"]'
-        );
-
-
-    if (!submitButton) {
-        return;
-    }
-
-
-    if (loading) {
-
-        submitButton.disabled =
-            true;
-
-
-        submitButton.dataset
-            .originalText =
-                submitButton.textContent;
-
-
-        submitButton.textContent =
-            guestbookT(
-                "hangingEma"
-            );
-
-    } else {
-
-        submitButton.disabled =
-            false;
-
-
-        if (
-            submitButton.dataset
-                .originalText
-        ) {
-
-            submitButton.textContent =
-                submitButton.dataset
-                    .originalText;
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   12. API ERROR HANDLER
-========================================================= */
-
-function handleGuestbookApiError(
-    response,
-    result
-) {
-
-    const status =
-        response.status;
-
-
-    /* =====================================================
-       MODERATION
-    ===================================================== */
-
-    if (
-        status === 400 &&
-        result?.blocked
-    ) {
-
-        showGuestbookError(
-            result.error ||
-            guestbookT(
-                "wordsNotAllowed"
-            )
-        );
-
-
-        return;
-
-    }
-
-
-    /* =====================================================
-       RATE LIMIT
-    ===================================================== */
-
-    if (
-        status === 429
-    ) {
-
-        showGuestbookError(
-            result?.error ||
-            guestbookT(
-                "tooManyRequests"
-            )
-        );
-
-
-        return;
-
-    }
-
-
-    /* =====================================================
-       VALIDATION
-    ===================================================== */
-
-    if (
-        status === 400
-    ) {
-
-        showGuestbookError(
-            result?.error ||
-            guestbookT(
-                "checkMessage"
-            )
-        );
-
-
-        return;
-
-    }
-
-
-    /* =====================================================
-       SERVER ERROR
-    ===================================================== */
-
-    if (
-        status >= 500
-    ) {
-
-        showGuestbookError(
-            result?.error ||
-            guestbookT(
-                "serverError"
-            )
-        );
-
-
-        return;
-
-    }
-
-
-    /* =====================================================
-       FALLBACK
-    ===================================================== */
-
-    showGuestbookError(
-        result?.error ||
-        guestbookT(
-            "somethingWrong"
-        )
-    );
-
-}
-
-
-/* =========================================================
-   13. LOAD GUESTBOOK
-========================================================= */
-
-async function loadGuestbook() {
-
-    if (!wall) {
-        return;
-    }
-
-
-    wall.innerHTML = `
-
-        <div class="loading">
-
-            🌸
-
-            ${guestbookT(
-                "loadingWishes"
-            )}
-
-        </div>
-
-    `;
-
-
-    try {
-
-        /*
-         * GET dilakukan melalui Flask.
-         *
-         * INSERT dan GET tetap melalui:
-         *
-         * /api/guestbook
-         */
-
-        const response =
-            await fetch(
-                API_GUESTBOOK,
-                {
-                    method:
-                        "GET",
-
-                    headers: {
-                        "Accept":
-                            "application/json"
-                    }
-                }
-            );
-
-
-        let result =
-            null;
-
-
-        try {
-
-            result =
-                await response.json();
-
-        } catch {
-
-            result =
-                null;
-
-        }
-
-
-        if (
-            !response.ok
-        ) {
-
-            throw new Error(
-                result?.error ||
-                `Guestbook request failed (${response.status})`
-            );
-
-        }
-
-
-        if (
-            !result ||
-            result.success !== true
-        ) {
-
-            throw new Error(
-                result?.error ||
-                "Invalid guestbook response."
-            );
-
-        }
-
-
-        wishes =
-            Array.isArray(
-                result.wishes
-            )
-                ? result.wishes
-                : [];
-
-
-        renderGuestbook();
-
-
-        updateFeaturedWish();
-
-
-    } catch (error) {
-
-        console.error(
-            "Guestbook loading error:",
-            error
-        );
-
-
-        wall.innerHTML = `
-
-            <div class="empty-wall">
-
-                <div class="empty-icon">
-                    🌸
-                </div>
-
-                <h3>
-                    ${guestbookT(
-                        "unableToLoadWishes"
-                    )}
-                </h3>
-
-                <p>
-                    ${guestbookT(
-                        "pleaseTryAgainLater"
-                    )}
-                </p>
-
-                <button
-                    type="button"
-                    onclick="loadGuestbook()"
-                >
-                    ${guestbookT(
-                        "tryAgain"
-                    )}
-                </button>
-
-            </div>
-
-        `;
-
-    }
-
-}
-
-
-/* =========================================================
-   RENDER GUESTBOOK
-========================================================= */
-
-function renderGuestbook() {
-
-    if (!wishCount) {
-
-        buildRows();
-
-        return;
-
-    }
-
-
-    animateCounter(
-        wishCount,
-        wishes.length
-    );
-
-
-    if (
-        wishes.length === 0
-    ) {
-
-        wall.innerHTML = `
-
-            <div class="empty-wall">
-
-                <div class="empty-icon">
-                    🌸
-                </div>
-
-                <h3>
-                    ${guestbookT(
-                        "noWishesYet"
-                    )}
-                </h3>
-
-                <p>
-                    ${guestbookT(
-                        "beFirstToHang"
-                    )}
-                </p>
-
-            </div>
-
-        `;
-
-
-        return;
-
-    }
-
-
-    buildRows();
-
-}
-
-
-/* =========================================================
-   COUNTER ANIMATION
-========================================================= */
-
-function animateCounter(
-    target,
-    value
-) {
-
-    if (!target) {
-        return;
-    }
-
-
-    const numericValue =
-        Number(value) || 0;
-
-
-    if (
-        numericValue === 0
-    ) {
-
-        target.textContent =
-            "0";
-
-        return;
-
-    }
-
-
-    const current =
-        Number(
-            target.textContent
-        ) || 0;
-
-
-    if (
-        current ===
-        numericValue
-    ) {
-
-        target.textContent =
-            String(
-                numericValue
-            );
-
-        return;
-
-    }
-
-
-    const duration =
-        500;
-
-
-    const startTime =
-        performance.now();
-
-
-    function updateCounter(
-        currentTime
-    ) {
-
-        const elapsed =
-            currentTime -
-            startTime;
-
-
-        const progress =
-            Math.min(
-                elapsed /
-                duration,
-                1
-            );
-
-
-        const eased =
-            1 -
-            Math.pow(
-                1 -
-                progress,
-                3
-            );
-
-
-        const number =
-            Math.round(
-                current +
-                (
-                    numericValue -
-                    current
-                ) *
-                eased
-            );
-
-
-        target.textContent =
-            String(
-                number
-            );
-
-
-        if (
-            progress < 1
-        ) {
-
-            requestAnimationFrame(
-                updateCounter
-            );
-
-        }
-
-    }
-
-
-    requestAnimationFrame(
-        updateCounter
-    );
-
-}
-
-
-/* =========================================================
-   CREATE EMA CARD
-========================================================= */
-
-function createCard(
-    item
-) {
-
-    const rotate = [
-        -5,
-        -3,
-        -2,
-        2,
-        3,
-        5
-    ];
-
-
-    const card =
-        document.createElement(
-            "div"
-        );
-
-
-    card.className =
-        "ema-card";
-
-
-    card.style.setProperty(
-        "--ema-id",
-        String(
-            item.id || ""
-        )
-    );
-
-
-    card.dataset.id =
-        item.id;
-
-
-    card.dataset.name =
-        String(
-            item.name || ""
-        )
-            .toLowerCase();
-
-
-    card.style.transform =
-        `rotate(${
-            rotate[
-                Math.floor(
-                    Math.random() *
-                    rotate.length
-                )
-            ]
-        }deg)`;
-
-
-    /*
-     * IMPORTANT:
-     *
-     * name/message berasal dari user.
-     *
-     * Gunakan textContent.
-     *
-     * Jangan menggunakan:
-     *
-     * innerHTML =
-     * item.message
-     *
-     * agar HTML/script dari user
-     * tidak dirender sebagai HTML.
-     */
-
-
-    const string =
-        document.createElement(
-            "div"
-        );
-
-
-    string.className =
-        "ema-string";
-
-
-    const woodTop =
-        document.createElement(
-            "div"
-        );
-
-
-    woodTop.className =
-        "wood-top";
-
-
-    const content =
-        document.createElement(
-            "div"
-        );
-
-
-    content.className =
-        "ema-content";
-
-
-    const nameElement =
-        document.createElement(
-            "h3"
-        );
-
-
-    nameElement.className =
-        "ema-name";
-
-
-    nameElement.textContent =
-        item.name ||
-        guestbookT(
-            "anonymous"
-        );
-
-
-    const messageElement =
-        document.createElement(
-            "p"
-        );
-
-
-    messageElement.className =
-        "ema-message";
-
-
-    messageElement.textContent =
-        item.message ||
-        "";
-
-
-    content.appendChild(
-        nameElement
-    );
-
-
-    content.appendChild(
-        messageElement
-    );
-
-
-    const footer =
-        document.createElement(
-            "div"
-        );
-
-
-    footer.className =
-        "ema-footer";
-
-
-    const mood =
-        document.createElement(
-            "span"
-        );
-
-
-    mood.textContent =
-        item.mood ||
-        "🌸";
-
-
-    const likeButton =
-        document.createElement(
-            "button"
-        );
-
-
-    likeButton.type =
-        "button";
-
-
-    likeButton.className =
-        "like-btn";
-
-
-    likeButton.dataset.id =
-        item.id;
-
-
-    likeButton.setAttribute(
-        "aria-label",
-        guestbookT(
-            "likeThisWish"
-        )
-    );
-
-
-    const heart =
-        document.createTextNode(
-            "❤️ "
-        );
-
-
-    const likeCount =
-        document.createElement(
-            "span"
-        );
-
-
-    likeCount.className =
-        "like-count";
-
-
-    likeCount.textContent =
-        String(
-            Number(
-                item.likes
-            ) || 0
-        );
-
-
-    likeButton.appendChild(
-        heart
-    );
-
-
-    likeButton.appendChild(
-        likeCount
-    );
-
-
-    footer.appendChild(
-        mood
-    );
-
-
-    footer.appendChild(
-        likeButton
-    );
-
-
-    const date =
-        document.createElement(
-            "div"
-        );
-
-
-    date.className =
-        "ema-date";
-
-
-    date.textContent =
-        formatDate(
-            item.created_at
-        );
-
-
-    card.appendChild(
-        string
-    );
-
-
-    card.appendChild(
-        woodTop
-    );
-
-
-    card.appendChild(
-        content
-    );
-
-
-    card.appendChild(
-        footer
-    );
-
-
-    card.appendChild(
-        date
-    );
-
-
-    return card;
-
-}
-
-
-/* =========================================================
-   DATE FORMAT
-========================================================= */
-
-function formatDate(
-    dateValue
-) {
-
-    if (!dateValue) {
-        return "";
-    }
-
-
-    const date =
-        new Date(
-            dateValue
-        );
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return "";
-
-    }
-
+function initializeGallery() {
 
     const language =
-        getCurrentGuestbookLanguage();
+        getGalleryLanguage();
 
 
-    const localeMap = {
-
-        id:
-            "id-ID",
-
-        en:
-            "en-US",
-
-        ja:
-            "ja-JP",
-
-        ko:
-            "ko-KR",
-
-        zh:
-            "zh-CN"
-
-    };
-
-
-    return date.toLocaleDateString(
-        localeMap[
+    document.documentElement
+        .setAttribute(
+            "lang",
             language
-        ] ||
-        "en-US",
-        {
+        );
 
-            month:
-                "short",
 
-            day:
-                "numeric",
+    applyGalleryTranslations();
 
-            year:
-                "numeric"
+    initializeFilters();
 
-        }
-    );
+    initializeLightbox();
 
 }
 
 
 /* =========================================================
-   14. SEARCH
-========================================================= */
+   DOM READY
+   ========================================================= */
 
-if (searchInput) {
-
-    searchInput.addEventListener(
-        "input",
-        filterAndRender
-    );
-
-}
-
-
-if (sortSelect) {
-
-    sortSelect.addEventListener(
-        "change",
-        filterAndRender
-    );
-
-}
-
-
-function filterAndRender() {
-
-    let filtered =
-        [...wishes];
-
-
-    const keyword =
-        searchInput?.value
-            .trim()
-            .toLowerCase() ||
-        "";
-
-
-    /* =====================================================
-       SEARCH
-    ===================================================== */
-
-    if (keyword) {
-
-        filtered =
-            filtered.filter(
-                item => {
-
-                    const name =
-                        String(
-                            item.name ||
-                            ""
-                        )
-                            .toLowerCase();
-
-
-                    const message =
-                        String(
-                            item.message ||
-                            ""
-                        )
-                            .toLowerCase();
-
-
-                    return (
-                        name.includes(
-                            keyword
-                        ) ||
-                        message.includes(
-                            keyword
-                        )
-                    );
-
-                }
-            );
-
-    }
-
-
-    /* =====================================================
-       SORT
-    ===================================================== */
-
-    switch (
-        sortSelect?.value
-    ) {
-
-        case "newest":
-
-            filtered.sort(
-                (a, b) =>
-                    new Date(
-                        b.created_at
-                    ) -
-                    new Date(
-                        a.created_at
-                    )
-            );
-
-            break;
-
-
-        case "oldest":
-
-            filtered.sort(
-                (a, b) =>
-                    new Date(
-                        a.created_at
-                    ) -
-                    new Date(
-                        b.created_at
-                    )
-            );
-
-            break;
-
-
-        case "longest":
-
-            filtered.sort(
-                (a, b) =>
-                    String(
-                        b.message ||
-                        ""
-                    ).length -
-                    String(
-                        a.message ||
-                        ""
-                    ).length
-            );
-
-            break;
-
-
-        case "shortest":
-
-            filtered.sort(
-                (a, b) =>
-                    String(
-                        a.message ||
-                        ""
-                    ).length -
-                    String(
-                        b.message ||
-                        ""
-                    ).length
-            );
-
-            break;
-
-    }
-
-
-    buildRows(
-        filtered
-    );
-
-}
-
-
-/* =========================================================
-   BUILD ROWS
-========================================================= */
-
-function buildRows(
-    data = wishes
+if (
+    document.readyState ===
+    "loading"
 ) {
 
-    if (!wall) {
-        return;
-    }
-
-
-    wall.innerHTML =
-        "";
-
-
-    if (
-        !data.length
-    ) {
-
-        wall.innerHTML = `
-
-            <div class="empty-wall">
-
-                <div class="empty-icon">
-                    🌸
-                </div>
-
-                <h3>
-                    ${guestbookT(
-                        "noWishesFound"
-                    )}
-                </h3>
-
-                <p>
-                    ${guestbookT(
-                        "tryAnotherSearch"
-                    )}
-                </p>
-
-            </div>
-
-        `;
-
-
-        return;
-
-    }
-
-
-    const cardsPerRow =
-        3;
-
-
-    for (
-        let i = 0;
-        i < data.length;
-        i += cardsPerRow
-    ) {
-
-        const row =
-            document.createElement(
-                "div"
-            );
-
-
-        row.className =
-            "ema-row";
-
-
-        const rope =
-            document.createElement(
-                "div"
-            );
-
-
-        rope.className =
-            "rope-line";
-
-
-        const grid =
-            document.createElement(
-                "div"
-            );
-
-
-        grid.className =
-            "ema-row-grid";
-
-
-        data
-            .slice(
-                i,
-                i + cardsPerRow
-            )
-            .forEach(
-                item => {
-
-                    grid.appendChild(
-                        createCard(
-                            item
-                        )
-                    );
-
-                }
-            );
-
-
-        row.appendChild(
-            rope
-        );
-
-
-        row.appendChild(
-            grid
-        );
-
-
-        wall.appendChild(
-            row
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   15. FEATURED WISH
-========================================================= */
-
-setInterval(
-    updateFeaturedWish,
-    8000
-);
-
-
-function updateFeaturedWish() {
-
-    if (
-        !wishes.length
-    ) {
-
-        return;
-
-    }
-
-
-    const featured =
-        document.getElementById(
-            "featuredWish"
-        );
-
-
-    if (!featured) {
-        return;
-    }
-
-
-    const random =
-        wishes[
-            Math.floor(
-                Math.random() *
-                wishes.length
-            )
-        ];
-
-
-    /*
-     * User content tetap menggunakan
-     * textContent.
-     */
-
-    featured.textContent =
-        `"${random.message}" — ${random.name}`;
-
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-function showToast() {
-
-    if (!toast) {
-        return;
-    }
-
-
-    /*
-     * Jika toast mempunyai
-     * data-i18n, applyTranslation
-     * navbar tetap dapat mengubahnya.
-     */
-
-
-    toast.classList.add(
-        "show"
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeGallery
     );
 
+} else {
 
-    setTimeout(
-        () => {
-
-            toast.classList.remove(
-                "show"
-            );
-
-        },
-        2500
-    );
+    initializeGallery();
 
 }
-
-
-/* =========================================================
-   ERROR MESSAGE
-========================================================= */
-
-function showGuestbookError(
-    message
-) {
-
-    if (toast) {
-
-        toast.textContent =
-            message;
-
-
-        toast.classList.add(
-            "show"
-        );
-
-
-        setTimeout(
-            () => {
-
-                toast.classList.remove(
-                    "show"
-                );
-
-            },
-            3500
-        );
-
-
-        return;
-
-    }
-
-
-    alert(
-        message
-    );
-
-}
-
-
-/* =========================================================
-   SAKURA
-========================================================= */
-
-const sakuraLayer =
-    document.querySelector(
-        ".guestbook-sakura"
-    );
-
-
-if (sakuraLayer) {
-
-    setInterval(
-        () => {
-
-            const petal =
-                document.createElement(
-                    "span"
-                );
-
-
-            petal.className =
-                "petal";
-
-
-            petal.style.left =
-                Math.random() *
-                100 +
-                "%";
-
-
-            petal.style.animationDuration =
-                7 +
-                Math.random() *
-                5 +
-                "s";
-
-
-            sakuraLayer.appendChild(
-                petal
-            );
-
-
-            setTimeout(
-                () => {
-
-                    petal.remove();
-
-                },
-                12000
-            );
-
-        },
-        500
-    );
-
-}
-
-
-/* =========================================================
-   16. LIKE
-========================================================= */
-
-document.addEventListener(
-    "click",
-    handleLikeClick
-);
-
-
-async function handleLikeClick(
-    event
-) {
-
-    const btn =
-        event.target.closest(
-            ".like-btn"
-        );
-
-
-    if (!btn) {
-        return;
-    }
-
-
-    const id =
-        btn.dataset.id;
-
-
-    if (!id) {
-        return;
-    }
-
-
-    if (
-        btn.dataset.loading ===
-        "true"
-    ) {
-
-        return;
-
-    }
-
-
-    /*
-     * Local protection.
-     *
-     * Bukan security utama.
-     * Hanya mencegah user normal
-     * menekan tombol berkali-kali.
-     */
-
-    if (
-        localStorage.getItem(
-            "liked_" + id
-        )
-    ) {
-
-        showGuestbookError(
-            guestbookT(
-                "alreadyLiked"
-            )
-        );
-
-
-        return;
-
-    }
-
-
-    btn.dataset.loading =
-        "true";
-
-
-    btn.classList.add(
-        "liked"
-    );
-
-
-    try {
-
-        if (
-            typeof supabaseClient ===
-            "undefined"
-        ) {
-
-            throw new Error(
-                "Supabase client is not available."
-            );
-
-        }
-
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.rpc(
-                "increment_guestbook_like",
-                {
-                    row_id:
-                        Number(id)
-                }
-            );
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        /*
-         * RPC mengembalikan jumlah
-         * like terbaru.
-         */
-
-        const newCount =
-            Array.isArray(
-                data
-            )
-                ? data[0]
-                : data;
-
-
-        const count =
-            btn.querySelector(
-                ".like-count"
-            );
-
-
-        if (count) {
-
-            count.textContent =
-                String(
-                    Number(
-                        newCount
-                    ) || 0
-                );
-
-        }
-
-
-        const wish =
-            wishes.find(
-                item =>
-                    String(
-                        item.id
-                    ) ===
-                    String(
-                        id
-                    )
-            );
-
-
-        if (wish) {
-
-            wish.likes =
-                Number(
-                    newCount
-                ) || 0;
-
-        }
-
-
-        localStorage.setItem(
-            "liked_" + id,
-            "true"
-        );
-
-
-        spawnHeart(
-            btn
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Like error:",
-            error
-        );
-
-
-        showGuestbookError(
-            guestbookT(
-                "failedToLike"
-            )
-        );
-
-
-    } finally {
-
-        delete btn.dataset.loading;
-
-
-        setTimeout(
-            () => {
-
-                btn.classList.remove(
-                    "liked"
-                );
-
-            },
-            300
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   FLOATING HEART
-========================================================= */
-
-function spawnHeart(
-    btn
-) {
-
-    if (!btn) {
-        return;
-    }
-
-
-    const heart =
-        document.createElement(
-            "span"
-        );
-
-
-    heart.className =
-        "floating-heart";
-
-
-    heart.textContent =
-        "❤️";
-
-
-    const rect =
-        btn.getBoundingClientRect();
-
-
-    heart.style.left =
-        rect.left +
-        window.scrollX +
-        20 +
-        "px";
-
-
-    heart.style.top =
-        rect.top +
-        window.scrollY +
-        "px";
-
-
-    document.body.appendChild(
-        heart
-    );
-
-
-    setTimeout(
-        () => {
-
-            heart.remove();
-
-        },
-        1000
-    );
-
-}
-
-
-/* =========================================================
-   17. REALTIME
-========================================================= */
-
-function initGuestbookRealtime() {
-
-    if (
-        typeof supabaseClient ===
-        "undefined"
-    ) {
-
-        console.error(
-            "supabaseClient belum tersedia."
-        );
-
-
-        return;
-
-    }
-
-
-    /*
-     * Hindari channel dibuat dua kali.
-     */
-
-    if (realtimeChannel) {
-        return;
-    }
-
-
-    realtimeChannel =
-        supabaseClient
-            .channel(
-                "guestbook-realtime"
-            )
-
-
-            /* =============================================
-               INSERT
-            ============================================= */
-
-            .on(
-                "postgres_changes",
-                {
-
-                    event:
-                        "INSERT",
-
-                    schema:
-                        "public",
-
-                    table:
-                        "guestbook"
-
-                },
-
-                payload => {
-
-                    handleRealtimeInsert(
-                        payload.new
-                    );
-
-                }
-            )
-
-
-            /* =============================================
-               UPDATE
-            ============================================= */
-
-            .on(
-                "postgres_changes",
-                {
-
-                    event:
-                        "UPDATE",
-
-                    schema:
-                        "public",
-
-                    table:
-                        "guestbook"
-
-                },
-
-                payload => {
-
-                    handleRealtimeUpdate(
-                        payload.new
-                    );
-
-                }
-            )
-
-
-            .subscribe();
-
-}
-
-
-/* =========================================================
-   REALTIME INSERT
-========================================================= */
-
-function handleRealtimeInsert(
-    newWish
-) {
-
-    if (!newWish) {
-        return;
-    }
-
-
-    const exists =
-        wishes.some(
-            item =>
-                String(
-                    item.id
-                ) ===
-                String(
-                    newWish.id
-                )
-        );
-
-
-    if (exists) {
-        return;
-    }
-
-
-    wishes.unshift(
-        newWish
-    );
-
-
-    if (wishCount) {
-
-        animateCounter(
-            wishCount,
-            wishes.length
-        );
-
-    }
-
-
-    filterAndRender();
-
-
-    updateFeaturedWish();
-
-}
-
-
-/* =========================================================
-   REALTIME UPDATE
-========================================================= */
-
-function handleRealtimeUpdate(
-    updatedWish
-) {
-
-    if (!updatedWish) {
-        return;
-    }
-
-
-    const index =
-        wishes.findIndex(
-            item =>
-                String(
-                    item.id
-                ) ===
-                String(
-                    updatedWish.id
-                )
-        );
-
-
-    if (
-        index === -1
-    ) {
-
-        return;
-
-    }
-
-
-    wishes[index] = {
-
-        ...wishes[index],
-
-        ...updatedWish
-
-    };
-
-
-    /*
-     * Update like count tanpa
-     * reload seluruh guestbook.
-     */
-
-    const btn =
-        document.querySelector(
-            `.like-btn[data-id="${updatedWish.id}"]`
-        );
-
-
-    if (btn) {
-
-        const count =
-            btn.querySelector(
-                ".like-count"
-            );
-
-
-        if (count) {
-
-            count.textContent =
-                String(
-                    Number(
-                        updatedWish.likes
-                    ) || 0
-                );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   MANUAL REFRESH
-========================================================= */
-
-function resizeGuestbook() {
-
-    filterAndRender();
-
-}
-
-
-/* =========================================================
-   CLEANUP
-========================================================= */
-
-window.addEventListener(
-    "beforeunload",
-    () => {
-
-        if (
-            realtimeChannel &&
-            typeof supabaseClient !==
-            "undefined"
-        ) {
-
-            supabaseClient.removeChannel(
-                realtimeChannel
-            );
-
-
-            realtimeChannel =
-                null;
-
-        }
-
-    }
-);
