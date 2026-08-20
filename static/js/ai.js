@@ -3015,7 +3015,7 @@ function renderTriviaQuestion() {
                 return (
                     category.includes("pajama") ||
                     category.includes("ramune") ||
-                    category.includes("twt") ||
+                    category.includes("Te wo Tsunaginagara (Sambil Menggandeng Erat Tanganku)") ||
                     category.includes("itadaki") ||
                     category.includes("unit") ||
                     category.includes("stage") ||
