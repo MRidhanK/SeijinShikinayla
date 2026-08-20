@@ -699,6 +699,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 const config =
                     modes[mode];
 
+                if (!config) {
+                    return;
+                }
+
+                if (triviaWorkspace) {
+
+                    triviaWorkspace.classList.remove(
+                        "active"
+                    );
+
+                }
+
+                workspace.classList.add(
+                    "active"
+                );
+
                 if (modeLabel) {
 
                     modeLabel.textContent =
@@ -720,8 +736,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 }
 
-                promptInput.placeholder =
-                    config.placeholder;
+                if (promptInput) {
+
+                    promptInput.placeholder =
+                        config.placeholder;
+
+                }
+
+                if (resultMode) {
+
+                    resultMode.textContent =
+                        config.resultLabel;
+
+                }
 
                 resetWorkspace();
 
@@ -737,32 +764,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     "active"
                 );
 
-                workspace.classList.add(
-                    "active"
-                );
-
-                if (triviaWorkspace) {
-
-                    triviaWorkspace.classList.remove(
-                        "active"
-                    );
-
-                }
-
-                setTimeout(() => {
-
-                    workspace.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
-
-                }, 100);
-
-                setTimeout(() => {
-
-                    promptInput.focus();
-
-                }, 500);
+                workspace.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
 
             }
         );
@@ -784,6 +789,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     "active"
                 );
 
+                if (triviaWorkspace) {
+
+                    triviaWorkspace.classList.remove(
+                        "active"
+                    );
+
+                }
+
                 toolCards.forEach(card => {
 
                     card.classList.remove(
@@ -792,6 +805,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 });
 
+                resetWorkspace();
+
             }
         );
 
@@ -799,110 +814,71 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       ESCAPE
+       CHARACTER COUNT
     ===================================================== */
 
-    document.addEventListener(
-        "keydown",
-        event => {
+    if (promptInput) {
 
-            if (event.key !== "Escape") {
-                return;
+        promptInput.addEventListener(
+            "input",
+            () => {
+
+                const length =
+                    promptInput.value.length;
+
+                if (charCount) {
+
+                    charCount.textContent =
+                        String(length);
+
+                    if (length >= 900) {
+
+                        charCount.classList.add(
+                            "warning"
+                        );
+
+                    } else {
+
+                        charCount.classList.remove(
+                            "warning"
+                        );
+
+                    }
+
+                }
+
             }
+        );
 
-            if (
-                workspace.classList.contains(
-                    "active"
-                )
-            ) {
-
-                workspace.classList.remove(
-                    "active"
-                );
-
-            }
-
-            if (
-                triviaWorkspace &&
-                triviaWorkspace.classList.contains(
-                    "active"
-                )
-            ) {
-
-                triviaWorkspace.classList.remove(
-                    "active"
-                );
-
-            }
-
-        }
-    );
+    }
 
 
     /* =====================================================
-       CHARACTER COUNTER
+       AI GENERATION
     ===================================================== */
 
-    promptInput.addEventListener(
-        "input",
-        () => {
-
-            if (!charCount) {
-                return;
-            }
-
-            const length =
-                promptInput.value.length;
-
-            charCount.textContent =
-                length;
-
-            if (length >= 900) {
-
-                charCount.classList.add(
-                    "warning"
-                );
-
-            } else {
-
-                charCount.classList.remove(
-                    "warning"
-                );
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       GENERATE
-    ===================================================== */
-
-    generateButton.addEventListener(
-        "click",
-        generateMessage
-    );
-
-
-    async function generateMessage() {
+    async function generateAI() {
 
         if (isGenerating) {
             return;
         }
+
+        hideError();
+
+        const prompt =
+            promptInput
+                ? promptInput.value.trim()
+                : "";
 
         const name =
             nameInput
                 ? nameInput.value.trim()
                 : "";
 
-        const prompt =
-            promptInput.value.trim();
-
         const style =
             styleSelect
                 ? styleSelect.value
-                : "heartfelt";
+                : "warm";
 
 
         if (!prompt) {
@@ -911,43 +887,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Please write something first."
             );
 
-            promptInput.focus();
+            if (promptInput) {
+                promptInput.focus();
+            }
 
             return;
 
         }
 
 
-        if (prompt.length < 5) {
+        if (prompt.length > 1200) {
 
             showError(
-                "Please write a little more about what you want to say."
-            );
-
-            promptInput.focus();
-
-            return;
-
-        }
-
-
-        if (prompt.length > 1000) {
-
-            showError(
-                "Your message is too long. Please keep it under 1000 characters."
-            );
-
-            promptInput.focus();
-
-            return;
-
-        }
-
-
-        if (name.length > 50) {
-
-            showError(
-                "Name is too long."
+                "Your message is too long. Please keep it under 1200 characters."
             );
 
             return;
@@ -955,7 +907,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        hideError();
+        const language =
+            localStorage.getItem(
+                "language"
+            ) ||
+            localStorage.getItem(
+                "selectedLanguage"
+            ) ||
+            document.documentElement.lang ||
+            "en";
 
 
         lastRequest = {
@@ -963,27 +923,19 @@ document.addEventListener("DOMContentLoaded", () => {
             mode:
                 currentMode,
 
-            name:
-                name,
-
             prompt:
                 prompt,
 
+            name:
+                name,
+
             style:
-                style
+                style,
+
+            language:
+                language
 
         };
-
-
-        resetResult();
-
-
-        if (loading) {
-
-            loading.style.display =
-                "block";
-
-        }
 
 
         setGeneratingState(
@@ -991,10 +943,15 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-        try {
+        if (loading) {
 
-        const language =
-            localStorage.getItem("language") || "en";
+            loading.style.display =
+                "flex";
+
+        }
+
+
+        try {
 
             const response =
                 await fetch(
@@ -1013,396 +970,24 @@ document.addEventListener("DOMContentLoaded", () => {
                                 "application/json"
 
                         },
-                        body:
-                            JSON.stringify({
-                                ...lastRequest,
-                                language:
-                                    language
-                            })
-                    }
-                );
-
-
-            let data;
-
-            try {
-
-                data =
-                    await response.json();
-
-            } catch {
-
-                throw new Error(
-                    "The server returned an invalid response."
-                );
-
-            }
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    data.error ||
-                    `Server error (${response.status}).`
-                );
-
-            }
-
-
-            if (!data.success) {
-
-                throw new Error(
-                    data.error ||
-                    "AI failed to generate the message."
-                );
-
-            }
-
-
-            if (
-                !data.message ||
-                !data.message.trim()
-            ) {
-
-                throw new Error(
-                    "AI returned an empty message."
-                );
-
-            }
-
-
-            const message =
-                data.message.trim();
-
-
-            lastGeneratedMessage =
-                message;
-
-
-            if (resultMode) {
-
-                resultMode.textContent =
-                    modes[currentMode]
-                        ? modes[currentMode].resultLabel
-                        : "AI Generated";
-
-            }
-
-
-            showResult(
-                message
-            );
-
-
-            showToast(
-                "🌸 Your message is ready."
-            );
-
-
-            setTimeout(() => {
-
-                if (!result) {
-                    return;
-                }
-
-                result.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-
-            }, 250);
-
-        }
-
-
-        catch (error) {
-
-            console.error(
-                "AI GENERATION ERROR:",
-                error
-            );
-
-            resetResult();
-
-            showError(
-                error.message ||
-                "Something went wrong while generating the message."
-            );
-
-        }
-
-
-        finally {
-
-            if (loading) {
-
-                loading.style.display =
-                    "none";
-
-            }
-
-            setGeneratingState(
-                false
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       REGENERATE
-    ===================================================== */
-
-    if (regenerateButton) {
-
-        regenerateButton.addEventListener(
-            "click",
-            async () => {
-
-                if (isGenerating) {
-                    return;
-                }
-
-                if (!lastRequest) {
-
-                    showError(
-                        "Please generate a message first."
-                    );
-
-                    return;
-
-                }
-
-                showToast(
-                    "✨ Creating another version..."
-                );
-
-                await generateMessage();
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       COPY
-    ===================================================== */
-
-    if (copyButton) {
-
-        copyButton.addEventListener(
-            "click",
-            async () => {
-
-                const text =
-                    lastGeneratedMessage ||
-                    (
-                        generatedText
-                            ? generatedText.textContent.trim()
-                            : ""
-                    );
-
-                if (!text) {
-                    return;
-                }
-
-
-                try {
-
-                    await navigator.clipboard.writeText(
-                        text
-                    );
-
-                    copyButton.classList.add(
-                        "success"
-                    );
-
-                    copyButton.textContent =
-                        "✓ Copied!";
-
-                    showToast(
-                        "📋 Message copied."
-                    );
-
-
-                    setTimeout(() => {
-
-                        copyButton.classList.remove(
-                            "success"
-                        );
-
-                        copyButton.textContent =
-                            "📋 Copy";
-
-                    }, 2000);
-
-                }
-
-
-                catch (error) {
-
-                    console.error(
-                        "COPY ERROR:",
-                        error
-                    );
-
-                    showError(
-                        "Unable to copy the message."
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       USE IN GUESTBOOK
-    ===================================================== */
-
-    if (guestbookButton) {
-
-        guestbookButton.addEventListener(
-            "click",
-            sendToGuestbook
-        );
-
-    }
-
-
-    async function sendToGuestbook() {
-
-        if (isSendingGuestbook) {
-            return;
-        }
-
-
-        const name =
-            nameInput
-                ? nameInput.value.trim()
-                : "";
-
-        const message =
-            lastGeneratedMessage ||
-            (
-                generatedText
-                    ? generatedText.textContent.trim()
-                    : ""
-            );
-
-
-        if (!message) {
-
-            showError(
-                "Please generate a message first."
-            );
-
-            return;
-
-        }
-
-
-        if (!name) {
-
-            showError(
-                "Please enter your name before sending the message."
-            );
-
-            if (nameInput) {
-
-                nameInput.focus();
-
-            }
-
-            return;
-
-        }
-
-
-        if (name.length > 50) {
-
-            showError(
-                "Name is too long."
-            );
-
-            return;
-
-        }
-
-
-        if (message.length > 1000) {
-
-            showError(
-                "The generated message is too long for the guestbook."
-            );
-
-            return;
-
-        }
-
-
-        hideError();
-
-
-        isSendingGuestbook =
-            true;
-
-        guestbookButton.disabled =
-            true;
-
-
-        const originalText =
-            guestbookButton.textContent;
-
-
-        guestbookButton.innerHTML =
-            `
-            <span class="ai-button-spinner"></span>
-            Sending...
-            `;
-
-
-        try {
-
-            const response =
-                await fetch(
-                    "/api/guestbook",
-                    {
-
-                        method:
-                            "POST",
-
-                        headers: {
-
-                            "Content-Type":
-                                "application/json",
-
-                            "Accept":
-                                "application/json"
-
-                        },
 
                         body:
                             JSON.stringify({
+
+                                mode:
+                                    currentMode,
+
+                                prompt:
+                                    prompt,
 
                                 name:
                                     name,
 
-                                message:
-                                    message,
+                                style:
+                                    style,
 
-                                member_type:
-                                    "Fan",
-
-                                mood:
-                                    "🌸",
-
-                                submission_mode:
-                                    "ai"
+                                language:
+                                    language
 
                             })
 
@@ -1426,76 +1011,338 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            if (!response.ok) {
+            if (
+                !response.ok ||
+                !data.success
+            ) {
 
                 throw new Error(
                     data.error ||
-                    `Unable to save message (${response.status}).`
+                    "Unable to generate AI message."
                 );
 
             }
 
 
-            if (!data.success) {
+            const message =
+                data.message ||
+                data.result ||
+                data.text ||
+                "";
+
+
+            if (!message) {
 
                 throw new Error(
-                    data.error ||
-                    "Unable to save your message."
+                    "AI returned an empty response."
                 );
 
             }
 
 
-            guestbookButton.classList.add(
-                "success"
+            if (loading) {
+
+                loading.style.display =
+                    "none";
+
+            }
+
+            showResult(
+                message
             );
-
-            guestbookButton.textContent =
-                "✓ Sent to Guestbook";
-
 
             showToast(
-                "🌸 Your message was added to the guestbook."
+                "✨ Your message is ready!"
             );
 
-
-            setTimeout(() => {
-
-                window.location.href =
-                    "/guestbook";
-
-            }, 1000);
-
         }
-
-
         catch (error) {
 
             console.error(
-                "AI GUESTBOOK SEND ERROR:",
+                "AI generation failed:",
                 error
             );
 
+            if (loading) {
+
+                loading.style.display =
+                    "none";
+
+            }
+
             showError(
                 error.message ||
-                "Unable to send the message to the guestbook."
+                "Something went wrong while generating your message."
             );
 
-            guestbookButton.disabled =
-                false;
-
-            guestbookButton.textContent =
-                originalText;
-
         }
-
-
         finally {
 
-            isSendingGuestbook =
-                false;
+            setGeneratingState(
+                false
+            );
 
         }
+
+    }
+
+
+    /* =====================================================
+       GENERATE BUTTON
+    ===================================================== */
+
+    generateButton.addEventListener(
+        "click",
+        generateAI
+    );
+
+
+    /* =====================================================
+       COPY RESULT
+    ===================================================== */
+
+    if (copyButton) {
+
+        copyButton.addEventListener(
+            "click",
+            async () => {
+
+                const text =
+                    lastGeneratedMessage ||
+                    (
+                        generatedText
+                            ? generatedText.textContent
+                            : ""
+                    );
+
+
+                if (!text) {
+
+                    showError(
+                        "There is nothing to copy yet."
+                    );
+
+                    return;
+
+                }
+
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        text
+                    );
+
+                    showToast(
+                        "📋 Copied to clipboard!"
+                    );
+
+                }
+                catch {
+
+                    const textarea =
+                        document.createElement(
+                            "textarea"
+                        );
+
+                    textarea.value =
+                        text;
+
+                    textarea.style.position =
+                        "fixed";
+
+                    textarea.style.opacity =
+                        "0";
+
+                    document.body.appendChild(
+                        textarea
+                    );
+
+                    textarea.select();
+
+                    try {
+
+                        document.execCommand(
+                            "copy"
+                        );
+
+                        showToast(
+                            "📋 Copied to clipboard!"
+                        );
+
+                    }
+                    catch {
+
+                        showError(
+                            "Unable to copy the message."
+                        );
+
+                    }
+
+                    textarea.remove();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       REGENERATE
+    ===================================================== */
+
+    if (regenerateButton) {
+
+        regenerateButton.addEventListener(
+            "click",
+            () => {
+
+                if (!lastRequest) {
+
+                    showError(
+                        "There is no previous request to regenerate."
+                    );
+
+                    return;
+
+                }
+
+                if (promptInput) {
+
+                    promptInput.value =
+                        lastRequest.prompt;
+
+                }
+
+                generateAI();
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       USE GUESTBOOK
+    ===================================================== */
+
+    if (guestbookButton) {
+
+        guestbookButton.addEventListener(
+            "click",
+            async () => {
+
+                if (
+                    isSendingGuestbook ||
+                    !lastGeneratedMessage
+                ) {
+
+                    return;
+
+                }
+
+                isSendingGuestbook =
+                    true;
+
+                guestbookButton.disabled =
+                    true;
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/guestbook",
+                            {
+
+                                method:
+                                    "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Accept":
+                                        "application/json"
+
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        message:
+                                            lastGeneratedMessage,
+
+                                        source:
+                                            "ai"
+
+                                    })
+
+                            }
+                        );
+
+
+                    let data;
+
+                    try {
+
+                        data =
+                            await response.json();
+
+                    }
+                    catch {
+
+                        data = {};
+
+                    }
+
+
+                    if (
+                        !response.ok ||
+                        data.success === false
+                    ) {
+
+                        throw new Error(
+                            data.error ||
+                            "Unable to send the message to Guestbook."
+                        );
+
+                    }
+
+
+                    showToast(
+                        "💌 Message sent to Guestbook!"
+                    );
+
+                }
+                catch (error) {
+
+                    console.error(
+                        "Guestbook error:",
+                        error
+                    );
+
+                    showError(
+                        error.message ||
+                        "Unable to send the message to Guestbook."
+                    );
+
+                }
+                finally {
+
+                    isSendingGuestbook =
+                        false;
+
+                    guestbookButton.disabled =
+                        false;
+
+                }
+
+            }
+        );
 
     }
 
@@ -1637,6 +1484,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =====================================================
        TRIVIA STATE
+       GLOBAL SHARED STATE
     ===================================================== */
 
     let triviaState = {
@@ -1669,6 +1517,20 @@ document.addEventListener("DOMContentLoaded", () => {
             []
 
     };
+
+
+    /*
+     * IMPORTANT
+     *
+     * The AI translation system lives inside another
+     * DOMContentLoaded scope.
+     *
+     * Therefore triviaState must also be available
+     * globally.
+     */
+
+    window.triviaState =
+        triviaState;
 
 
     /* =====================================================
@@ -1765,7 +1627,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (triviaDifficulty) {
 
             triviaDifficulty.textContent =
-                "EASY";
+                "Easy";
 
         }
 
@@ -1781,31 +1643,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (triviaQuestion) {
 
             triviaQuestion.textContent =
-                "Preparing your first challenge...";
-
-        }
-
-
-        if (triviaRank) {
-
-            triviaRank.style.display =
-                "none";
-
-        }
-
-
-        if (triviaAchievements) {
-
-            triviaAchievements.style.display =
-                "none";
-
-        }
-
-
-        if (naylaMemory) {
-
-            naylaMemory.style.display =
-                "none";
+                "I have a question for you...";
 
         }
 
@@ -1816,254 +1654,244 @@ document.addEventListener("DOMContentLoaded", () => {
        START TRIVIA
     ===================================================== */
 
-async function startTrivia() {
+    async function startTrivia() {
 
-    if (!triviaWorkspace) {
-        return;
-    }
-
-
-    /* =============================================
-       HARD RESET STATE
-    ============================================= */
-
-    triviaState = {
-
-        active:
-            true,
-
-        questionIndex:
-            0,
-
-        score:
-            0,
-
-        correct:
-            0,
-
-        difficulty:
-            "easy",
-
-        questions:
-            [],
-
-        currentQuestion:
-            null,
-
-        answered:
-            false,
-
-        answeredQuestions:
-            []
-
-    };
-
-
-    resetTriviaUI();
-
-
-    /* =============================================
-       SWITCH SCREEN
-    ============================================= */
-
-    if (triviaStart) {
-
-        triviaStart.style.display =
-            "none";
-
-    }
-
-
-    if (triviaResult) {
-
-        triviaResult.style.display =
-            "none";
-
-    }
-
-
-    if (triviaGame) {
-
-        triviaGame.style.display =
-            "block";
-
-    }
-
-
-    try {
-
-        /*
-            IMPORTANT:
-            Always follow the master navbar language.
-        */
-
-        const language =
-            localStorage.getItem("language") || "en";
-
-
-        const response =
-            await fetch(
-                "/api/ai/trivia/start",
-                {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json",
-
-                        "Accept":
-                            "application/json"
-
-                    },
-
-                    body:
-                        JSON.stringify({
-                            difficulty:
-                                "easy",
-
-                            question_count:
-                                5,
-
-                            language:
-                                localStorage.getItem(
-                                    "language"
-                                ) || "en"
-                        })
-
-                }
-            );
-
-
-        let data;
-
-
-        try {
-
-            data =
-                await response.json();
-
-        } catch {
-
-            throw new Error(
-                "Server returned an invalid response."
-            );
-
+        if (!triviaWorkspace) {
+            return;
         }
 
 
-        if (
-            !response.ok ||
-            !data.success
-        ) {
+        /* =============================================
+           HARD RESET STATE
+        ============================================= */
 
-            throw new Error(
-                data.error ||
-                "Unable to start trivia."
-            );
+        Object.assign(
+            triviaState,
+            {
 
-        }
+                active:
+                    true,
 
+                questionIndex:
+                    0,
 
-        triviaState.questions =
-            Array.isArray(
-                data.questions
-            )
-                ? data.questions
-                : [];
+                score:
+                    0,
 
+                correct:
+                    0,
 
-        if (
-            triviaState.questions.length === 0
-        ) {
+                difficulty:
+                    "easy",
 
-            throw new Error(
-                "No trivia questions were returned."
-            );
+                questions:
+                    [],
 
-        }
+                currentQuestion:
+                    null,
 
+                answered:
+                    false,
 
-        triviaState.questionIndex =
-            0;
+                answeredQuestions:
+                    []
 
-        triviaState.correct =
-            0;
-
-        triviaState.score =
-            0;
-
-        triviaState.answered =
-            false;
-
-        triviaState.currentQuestion =
-            null;
-
-        triviaState.answeredQuestions =
-            [];
-
-
-        renderTriviaQuestion();
-
-    }
-
-
-    catch (error) {
-
-        console.error(
-            "TRIVIA START ERROR:",
-            error
+            }
         );
 
 
-        triviaState.active =
-            false;
-
-        triviaState.answered =
-            false;
-
-        triviaState.questions =
-            [];
-
-        triviaState.currentQuestion =
-            null;
-
-        triviaState.answeredQuestions =
-            [];
+        window.triviaState =
+            triviaState;
 
 
-        if (triviaGame) {
-
-            triviaGame.style.display =
-                "none";
-
-        }
+        const language =
+            localStorage.getItem(
+                "language"
+            ) ||
+            localStorage.getItem(
+                "selectedLanguage"
+            ) ||
+            localStorage.getItem(
+                "currentLanguage"
+            ) ||
+            localStorage.getItem(
+                "lang"
+            ) ||
+            document.documentElement.lang ||
+            "en";
 
 
         if (triviaStart) {
 
             triviaStart.style.display =
+                "none";
+
+        }
+
+
+        if (triviaResult) {
+
+            triviaResult.style.display =
+                "none";
+
+        }
+
+
+        if (triviaGame) {
+
+            triviaGame.style.display =
                 "block";
 
         }
 
 
-        showToast(
-            "⚠️ Unable to start trivia."
-        );
+        resetTriviaUI();
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/ai/trivia/start",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Accept":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                difficulty:
+                                    "easy",
+
+                                question_count:
+                                    5,
+
+                                language:
+                                    language
+
+                            })
+
+                    }
+                );
+
+
+            let data;
+
+            try {
+
+                data =
+                    await response.json();
+
+            }
+            catch {
+
+                throw new Error(
+                    "Server returned an invalid trivia response."
+                );
+
+            }
+
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data.error ||
+                    "Unable to start trivia."
+                );
+
+            }
+
+
+            const questions =
+                Array.isArray(
+                    data.questions
+                )
+                    ? data.questions
+                    : [];
+
+
+            if (!questions.length) {
+
+                throw new Error(
+                    "No trivia questions were returned."
+                );
+
+            }
+
+
+            triviaState.questions =
+                questions;
+
+
+            triviaState.questionIndex =
+                0;
+
+
+            triviaState.difficulty =
+                "easy";
+
+
+            renderTriviaQuestion();
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "Trivia start failed:",
+                error
+            );
+
+
+            triviaState.active =
+                false;
+
+
+            if (triviaStart) {
+
+                triviaStart.style.display =
+                    "block";
+
+            }
+
+
+            if (triviaGame) {
+
+                triviaGame.style.display =
+                    "none";
+
+            }
+
+
+            showError(
+                error.message ||
+                "Unable to start trivia."
+            );
+
+        }
 
     }
+    /* =========================================================
+   PART 2 / 10
+   TRIVIA ENGINE
+========================================================= */
 
-}
 
-
-    /* =====================================================
-       RENDER QUESTION
-    ===================================================== */
-
-    /* =====================================================
+/* =====================================================
    RENDER TRIVIA QUESTION
 ===================================================== */
 
@@ -2074,11 +1902,10 @@ function renderTriviaQuestion() {
             triviaState.questionIndex
         ];
 
-    /*
-    =====================================================
-    NO QUESTION
-    =====================================================
-    */
+
+    /* =================================================
+       NO QUESTION
+    ================================================= */
 
     if (!question) {
 
@@ -2088,11 +1915,10 @@ function renderTriviaQuestion() {
 
     }
 
-    /*
-    =====================================================
-    VALIDATE QUESTION DATA
-    =====================================================
-    */
+
+    /* =================================================
+       VALIDATE QUESTION
+    ================================================= */
 
     if (
         typeof question.question !== "string" ||
@@ -2112,11 +1938,10 @@ function renderTriviaQuestion() {
 
     }
 
-    /*
-    =====================================================
-    SAVE CURRENT QUESTION
-    =====================================================
-    */
+
+    /* =================================================
+       SAVE CURRENT QUESTION
+    ================================================= */
 
     triviaState.currentQuestion =
         question;
@@ -2128,11 +1953,9 @@ function renderTriviaQuestion() {
         getTriviaDifficulty();
 
 
-    /*
-    =====================================================
-    QUESTION NUMBER
-    =====================================================
-    */
+    /* =================================================
+       QUESTION NUMBER
+    ================================================= */
 
     if (triviaQuestionNumber) {
 
@@ -2142,11 +1965,9 @@ function renderTriviaQuestion() {
     }
 
 
-    /*
-    =====================================================
-    DIFFICULTY
-    =====================================================
-    */
+    /* =================================================
+       DIFFICULTY
+    ================================================= */
 
     if (triviaDifficulty) {
 
@@ -2156,11 +1977,9 @@ function renderTriviaQuestion() {
     }
 
 
-    /*
-    =====================================================
-    SCORE
-    =====================================================
-    */
+    /* =================================================
+       SCORE
+    ================================================= */
 
     if (triviaScoreElement) {
 
@@ -2170,19 +1989,25 @@ function renderTriviaQuestion() {
     }
 
 
-    /*
-    =====================================================
-    PROGRESS
-    =====================================================
-    */
+    /* =================================================
+       PROGRESS
+    ================================================= */
 
     if (triviaProgressBar) {
 
+        const total =
+            triviaState.questions.length;
+
+
+        const current =
+            triviaState.questionIndex;
+
+
         const progress =
-            (
-                triviaState.questionIndex /
-                triviaState.questions.length
-            ) * 100;
+            total > 0
+                ? (current / total) * 100
+                : 0;
+
 
         triviaProgressBar.style.width =
             `${progress}%`;
@@ -2190,15 +2015,15 @@ function renderTriviaQuestion() {
     }
 
 
-    /*
-    =====================================================
-    QUESTION
-
-    IMPORTANT:
-    This must be the ONLY place that controls the
-    actual trivia question text after the game starts.
-    =====================================================
-    */
+    /* =================================================
+       QUESTION TEXT
+       
+       IMPORTANT:
+       Do NOT call getTranslation() here.
+       
+       The question comes directly from the backend
+       according to the currently selected language.
+    ================================================= */
 
     if (triviaQuestion) {
 
@@ -2208,11 +2033,9 @@ function renderTriviaQuestion() {
     }
 
 
-    /*
-    =====================================================
-    CLEAR OLD ANSWERS
-    =====================================================
-    */
+    /* =================================================
+       CLEAR OLD ANSWERS
+    ================================================= */
 
     if (triviaAnswers) {
 
@@ -2222,11 +2045,9 @@ function renderTriviaQuestion() {
     }
 
 
-    /*
-    =====================================================
-    CLEAR FEEDBACK
-    =====================================================
-    */
+    /* =================================================
+       CLEAR FEEDBACK
+    ================================================= */
 
     if (triviaFeedback) {
 
@@ -2242,11 +2063,9 @@ function renderTriviaQuestion() {
     }
 
 
-    /*
-    =====================================================
-    HIDE NEXT BUTTON
-    =====================================================
-    */
+    /* =================================================
+       HIDE NEXT BUTTON
+    ================================================= */
 
     if (nextTriviaButton) {
 
@@ -2259,11 +2078,9 @@ function renderTriviaQuestion() {
     }
 
 
-    /*
-    =====================================================
-    OPTIONS
-    =====================================================
-    */
+    /* =================================================
+       OPTIONS
+    ================================================= */
 
     const options =
         Array.isArray(
@@ -2273,7 +2090,9 @@ function renderTriviaQuestion() {
             : [];
 
 
-    if (options.length === 0) {
+    if (
+        options.length === 0
+    ) {
 
         console.error(
             "Trivia question has no options:",
@@ -2289,11 +2108,9 @@ function renderTriviaQuestion() {
     }
 
 
-    /*
-    =====================================================
-    CREATE ANSWER BUTTONS
-    =====================================================
-    */
+    /* =================================================
+       CREATE ANSWER BUTTONS
+    ================================================= */
 
     options.forEach(
         (option, index) => {
@@ -2303,22 +2120,22 @@ function renderTriviaQuestion() {
                     "button"
                 );
 
+
             button.type =
                 "button";
 
+
             button.className =
                 "trivia-answer";
+
 
             button.dataset.answer =
                 option;
 
 
-            /*
-            A / B / C / D
-
-            These letters are intentionally universal.
-            They do NOT need translation.
-            */
+            /* -----------------------------------------
+               ANSWER LETTER
+            ----------------------------------------- */
 
             const letter =
                 String.fromCharCode(
@@ -2332,11 +2149,15 @@ function renderTriviaQuestion() {
                     ${letter}
                 </span>
 
-                <span>
+                <span class="trivia-answer-text">
                     ${escapeHtml(option)}
                 </span>
                 `;
 
+
+            /* -----------------------------------------
+               CLICK
+            ----------------------------------------- */
 
             button.addEventListener(
                 "click",
@@ -2365,237 +2186,270 @@ function renderTriviaQuestion() {
 }
 
 
-    /* =====================================================
-       HTML ESCAPE
-    ===================================================== */
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
 
-    function escapeHtml(value) {
+function escapeHtml(value) {
 
-        return String(value)
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   ANSWER TRIVIA
+===================================================== */
+
+async function answerTrivia(
+    answer,
+    selectedButton
+) {
+
+    /* =================================================
+       SAFETY
+    ================================================= */
+
+    if (
+        !triviaState.active ||
+        triviaState.answered ||
+        !triviaState.currentQuestion
+    ) {
+
+        return;
 
     }
 
 
-    /* =====================================================
-       ANSWER TRIVIA
-    ===================================================== */
-
-    async function answerTrivia(
-        answer,
-        selectedButton
-    ) {
-
-        if (
-            !triviaState.active ||
-            triviaState.answered ||
-            !triviaState.currentQuestion
-        ) {
-
-            return;
-
-        }
+    triviaState.answered =
+        true;
 
 
-        triviaState.answered =
-            true;
+    /* =================================================
+       DISABLE ALL ANSWERS
+    ================================================= */
+
+    const buttons =
+        triviaAnswers
+            ? triviaAnswers.querySelectorAll(
+                ".trivia-answer"
+            )
+            : [];
 
 
-        const buttons =
-            triviaAnswers
-                ? triviaAnswers.querySelectorAll(
-                    ".trivia-answer"
-                )
-                : [];
-
-
-        buttons.forEach(button => {
+    buttons.forEach(
+        button => {
 
             button.disabled =
                 true;
 
-        });
+        }
+    );
 
+
+    if (selectedButton) {
 
         selectedButton.classList.add(
             "selected"
         );
 
+    }
+
+
+    /* =================================================
+       CHECK ANSWER
+    ================================================= */
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/ai/trivia/answer",
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Accept":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            question:
+                                triviaState.currentQuestion.question,
+
+                            correct_answer:
+                                triviaState.currentQuestion.correct_answer,
+
+                            user_answer:
+                                answer,
+
+                            difficulty:
+                                triviaState.difficulty
+
+                        })
+
+                }
+            );
+
+
+        let data;
 
         try {
 
-            const response =
-                await fetch(
-                    "/api/ai/trivia/answer",
-                    {
+            data =
+                await response.json();
 
-                        method:
-                            "POST",
+        }
+        catch {
 
-                        headers: {
+            throw new Error(
+                "Server returned an invalid trivia response."
+            );
 
-                            "Content-Type":
-                                "application/json",
-
-                            "Accept":
-                                "application/json"
-
-                        },
-
-                        body:
-                            JSON.stringify({
-
-                                question:
-                                    triviaState.currentQuestion.question,
-
-                                correct_answer:
-                                    triviaState.currentQuestion.correct_answer,
-
-                                user_answer:
-                                    answer,
-
-                                difficulty:
-                                    triviaState.difficulty
-
-                            })
-
-                    }
-                );
+        }
 
 
-            let data;
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
-            try {
+            throw new Error(
+                data.error ||
+                "Unable to check the answer."
+            );
 
-                data =
-                    await response.json();
-
-            } catch {
-
-                throw new Error(
-                    "Server returned an invalid response."
-                );
-
-            }
+        }
 
 
-            if (
-                !response.ok ||
-                !data.success
-            ) {
-
-                throw new Error(
-                    data.error ||
-                    "Unable to check answer."
-                );
-
-            }
+        const correct =
+            data.correct === true;
 
 
-            const correct =
-                data.correct === true;
+        /* =================================================
+           RECORD ANSWER
+        ================================================= */
+
+        triviaState.answeredQuestions.push({
+
+            question:
+                triviaState.currentQuestion.question,
+
+            answer:
+                answer,
+
+            correctAnswer:
+                triviaState.currentQuestion.correct_answer,
+
+            correct:
+                correct,
+
+            category:
+                triviaState.currentQuestion.category ||
+                data.category ||
+                "",
+
+            difficulty:
+                triviaState.difficulty
+
+        });
 
 
-            /* =============================================
-               RECORD ANSWER
-            ============================================= */
+        /* =================================================
+           CORRECT ANSWER
+        ================================================= */
 
-            triviaState.answeredQuestions.push({
+        if (correct) {
 
-                question:
-                    triviaState.currentQuestion.question,
-
-                answer:
-                    answer,
-
-                correctAnswer:
-                    triviaState.currentQuestion.correct_answer,
-
-                correct:
-                    correct,
-
-                category:
-                    triviaState.currentQuestion.category ||
-                    data.category ||
-                    "",
-
-                difficulty:
-                    triviaState.difficulty
-
-            });
+            triviaState.correct++;
 
 
-            /* =============================================
-               CORRECT
-            ============================================= */
+            triviaState.score +=
+                Number(
+                    data.points
+                ) || 100;
 
-            if (correct) {
 
-                triviaState.correct++;
-
-                triviaState.score +=
-                    Number(
-                        data.points
-                    ) || 100;
-
+            if (selectedButton) {
 
                 selectedButton.classList.add(
                     "correct"
                 );
 
-
-                if (triviaFeedback) {
-
-                    triviaFeedback.innerHTML =
-                        `
-                        <strong>
-                            Correct! 🔥
-                        </strong>
-
-                        <span>
-                            ${escapeHtml(
-                                data.explanation ||
-                                "You know Nayla well!"
-                            )}
-                        </span>
-                        `;
-
-                }
-
             }
 
 
-            /* =============================================
-               WRONG
-            ============================================= */
+            if (triviaFeedback) {
 
-            else {
+                triviaFeedback.innerHTML =
+                    `
+                    <strong>
+                        Correct! 🔥
+                    </strong>
+
+                    <span>
+                        ${escapeHtml(
+                            data.explanation ||
+                            "You know Nayla well!"
+                        )}
+                    </span>
+                    `;
+
+            }
+
+        }
+
+
+        /* =================================================
+           WRONG ANSWER
+        ================================================= */
+
+        else {
+
+            if (selectedButton) {
 
                 selectedButton.classList.add(
                     "wrong"
                 );
 
+            }
 
-                buttons.forEach(button => {
+
+            /* ---------------------------------------------
+               HIGHLIGHT CORRECT ANSWER
+            --------------------------------------------- */
+
+            buttons.forEach(
+                button => {
 
                     if (
                         button.dataset.answer ===
@@ -2608,98 +2462,125 @@ function renderTriviaQuestion() {
 
                     }
 
-                });
-
-
-                if (triviaFeedback) {
-
-                    triviaFeedback.innerHTML =
-                        `
-                        <strong>
-                            Not quite! 🌸
-                        </strong>
-
-                        <span>
-                            Correct answer:
-                            ${escapeHtml(
-                                triviaState.currentQuestion.correct_answer
-                            )}
-                        </span>
-
-                        <span>
-                            ${escapeHtml(
-                                data.explanation || ""
-                            )}
-                        </span>
-                        `;
-
                 }
-
-            }
-
-
-            if (triviaScoreElement) {
-
-                triviaScoreElement.textContent =
-                    triviaState.score;
-
-            }
-
-
-            if (triviaDifficulty) {
-
-                triviaDifficulty.textContent =
-                    getTriviaDifficulty()
-                        .toUpperCase();
-
-            }
+            );
 
 
             if (triviaFeedback) {
 
-                triviaFeedback.style.display =
-                    "flex";
+                triviaFeedback.innerHTML =
+                    `
+                    <strong>
+                        Not quite! 🌸
+                    </strong>
 
-            }
+                    <span>
+                        Correct answer:
+                        ${escapeHtml(
+                            triviaState.currentQuestion.correct_answer
+                        )}
+                    </span>
 
-
-            if (nextTriviaButton) {
-
-                nextTriviaButton.style.display =
-                    "block";
-
-                nextTriviaButton.disabled =
-                    false;
+                    <span>
+                        ${escapeHtml(
+                            data.explanation ||
+                            ""
+                        )}
+                    </span>
+                    `;
 
             }
 
         }
 
 
-        catch (error) {
+        /* =================================================
+           UPDATE SCORE
+        ================================================= */
 
-            console.error(
-                "TRIVIA ANSWER ERROR:",
-                error
-            );
+        if (triviaScoreElement) {
+
+            triviaScoreElement.textContent =
+                triviaState.score;
+
+        }
 
 
-            triviaState.answered =
+        /* =================================================
+           UPDATE DIFFICULTY
+        ================================================= */
+
+        triviaState.difficulty =
+            getTriviaDifficulty();
+
+
+        if (triviaDifficulty) {
+
+            triviaDifficulty.textContent =
+                triviaState.difficulty.toUpperCase();
+
+        }
+
+
+        /* =================================================
+           SHOW FEEDBACK
+        ================================================= */
+
+        if (triviaFeedback) {
+
+            triviaFeedback.style.display =
+                "flex";
+
+        }
+
+
+        /* =================================================
+           NEXT BUTTON
+        ================================================= */
+
+        if (nextTriviaButton) {
+
+            nextTriviaButton.style.display =
+                "block";
+
+            nextTriviaButton.disabled =
                 false;
 
-
-            showToast(
-                "⚠️ Unable to check answer."
-            );
+        }
 
 
-            buttons.forEach(button => {
+        /*
+         * Save progress in session.
+         */
+
+        saveTriviaProgress();
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "TRIVIA ANSWER ERROR:",
+            error
+        );
+
+
+        triviaState.answered =
+            false;
+
+
+        buttons.forEach(
+            button => {
 
                 button.disabled =
                     false;
 
-            });
+            }
+        );
 
+
+        if (selectedButton) {
 
             selectedButton.classList.remove(
                 "selected"
@@ -2707,766 +2588,715 @@ function renderTriviaQuestion() {
 
         }
 
-    }
 
-
-    /* =====================================================
-       NEXT QUESTION
-    ===================================================== */
-
-    if (nextTriviaButton) {
-
-        nextTriviaButton.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    !triviaState.active ||
-                    !triviaState.answered
-                ) {
-
-                    return;
-
-                }
-
-
-                nextTriviaButton.disabled =
-                    true;
-
-                nextTriviaButton.style.display =
-                    "none";
-
-
-                if (triviaFeedback) {
-
-                    triviaFeedback.style.display =
-                        "none";
-
-                    triviaFeedback.textContent =
-                        "";
-
-                    triviaFeedback.innerHTML =
-                        "";
-
-                }
-
-
-                triviaState.questionIndex++;
-
-
-                if (
-                    triviaState.questionIndex >=
-                    triviaState.questions.length
-                ) {
-
-                    finishTrivia();
-
-                    return;
-
-                }
-
-
-                renderTriviaQuestion();
-
-            }
+        showToast(
+            error.message ||
+            "Unable to check the answer."
         );
 
     }
 
-
-    /* =====================================================
-       NAYLA MEMORY
-    ===================================================== */
-
-    const NAYLA_MEMORY_FACTS = [
-
-        {
-            icon: "🌸",
-            text:
-                "Nayla lahir di Kumamoto, Jepang."
-        },
-
-        {
-            icon: "🎤",
-            text:
-                "Di Ramune no Nomikata, unit song Nayla adalah Cross."
-        },
-
-        {
-            icon: "🎤",
-            text:
-                "Di TWT, unit song Nayla adalah Glory Days."
-        },
-
-        {
-            icon: "🎤",
-            text:
-                "Di Itadaki♥Love, unit song Nayla adalah Kataomoi no Karaage."
-        },
-
-        {
-            icon: "🎤",
-            text:
-                "Di Pajama Drive, unit song Nayla adalah Pajama Drive."
-        },
-
-        {
-            icon: "🦚",
-            text:
-                "Hewan yang berkaitan dengan BDTS Nayla adalah burung merak."
-        },
-
-        {
-            icon: "📺",
-            text:
-                "Nama akun JKT48 SHOWROOM Nayla adalah Nayla / ナイラ（JKT48)."
-        },
-
-        {
-            icon: "🎂",
-            text:
-                "Birthday Project Nayla tahun 2025 menggunakan #HappinessNaylalaland18."
-        },
-
-        {
-            icon: "🎂",
-            text:
-                "Birthday Project Nayla tahun 2026 menggunakan #HappinessUndertheSpotl19."
-        },
-
-        {
-            icon: "✨",
-            text:
-                "Nayla merupakan bagian dari JKT48 Generation 12."
-        },
-
-        {
-            icon: "♊",
-            text:
-                "Zodiak Nayla adalah Gemini."
-        },
-
-        {
-            icon: "💗",
-            text:
-                "Nayla Suji lahir pada 18 Juni 2007."
-        }
-
-    ];
+}
 
 
-    /* =====================================================
-       RENDER NAYLA MEMORY
-    ===================================================== */
+/* =====================================================
+   SAVE TRIVIA PROGRESS
+===================================================== */
 
-    function renderNaylaMemory() {
+function saveTriviaProgress() {
 
-        if (!naylaMemoryList) {
-            return;
-        }
+    try {
 
+        const state = {
 
-        naylaMemoryList.innerHTML =
-            "";
+            active:
+                triviaState.active,
 
+            questionIndex:
+                triviaState.questionIndex,
 
-        const shuffled =
-            [...NAYLA_MEMORY_FACTS]
-                .sort(
-                    () => Math.random() - 0.5
-                );
+            score:
+                triviaState.score,
 
+            correct:
+                triviaState.correct,
 
-        const selected =
-            shuffled.slice(
-                0,
-                4
-            );
+            difficulty:
+                triviaState.difficulty,
 
+            answered:
+                triviaState.answered
 
-        selected.forEach(
-            fact => {
-
-                const item =
-                    document.createElement(
-                        "div"
-                    );
+        };
 
 
-                item.className =
-                    "nayla-memory-card";
+        sessionStorage.setItem(
+            "naylaTriviaProgress",
+            JSON.stringify(
+                state
+            )
+        );
 
+    }
+    catch (error) {
 
-                item.innerHTML =
-                    `
-                    <div class="nayla-memory-icon">
-                        ${fact.icon}
-                    </div>
-
-                    <p>
-                        ${escapeHtml(
-                            fact.text
-                        )}
-                    </p>
-                    `;
-
-
-                naylaMemoryList.appendChild(
-                    item
-                );
-
-            }
+        console.warn(
+            "Unable to save trivia progress:",
+            error
         );
 
     }
 
+}
 
-    /* =====================================================
-       TRIVIA RANK
-    ===================================================== */
 
-    function getTriviaRank(
-        correct,
-        total
+/* =====================================================
+   NEXT TRIVIA QUESTION
+===================================================== */
+
+if (nextTriviaButton) {
+
+    nextTriviaButton.addEventListener(
+        "click",
+        () => {
+
+            if (
+                !triviaState.active ||
+                !triviaState.answered
+            ) {
+
+                return;
+
+            }
+
+
+            nextTriviaButton.disabled =
+                true;
+
+
+            nextTriviaButton.style.display =
+                "none";
+
+
+            /* -----------------------------------------
+               MOVE TO NEXT QUESTION
+            ----------------------------------------- */
+
+            triviaState.questionIndex++;
+
+
+            /* -----------------------------------------
+               FINISHED?
+            ----------------------------------------- */
+
+            if (
+                triviaState.questionIndex >=
+                triviaState.questions.length
+            ) {
+
+                finishTrivia();
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               RENDER NEXT
+            ----------------------------------------- */
+
+            renderTriviaQuestion();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FINISH TRIVIA
+===================================================== */
+
+function finishTrivia() {
+
+    triviaState.active =
+        false;
+
+
+    triviaState.answered =
+        false;
+
+
+    if (triviaGame) {
+
+        triviaGame.style.display =
+            "none";
+
+    }
+
+
+    if (triviaResult) {
+
+        triviaResult.style.display =
+            "block";
+
+    }
+
+
+    /* =================================================
+       FINAL SCORE
+    ================================================= */
+
+    const total =
+        triviaState.questions.length;
+
+
+    const score =
+        triviaState.score;
+
+
+    const correct =
+        triviaState.correct;
+
+
+    if (triviaFinalScore) {
+
+        triviaFinalScore.textContent =
+            score;
+
+    }
+
+
+    /* =================================================
+       FINAL TITLE
+    ================================================= */
+
+    let title =
+        "Trivia Complete!";
+
+
+    let message =
+        "Thank you for playing Nayla Trivia Master!";
+
+
+    if (
+        total > 0 &&
+        correct === total
     ) {
 
-        if (
-            correct >= total &&
-            total > 0
-        ) {
-
-            return {
-
-                icon:
-                    "👑",
-
-                title:
-                    "Nayla Master",
-
-                description:
-                    "Perfect score! You really know Nayla."
-
-            };
-
-        }
+        title =
+            "Perfect Score! 🎉";
 
 
-        if (correct >= 4) {
+        message =
+            "Amazing! You really know Nayla well.";
 
-            return {
+    }
 
-                icon:
-                    "🔥",
+    else if (
+        correct >= Math.ceil(
+            total * 0.7
+        )
+    ) {
 
-                title:
-                    "Nayla Expert",
-
-                description:
-                    "Amazing! Your Nayla knowledge is impressive."
-
-            };
-
-        }
+        title =
+            "Amazing Job! 🌸";
 
 
-        if (correct >= 2) {
+        message =
+            "You know Nayla really well!";
 
-            return {
+    }
 
-                icon:
-                    "🌸",
+    else if (
+        correct >= Math.ceil(
+            total * 0.4
+        )
+    ) {
 
-                title:
-                    "Nayla Supporter",
-
-                description:
-                    "You know Nayla pretty well!"
-
-            };
-
-        }
+        title =
+            "Good Try! ✨";
 
 
-        return {
+        message =
+            "You know quite a bit about Nayla.";
+
+    }
+
+    else {
+
+        title =
+            "Keep Exploring! 💫";
+
+
+        message =
+            "There is still more to discover about Nayla.";
+
+    }
+
+
+    if (triviaFinalTitle) {
+
+        triviaFinalTitle.textContent =
+            title;
+
+    }
+
+
+    if (triviaFinalMessage) {
+
+        triviaFinalMessage.textContent =
+            message;
+
+    }
+
+
+    /* =================================================
+       RANK
+    ================================================= */
+
+    updateTriviaRank(
+        correct,
+        total
+    );
+
+
+    /* =================================================
+       ACHIEVEMENTS
+    ================================================= */
+
+    updateTriviaAchievements(
+        correct,
+        total
+    );
+
+
+    /* =================================================
+       MEMORY
+    ================================================= */
+
+    updateNaylaMemory();
+
+
+    /* =================================================
+       PROGRESS
+    ================================================= */
+
+    if (triviaProgressBar) {
+
+        triviaProgressBar.style.width =
+            "100%";
+
+    }
+
+
+    saveTriviaProgress();
+
+}
+
+
+/* =====================================================
+   TRIVIA RANK
+===================================================== */
+
+function updateTriviaRank(
+    correct,
+    total
+) {
+
+    let icon =
+        "🌱";
+
+    let title =
+        "Nayla Beginner";
+
+    let description =
+        "You are just beginning your journey.";
+
+
+    if (
+        total > 0 &&
+        correct === total
+    ) {
+
+        icon =
+            "👑";
+
+        title =
+            "Nayla Master";
+
+        description =
+            "Perfect knowledge of Nayla!";
+
+    }
+
+    else if (
+        total > 0 &&
+        correct >=
+            Math.ceil(
+                total * 0.8
+            )
+    ) {
+
+        icon =
+            "🌸";
+
+        title =
+            "Nayla Expert";
+
+        description =
+            "You know Nayla exceptionally well.";
+
+    }
+
+    else if (
+        total > 0 &&
+        correct >=
+            Math.ceil(
+                total * 0.6
+            )
+    ) {
+
+        icon =
+            "✨";
+
+        title =
+            "Nayla Friend";
+
+        description =
+            "You know quite a lot about Nayla.";
+
+    }
+
+    else if (
+        total > 0 &&
+        correct >=
+            Math.ceil(
+                total * 0.4
+            )
+    ) {
+
+        icon =
+            "🌱";
+
+        title =
+            "Nayla Explorer";
+
+        description =
+            "Keep exploring and learning more.";
+
+    }
+
+
+    if (triviaRankIcon) {
+
+        triviaRankIcon.textContent =
+            icon;
+
+    }
+
+
+    if (triviaRankTitle) {
+
+        triviaRankTitle.textContent =
+            title;
+
+    }
+
+
+    if (triviaRankDescription) {
+
+        triviaRankDescription.textContent =
+            description;
+
+    }
+
+
+    if (triviaRank) {
+
+        triviaRank.style.display =
+            "block";
+
+    }
+
+}
+/* =========================================================
+   PART 3 / 10
+   TRIVIA ACHIEVEMENTS + NAYLA MEMORY
+========================================================= */
+
+
+/* =====================================================
+   TRIVIA ACHIEVEMENTS
+===================================================== */
+
+function updateTriviaAchievements(
+    correct,
+    total
+) {
+
+    if (!triviaAchievementList) {
+        return;
+    }
+
+
+    triviaAchievementList.innerHTML =
+        "";
+
+
+    const achievements = [];
+
+
+    /* =================================================
+       PERFECT SCORE
+    ================================================= */
+
+    if (
+        total > 0 &&
+        correct === total
+    ) {
+
+        achievements.push({
+
+            icon:
+                "👑",
+
+            title:
+                "Perfect Score",
+
+            description:
+                "You answered every question correctly."
+
+        });
+
+    }
+
+
+    /* =================================================
+       HIGH SCORE
+    ================================================= */
+
+    else if (
+        total > 0 &&
+        correct >=
+            Math.ceil(
+                total * 0.8
+            )
+    ) {
+
+        achievements.push({
+
+            icon:
+                "🌸",
+
+            title:
+                "Nayla Expert",
+
+            description:
+                "You answered most questions correctly."
+
+        });
+
+    }
+
+
+    /* =================================================
+       FIRST STEP
+    ================================================= */
+
+    if (correct >= 1) {
+
+        achievements.push({
+
+            icon:
+                "✨",
+
+            title:
+                "First Step",
+
+            description:
+                "You got your first trivia answer right."
+
+        });
+
+    }
+
+
+    /* =================================================
+       KNOW NAYLA
+    ================================================= */
+
+    if (
+        total > 0 &&
+        correct >=
+            Math.ceil(
+                total * 0.6
+            )
+    ) {
+
+        achievements.push({
+
+            icon:
+                "💖",
+
+            title:
+                "You Know Nayla",
+
+            description:
+                "You clearly remember many things about Nayla."
+
+        });
+
+    }
+
+
+    /* =================================================
+       TRIVIA PLAYER
+    ================================================= */
+
+    if (total >= 5) {
+
+        achievements.push({
+
+            icon:
+                "🎮",
+
+            title:
+                "Trivia Player",
+
+            description:
+                "You completed the full trivia challenge."
+
+        });
+
+    }
+
+
+    /* =================================================
+       EMPTY ACHIEVEMENT
+    ================================================= */
+
+    if (
+        achievements.length === 0
+    ) {
+
+        achievements.push({
 
             icon:
                 "🌱",
 
             title:
-                "Casual Fan",
+                "Keep Exploring",
 
             description:
-                "Keep exploring Nayla's journey!"
+                "Play again to unlock more achievements."
 
-        };
+        });
 
     }
 
 
-    /* =====================================================
-       TRIVIA ACHIEVEMENTS
-    ===================================================== */
-
-    function calculateTriviaAchievements() {
-
-        const records =
-            triviaState.answeredQuestions || [];
-
-        const total =
-            triviaState.questions.length;
-
-        const achievements = [];
-
-
-        /* =============================================
-           STAGE SPECIALIST
-        ============================================= */
-
-        const stageQuestions =
-            records.filter(record => {
-
-                const category =
-                    String(
-                        record.category || ""
-                    ).toLowerCase();
-
-                return (
-                    category.includes("pajama") ||
-                    category.includes("ramune") ||
-                    category.includes("twt") ||
-                    category.includes("itadaki") ||
-                    category.includes("unit") ||
-                    category.includes("stage") ||
-                    category.includes("matching")
-                );
-
-            });
-
-
-        const stageCorrect =
-            stageQuestions.length > 0 &&
-            stageQuestions.every(
-                record =>
-                    record.correct
-            );
-
-
-        if (stageCorrect) {
-
-            achievements.push({
-
-                icon:
-                    "🎤",
-
-                title:
-                    "Stage Specialist",
-
-                description:
-                    "You answered every stage question correctly."
-
-            });
-
-        }
-
-
-        /* =============================================
-           BIRTHDAY DETECTIVE
-        ============================================= */
-
-        const birthdayQuestions =
-            records.filter(record => {
-
-                const category =
-                    String(
-                        record.category || ""
-                    ).toLowerCase();
-
-                return category.includes(
-                    "birthday"
-                );
-
-            });
-
-
-        const birthdayCorrect =
-            birthdayQuestions.length > 0 &&
-            birthdayQuestions.every(
-                record =>
-                    record.correct
-            );
-
-
-        if (birthdayCorrect) {
-
-            achievements.push({
-
-                icon:
-                    "🎂",
-
-                title:
-                    "Birthday Detective",
-
-                description:
-                    "You answered every birthday project question correctly."
-
-            });
-
-        }
-
-
-        /* =============================================
-           PEACOCK KNOWLEDGE
-        ============================================= */
-
-        const peacockCorrect =
-            records.some(record => {
-
-                const category =
-                    String(
-                        record.category || ""
-                    ).toLowerCase();
-
-                return (
-                    category.includes("bdts") &&
-                    record.correct
-                );
-
-            });
-
-
-        if (peacockCorrect) {
-
-            achievements.push({
-
-                icon:
-                    "🦚",
-
-                title:
-                    "Peacock Knowledge",
-
-                description:
-                    "You know the BDTS peacock!"
-
-            });
-
-        }
-
-
-        /* =============================================
-           NAYLA MASTER
-        ============================================= */
-
-        if (
-            total > 0 &&
-            triviaState.correct === total
-        ) {
-
-            achievements.push({
-
-                icon:
-                    "👑",
-
-                title:
-                    "Nayla Master",
-
-                description:
-                    "Perfect 5/5! You truly know Nayla."
-
-            });
-
-        }
-
-
-        return achievements;
-
-    }
-
-
-    /* =====================================================
+    /* =================================================
        RENDER ACHIEVEMENTS
-    ===================================================== */
+    ================================================= */
 
-    function renderTriviaAchievements() {
+    achievements.forEach(
+        achievement => {
 
-        if (!triviaAchievementList) {
-            return;
-        }
-
-
-        triviaAchievementList.innerHTML =
-            "";
-
-
-        const achievements =
-            calculateTriviaAchievements();
-
-
-        if (achievements.length === 0) {
-
-            const empty =
+            const item =
                 document.createElement(
                     "div"
                 );
 
 
-            empty.className =
-                "trivia-achievement-empty";
+            item.className =
+                "trivia-achievement";
 
 
-            empty.innerHTML =
+            item.innerHTML =
                 `
-                <span>
-                    🌱
+                <span class="trivia-achievement-icon">
+                    ${achievement.icon}
                 </span>
 
-                <p>
-                    Keep playing to unlock achievements!
-                </p>
+                <div class="trivia-achievement-content">
+
+                    <strong>
+                        ${escapeHtml(
+                            achievement.title
+                        )}
+                    </strong>
+
+                    <span>
+                        ${escapeHtml(
+                            achievement.description
+                        )}
+                    </span>
+
+                </div>
                 `;
 
 
             triviaAchievementList.appendChild(
-                empty
+                item
             );
 
-            return;
-
         }
+    );
 
 
-        achievements.forEach(
-            achievement => {
+    if (triviaAchievements) {
 
-                const item =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                item.className =
-                    "trivia-achievement unlocked";
-
-
-                item.innerHTML =
-                    `
-                    <div class="trivia-achievement-icon">
-                        ${achievement.icon}
-                    </div>
-
-                    <div class="trivia-achievement-content">
-
-                        <strong>
-                            ${escapeHtml(
-                                achievement.title
-                            )}
-                        </strong>
-
-                        <span>
-                            ${escapeHtml(
-                                achievement.description
-                            )}
-                        </span>
-
-                    </div>
-
-                    <div class="trivia-achievement-check">
-                        ✓
-                    </div>
-                    `;
-
-
-                triviaAchievementList.appendChild(
-                    item
-                );
-
-            }
-        );
+        triviaAchievements.style.display =
+            "block";
 
     }
 
-
-    /* =====================================================
-       FINISH TRIVIA
-    ===================================================== */
-
-    function finishTrivia() {
-
-        triviaState.active =
-            false;
-
-        triviaState.answered =
-            false;
+}
 
 
-        if (nextTriviaButton) {
+/* =====================================================
+   NAYLA MEMORY
+===================================================== */
 
-            nextTriviaButton.disabled =
-                true;
+function updateNaylaMemory() {
 
-            nextTriviaButton.style.display =
-                "none";
-
-        }
-
-
-        if (triviaGame) {
-
-            triviaGame.style.display =
-                "none";
-
-        }
+    if (!naylaMemoryList) {
+        return;
+    }
 
 
-        if (triviaResult) {
-
-            triviaResult.style.display =
-                "block";
-
-        }
+    naylaMemoryList.innerHTML =
+        "";
 
 
-        const total =
-            triviaState.questions.length;
-
-        const correct =
-            triviaState.correct;
+    const answered =
+        triviaState.answeredQuestions || [];
 
 
-        if (triviaFinalScore) {
+    /* =================================================
+       NO MEMORY
+    ================================================= */
 
-            triviaFinalScore.textContent =
-                `${correct} / ${total}`;
+    if (!answered.length) {
 
-        }
-
-
-        let title =
-            "Trivia Challenger";
-
-        let message =
-            "Good try! Let's learn more about Nayla.";
-
-
-        if (correct === total) {
-
-            title =
-                "👑 NAYLA MASTER";
-
-            message =
-                "Perfect score! You really know Nayla! 🔥";
-
-        }
-
-        else if (correct >= 4) {
-
-            title =
-                "🌟 NAYLA EXPERT";
-
-            message =
-                "Amazing knowledge! You're almost at Master level.";
-
-        }
-
-        else if (correct >= 3) {
-
-            title =
-                "🔥 HARD MODE SURVIVOR";
-
-            message =
-                "Very impressive! Your Nayla knowledge is getting strong.";
-
-        }
-
-        else if (correct >= 2) {
-
-            title =
-                "🌸 TRIVIA RISING";
-
-            message =
-                "Not bad! Keep learning more about Nayla.";
-
-        }
-
-
-        if (triviaFinalTitle) {
-
-            triviaFinalTitle.textContent =
-                title;
-
-        }
-
-
-        if (triviaFinalMessage) {
-
-            triviaFinalMessage.textContent =
-                message;
-
-        }
-
-
-        /* =============================================
-           RANK
-        ============================================= */
-
-        const rank =
-            getTriviaRank(
-                correct,
-                total
+        const empty =
+            document.createElement(
+                "div"
             );
 
 
-        if (triviaRank) {
-
-            triviaRank.style.display =
-                "block";
-
-        }
+        empty.className =
+            "nayla-memory-empty";
 
 
-        if (triviaRankIcon) {
-
-            triviaRankIcon.textContent =
-                rank.icon;
-
-        }
+        empty.textContent =
+            "Your trivia memories will appear here.";
 
 
-        if (triviaRankTitle) {
-
-            triviaRankTitle.textContent =
-                rank.title;
-
-        }
-
-
-        if (triviaRankDescription) {
-
-            triviaRankDescription.textContent =
-                rank.description;
-
-        }
-
-
-        /* =============================================
-           ACHIEVEMENTS
-        ============================================= */
-
-        renderTriviaAchievements();
-
-
-        if (triviaAchievements) {
-
-            triviaAchievements.style.display =
-                "block";
-
-        }
-
-
-        /* =============================================
-           NAYLA MEMORY
-        ============================================= */
-
-        renderNaylaMemory();
+        naylaMemoryList.appendChild(
+            empty
+        );
 
 
         if (naylaMemory) {
@@ -3476,2808 +3306,6540 @@ function renderTriviaQuestion() {
 
         }
 
+        return;
 
-        /* =============================================
-           PROGRESS
-        ============================================= */
+    }
 
-        if (triviaProgressBar) {
 
-            triviaProgressBar.style.width =
-                "100%";
+    /* =================================================
+       CREATE MEMORY ITEMS
+    ================================================= */
+
+    answered.forEach(
+        (item, index) => {
+
+            const memory =
+                document.createElement(
+                    "div"
+                );
+
+
+            memory.className =
+                "nayla-memory-item";
+
+
+            if (item.correct) {
+
+                memory.classList.add(
+                    "correct"
+                );
+
+            }
+            else {
+
+                memory.classList.add(
+                    "wrong"
+                );
+
+            }
+
+
+            const status =
+                item.correct
+                    ? "✓"
+                    : "×";
+
+
+            const question =
+                item.question ||
+                "";
+
+
+            const answer =
+                item.answer ||
+                "";
+
+
+            const correctAnswer =
+                item.correctAnswer ||
+                "";
+
+
+            memory.innerHTML =
+                `
+                <div class="nayla-memory-number">
+                    ${index + 1}
+                </div>
+
+                <div class="nayla-memory-body">
+
+                    <div class="nayla-memory-question">
+                        ${escapeHtml(
+                            question
+                        )}
+                    </div>
+
+                    <div class="nayla-memory-answer">
+
+                        <span class="nayla-memory-status">
+                            ${status}
+                        </span>
+
+                        <span>
+                            ${escapeHtml(
+                                answer
+                            )}
+                        </span>
+
+                    </div>
+
+                    ${
+                        !item.correct
+                            ? `
+                            <div class="nayla-memory-correct">
+
+                                Correct:
+                                ${escapeHtml(
+                                    correctAnswer
+                                )}
+
+                            </div>
+                            `
+                            : ""
+                    }
+
+                </div>
+                `;
+
+
+            naylaMemoryList.appendChild(
+                memory
+            );
 
         }
+    );
+
+
+    if (naylaMemory) {
+
+        naylaMemory.style.display =
+            "block";
 
     }
 
+}
 
-    /* =====================================================
-       RESTART / PLAY AGAIN
-    ===================================================== */
 
-    if (restartTriviaButton) {
+/* =====================================================
+   RESTART TRIVIA
+===================================================== */
 
-        restartTriviaButton.addEventListener(
-            "click",
-            () => {
+if (restartTriviaButton) {
 
-                startTrivia();
+    restartTriviaButton.addEventListener(
+        "click",
+        () => {
+
+            /*
+             * Hide result first.
+             */
+
+            if (triviaResult) {
+
+                triviaResult.style.display =
+                    "none";
 
             }
-        );
-
-    }
 
 
-    /* =====================================================
-       START BUTTON
-    ===================================================== */
+            /*
+             * Show game container.
+             */
 
-    if (startTriviaButton) {
+            if (triviaGame) {
 
-        startTriviaButton.addEventListener(
-            "click",
-            () => {
-
-                startTrivia();
+                triviaGame.style.display =
+                    "block";
 
             }
-        );
-
-    }
 
 
-    /* =====================================================
-       CLOSE TRIVIA
-    ===================================================== */
+            /*
+             * Start a completely new game.
+             */
 
-    if (closeTriviaButton) {
+            startTrivia();
 
-        closeTriviaButton.addEventListener(
-            "click",
-            () => {
+        }
+    );
 
-                if (triviaWorkspace) {
-
-                    triviaWorkspace.classList.remove(
-                        "active"
-                    );
-
-                }
+}
 
 
-                toolCards.forEach(card => {
+/* =====================================================
+   CLOSE TRIVIA
+===================================================== */
+
+if (closeTriviaButton) {
+
+    closeTriviaButton.addEventListener(
+        "click",
+        () => {
+
+            triviaState.active =
+                false;
+
+
+            triviaState.answered =
+                false;
+
+
+            if (triviaWorkspace) {
+
+                triviaWorkspace.classList.remove(
+                    "active"
+                );
+
+            }
+
+
+            if (triviaGame) {
+
+                triviaGame.style.display =
+                    "none";
+
+            }
+
+
+            if (triviaResult) {
+
+                triviaResult.style.display =
+                    "none";
+
+            }
+
+
+            if (triviaStart) {
+
+                triviaStart.style.display =
+                    "block";
+
+            }
+
+
+            resetTriviaUI();
+
+
+            /*
+             * Remove active tool state.
+             */
+
+            toolCards.forEach(
+                card => {
 
                     card.classList.remove(
                         "active"
                     );
 
-                });
+                }
+            );
 
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       INITIAL STATE
-    ===================================================== */
-
-    resetResult();
-
-
-    if (triviaWorkspace) {
-
-        resetTriviaUI();
-
-    }
-
-
-    console.log(
-        "AI JS READY"
+        }
     );
 
-});
+}
+
+
+/* =====================================================
+   START TRIVIA BUTTON
+===================================================== */
+
+if (startTriviaButton) {
+
+    startTriviaButton.addEventListener(
+        "click",
+        () => {
+
+            startTrivia();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   KEYBOARD SUPPORT
+===================================================== */
+
+if (triviaWorkspace) {
+
+    triviaWorkspace.addEventListener(
+        "keydown",
+        event => {
+
+            /*
+             * Do not interfere with text inputs.
+             */
+
+            if (
+                event.target.matches(
+                    "input, textarea, select"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+             * Only process keyboard shortcuts
+             * while trivia is active.
+             */
+
+            if (
+                !triviaState.active
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+             * A / B / C / D
+             */
+
+            const key =
+                event.key.toUpperCase();
+
+
+            if (
+                key >= "A" &&
+                key <= "D"
+            ) {
+
+                const index =
+                    key.charCodeAt(0) -
+                    65;
+
+
+                const buttons =
+                    triviaAnswers
+                        ? triviaAnswers.querySelectorAll(
+                            ".trivia-answer"
+                        )
+                        : [];
+
+
+                const button =
+                    buttons[index];
+
+
+                if (
+                    button &&
+                    !button.disabled
+                ) {
+
+                    button.click();
+
+                }
+
+            }
+
+
+            /*
+             * Enter / Space for Next.
+             */
+
+            if (
+                (
+                    event.key ===
+                    "Enter"
+                ||
+                    event.key ===
+                    " "
+                ) &&
+                triviaState.answered &&
+                nextTriviaButton &&
+                !nextTriviaButton.disabled
+            ) {
+
+                event.preventDefault();
+
+                nextTriviaButton.click();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   TRIVIA INITIAL UI
+===================================================== */
+
+if (triviaWorkspace) {
+
+    resetTriviaUI();
+
+}
+
+
+/* =====================================================
+   TRIVIA GLOBAL API
+===================================================== */
+
+window.NaylaAI =
+    window.NaylaAI || {};
+
+
+window.NaylaAI.trivia =
+    window.NaylaAI.trivia || {};
+
+
+window.NaylaAI.trivia.start =
+    startTrivia;
+
+
+window.NaylaAI.trivia.render =
+    renderTriviaQuestion;
+
+
+window.NaylaAI.trivia.answer =
+    answerTrivia;
+
+
+window.NaylaAI.trivia.finish =
+    finishTrivia;
+
+
+window.NaylaAI.trivia.reset =
+    resetTriviaUI;
+
+
+/*
+ * Backward-compatible global functions.
+ *
+ * Translation system uses these when the language
+ * changes while trivia is active.
+ */
+
+window.startTrivia =
+    startTrivia;
+
+
+window.renderTriviaQuestion =
+    renderTriviaQuestion;
+
+
+window.finishTrivia =
+    finishTrivia;
+
+
+window.resetTriviaUI =
+    resetTriviaUI;
+
+
+/*
+ * VERY IMPORTANT:
+ *
+ * Keep the exact same state object available globally.
+ * Do not create another triviaState object elsewhere.
+ */
+
+window.triviaState =
+    triviaState;
 /* =========================================================
-   AI PAGE TRANSLATION
-   Nayla Seijin Shiki
-   5 LANGUAGES
-   ---------------------------------------------------------
-   Supported:
-   en = English
-   id = Indonesian
-   ja = Japanese
-   zh = Chinese
-   ko = Korean
-
-   IMPORTANT:
-   Navbar is the MASTER language system.
-
-   Navbar uses:
-       localStorage.getItem("language")
-
-   Navbar dispatches:
-       window "languageChanged"
-
-   This file ONLY listens to that system.
+   PART 4 / 10
+   SAFE AI LANGUAGE BRIDGE
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    "use strict";
+/* =====================================================
+   LANGUAGE CONFIG
+===================================================== */
 
-    console.log("=================================");
-    console.log("AI TRANSLATION INITIALIZED");
-    console.log("=================================");
+const AI_SUPPORTED_LANGUAGES = [
+    "en",
+    "id",
+    "ja",
+    "zh",
+    "ko"
+];
 
 
-    /* =====================================================
-       SUPPORTED LANGUAGES
-    ===================================================== */
+/* =====================================================
+   GET CURRENT AI LANGUAGE
+===================================================== */
 
-    const supportedLanguages = [
-        "en",
-        "id",
-        "ja",
-        "zh",
-        "ko"
+function getAILanguage() {
+
+    const candidates = [
+
+        localStorage.getItem(
+            "language"
+        ),
+
+        localStorage.getItem(
+            "selectedLanguage"
+        ),
+
+        localStorage.getItem(
+            "currentLanguage"
+        ),
+
+        localStorage.getItem(
+            "lang"
+        ),
+
+        document.documentElement.lang
+
     ];
 
 
-    /* =====================================================
-       CURRENT LANGUAGE
-       FOLLOW NAVBAR
-    ===================================================== */
-
-    let currentLanguage =
-        localStorage.getItem("language") || "en";
-
-
-    if (
-        !supportedLanguages.includes(currentLanguage)
+    for (
+        const language of candidates
     ) {
 
-        currentLanguage = "en";
+        if (
+            typeof language ===
+                "string" &&
+            AI_SUPPORTED_LANGUAGES.includes(
+                language
+            )
+        ) {
+
+            return language;
+
+        }
 
     }
 
 
-    /* =====================================================
-       TRANSLATION DICTIONARY
-    ===================================================== */
+    return "en";
 
-    const AI_TRANSLATIONS = {
+}
 
 
-        /* =================================================
-           ENGLISH
-        ================================================= */
+/* =====================================================
+   SET AI LANGUAGE
+===================================================== */
 
-        en: {
+function setAILanguage(
+    language
+) {
 
-            ai: {
+    if (
+        !AI_SUPPORTED_LANGUAGES.includes(
+            language
+        )
+    ) {
 
-                heroLabel:
-                    "人工知能 • AI SHRINE",
+        language =
+            "en";
 
-                heroTitle:
-                    "A Little AI For Nayla",
+    }
 
-                heroDescription:
-                    "Create a beautiful message, wish, or letter for Nayla's Seijin Shiki.",
 
-                introLabel:
-                    "✦ CREATE SOMETHING SPECIAL ✦",
+    /*
+     * Keep all known language keys synchronized.
+     */
 
-                introTitle:
-                    "What would you like to write?",
+    localStorage.setItem(
+        "language",
+        language
+    );
 
-                introDescription:
-                    "Let the AI help you turn your thoughts into a meaningful message for Nayla.",
 
+    localStorage.setItem(
+        "selectedLanguage",
+        language
+    );
 
-                tools: {
 
-                    wish: {
-                        title:
-                            "Wish Generator",
+    localStorage.setItem(
+        "currentLanguage",
+        language
+    );
 
-                        description:
-                            "Create a beautiful birthday or Seijin Shiki wish.",
 
-                        button:
-                            "Create Wish →"
-                    },
+    localStorage.setItem(
+        "lang",
+        language
+    );
 
 
-                    enhance: {
-                        title:
-                            "Message Enhancer",
+    document.documentElement.lang =
+        language;
 
-                        description:
-                            "Turn your simple message into something more heartfelt.",
 
-                        button:
-                            "Enhance Message →"
-                    },
+    return language;
 
+}
 
-                    fortune: {
-                        title:
-                            "Seijin Message",
 
-                        description:
-                            "Receive a small message about growth and new beginnings.",
+/* =====================================================
+   SAFE TRANSLATION LOOKUP
+===================================================== */
 
-                        button:
-                            "Get Message →"
-                    },
+function getTranslation(
+    key,
+    fallback = ""
+) {
 
+    const language =
+        getAILanguage();
 
-                    letter: {
-                        title:
-                            "Letter Generator",
 
-                        description:
-                            "Create a longer personal letter for Nayla.",
+    /*
+     * AI_TRANSLATIONS must already exist.
+     *
+     * If a translation is missing,
+     * NEVER print the key itself.
+     *
+     * This is what prevents:
+     *
+     * trivia.game.next
+     * trivia.game.defaultQuestion
+     *
+     * from appearing in the UI.
+     */
 
-                        button:
-                            "Write Letter →"
-                    },
+    if (
+        typeof AI_TRANSLATIONS ===
+            "undefined"
+    ) {
 
+        return fallback;
 
-                    trivia: {
-                        title:
-                            "Nayla Trivia Master",
+    }
 
-                        description:
-                            "Challenge your knowledge about Nayla in an AI-powered quiz battle.",
 
-                        button:
-                            "Start Trivia Battle →"
-                    }
+    const languagePack =
+        AI_TRANSLATIONS[
+            language
+        ] ||
+        AI_TRANSLATIONS.en;
 
-                },
 
+    if (!languagePack) {
 
-                form: {
+        return fallback;
 
-                    name:
-                        "Your name",
+    }
 
-                    namePlaceholder:
-                        "Your name (optional)",
 
-                    message:
-                        "What would you like to say?",
+    const parts =
+        String(key)
+            .split(".");
 
-                    messagePlaceholder:
-                        "Write your thoughts here...",
 
-                    style:
-                        "Writing style",
+    let value =
+        languagePack;
 
-                    generate:
-                        "✨ Generate"
 
-                },
+    for (
+        const part of parts
+    ) {
 
+        if (
+            value &&
+            Object.prototype.hasOwnProperty.call(
+                value,
+                part
+            )
+        ) {
 
-                styles: {
+            value =
+                value[part];
 
-                    heartfelt:
-                        "Heartfelt",
+        }
+        else {
 
-                    sweet:
-                        "Sweet & Cute",
+            value =
+                undefined;
 
-                    elegant:
-                        "Elegant",
-
-                    simple:
-                        "Simple",
-
-                    poetic:
-                        "Poetic"
-
-                },
-
-
-                loading: {
-
-                    title:
-                        "Writing something special...",
-
-                    description:
-                        "Please wait a moment."
-
-                },
-
-
-                result: {
-
-                    placeholderTitle:
-                        "Your message will appear here.",
-
-                    placeholderDescription:
-                        "Choose an AI tool above, write your thoughts, and let the AI create something special.",
-
-                    message:
-                        "🌸 Your Message"
-
-                },
-
-
-                actions: {
-
-                    copy:
-                        "📋 Copy",
-
-                    regenerate:
-                        "🔄 Regenerate",
-
-                    guestbook:
-                        "🌸 Use in Guestbook"
-
-                },
-
-
-                dynamic: {
-
-                    wishLabel:
-                        "🌸 AI WISH GENERATOR",
-
-                    wishTitle:
-                        "Create Your Wish",
-
-                    wishDescription:
-                        "Create a beautiful birthday or Seijin Shiki wish for Nayla.",
-
-
-                    enhanceLabel:
-                        "✨ MESSAGE ENHANCER",
-
-                    enhanceTitle:
-                        "Enhance Your Message",
-
-                    enhanceDescription:
-                        "Turn your simple thoughts into a more heartfelt message for Nayla.",
-
-
-                    fortuneLabel:
-                        "🎋 SEIJIN MESSAGE",
-
-                    fortuneTitle:
-                        "Receive a Seijin Message",
-
-                    fortuneDescription:
-                        "Create a meaningful message about growth, adulthood and new beginnings.",
-
-
-                    letterLabel:
-                        "💌 LETTER GENERATOR",
-
-                    letterTitle:
-                        "Write a Letter for Nayla",
-
-                    letterDescription:
-                        "Create a longer and more personal letter for Nayla's Seijin Shiki."
-
-                },
-
-
-                closing: {
-
-                    title:
-                        "Words become memories.",
-
-                    description:
-                        "Maybe your message is only a few lines, but it may become a small memory someone remembers for a long time."
-
-                }
-
-            },
-
-
-            trivia: {
-
-                header: {
-
-                    label:
-                        "🤖 AI TRIVIA BATTLE",
-
-                    title:
-                        "Nayla Trivia Master",
-
-                    description:
-                        "How well do you really know Nayla?"
-
-                },
-
-
-                start: {
-
-                    label:
-                        "NAYLA AI",
-
-                    title:
-                        "I'll test your knowledge!",
-
-                    description:
-                        "Answer questions about Nayla, JKT48, her journey, performances, and memorable moments.",
-
-                    button:
-                        "⚔️ START BATTLE"
-
-                },
-
-
-                rules: {
-
-                    questions:
-                        "Questions",
-
-                    challenges:
-                        "Challenges",
-
-                    rank:
-                        "Master Rank"
-
-                },
-
-
-                game: {
-
-                    question:
-                        "QUESTION",
-
-                    score:
-                        "SCORE",
-
-                    level:
-                        "LEVEL",
-
-                    defaultQuestion:
-                        "I have a question for you...",
-
-                    next:
-                        "Next Question →"
-
-                },
-
-
-                result: {
-
-                    label:
-                        "TRIVIA COMPLETE",
-
-                    finalScore:
-                        "Final Score",
-
-                    achievements:
-                        "🏆 Achievements",
-
-                    memory:
-                        "🌸 A Little More About Nayla",
-
-                    playAgain:
-                        "🔄 PLAY AGAIN"
-
-                },
-
-
-                messages: {
-
-                    correct:
-                        "Correct! 🔥",
-
-                    wrong:
-                        "Not quite! 🌸",
-
-                    correctFallback:
-                        "You know Nayla well!",
-
-                    wrongAnswer:
-                        "Correct answer:",
-
-                    preparing:
-                        "Preparing your first challenge...",
-
-                    unableStart:
-                        "⚠️ Unable to start trivia.",
-
-                    unableAnswer:
-                        "⚠️ Unable to check answer."
-
-                },
-
-
-                ranks: {
-
-                    master: {
-                        title:
-                            "Nayla Master",
-
-                        description:
-                            "Perfect score! You really know Nayla."
-                    },
-
-                    expert: {
-                        title:
-                            "Nayla Expert",
-
-                        description:
-                            "Amazing! Your Nayla knowledge is impressive."
-                    },
-
-                    supporter: {
-                        title:
-                            "Nayla Supporter",
-
-                        description:
-                            "You know Nayla pretty well!"
-                    },
-
-                    casual: {
-                        title:
-                            "Casual Fan",
-
-                        description:
-                            "Keep exploring Nayla's journey!"
-                    }
-
-                },
-
-
-                achievements: {
-
-                    stage: {
-                        title:
-                            "Stage Specialist",
-
-                        description:
-                            "You answered every stage question correctly."
-                    },
-
-                    birthday: {
-                        title:
-                            "Birthday Detective",
-
-                        description:
-                            "You answered every birthday project question correctly."
-                    },
-
-                    peacock: {
-                        title:
-                            "Peacock Knowledge",
-
-                        description:
-                            "You know the BDTS peacock!"
-                    },
-
-                    master: {
-                        title:
-                            "Nayla Master",
-
-                        description:
-                            "Perfect 5/5! You truly know Nayla."
-                    },
-
-                    empty:
-                        "Keep playing to unlock achievements!"
-
-                },
-
-
-                final: {
-
-                    challenger:
-                        "Trivia Challenger",
-
-                    challengerMessage:
-                        "Good try! Let's learn more about Nayla.",
-
-                    master:
-                        "👑 NAYLA MASTER",
-
-                    masterMessage:
-                        "Perfect score! You really know Nayla! 🔥",
-
-                    expert:
-                        "🌟 NAYLA EXPERT",
-
-                    expertMessage:
-                        "Amazing knowledge! You're almost at Master level.",
-
-                    survivor:
-                        "🔥 HARD MODE SURVIVOR",
-
-                    survivorMessage:
-                        "Very impressive! Your Nayla knowledge is getting strong.",
-
-                    rising:
-                        "🌸 TRIVIA RISING",
-
-                    risingMessage:
-                        "Not bad! Keep learning more about Nayla."
-
-                }
-
-            }
-
-        },
-
-
-        /* =================================================
-           INDONESIAN
-        ================================================= */
-
-        id: {
-
-            ai: {
-
-                heroLabel:
-                    "人工知能 • AI SHRINE",
-
-                heroTitle:
-                    "Sedikit AI Untuk Nayla",
-
-                heroDescription:
-                    "Buat pesan, ucapan, atau surat yang indah untuk Seijin Shiki Nayla.",
-
-                introLabel:
-                    "✦ BUAT SESUATU YANG SPESIAL ✦",
-
-                introTitle:
-                    "Apa yang ingin kamu tulis?",
-
-                introDescription:
-                    "Biarkan AI membantu mengubah pikiranmu menjadi pesan yang bermakna untuk Nayla.",
-
-
-                tools: {
-
-                    wish: {
-                        title:
-                            "Pembuat Ucapan",
-
-                        description:
-                            "Buat ucapan ulang tahun atau Seijin Shiki yang indah.",
-
-                        button:
-                            "Buat Ucapan →"
-                    },
-
-                    enhance: {
-                        title:
-                            "Penyempurna Pesan",
-
-                        description:
-                            "Ubah pesan sederhana menjadi lebih menyentuh.",
-
-                        button:
-                            "Sempurnakan Pesan →"
-                    },
-
-                    fortune: {
-                        title:
-                            "Pesan Seijin",
-
-                        description:
-                            "Dapatkan pesan kecil tentang pertumbuhan dan awal yang baru.",
-
-                        button:
-                            "Dapatkan Pesan →"
-                    },
-
-                    letter: {
-                        title:
-                            "Pembuat Surat",
-
-                        description:
-                            "Buat surat pribadi yang lebih panjang untuk Nayla.",
-
-                        button:
-                            "Tulis Surat →"
-                    },
-
-                    trivia: {
-                        title:
-                            "Nayla Trivia Master",
-
-                        description:
-                            "Uji pengetahuanmu tentang Nayla dalam pertarungan kuis bertenaga AI.",
-
-                        button:
-                            "Mulai Trivia →"
-                    }
-
-                },
-
-
-                form: {
-
-                    name:
-                        "Nama kamu",
-
-                    namePlaceholder:
-                        "Nama kamu (opsional)",
-
-                    message:
-                        "Apa yang ingin kamu sampaikan?",
-
-                    messagePlaceholder:
-                        "Tulis pikiranmu di sini...",
-
-                    style:
-                        "Gaya tulisan",
-
-                    generate:
-                        "✨ Buat Pesan"
-
-                },
-
-
-                styles: {
-
-                    heartfelt:
-                        "Penuh Perasaan",
-
-                    sweet:
-                        "Manis & Imut",
-
-                    elegant:
-                        "Elegan",
-
-                    simple:
-                        "Sederhana",
-
-                    poetic:
-                        "Puitis"
-
-                },
-
-
-                loading: {
-
-                    title:
-                        "Sedang menulis sesuatu yang spesial...",
-
-                    description:
-                        "Tunggu sebentar."
-
-                },
-
-
-                result: {
-
-                    placeholderTitle:
-                        "Pesanmu akan muncul di sini.",
-
-                    placeholderDescription:
-                        "Pilih AI tool di atas, tuliskan pikiranmu, lalu biarkan AI membuat sesuatu yang spesial.",
-
-                    message:
-                        "🌸 Pesanmu"
-
-                },
-
-
-                actions: {
-
-                    copy:
-                        "📋 Salin",
-
-                    regenerate:
-                        "🔄 Buat Lagi",
-
-                    guestbook:
-                        "🌸 Gunakan di Guestbook"
-
-                },
-
-
-                dynamic: {
-
-                    wishLabel:
-                        "🌸 AI PEMBUAT UCAPAN",
-
-                    wishTitle:
-                        "Buat Ucapanmu",
-
-                    wishDescription:
-                        "Buat ucapan ulang tahun atau Seijin Shiki yang indah untuk Nayla.",
-
-                    enhanceLabel:
-                        "✨ PENYEMPURNA PESAN",
-
-                    enhanceTitle:
-                        "Sempurnakan Pesanmu",
-
-                    enhanceDescription:
-                        "Ubah pikiran sederhanamu menjadi pesan yang lebih menyentuh untuk Nayla.",
-
-                    fortuneLabel:
-                        "🎋 PESAN SEIJIN",
-
-                    fortuneTitle:
-                        "Terima Pesan Seijin",
-
-                    fortuneDescription:
-                        "Buat pesan bermakna tentang pertumbuhan, kedewasaan, dan awal yang baru.",
-
-                    letterLabel:
-                        "💌 PEMBUAT SURAT",
-
-                    letterTitle:
-                        "Tulis Surat untuk Nayla",
-
-                    letterDescription:
-                        "Buat surat yang lebih panjang dan personal untuk Seijin Shiki Nayla."
-
-                },
-
-
-                closing: {
-
-                    title:
-                        "Kata-kata menjadi kenangan.",
-
-                    description:
-                        "Mungkin pesanmu hanya terdiri dari beberapa baris, tetapi bisa menjadi kenangan kecil yang diingat seseorang untuk waktu yang lama."
-
-                }
-
-            },
-
-
-            trivia: {
-
-                header: {
-
-                    label:
-                        "🤖 PERTARUNGAN TRIVIA AI",
-
-                    title:
-                        "Nayla Trivia Master",
-
-                    description:
-                        "Seberapa baik kamu benar-benar mengenal Nayla?"
-
-                },
-
-
-                start: {
-
-                    label:
-                        "NAYLA AI",
-
-                    title:
-                        "Aku akan menguji pengetahuanmu!",
-
-                    description:
-                        "Jawab pertanyaan tentang Nayla, JKT48, perjalanannya, penampilan, dan momen-momen berkesan.",
-
-                    button:
-                        "⚔️ MULAI BERTARUNG"
-
-                },
-
-
-                rules: {
-
-                    questions:
-                        "Pertanyaan",
-
-                    challenges:
-                        "Tantangan",
-
-                    rank:
-                        "Peringkat Master"
-
-                },
-
-
-                game: {
-
-                    question:
-                        "PERTANYAAN",
-
-                    score:
-                        "SKOR",
-
-                    level:
-                        "LEVEL",
-
-                    defaultQuestion:
-                        "Aku punya pertanyaan untukmu...",
-
-                    next:
-                        "Pertanyaan Berikutnya →"
-
-                },
-
-
-                result: {
-
-                    label:
-                        "TRIVIA SELESAI",
-
-                    finalScore:
-                        "Skor Akhir",
-
-                    achievements:
-                        "🏆 Pencapaian",
-
-                    memory:
-                        "🌸 Sedikit Lagi Tentang Nayla",
-
-                    playAgain:
-                        "🔄 MAIN LAGI"
-
-                },
-
-
-                messages: {
-
-                    correct:
-                        "Benar! 🔥",
-
-                    wrong:
-                        "Belum tepat! 🌸",
-
-                    correctFallback:
-                        "Kamu mengenal Nayla dengan baik!",
-
-                    wrongAnswer:
-                        "Jawaban yang benar:",
-
-                    preparing:
-                        "Menyiapkan tantangan pertamamu...",
-
-                    unableStart:
-                        "⚠️ Trivia tidak dapat dimulai.",
-
-                    unableAnswer:
-                        "⚠️ Jawaban tidak dapat diperiksa."
-
-                },
-
-
-                ranks: {
-
-                    master: {
-                        title:
-                            "Nayla Master",
-
-                        description:
-                            "Skor sempurna! Kamu benar-benar mengenal Nayla."
-                    },
-
-                    expert: {
-                        title:
-                            "Nayla Expert",
-
-                        description:
-                            "Luar biasa! Pengetahuanmu tentang Nayla sangat mengesankan."
-                    },
-
-                    supporter: {
-                        title:
-                            "Nayla Supporter",
-
-                        description:
-                            "Kamu cukup mengenal Nayla!"
-                    },
-
-                    casual: {
-                        title:
-                            "Casual Fan",
-
-                        description:
-                            "Terus jelajahi perjalanan Nayla!"
-                    }
-
-                },
-
-
-                achievements: {
-
-                    stage: {
-                        title:
-                            "Stage Specialist",
-
-                        description:
-                            "Kamu menjawab semua pertanyaan tentang stage dengan benar."
-                    },
-
-                    birthday: {
-                        title:
-                            "Birthday Detective",
-
-                        description:
-                            "Kamu menjawab semua pertanyaan tentang birthday project dengan benar."
-                    },
-
-                    peacock: {
-                        title:
-                            "Peacock Knowledge",
-
-                        description:
-                            "Kamu tahu tentang burung merak BDTS!"
-                    },
-
-                    master: {
-                        title:
-                            "Nayla Master",
-
-                        description:
-                            "Sempurna 5/5! Kamu benar-benar mengenal Nayla."
-                    },
-
-                    empty:
-                        "Terus bermain untuk membuka pencapaian!"
-
-                },
-
-
-                final: {
-
-                    challenger:
-                        "Trivia Challenger",
-
-                    challengerMessage:
-                        "Percobaan yang bagus! Yuk, kenali Nayla lebih jauh.",
-
-                    master:
-                        "👑 NAYLA MASTER",
-
-                    masterMessage:
-                        "Skor sempurna! Kamu benar-benar mengenal Nayla! 🔥",
-
-                    expert:
-                        "🌟 NAYLA EXPERT",
-
-                    expertMessage:
-                        "Pengetahuanmu luar biasa! Sedikit lagi menuju Master.",
-
-                    survivor:
-                        "🔥 HARD MODE SURVIVOR",
-
-                    survivorMessage:
-                        "Sangat mengesankan! Pengetahuanmu tentang Nayla semakin kuat.",
-
-                    rising:
-                        "🌸 TRIVIA RISING",
-
-                    risingMessage:
-                        "Lumayan! Terus belajar lebih banyak tentang Nayla."
-
-                }
-
-            }
-
-        },
-
-
-        /* =================================================
-           JAPANESE
-        ================================================= */
-
-        ja: {
-
-            ai: {
-
-                heroLabel:
-                    "人工知能 • AI SHRINE",
-
-                heroTitle:
-                    "Naylaのための小さなAI",
-
-                heroDescription:
-                    "Naylaの成人式のために、素敵なメッセージやお祝い、手紙を作りましょう。",
-
-                introLabel:
-                    "✦ 特別なものを作ろう ✦",
-
-                introTitle:
-                    "何を書きたいですか？",
-
-                introDescription:
-                    "AIがあなたの想いをNaylaへの心のこもったメッセージに変えるお手伝いをします.",
-
-
-                tools: {
-
-                    wish: {
-                        title:
-                            "お祝いメッセージ",
-
-                        description:
-                            "誕生日や成人式のお祝いメッセージを作ります。",
-
-                        button:
-                            "お祝いを作る →"
-                    },
-
-                    enhance: {
-                        title:
-                            "メッセージを整える",
-
-                        description:
-                            "シンプルなメッセージを、より心のこもった文章にします。",
-
-                        button:
-                            "メッセージを整える →"
-                    },
-
-                    fortune: {
-                        title:
-                            "成人式メッセージ",
-
-                        description:
-                            "成長や新しい始まりについてのメッセージを作ります。",
-
-                        button:
-                            "メッセージを受け取る →"
-                    },
-
-                    letter: {
-                        title:
-                            "手紙ジェネレーター",
-
-                        description:
-                            "Naylaへの長くてパーソナルな手紙を作ります。",
-
-                        button:
-                            "手紙を書く →"
-                    },
-
-                    trivia: {
-                        title:
-                            "Nayla Trivia Master",
-
-                        description:
-                            "AIクイズでNaylaについての知識を試しましょう。",
-
-                        button:
-                            "トリビアを始める →"
-                    }
-
-                },
-
-
-                form: {
-
-                    name:
-                        "あなたの名前",
-
-                    namePlaceholder:
-                        "あなたの名前（任意）",
-
-                    message:
-                        "何を伝えたいですか？",
-
-                    messagePlaceholder:
-                        "ここにあなたの想いを書いてください...",
-
-                    style:
-                        "文章のスタイル",
-
-                    generate:
-                        "✨ メッセージを作る"
-
-                },
-
-
-                styles: {
-
-                    heartfelt:
-                        "心のこもった",
-
-                    sweet:
-                        "かわいくて優しい",
-
-                    elegant:
-                        "エレガント",
-
-                    simple:
-                        "シンプル",
-
-                    poetic:
-                        "詩的"
-
-                },
-
-
-                loading: {
-
-                    title:
-                        "特別なメッセージを書いています...",
-
-                    description:
-                        "少々お待ちください。"
-
-                },
-
-
-                result: {
-
-                    placeholderTitle:
-                        "ここにメッセージが表示されます。",
-
-                    placeholderDescription:
-                        "上のAIツールを選び、想いを書いて、AIに特別なメッセージを作ってもらいましょう。",
-
-                    message:
-                        "🌸 あなたのメッセージ"
-
-                },
-
-
-                actions: {
-
-                    copy:
-                        "📋 コピー",
-
-                    regenerate:
-                        "🔄 もう一度作る",
-
-                    guestbook:
-                        "🌸 ゲストブックで使用"
-
-                },
-
-
-                dynamic: {
-
-                    wishLabel:
-                        "🌸 AI お祝いメッセージ",
-
-                    wishTitle:
-                        "お祝いメッセージを作る",
-
-                    wishDescription:
-                        "Naylaの誕生日や成人式のための素敵なお祝いメッセージを作ります。",
-
-                    enhanceLabel:
-                        "✨ メッセージを整える",
-
-                    enhanceTitle:
-                        "メッセージをより素敵に",
-
-                    enhanceDescription:
-                        "あなたの想いを、より心のこもったNaylaへのメッセージにします。",
-
-                    fortuneLabel:
-                        "🎋 成人式メッセージ",
-
-                    fortuneTitle:
-                        "成人式メッセージを受け取る",
-
-                    fortuneDescription:
-                        "成長、大人への一歩、新しい始まりについてのメッセージを作ります。",
-
-                    letterLabel:
-                        "💌 手紙ジェネレーター",
-
-                    letterTitle:
-                        "Naylaへの手紙を書く",
-
-                    letterDescription:
-                        "Naylaの成人式のために、より長くパーソナルな手紙を作ります。"
-
-                },
-
-
-                closing: {
-
-                    title:
-                        "言葉は思い出になる。",
-
-                    description:
-                        "あなたのメッセージは数行だけかもしれません。でも、それは誰かの心に長く残る小さな思い出になるかもしれません。"
-
-                }
-
-            },
-
-
-            trivia: {
-
-                header: {
-
-                    label:
-                        "🤖 AI トリビアバトル",
-
-                    title:
-                        "Nayla Trivia Master",
-
-                    description:
-                        "あなたはNaylaのことをどれくらい知っていますか？"
-
-                },
-
-
-                start: {
-
-                    label:
-                        "NAYLA AI",
-
-                    title:
-                        "あなたの知識を試します！",
-
-                    description:
-                        "Nayla、JKT48、これまでの歩み、パフォーマンス、思い出に残る瞬間について答えてください。",
-
-                    button:
-                        "⚔️ バトル開始"
-
-                },
-
-
-                rules: {
-
-                    questions:
-                        "問題",
-
-                    challenges:
-                        "チャレンジ",
-
-                    rank:
-                        "マスターランク"
-
-                },
-
-
-                game: {
-
-                    question:
-                        "問題",
-
-                    score:
-                        "スコア",
-
-                    level:
-                        "レベル",
-
-                    defaultQuestion:
-                        "あなたに質問があります...",
-
-                    next:
-                        "次の問題 →"
-
-                },
-
-
-                result: {
-
-                    label:
-                        "トリビア終了",
-
-                    finalScore:
-                        "最終スコア",
-
-                    achievements:
-                        "🏆 アチーブメント",
-
-                    memory:
-                        "🌸 Naylaについてもう少し",
-
-                    playAgain:
-                        "🔄 もう一度プレイ"
-
-                },
-
-
-                messages: {
-
-                    correct:
-                        "正解！ 🔥",
-
-                    wrong:
-                        "惜しい！ 🌸",
-
-                    correctFallback:
-                        "Naylaのことをよく知っていますね！",
-
-                    wrongAnswer:
-                        "正解：",
-
-                    preparing:
-                        "最初のチャレンジを準備しています...",
-
-                    unableStart:
-                        "⚠️ トリビアを開始できませんでした。",
-
-                    unableAnswer:
-                        "⚠️ 回答を確認できませんでした。"
-
-                },
-
-
-                ranks: {
-
-                    master: {
-                        title:
-                            "Nayla Master",
-
-                        description:
-                            "パーフェクトスコア！Naylaのことを本当によく知っていますね。"
-                    },
-
-                    expert: {
-                        title:
-                            "Nayla Expert",
-
-                        description:
-                            "素晴らしい！Naylaについての知識がすごいです。"
-                    },
-
-                    supporter: {
-                        title:
-                            "Nayla Supporter",
-
-                        description:
-                            "Naylaのことをかなり知っていますね！"
-                    },
-
-                    casual: {
-                        title:
-                            "Casual Fan",
-
-                        description:
-                            "これからもNaylaの歩みを楽しみましょう！"
-                    }
-
-                },
-
-
-                achievements: {
-
-                    stage: {
-                        title:
-                            "Stage Specialist",
-
-                        description:
-                            "ステージに関する問題をすべて正解しました。"
-                    },
-
-                    birthday: {
-                        title:
-                            "Birthday Detective",
-
-                        description:
-                            "バースデープロジェクトに関する問題をすべて正解しました。"
-                    },
-
-                    peacock: {
-                        title:
-                            "Peacock Knowledge",
-
-                        description:
-                            "BDTSのクジャクについて知っていますね！"
-                    },
-
-                    master: {
-                        title:
-                            "Nayla Master",
-
-                        description:
-                            "5/5パーフェクト！Naylaのことを本当によく知っています。"
-                    },
-
-                    empty:
-                        "プレイを続けてアチーブメントを解除しましょう！"
-
-                },
-
-
-                final: {
-
-                    challenger:
-                        "Trivia Challenger",
-
-                    challengerMessage:
-                        "よく頑張りました！もっとNaylaについて知っていきましょう。",
-
-                    master:
-                        "👑 NAYLA MASTER",
-
-                    masterMessage:
-                        "パーフェクトスコア！Naylaのことを本当によく知っています！🔥",
-
-                    expert:
-                        "🌟 NAYLA EXPERT",
-
-                    expertMessage:
-                        "素晴らしい知識です！マスターまであと少し！",
-
-                    survivor:
-                        "🔥 HARD MODE SURVIVOR",
-
-                    survivorMessage:
-                        "すごい！Naylaについての知識がどんどん深まっています。",
-
-                    rising:
-                        "🌸 TRIVIA RISING",
-
-                    risingMessage:
-                        "なかなかです！もっとNaylaについて学んでみましょう。"
-
-                }
-
-            }
-
-        },
-
-
-        /* =================================================
-           CHINESE
-        ================================================= */
-
-        zh: {
-
-            ai: {
-
-                heroLabel:
-                    "人工智能 • AI 神社",
-
-                heroTitle:
-                    "给 Nayla 的小小 AI",
-
-                heroDescription:
-                    "为 Nayla 的成人礼创作一段美好的祝福、留言或信件。",
-
-                introLabel:
-                    "✦ 创造一些特别的回忆 ✦",
-
-                introTitle:
-                    "你想写些什么？",
-
-                introDescription:
-                    "让 AI 帮助你把心中的想法变成一段送给 Nayla 的特别留言。",
-
-
-                tools: {
-
-                    wish: {
-                        title:
-                            "祝福生成器",
-
-                        description:
-                            "为生日或成人礼创作一段美好的祝福。",
-
-                        button:
-                            "生成祝福 →"
-                    },
-
-                    enhance: {
-                        title:
-                            "留言润色",
-
-                        description:
-                            "把简单的留言变成更加真挚动人的文字。",
-
-                        button:
-                            "润色留言 →"
-                    },
-
-                    fortune: {
-                        title:
-                            "成人礼寄语",
-
-                        description:
-                            "获得一段关于成长与新开始的小小寄语。",
-
-                        button:
-                            "获取寄语 →"
-                    },
-
-                    letter: {
-                        title:
-                            "信件生成器",
-
-                        description:
-                            "为 Nayla 创作一封更长、更个人化的信。",
-
-                        button:
-                            "写一封信 →"
-                    },
-
-                    trivia: {
-                        title:
-                            "Nayla Trivia Master",
-
-                        description:
-                            "通过 AI 问答挑战你对 Nayla 的了解。",
-
-                        button:
-                            "开始 Trivia →"
-                    }
-
-                },
-
-
-                form: {
-
-                    name:
-                        "你的名字",
-
-                    namePlaceholder:
-                        "你的名字（可选）",
-
-                    message:
-                        "你想说些什么？",
-
-                    messagePlaceholder:
-                        "在这里写下你的想法...",
-
-                    style:
-                        "写作风格",
-
-                    generate:
-                        "✨ 生成留言"
-
-                },
-
-
-                styles: {
-
-                    heartfelt:
-                        "真挚感人",
-
-                    sweet:
-                        "甜美可爱",
-
-                    elegant:
-                        "优雅",
-
-                    simple:
-                        "简单",
-
-                    poetic:
-                        "诗意"
-
-                },
-
-
-                loading: {
-
-                    title:
-                        "正在写一些特别的内容...",
-
-                    description:
-                        "请稍等片刻。"
-
-                },
-
-
-                result: {
-
-                    placeholderTitle:
-                        "你的留言会出现在这里。",
-
-                    placeholderDescription:
-                        "选择上面的 AI 工具，写下你的想法，让 AI 为你创造一些特别的内容。",
-
-                    message:
-                        "🌸 你的留言"
-
-                },
-
-
-                actions: {
-
-                    copy:
-                        "📋 复制",
-
-                    regenerate:
-                        "🔄 重新生成",
-
-                    guestbook:
-                        "🌸 用于留言簿"
-
-                },
-
-
-                dynamic: {
-
-                    wishLabel:
-                        "🌸 AI 祝福生成器",
-
-                    wishTitle:
-                        "创建你的祝福",
-
-                    wishDescription:
-                        "为 Nayla 的生日或成人礼创作一段美好的祝福。",
-
-                    enhanceLabel:
-                        "✨ 留言润色",
-
-                    enhanceTitle:
-                        "让你的留言更特别",
-
-                    enhanceDescription:
-                        "把简单的想法变成一段更加真挚的 Nayla 留言。",
-
-                    fortuneLabel:
-                        "🎋 成人礼寄语",
-
-                    fortuneTitle:
-                        "获取成人礼寄语",
-
-                    fortuneDescription:
-                        "创作一段关于成长、成年和新开始的有意义寄语。",
-
-                    letterLabel:
-                        "💌 信件生成器",
-
-                    letterTitle:
-                        "写一封给 Nayla 的信",
-
-                    letterDescription:
-                        "为 Nayla 的成人礼创作一封更长、更个人化的信。"
-
-                },
-
-
-                closing: {
-
-                    title:
-                        "文字会成为回忆。",
-
-                    description:
-                        "你的留言也许只有几行，但它可能会成为某个人长久记住的一段小小回忆。"
-
-                }
-
-            },
-
-
-            trivia: {
-
-                header: {
-
-                    label:
-                        "🤖 AI Trivia 对战",
-
-                    title:
-                        "Nayla Trivia Master",
-
-                    description:
-                        "你到底有多了解 Nayla？"
-
-                },
-
-
-                start: {
-
-                    label:
-                        "NAYLA AI",
-
-                    title:
-                        "让我来测试你的知识！",
-
-                    description:
-                        "回答关于 Nayla、JKT48、她的成长历程、舞台表演和难忘瞬间的问题。",
-
-                    button:
-                        "⚔️ 开始挑战"
-
-                },
-
-
-                rules: {
-
-                    questions:
-                        "问题",
-
-                    challenges:
-                        "挑战",
-
-                    rank:
-                        "大师等级"
-
-                },
-
-
-                game: {
-
-                    question:
-                        "问题",
-
-                    score:
-                        "分数",
-
-                    level:
-                        "等级",
-
-                    defaultQuestion:
-                        "我有一个问题想问你...",
-
-                    next:
-                        "下一题 →"
-
-                },
-
-
-                result: {
-
-                    label:
-                        "Trivia 完成",
-
-                    finalScore:
-                        "最终得分",
-
-                    achievements:
-                        "🏆 成就",
-
-                    memory:
-                        "🌸 更多关于 Nayla",
-
-                    playAgain:
-                        "🔄 再玩一次"
-
-                },
-
-
-                messages: {
-
-                    correct:
-                        "答对了！ 🔥",
-
-                    wrong:
-                        "差一点！ 🌸",
-
-                    correctFallback:
-                        "你很了解 Nayla！",
-
-                    wrongAnswer:
-                        "正确答案：",
-
-                    preparing:
-                        "正在准备第一个挑战...",
-
-                    unableStart:
-                        "⚠️ 无法开始 Trivia。",
-
-                    unableAnswer:
-                        "⚠️ 无法检查答案。"
-
-                },
-
-
-                ranks: {
-
-                    master: {
-                        title:
-                            "Nayla Master",
-
-                        description:
-                            "满分！你真的非常了解 Nayla。"
-                    },
-
-                    expert: {
-                        title:
-                            "Nayla Expert",
-
-                        description:
-                            "太棒了！你对 Nayla 的了解令人印象深刻。"
-                    },
-
-                    supporter: {
-                        title:
-                            "Nayla Supporter",
-
-                        description:
-                            "你对 Nayla 相当了解！"
-                    },
-
-                    casual: {
-                        title:
-                            "Casual Fan",
-
-                        description:
-                            "继续探索 Nayla 的成长旅程吧！"
-                    }
-
-                },
-
-
-                achievements: {
-
-                    stage: {
-                        title:
-                            "Stage Specialist",
-
-                        description:
-                            "你正确回答了所有舞台相关问题。"
-                    },
-
-                    birthday: {
-                        title:
-                            "Birthday Detective",
-
-                        description:
-                            "你正确回答了所有生日企划相关问题。"
-                    },
-
-                    peacock: {
-                        title:
-                            "Peacock Knowledge",
-
-                        description:
-                            "你知道 BDTS 的孔雀！"
-                    },
-
-                    master: {
-                        title:
-                            "Nayla Master",
-
-                        description:
-                            "5/5 完美！你真的很了解 Nayla。"
-                    },
-
-                    empty:
-                        "继续游戏来解锁更多成就！"
-
-                },
-
-
-                final: {
-
-                    challenger:
-                        "Trivia Challenger",
-
-                    challengerMessage:
-                        "不错的尝试！继续了解更多关于 Nayla 的故事吧。",
-
-                    master:
-                        "👑 NAYLA MASTER",
-
-                    masterMessage:
-                        "满分！你真的非常了解 Nayla！🔥",
-
-                    expert:
-                        "🌟 NAYLA EXPERT",
-
-                    expertMessage:
-                        "知识太棒了！距离 Master 只差一步！",
-
-                    survivor:
-                        "🔥 HARD MODE SURVIVOR",
-
-                    survivorMessage:
-                        "非常厉害！你对 Nayla 的了解越来越深了。",
-
-                    rising:
-                        "🌸 TRIVIA RISING",
-
-                    risingMessage:
-                        "还不错！继续学习更多关于 Nayla 的故事吧。"
-
-                }
-
-            }
-
-        },
-
-
-        /* =================================================
-           KOREAN
-        ================================================= */
-
-        ko: {
-
-            ai: {
-
-                heroLabel:
-                    "인공지능 • AI SHRINE",
-
-                heroTitle:
-                    "Nayla를 위한 작은 AI",
-
-                heroDescription:
-                    "Nayla의 성인식을 위한 아름다운 메시지, 축하 글 또는 편지를 만들어보세요.",
-
-                introLabel:
-                    "✦ 특별한 것을 만들어보세요 ✦",
-
-                introTitle:
-                    "무엇을 쓰고 싶나요?",
-
-                introDescription:
-                    "AI가 여러분의 생각을 Nayla에게 전하는 의미 있는 메시지로 만들어드립니다.",
-
-
-                tools: {
-
-                    wish: {
-                        title:
-                            "축하 메시지 생성기",
-
-                        description:
-                            "생일이나 성인식을 위한 아름다운 축하 메시지를 만들어보세요.",
-
-                        button:
-                            "축하 메시지 만들기 →"
-                    },
-
-                    enhance: {
-                        title:
-                            "메시지 다듬기",
-
-                        description:
-                            "간단한 메시지를 더욱 진심 어린 글로 바꿔드립니다.",
-
-                        button:
-                            "메시지 다듬기 →"
-                    },
-
-                    fortune: {
-                        title:
-                            "성인식 메시지",
-
-                        description:
-                            "성장과 새로운 시작에 관한 작은 메시지를 받아보세요.",
-
-                        button:
-                            "메시지 받기 →"
-                    },
-
-                    letter: {
-                        title:
-                            "편지 생성기",
-
-                        description:
-                            "Nayla를 위한 더 길고 개인적인 편지를 만들어보세요.",
-
-                        button:
-                            "편지 쓰기 →"
-                    },
-
-                    trivia: {
-                        title:
-                            "Nayla Trivia Master",
-
-                        description:
-                            "AI 퀴즈를 통해 Nayla에 대해 얼마나 알고 있는지 도전해보세요.",
-
-                        button:
-                            "Trivia 시작하기 →"
-                    }
-
-                },
-
-
-                form: {
-
-                    name:
-                        "이름",
-
-                    namePlaceholder:
-                        "이름 (선택사항)",
-
-                    message:
-                        "무엇을 전하고 싶나요?",
-
-                    messagePlaceholder:
-                        "여기에 여러분의 생각을 적어주세요...",
-
-                    style:
-                        "글쓰기 스타일",
-
-                    generate:
-                        "✨ 메시지 만들기"
-
-                },
-
-
-                styles: {
-
-                    heartfelt:
-                        "진심 어린",
-
-                    sweet:
-                        "달콤하고 귀여운",
-
-                    elegant:
-                        "우아한",
-
-                    simple:
-                        "심플한",
-
-                    poetic:
-                        "시적인"
-
-                },
-
-
-                loading: {
-
-                    title:
-                        "특별한 메시지를 작성하고 있습니다...",
-
-                    description:
-                        "잠시만 기다려주세요."
-
-                },
-
-
-                result: {
-
-                    placeholderTitle:
-                        "여기에 메시지가 표시됩니다.",
-
-                    placeholderDescription:
-                        "위의 AI 도구를 선택하고 생각을 적어주세요. AI가 특별한 메시지를 만들어드립니다.",
-
-                    message:
-                        "🌸 여러분의 메시지"
-
-                },
-
-
-                actions: {
-
-                    copy:
-                        "📋 복사",
-
-                    regenerate:
-                        "🔄 다시 만들기",
-
-                    guestbook:
-                        "🌸 방명록에서 사용"
-
-                },
-
-
-                dynamic: {
-
-                    wishLabel:
-                        "🌸 AI 축하 메시지 생성기",
-
-                    wishTitle:
-                        "축하 메시지 만들기",
-
-                    wishDescription:
-                        "Nayla의 생일이나 성인식을 위한 아름다운 축하 메시지를 만들어보세요.",
-
-                    enhanceLabel:
-                        "✨ 메시지 다듬기",
-
-                    enhanceTitle:
-                        "메시지를 더 특별하게",
-
-                    enhanceDescription:
-                        "여러분의 생각을 더욱 진심 어린 Nayla를 위한 메시지로 만들어드립니다.",
-
-                    fortuneLabel:
-                        "🎋 성인식 메시지",
-
-                    fortuneTitle:
-                        "성인식 메시지 받기",
-
-                    fortuneDescription:
-                        "성장, 성인이 되는 과정과 새로운 시작에 관한 의미 있는 메시지를 만들어보세요.",
-
-                    letterLabel:
-                        "💌 편지 생성기",
-
-                    letterTitle:
-                        "Nayla에게 편지 쓰기",
-
-                    letterDescription:
-                        "Nayla의 성인식을 위한 더 길고 개인적인 편지를 만들어보세요."
-
-                },
-
-
-                closing: {
-
-                    title:
-                        "말은 추억이 됩니다.",
-
-                    description:
-                        "여러분의 메시지는 몇 줄뿐일 수도 있지만, 누군가에게 오랫동안 기억되는 작은 추억이 될 수 있습니다."
-
-                }
-
-            },
-
-
-            trivia: {
-
-                header: {
-
-                    label:
-                        "🤖 AI TRIVIA BATTLE",
-
-                    title:
-                        "Nayla Trivia Master",
-
-                    description:
-                        "당신은 Nayla를 얼마나 잘 알고 있나요?"
-
-                },
-
-
-                start: {
-
-                    label:
-                        "NAYLA AI",
-
-                    title:
-                        "여러분의 지식을 테스트해볼게요!",
-
-                    description:
-                        "Nayla, JKT48, 그녀의 여정, 공연 그리고 기억에 남는 순간에 관한 질문에 답해보세요.",
-
-                    button:
-                        "⚔️ 배틀 시작"
-
-                },
-
-
-                rules: {
-
-                    questions:
-                        "문제",
-
-                    challenges:
-                        "도전",
-
-                    rank:
-                        "마스터 랭크"
-
-                },
-
-
-                game: {
-
-                    question:
-                        "문제",
-
-                    score:
-                        "점수",
-
-                    level:
-                        "레벨",
-
-                    defaultQuestion:
-                        "여러분에게 질문이 있어요...",
-
-                    next:
-                        "다음 문제 →"
-
-                },
-
-
-                result: {
-
-                    label:
-                        "TRIVIA 완료",
-
-                    finalScore:
-                        "최종 점수",
-
-                    achievements:
-                        "🏆 업적",
-
-                    memory:
-                        "🌸 Nayla에 대해 조금 더",
-
-                    playAgain:
-                        "🔄 다시 플레이"
-
-                },
-
-
-                messages: {
-
-                    correct:
-                        "정답입니다! 🔥",
-
-                    wrong:
-                        "아쉽네요! 🌸",
-
-                    correctFallback:
-                        "Nayla를 정말 잘 알고 있네요!",
-
-                    wrongAnswer:
-                        "정답:",
-
-                    preparing:
-                        "첫 번째 도전을 준비하고 있습니다...",
-
-                    unableStart:
-                        "⚠️ Trivia를 시작할 수 없습니다.",
-
-                    unableAnswer:
-                        "⚠️ 답변을 확인할 수 없습니다."
-
-                },
-
-
-                ranks: {
-
-                    master: {
-                        title:
-                            "Nayla Master",
-
-                        description:
-                            "만점입니다! Nayla를 정말 잘 알고 있네요."
-                    },
-
-                    expert: {
-                        title:
-                            "Nayla Expert",
-
-                        description:
-                            "대단해요! Nayla에 대한 지식이 정말 놀랍습니다."
-                    },
-
-                    supporter: {
-                        title:
-                            "Nayla Supporter",
-
-                        description:
-                            "Nayla를 꽤 잘 알고 있네요!"
-                    },
-
-                    casual: {
-                        title:
-                            "Casual Fan",
-
-                        description:
-                            "Nayla의 여정을 계속 알아가보세요!"
-                    }
-
-                },
-
-
-                achievements: {
-
-                    stage: {
-                        title:
-                            "Stage Specialist",
-
-                        description:
-                            "무대에 관한 모든 문제를 맞혔습니다."
-                    },
-
-                    birthday: {
-                        title:
-                            "Birthday Detective",
-
-                        description:
-                            "생일 프로젝트에 관한 모든 문제를 맞혔습니다."
-                    },
-
-                    peacock: {
-                        title:
-                            "Peacock Knowledge",
-
-                        description:
-                            "BDTS의 공작새에 대해 알고 있네요!"
-                    },
-
-                    master: {
-                        title:
-                            "Nayla Master",
-
-                        description:
-                            "5/5 완벽합니다! Nayla를 정말 잘 알고 있네요."
-                    },
-
-                    empty:
-                        "계속 플레이하여 업적을 잠금 해제하세요!"
-
-                },
-
-
-                final: {
-
-                    challenger:
-                        "Trivia Challenger",
-
-                    challengerMessage:
-                        "좋은 도전이었어요! Nayla에 대해 더 알아가 봐요.",
-
-                    master:
-                        "👑 NAYLA MASTER",
-
-                    masterMessage:
-                        "완벽한 점수! Nayla를 정말 잘 알고 있네요! 🔥",
-
-                    expert:
-                        "🌟 NAYLA EXPERT",
-
-                    expertMessage:
-                        "놀라운 지식이에요! Master까지 거의 다 왔어요.",
-
-                    survivor:
-                        "🔥 HARD MODE SURVIVOR",
-
-                    survivorMessage:
-                        "정말 대단해요! Nayla에 대한 지식이 점점 깊어지고 있어요.",
-
-                    rising:
-                        "🌸 TRIVIA RISING",
-
-                    risingMessage:
-                        "나쁘지 않아요! Nayla에 대해 더 많이 배워보세요."
-
-                }
-
-            }
+            break;
 
         }
 
-    };
+    }
 
 
-    /* =====================================================
-       GET NESTED TRANSLATION
-    ===================================================== */
+    /*
+     * Valid translation.
+     */
 
-    function getTranslation(
-        path,
-        language = currentLanguage
+    if (
+        typeof value ===
+            "string" &&
+        value.trim()
     ) {
 
-        const dictionary =
-            AI_TRANSLATIONS[language] ||
+        return value;
+
+    }
+
+
+    /*
+     * Try English fallback.
+     */
+
+    if (
+        language !== "en" &&
+        AI_TRANSLATIONS.en
+    ) {
+
+        let englishValue =
             AI_TRANSLATIONS.en;
 
 
-        return path
-            .split(".")
-            .reduce(
-                (object, key) => {
+        for (
+            const part of parts
+        ) {
 
-                    if (
-                        object &&
-                        Object.prototype.hasOwnProperty.call(
-                            object,
-                            key
-                        )
-                    ) {
+            if (
+                englishValue &&
+                Object.prototype.hasOwnProperty.call(
+                    englishValue,
+                    part
+                )
+            ) {
 
-                        return object[key];
+                englishValue =
+                    englishValue[part];
 
-                    }
+            }
+            else {
 
-                    return null;
+                englishValue =
+                    undefined;
 
-                },
-                dictionary
-            );
+                break;
+
+            }
+
+        }
+
+
+        if (
+            typeof englishValue ===
+                "string" &&
+            englishValue.trim()
+        ) {
+
+            return englishValue;
+
+        }
 
     }
 
 
-    /* =====================================================
-       APPLY AI TRANSLATION
-    ===================================================== */
+    /*
+     * NEVER return the translation key.
+     */
 
-    function translateAIPage() {
+    return fallback;
 
-        currentLanguage =
-            localStorage.getItem("language") ||
-            "en";
+}
 
 
-        if (
-            !supportedLanguages.includes(
-                currentLanguage
-            )
-        ) {
+/* =====================================================
+   SAFE TEXT APPLICATION
+===================================================== */
 
-            currentLanguage = "en";
+function setTranslatedText(
+    element,
+    key,
+    fallback = ""
+) {
 
-        }
+    if (!element) {
 
+        return;
 
-        /* ================================================
-           NORMAL TEXT
-        ================================================= */
-
-document
-    .querySelectorAll("[data-i18n]")
-    .forEach(element => {
-
-        const key =
-            element.dataset.i18n;
-
-        if (!key) {
-            return;
-        }
-
-        /*
-        =====================================================
-        IMPORTANT - TRIVIA QUESTION PROTECTION
-        =====================================================
-
-        #triviaQuestion menggunakan data-i18n hanya untuk
-        placeholder awal.
-
-        Setelah Trivia dimulai, isi element ini berasal dari
-        backend /api/ai/trivia/start.
-
-        JANGAN biarkan sistem translation menimpanya kembali
-        menjadi "I have a question for you..."
-        */
-
-        if (
-            element.id === "triviaQuestion" &&
-            triviaState &&
-            triviaState.active === true
-        ) {
-            return;
-        }
-
-        const translation =
-            getTranslation(key);
-
-        if (
-            translation !== null &&
-            translation !== undefined
-        ) {
-            element.textContent =
-                translation;
-        }
-
-    });
+    }
 
 
-        /* ================================================
-           PLACEHOLDERS
-        ================================================= */
-
-        document
-            .querySelectorAll(
-                "[data-i18n-placeholder]"
-            )
-            .forEach(
-                element => {
-
-                    const key =
-                        element.dataset.i18nPlaceholder;
+    const text =
+        getTranslation(
+            key,
+            fallback
+        );
 
 
-                    const translation =
-                        getTranslation(
-                            key
-                        );
+    if (
+        text &&
+        text.trim()
+    ) {
+
+        element.textContent =
+            text;
+
+    }
+
+}
 
 
-                    if (
-                        translation !== null &&
-                        translation !== undefined
-                    ) {
+/* =====================================================
+   SAFE PLACEHOLDER APPLICATION
+===================================================== */
 
-                        element.placeholder =
-                            translation;
+function setTranslatedPlaceholder(
+    element,
+    key,
+    fallback = ""
+) {
 
-                    }
+    if (!element) {
 
-                }
-            );
+        return;
 
-
-        /* ================================================
-           SELECT OPTIONS
-        ================================================= */
-
-        document
-            .querySelectorAll(
-                "#aiStyle option[data-i18n]"
-            )
-            .forEach(
-                option => {
-
-                    const translation =
-                        getTranslation(
-                            option.dataset.i18n
-                        );
+    }
 
 
-                    if (
-                        translation !== null &&
-                        translation !== undefined
-                    ) {
-
-                        option.textContent =
-                            translation;
-
-                    }
-
-                }
-            );
+    const text =
+        getTranslation(
+            key,
+            fallback
+        );
 
 
-        /* ================================================
-           DYNAMIC AI WORKSPACE
-        ================================================= */
+    if (
+        text &&
+        text.trim()
+    ) {
 
-        translateDynamicWorkspace();
+        element.placeholder =
+            text;
+
+    }
+
+}
 
 
-        /* ================================================
-           DYNAMIC TRIVIA
-        ================================================= */
+/* =====================================================
+   TRANSLATE TRIVIA STATIC UI
+===================================================== */
+
+function translateTriviaDynamic() {
+
+    /*
+     * IMPORTANT:
+     *
+     * We translate ONLY static labels.
+     *
+     * We DO NOT translate:
+     *
+     * triviaQuestion
+     * triviaAnswers
+     * currentQuestion
+     * correctAnswer
+     *
+     * because those are generated by the backend
+     * using the selected language.
+     */
+
+
+    const triviaLabel =
+        document.querySelector(
+            "[data-i18n='trivia.header.label']"
+        );
+
+
+    const triviaTitle =
+        document.querySelector(
+            "[data-i18n='trivia.header.title']"
+        );
+
+
+    const triviaDescription =
+        document.querySelector(
+            "[data-i18n='trivia.header.description']"
+        );
+
+
+    const triviaStartLabel =
+        document.querySelector(
+            "[data-i18n='trivia.start.label']"
+        );
+
+
+    const triviaStartTitle =
+        document.querySelector(
+            "[data-i18n='trivia.start.title']"
+        );
+
+
+    const triviaStartDescription =
+        document.querySelector(
+            "[data-i18n='trivia.start.description']"
+        );
+
+
+    const triviaStartButton =
+        document.getElementById(
+            "startTrivia"
+        );
+
+
+    const triviaQuestionLabel =
+        document.querySelector(
+            "[data-i18n='trivia.game.question']"
+        );
+
+
+    const triviaScoreLabel =
+        document.querySelector(
+            "[data-i18n='trivia.game.score']"
+        );
+
+
+    const triviaLevelLabel =
+        document.querySelector(
+            "[data-i18n='trivia.game.level']"
+        );
+
+
+    const nextButton =
+        document.getElementById(
+            "nextTrivia"
+        );
+
+
+    const resultLabel =
+        document.querySelector(
+            "[data-i18n='trivia.result.label']"
+        );
+
+
+    const finalScoreLabel =
+        document.querySelector(
+            "[data-i18n='trivia.result.finalScore']"
+        );
+
+
+    const achievementsLabel =
+        document.querySelector(
+            "[data-i18n='trivia.result.achievements']"
+        );
+
+
+    const memoryLabel =
+        document.querySelector(
+            "[data-i18n='trivia.result.memory']"
+        );
+
+
+    const restartButton =
+        document.getElementById(
+            "restartTrivia"
+        );
+
+
+    /*
+     * Header.
+     */
+
+    setTranslatedText(
+        triviaLabel,
+        "trivia.header.label",
+        "🤖 AI TRIVIA BATTLE"
+    );
+
+
+    setTranslatedText(
+        triviaTitle,
+        "trivia.header.title",
+        "Nayla Trivia Master"
+    );
+
+
+    setTranslatedText(
+        triviaDescription,
+        "trivia.header.description",
+        "How well do you really know Nayla?"
+    );
+
+
+    /*
+     * Start screen.
+     */
+
+    setTranslatedText(
+        triviaStartLabel,
+        "trivia.start.label",
+        "NAYLA AI"
+    );
+
+
+    setTranslatedText(
+        triviaStartTitle,
+        "trivia.start.title",
+        "I'll test your knowledge!"
+    );
+
+
+    setTranslatedText(
+        triviaStartDescription,
+        "trivia.start.description",
+        "Answer questions about Nayla, JKT48, her journey, performances, and memorable moments."
+    );
+
+
+    setTranslatedText(
+        triviaStartButton,
+        "trivia.start.button",
+        "⚔️ START BATTLE"
+    );
+
+
+    /*
+     * Game labels.
+     */
+
+    setTranslatedText(
+        triviaQuestionLabel,
+        "trivia.game.question",
+        "QUESTION"
+    );
+
+
+    setTranslatedText(
+        triviaScoreLabel,
+        "trivia.game.score",
+        "SCORE"
+    );
+
+
+    setTranslatedText(
+        triviaLevelLabel,
+        "trivia.game.level",
+        "LEVEL"
+    );
+
+
+    /*
+     * VERY IMPORTANT:
+     *
+     * nextTriviaButton is a real button,
+     * but its text must be changed only here.
+     *
+     * renderTriviaQuestion() never touches this
+     * translation.
+     */
+
+    setTranslatedText(
+        nextButton,
+        "trivia.game.next",
+        "Next Question →"
+    );
+
+
+    /*
+     * Result screen.
+     */
+
+    setTranslatedText(
+        resultLabel,
+        "trivia.result.label",
+        "TRIVIA COMPLETE"
+    );
+
+
+    setTranslatedText(
+        finalScoreLabel,
+        "trivia.result.finalScore",
+        "Final Score"
+    );
+
+
+    setTranslatedText(
+        achievementsLabel,
+        "trivia.result.achievements",
+        "🏆 Achievements"
+    );
+
+
+    setTranslatedText(
+        memoryLabel,
+        "trivia.result.memory",
+        "🌸 A Little More About Nayla"
+    );
+
+
+    setTranslatedText(
+        restartButton,
+        "trivia.result.playAgain",
+        "🔄 PLAY AGAIN"
+    );
+
+}
+
+
+/* =====================================================
+   TRANSLATE NORMAL AI WORKSPACE
+===================================================== */
+
+function translateDynamicWorkspace() {
+
+    if (
+        typeof currentMode ===
+            "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Trivia has its own workspace.
+     */
+
+    if (
+        currentMode ===
+            "trivia"
+    ) {
 
         translateTriviaDynamic();
 
+        return;
 
-        /* ================================================
-           HTML LANG
-        ================================================= */
-
-        document.documentElement.lang =
-            currentLanguage;
+    }
 
 
-        console.log(
-            "[AI Translation] Applied:",
-            currentLanguage
+    /*
+     * These elements are already declared
+     * in the main AI workspace.
+     */
+
+    if (modeLabel) {
+
+        const key =
+            `ai.dynamic.${currentMode}Label`;
+
+
+        const fallback =
+            modeLabel.textContent ||
+            "";
+
+
+        setTranslatedText(
+            modeLabel,
+            key,
+            fallback
         );
 
     }
 
 
-    /* =====================================================
-       DYNAMIC AI WORKSPACE
-    ===================================================== */
+    if (workspaceTitle) {
 
-    function translateDynamicWorkspace() {
-
-        const activeTool =
-            document.querySelector(
-                ".ai-tool-card.active"
-            );
+        const key =
+            `ai.dynamic.${currentMode}Title`;
 
 
-        const mode =
-            activeTool?.dataset.aiMode;
+        const fallback =
+            workspaceTitle.textContent ||
+            "";
 
 
-        if (!mode) {
-            return;
-        }
+        setTranslatedText(
+            workspaceTitle,
+            key,
+            fallback
+        );
+
+    }
 
 
-        const map = {
+    if (workspaceDescription) {
 
-            wish: {
-
-                label:
-                    "ai.dynamic.wishLabel",
-
-                title:
-                    "ai.dynamic.wishTitle",
-
-                description:
-                    "ai.dynamic.wishDescription"
-
-            },
+        const key =
+            `ai.dynamic.${currentMode}Description`;
 
 
-            enhance: {
-
-                label:
-                    "ai.dynamic.enhanceLabel",
-
-                title:
-                    "ai.dynamic.enhanceTitle",
-
-                description:
-                    "ai.dynamic.enhanceDescription"
-
-            },
+        const fallback =
+            workspaceDescription.textContent ||
+            "";
 
 
-            fortune: {
+        setTranslatedText(
+            workspaceDescription,
+            key,
+            fallback
+        );
 
-                label:
-                    "ai.dynamic.fortuneLabel",
+    }
 
-                title:
-                    "ai.dynamic.fortuneTitle",
-
-                description:
-                    "ai.dynamic.fortuneDescription"
-
-            },
+}
 
 
-            letter: {
+/* =====================================================
+   TRANSLATE ALL AI STATIC ELEMENTS
+===================================================== */
 
-                label:
-                    "ai.dynamic.letterLabel",
+function translateAIPage() {
 
-                title:
-                    "ai.dynamic.letterTitle",
+    const language =
+        getAILanguage();
 
-                description:
-                    "ai.dynamic.letterDescription"
+
+    /*
+     * Keep HTML language synchronized.
+     */
+
+    if (
+        document.documentElement.lang !==
+        language
+    ) {
+
+        document.documentElement.lang =
+            language;
+
+    }
+
+
+    /*
+     * Apply data-i18n elements.
+     *
+     * This is intentionally generic.
+     *
+     * Example:
+     *
+     * <span data-i18n="ai.heroTitle">
+     *
+     * becomes:
+     *
+     * AI_TRANSLATIONS[language].ai.heroTitle
+     */
+
+    document
+        .querySelectorAll(
+            "[data-i18n]"
+        )
+        .forEach(
+            element => {
+
+                const key =
+                    element.dataset.i18n;
+
+
+                if (
+                    !key
+                ) {
+
+                    return;
+
+                }
+
+
+                const original =
+                    element.dataset.i18nFallback ||
+                    element.textContent ||
+                    "";
+
+
+                if (
+                    !element.dataset.i18nFallback
+                ) {
+
+                    element.dataset.i18nFallback =
+                        original;
+
+                }
+
+
+                const translated =
+                    getTranslation(
+                        key,
+                        element.dataset.i18nFallback
+                    );
+
+
+                if (
+                    translated &&
+                    translated.trim()
+                ) {
+
+                    element.textContent =
+                        translated;
+
+                }
 
             }
+        );
+
+
+    /*
+     * Placeholders.
+     */
+
+    document
+        .querySelectorAll(
+            "[data-i18n-placeholder]"
+        )
+        .forEach(
+            element => {
+
+                const key =
+                    element.dataset
+                        .i18nPlaceholder;
+
+
+                if (!key) {
+
+                    return;
+
+                }
+
+
+                const fallback =
+                    element.dataset.i18nPlaceholderFallback ||
+                    element.placeholder ||
+                    "";
+
+
+                if (
+                    !element.dataset
+                        .i18nPlaceholderFallback
+                ) {
+
+                    element.dataset
+                        .i18nPlaceholderFallback =
+                            fallback;
+
+                }
+
+
+                setTranslatedPlaceholder(
+                    element,
+                    key,
+                    element.dataset
+                        .i18nPlaceholderFallback
+                );
+
+            }
+        );
+
+
+    /*
+     * Dynamic workspace.
+     */
+
+    translateDynamicWorkspace();
+
+
+    /*
+     * Trivia static UI.
+     */
+
+    translateTriviaDynamic();
+
+}
+
+
+/* =====================================================
+   SAFE LANGUAGE CHANGE HANDLER
+===================================================== */
+
+function handleAILanguageChanged(
+    event
+) {
+
+    let language =
+        null;
+
+
+    /*
+     * Support several possible event formats.
+     */
+
+    if (
+        event &&
+        event.detail
+    ) {
+
+        if (
+            typeof event.detail ===
+                "string"
+        ) {
+
+            language =
+                event.detail;
+
+        }
+        else {
+
+            language =
+                event.detail.language ||
+                event.detail.lang ||
+                event.detail.code ||
+                null;
+
+        }
+
+    }
+
+
+    /*
+     * If event doesn't provide a language,
+     * read navbar/localStorage state.
+     */
+
+    if (
+        !language
+    ) {
+
+        language =
+            getAILanguage();
+
+    }
+
+
+    language =
+        setAILanguage(
+            language
+        );
+
+
+    /*
+     * Translate static UI immediately.
+     */
+
+    translateAIPage();
+
+
+    /*
+     * =================================================
+     * CRITICAL TRIVIA FIX
+     * =================================================
+     *
+     * DO NOT call:
+     *
+     * renderTriviaQuestion()
+     *
+     * when language changes.
+     *
+     * DO NOT replace the current question
+     * with a translation key.
+     *
+     * DO NOT restart the game blindly.
+     *
+     * If a trivia game is active, the question
+     * currently displayed must remain untouched.
+     */
+
+
+    if (
+        window.triviaState &&
+        window.triviaState.active === true
+    ) {
+
+        /*
+         * Keep the current question and answers.
+         *
+         * Only static labels such as:
+         *
+         * QUESTION
+         * SCORE
+         * LEVEL
+         * NEXT QUESTION
+         *
+         * are translated.
+         */
+
+        translateTriviaDynamic();
+
+        return;
+
+    }
+
+}
+
+
+/* =====================================================
+   LANGUAGE EVENTS
+===================================================== */
+
+window.addEventListener(
+    "languageChanged",
+    handleAILanguageChanged
+);
+
+
+window.addEventListener(
+    "languagechange",
+    handleAILanguageChanged
+);
+
+
+/* =====================================================
+   CUSTOM EVENT SUPPORT
+===================================================== */
+
+document.addEventListener(
+    "languageChanged",
+    handleAILanguageChanged
+);
+
+
+/* =====================================================
+   INITIAL TRANSLATION
+===================================================== */
+
+function initializeAITranslations() {
+
+    /*
+     * Synchronize current language.
+     */
+
+    setAILanguage(
+        getAILanguage()
+    );
+
+
+    /*
+     * Apply translations after DOM
+     * has finished rendering.
+     */
+
+    translateAIPage();
+
+}
+
+
+/* =====================================================
+   DOM READY
+===================================================== */
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeAITranslations,
+        {
+            once:
+                true
+        }
+    );
+
+}
+else {
+
+    initializeAITranslations();
+
+}
+
+
+/* =====================================================
+   GLOBAL AI TRANSLATION API
+===================================================== */
+
+window.NaylaAI =
+    window.NaylaAI || {};
+
+
+window.NaylaAI.language =
+    window.NaylaAI.language || {};
+
+
+window.NaylaAI.language.get =
+    getAILanguage;
+
+
+window.NaylaAI.language.set =
+    setAILanguage;
+
+
+window.NaylaAI.language.translate =
+    translateAIPage;
+
+
+window.NaylaAI.language.translateTrivia =
+    translateTriviaDynamic;
+
+
+window.getAILanguage =
+    getAILanguage;
+
+
+window.setAILanguage =
+    setAILanguage;
+
+
+window.getTranslation =
+    getTranslation;
+
+
+window.translateAIPage =
+    translateAIPage;
+
+
+window.translateTriviaDynamic =
+    translateTriviaDynamic;
+/* =========================================================
+   PART 5 / 10
+   AI WORKSPACE + FORM TRANSLATION
+========================================================= */
+
+
+/* =====================================================
+   AI TOOL TRANSLATION MAP
+===================================================== */
+
+const AI_TOOL_TRANSLATION_MAP = {
+
+    wish: {
+
+        label:
+            "ai.dynamic.wishLabel",
+
+        title:
+            "ai.dynamic.wishTitle",
+
+        description:
+            "ai.dynamic.wishDescription"
+
+    },
+
+
+    enhance: {
+
+        label:
+            "ai.dynamic.enhanceLabel",
+
+        title:
+            "ai.dynamic.enhanceTitle",
+
+        description:
+            "ai.dynamic.enhanceDescription"
+
+    },
+
+
+    fortune: {
+
+        label:
+            "ai.dynamic.fortuneLabel",
+
+        title:
+            "ai.dynamic.fortuneTitle",
+
+        description:
+            "ai.dynamic.fortuneDescription"
+
+    },
+
+
+    letter: {
+
+        label:
+            "ai.dynamic.letterLabel",
+
+        title:
+            "ai.dynamic.letterTitle",
+
+        description:
+            "ai.dynamic.letterDescription"
+
+    }
+
+};
+
+
+/* =====================================================
+   FIND AI WORKSPACE ELEMENTS SAFELY
+===================================================== */
+
+function getAIWorkspaceElements() {
+
+    return {
+
+        nameInput:
+            document.querySelector(
+                "#aiName, #nameInput, [name='name']"
+            ),
+
+
+        messageInput:
+            document.querySelector(
+                "#aiMessage, #messageInput, textarea[name='message']"
+            ),
+
+
+        styleSelect:
+            document.querySelector(
+                "#aiStyle, #styleSelect, select[name='style']"
+            ),
+
+
+        generateButton:
+            document.querySelector(
+                "#generateAI, #generateButton, [data-action='generate-ai']"
+            ),
+
+
+        modeLabel:
+            document.querySelector(
+                "#modeLabel, .mode-label, [data-ai-mode-label]"
+            ),
+
+
+        workspaceTitle:
+            document.querySelector(
+                "#workspaceTitle, .workspace-title, [data-ai-workspace-title]"
+            ),
+
+
+        workspaceDescription:
+            document.querySelector(
+                "#workspaceDescription, .workspace-description, [data-ai-workspace-description]"
+            ),
+
+
+        loadingTitle:
+            document.querySelector(
+                "#loadingTitle, .loading-title, [data-i18n='ai.loading.title']"
+            ),
+
+
+        loadingDescription:
+            document.querySelector(
+                "#loadingDescription, .loading-description, [data-i18n='ai.loading.description']"
+            ),
+
+
+        resultTitle:
+            document.querySelector(
+                "#resultTitle, .result-title, [data-i18n='ai.result.message']"
+            ),
+
+
+        resultPlaceholderTitle:
+            document.querySelector(
+                "#resultPlaceholderTitle, .result-placeholder-title"
+            ),
+
+
+        resultPlaceholderDescription:
+            document.querySelector(
+                "#resultPlaceholderDescription, .result-placeholder-description"
+            ),
+
+
+        copyButton:
+            document.querySelector(
+                "#copyAI, #copyButton, [data-action='copy-ai']"
+            ),
+
+
+        regenerateButton:
+            document.querySelector(
+                "#regenerateAI, #regenerateButton, [data-action='regenerate-ai']"
+            ),
+
+
+        guestbookButton:
+            document.querySelector(
+                "#useInGuestbook, #guestbookButton, [data-action='guestbook']"
+            )
+
+    };
+
+}
+
+
+/* =====================================================
+   TRANSLATE AI FORM
+===================================================== */
+
+function translateAIForm() {
+
+    const elements =
+        getAIWorkspaceElements();
+
+
+    /* =================================================
+       NAME
+    ================================================= */
+
+    setTranslatedText(
+        document.querySelector(
+            "[data-i18n='ai.form.name']"
+        ),
+        "ai.form.name",
+        "Your name"
+    );
+
+
+    setTranslatedPlaceholder(
+        elements.nameInput,
+        "ai.form.namePlaceholder",
+        "Your name (optional)"
+    );
+
+
+    /* =================================================
+       MESSAGE
+    ================================================= */
+
+    setTranslatedText(
+        document.querySelector(
+            "[data-i18n='ai.form.message']"
+        ),
+        "ai.form.message",
+        "What would you like to say?"
+    );
+
+
+    setTranslatedPlaceholder(
+        elements.messageInput,
+        "ai.form.messagePlaceholder",
+        "Write your thoughts here..."
+    );
+
+
+    /* =================================================
+       STYLE
+    ================================================= */
+
+    setTranslatedText(
+        document.querySelector(
+            "[data-i18n='ai.form.style']"
+        ),
+        "ai.form.style",
+        "Writing style"
+    );
+
+
+    /* =================================================
+       GENERATE
+    ================================================= */
+
+    setTranslatedText(
+        elements.generateButton,
+        "ai.form.generate",
+        "✨ Generate"
+    );
+
+
+    /* =================================================
+       STYLE OPTIONS
+       
+       IMPORTANT:
+       We use option VALUE, not current text,
+       so changing language doesn't break form state.
+    ================================================= */
+
+    if (
+        elements.styleSelect
+    ) {
+
+        const styleMap = {
+
+            heartfelt:
+                "ai.styles.heartfelt",
+
+            sweet:
+                "ai.styles.sweet",
+
+            elegant:
+                "ai.styles.elegant",
+
+            simple:
+                "ai.styles.simple",
+
+            poetic:
+                "ai.styles.poetic"
 
         };
 
 
-        const config =
-            map[mode];
+        Array.from(
+            elements.styleSelect.options
+        ).forEach(
+            option => {
+
+                const key =
+                    styleMap[
+                        option.value
+                    ];
 
 
-        if (!config) {
-            return;
+                if (!key) {
+
+                    return;
+
+                }
+
+
+                const fallback =
+                    option.dataset
+                        .i18nFallback ||
+                    option.textContent;
+
+
+                if (
+                    !option.dataset
+                        .i18nFallback
+                ) {
+
+                    option.dataset
+                        .i18nFallback =
+                            fallback;
+
+                }
+
+
+                const translated =
+                    getTranslation(
+                        key,
+                        option.dataset
+                            .i18nFallback
+                    );
+
+
+                if (
+                    translated
+                ) {
+
+                    option.textContent =
+                        translated;
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   TRANSLATE LOADING STATE
+===================================================== */
+
+function translateAILoading() {
+
+    const elements =
+        getAIWorkspaceElements();
+
+
+    setTranslatedText(
+        elements.loadingTitle,
+        "ai.loading.title",
+        "Writing something special..."
+    );
+
+
+    setTranslatedText(
+        elements.loadingDescription,
+        "ai.loading.description",
+        "Please wait a moment."
+    );
+
+}
+
+
+/* =====================================================
+   TRANSLATE RESULT ACTIONS
+===================================================== */
+
+function translateAIResultActions() {
+
+    const elements =
+        getAIWorkspaceElements();
+
+
+    setTranslatedText(
+        elements.resultTitle,
+        "ai.result.message",
+        "🌸 Your Message"
+    );
+
+
+    setTranslatedText(
+        elements.copyButton,
+        "ai.actions.copy",
+        "📋 Copy"
+    );
+
+
+    setTranslatedText(
+        elements.regenerateButton,
+        "ai.actions.regenerate",
+        "🔄 Regenerate"
+    );
+
+
+    setTranslatedText(
+        elements.guestbookButton,
+        "ai.actions.guestbook",
+        "🌸 Use in Guestbook"
+    );
+
+}
+
+
+/* =====================================================
+   TRANSLATE AI RESULT PLACEHOLDER
+===================================================== */
+
+function translateAIResultPlaceholder() {
+
+    const elements =
+        getAIWorkspaceElements();
+
+
+    setTranslatedText(
+        elements.resultPlaceholderTitle,
+        "ai.result.placeholderTitle",
+        "Your message will appear here."
+    );
+
+
+    setTranslatedText(
+        elements.resultPlaceholderDescription,
+        "ai.result.placeholderDescription",
+        "Choose an AI tool above, write your thoughts, and let the AI create something special."
+    );
+
+}
+
+
+/* =====================================================
+   TRANSLATE CURRENT WORKSPACE
+===================================================== */
+
+function translateCurrentAIWorkspace() {
+
+    translateAIForm();
+
+    translateAILoading();
+
+    translateAIResultActions();
+
+    translateAIResultPlaceholder();
+
+    translateDynamicWorkspace();
+
+}
+
+
+/* =====================================================
+   UPDATE MODE TEXT
+===================================================== */
+
+function translateCurrentMode() {
+
+    /*
+     * If no current mode exists,
+     * there is nothing to translate.
+     */
+
+    if (
+        typeof currentMode ===
+            "undefined" ||
+        !currentMode
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Trivia has a separate translation system.
+     */
+
+    if (
+        currentMode ===
+            "trivia"
+    ) {
+
+        translateTriviaDynamic();
+
+        return;
+
+    }
+
+
+    const map =
+        AI_TOOL_TRANSLATION_MAP[
+            currentMode
+        ];
+
+
+    if (!map) {
+
+        return;
+
+    }
+
+
+    const elements =
+        getAIWorkspaceElements();
+
+
+    const labelFallback =
+        elements.modeLabel
+            ? (
+                elements.modeLabel
+                    .dataset
+                    .i18nFallback ||
+                elements.modeLabel.textContent
+            )
+            : "";
+
+
+    const titleFallback =
+        elements.workspaceTitle
+            ? (
+                elements.workspaceTitle
+                    .dataset
+                    .i18nFallback ||
+                elements.workspaceTitle.textContent
+            )
+            : "";
+
+
+    const descriptionFallback =
+        elements.workspaceDescription
+            ? (
+                elements.workspaceDescription
+                    .dataset
+                    .i18nFallback ||
+                elements.workspaceDescription.textContent
+            )
+            : "";
+
+
+    setTranslatedText(
+        elements.modeLabel,
+        map.label,
+        labelFallback
+    );
+
+
+    setTranslatedText(
+        elements.workspaceTitle,
+        map.title,
+        titleFallback
+    );
+
+
+    setTranslatedText(
+        elements.workspaceDescription,
+        map.description,
+        descriptionFallback
+    );
+
+}
+
+
+/* =====================================================
+   OVERRIDE / EXTEND TRANSLATION PIPELINE
+===================================================== */
+
+const originalTranslateAIPage =
+    window.translateAIPage;
+
+
+/*
+ * Keep a reference so other parts of the original
+ * script don't lose the translation function.
+ */
+
+function translateAIPageComplete() {
+
+    /*
+     * First execute the safe base translation.
+     */
+
+    if (
+        typeof originalTranslateAIPage ===
+            "function"
+    ) {
+
+        try {
+
+            originalTranslateAIPage();
+
         }
+        catch (error) {
 
-
-        const label =
-            document.getElementById(
-                "aiModeLabel"
+            console.warn(
+                "Base AI translation warning:",
+                error
             );
-
-
-        const title =
-            document.getElementById(
-                "aiWorkspaceTitle"
-            );
-
-
-        const description =
-            document.getElementById(
-                "aiWorkspaceDescription"
-            );
-
-
-        if (label) {
-
-            label.textContent =
-                getTranslation(
-                    config.label
-                );
-
-        }
-
-
-        if (title) {
-
-            title.textContent =
-                getTranslation(
-                    config.title
-                );
-
-        }
-
-
-        if (description) {
-
-            description.textContent =
-                getTranslation(
-                    config.description
-                );
 
         }
 
     }
 
 
-    /* =====================================================
-       DYNAMIC TRIVIA
-    ===================================================== */
+    /*
+     * Then translate the AI workspace.
+     */
+
+    translateCurrentAIWorkspace();
+
+
+    /*
+     * Finally translate the current mode.
+     */
+
+    translateCurrentMode();
+
+
+    /*
+     * Trivia gets static labels only.
+     */
+
+    if (
+        window.triviaState &&
+        window.triviaState.active === true
+    ) {
+
+        translateTriviaDynamic();
+
+    }
+
+}
+
 
 /* =====================================================
-   DYNAMIC TRIVIA TRANSLATION
+   GLOBAL REPLACEMENT
 ===================================================== */
 
-function translateTriviaDynamic() {
+window.translateAIPage =
+    translateAIPageComplete;
+
+
+/* =====================================================
+   LANGUAGE EVENT — WORKSPACE UPDATE
+===================================================== */
+
+function handleAIWorkspaceLanguageChanged() {
+
+    /*
+     * Give navbar/localStorage a moment to settle
+     * before reading the selected language.
+     */
+
+    requestAnimationFrame(
+        () => {
+
+            try {
+
+                translateCurrentAIWorkspace();
+
+                translateCurrentMode();
+
+            }
+            catch (error) {
+
+                console.error(
+                    "AI workspace translation error:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+window.addEventListener(
+    "languageChanged",
+    handleAIWorkspaceLanguageChanged
+);
+
+
+document.addEventListener(
+    "languageChanged",
+    handleAIWorkspaceLanguageChanged
+);
+
+
+/* =====================================================
+   OBSERVE DYNAMIC WORKSPACE
+===================================================== */
+
+let aiWorkspaceObserver = null;
+
+
+function initializeAIWorkspaceObserver() {
+
+    /*
+     * Prevent duplicate observers.
+     */
+
+    if (
+        aiWorkspaceObserver
+    ) {
+
+        return;
+
+    }
+
+
+    const target =
+        document.querySelector(
+            "#aiWorkspace, .ai-workspace, main"
+        );
+
+
+    if (!target) {
+
+        return;
+
+    }
+
+
+    aiWorkspaceObserver =
+        new MutationObserver(
+            mutations => {
+
+                /*
+                 * Ignore mutations generated by our own
+                 * translation whenever possible.
+                 */
+
+                let shouldTranslate =
+                    false;
+
+
+                for (
+                    const mutation of mutations
+                ) {
+
+                    if (
+                        mutation.type ===
+                            "childList"
+                    ) {
+
+                        shouldTranslate =
+                            true;
+
+                        break;
+
+                    }
+
+                }
+
+
+                if (
+                    !shouldTranslate
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Don't continuously translate while
+                 * trivia answers are being generated.
+                 *
+                 * Static labels are already translated.
+                 */
+
+                if (
+                    window.triviaState &&
+                    window.triviaState.active
+                ) {
+
+                    translateTriviaDynamic();
+
+                    return;
+
+                }
+
+
+                /*
+                 * Normal AI workspace.
+                 */
+
+                translateCurrentAIWorkspace();
+
+            }
+        );
+
+
+    aiWorkspaceObserver.observe(
+        target,
+        {
+            childList:
+                true,
+
+            subtree:
+                true
+        }
+    );
+
+}
+
+
+/* =====================================================
+   INITIALIZE WORKSPACE TRANSLATION
+===================================================== */
+
+function initializeAIWorkspaceTranslation() {
+
+    translateCurrentAIWorkspace();
+
+    translateCurrentMode();
+
+    initializeAIWorkspaceObserver();
+
+}
+
+
+/* =====================================================
+   DOM READY
+===================================================== */
+
+if (
+    document.readyState ===
+        "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeAIWorkspaceTranslation,
+        {
+            once:
+                true
+        }
+    );
+
+}
+else {
+
+    initializeAIWorkspaceTranslation();
+
+}
+
+
+/* =====================================================
+   PUBLIC API
+===================================================== */
+
+window.NaylaAI =
+    window.NaylaAI || {};
+
+
+window.NaylaAI.translation =
+    window.NaylaAI.translation || {};
+
+
+window.NaylaAI.translation
+    .translateWorkspace =
+        translateCurrentAIWorkspace;
+
+
+window.NaylaAI.translation
+    .translateMode =
+        translateCurrentMode;
+
+
+window.NaylaAI.translation
+    .translateLoading =
+        translateAILoading;
+
+
+window.NaylaAI.translation
+    .translateResult =
+        translateAIResultActions;
+/* =========================================================
+   PART 6 / 10
+   AI GENERATION ENGINE
+========================================================= */
+
+
+/* =====================================================
+   AI GENERATION STATE
+===================================================== */
+
+const aiGenerationState = {
+
+    loading:
+        false,
+
+    lastRequest:
+        null,
+
+    lastResult:
+        "",
+
+    currentMode:
+        null
+
+};
+
+
+/* =====================================================
+   GET CURRENT AI MODE
+===================================================== */
+
+function getCurrentAIMode() {
+
+    if (
+        typeof currentMode !==
+        "undefined" &&
+        currentMode
+    ) {
+
+        return currentMode;
+
+    }
+
+
+    /*
+     * Try common active-tool selectors.
+     */
+
+    const activeTool =
+        document.querySelector(
+            "[data-ai-tool].active, " +
+            ".ai-tool.active, " +
+            ".tool-card.active"
+        );
+
+
+    if (activeTool) {
+
+        return (
+            activeTool.dataset.aiTool ||
+            activeTool.dataset.tool ||
+            activeTool.dataset.mode ||
+            null
+        );
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =====================================================
+   GET AI FORM DATA
+===================================================== */
+
+function getAIFormData() {
+
+    const elements =
+        getAIWorkspaceElements();
+
+
+    const name =
+        elements.nameInput
+            ? elements.nameInput.value.trim()
+            : "";
+
+
+    const message =
+        elements.messageInput
+            ? elements.messageInput.value.trim()
+            : "";
+
+
+    const style =
+        elements.styleSelect
+            ? elements.styleSelect.value
+            : "heartfelt";
+
+
+    const mode =
+        getCurrentAIMode();
+
+
+    const language =
+        getAILanguage();
+
+
+    return {
+
+        name,
+
+        message,
+
+        style,
+
+        mode,
+
+        language
+
+    };
+
+}
+
+
+/* =====================================================
+   VALIDATE AI FORM
+===================================================== */
+
+function validateAIForm(
+    data
+) {
+
+    /*
+     * Trivia does not use the normal AI form.
+     */
+
+    if (
+        data.mode ===
+        "trivia"
+    ) {
+
+        return true;
+
+    }
+
+
+    /*
+     * Some tools can work without a message,
+     * therefore don't blindly reject every empty field.
+     *
+     * Only reject if the user has absolutely no
+     * useful input for a message-based tool.
+     */
+
+    const messageBasedModes = [
+
+        "wish",
+
+        "enhance",
+
+        "letter"
+
+    ];
+
+
+    if (
+        messageBasedModes.includes(
+            data.mode
+        ) &&
+        !data.message
+    ) {
+
+        showAIError(
+            getTranslation(
+                "ai.form.messageRequired",
+                "Please write something first."
+            )
+        );
+
+
+        if (
+            document.querySelector(
+                "#aiMessage, #messageInput, textarea[name='message']"
+            )
+        ) {
+
+            document
+                .querySelector(
+                    "#aiMessage, #messageInput, textarea[name='message']"
+                )
+                .focus();
+
+        }
+
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =====================================================
+   SHOW AI LOADING
+===================================================== */
+
+function showAILoading() {
+
+    aiGenerationState.loading =
+        true;
+
+
+    const loading =
+        document.querySelector(
+            "#aiLoading, .ai-loading, .loading-state"
+        );
+
+
+    const result =
+        document.querySelector(
+            "#aiResult, .ai-result, .result-state"
+        );
+
+
+    const generateButton =
+        document.querySelector(
+            "#generateAI, #generateButton, [data-action='generate-ai']"
+        );
+
+
+    const regenerateButton =
+        document.querySelector(
+            "#regenerateAI, #regenerateButton, [data-action='regenerate-ai']"
+        );
+
+
+    if (loading) {
+
+        loading.style.display =
+            "block";
+
+    }
+
+
+    if (result) {
+
+        result.classList.add(
+            "is-loading"
+        );
+
+    }
+
+
+    if (generateButton) {
+
+        generateButton.disabled =
+            true;
+
+        generateButton.classList.add(
+            "loading"
+        );
+
+    }
+
+
+    if (regenerateButton) {
+
+        regenerateButton.disabled =
+            true;
+
+    }
+
+
+    translateAILoading();
+
+}
+
+
+/* =====================================================
+   HIDE AI LOADING
+===================================================== */
+
+function hideAILoading() {
+
+    aiGenerationState.loading =
+        false;
+
+
+    const loading =
+        document.querySelector(
+            "#aiLoading, .ai-loading, .loading-state"
+        );
+
+
+    const result =
+        document.querySelector(
+            "#aiResult, .ai-result, .result-state"
+        );
+
+
+    const generateButton =
+        document.querySelector(
+            "#generateAI, #generateButton, [data-action='generate-ai']"
+        );
+
+
+    const regenerateButton =
+        document.querySelector(
+            "#regenerateAI, #regenerateButton, [data-action='regenerate-ai']"
+        );
+
+
+    if (loading) {
+
+        loading.style.display =
+            "none";
+
+    }
+
+
+    if (result) {
+
+        result.classList.remove(
+            "is-loading"
+        );
+
+    }
+
+
+    if (generateButton) {
+
+        generateButton.disabled =
+            false;
+
+        generateButton.classList.remove(
+            "loading"
+        );
+
+    }
+
+
+    if (regenerateButton) {
+
+        regenerateButton.disabled =
+            false;
+
+    }
+
+}
+
+
+/* =====================================================
+   SHOW AI ERROR
+===================================================== */
+
+function showAIError(
+    message
+) {
+
+    hideAILoading();
+
+
+    const result =
+        document.querySelector(
+            "#aiResult, .ai-result, .result-state"
+        );
+
+
+    const resultContent =
+        document.querySelector(
+            "#aiResultContent, " +
+            ".ai-result-content, " +
+            ".result-content"
+        );
+
+
+    const errorText =
+        message ||
+        getTranslation(
+            "ai.error.generic",
+            "Something went wrong. Please try again."
+        );
+
+
+    if (result) {
+
+        result.style.display =
+            "block";
+
+        result.classList.add(
+            "error"
+        );
+
+    }
+
+
+    if (resultContent) {
+
+        resultContent.textContent =
+            errorText;
+
+    }
+    else if (result) {
+
+        /*
+         * textContent is used intentionally.
+         * Never inject server error HTML.
+         */
+
+        result.textContent =
+            errorText;
+
+    }
+
+
+    showToast(
+        errorText
+    );
+
+}
+
+
+/* =====================================================
+   EXTRACT AI RESULT
+===================================================== */
+
+function extractAIResult(
+    data
+) {
+
+    if (!data) {
+
+        return "";
+
+    }
+
+
+    /*
+     * Most common backend response fields.
+     */
+
+    const candidates = [
+
+        data.message,
+
+        data.result,
+
+        data.text,
+
+        data.content,
+
+        data.generated_text,
+
+        data.output,
+
+        data.response
+
+    ];
+
+
+    for (
+        const value of candidates
+    ) {
+
+        if (
+            typeof value ===
+                "string" &&
+            value.trim()
+        ) {
+
+            return value.trim();
+
+        }
+
+    }
+
+
+    /*
+     * Some APIs return nested data.
+     */
+
+    if (
+        data.data &&
+        typeof data.data ===
+            "object"
+    ) {
+
+        return extractAIResult(
+            data.data
+        );
+
+    }
+
+
+    return "";
+
+}
+
+
+/* =====================================================
+   RENDER AI RESULT
+===================================================== */
+
+function renderAIResult(
+    text
+) {
+
+    const result =
+        document.querySelector(
+            "#aiResult, .ai-result, .result-state"
+        );
+
+
+    const resultContent =
+        document.querySelector(
+            "#aiResultContent, " +
+            ".ai-result-content, " +
+            ".result-content"
+        );
+
+
+    if (!text) {
+
+        showAIError(
+            getTranslation(
+                "ai.error.emptyResult",
+                "The AI did not return a message."
+            )
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Save result.
+     */
+
+    aiGenerationState.lastResult =
+        text;
+
+
+    /*
+     * Render as text.
+     *
+     * Do NOT use innerHTML because AI output
+     * must be treated as untrusted text.
+     */
+
+    if (resultContent) {
+
+        resultContent.textContent =
+            text;
+
+    }
+    else if (result) {
+
+        result.textContent =
+            text;
+
+    }
+
+
+    if (result) {
+
+        result.style.display =
+            "block";
+
+        result.classList.remove(
+            "error"
+        );
+
+        result.classList.remove(
+            "is-loading"
+        );
+
+    }
+
+
+    /*
+     * Update result actions.
+     */
+
+    translateAIResultActions();
+
+
+    /*
+     * Save result globally so Guestbook / Copy
+     * can use it.
+     */
+
+    window.NaylaAI =
+        window.NaylaAI || {};
+
+
+    window.NaylaAI.lastResult =
+        text;
+
+
+    /*
+     * Scroll result into view.
+     */
+
+    if (
+        result &&
+        typeof result.scrollIntoView ===
+            "function"
+    ) {
+
+        result.scrollIntoView({
+
+            behavior:
+                "smooth",
+
+            block:
+                "center"
+
+        });
+
+    }
+
+}
+
+
+/* =====================================================
+   AI API ENDPOINT
+===================================================== */
+
+function getAIGenerationEndpoint(
+    mode
+) {
+
+    /*
+     * Keep endpoint selection in one place.
+     *
+     * The normal AI tools use /api/ai/generate.
+     *
+     * Trivia has its own endpoints and must NEVER
+     * reach this function during answer generation.
+     */
+
+    if (
+        mode ===
+            "trivia"
+    ) {
+
+        return null;
+
+    }
+
+
+    return "/api/ai/generate";
+
+}
+
+
+/* =====================================================
+   GENERATE AI CONTENT
+===================================================== */
+
+async function generateAI(
+    overrideData = null
+) {
+
+    /*
+     * Prevent double generation.
+     */
+
+    if (
+        aiGenerationState.loading
+    ) {
+
+        return null;
+
+    }
+
+
+    const data =
+        overrideData ||
+        getAIFormData();
+
+
+    /*
+     * Normalize mode.
+     */
+
+    data.mode =
+        data.mode ||
+        getCurrentAIMode();
+
+
+    /*
+     * Validate.
+     */
+
+    if (
+        !validateAIForm(
+            data
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    /*
+     * Trivia has its own engine.
+     */
+
+    if (
+        data.mode ===
+            "trivia"
+    ) {
+
+        if (
+            typeof startTrivia ===
+                "function"
+        ) {
+
+            return startTrivia();
+
+        }
+
+
+        if (
+            window.startTrivia &&
+            typeof window.startTrivia ===
+                "function"
+        ) {
+
+            return window.startTrivia();
+
+        }
+
+
+        showAIError(
+            "Trivia engine is unavailable."
+        );
+
+
+        return null;
+
+    }
+
+
+    const endpoint =
+        getAIGenerationEndpoint(
+            data.mode
+        );
+
+
+    if (!endpoint) {
+
+        showAIError(
+            getTranslation(
+                "ai.error.invalidMode",
+                "Invalid AI mode."
+            )
+        );
+
+
+        return null;
+
+    }
+
+
+    /*
+     * Save request BEFORE fetch.
+     *
+     * Regenerate will reuse this exact structure,
+     * except language is refreshed.
+     */
+
+    aiGenerationState.lastRequest = {
+
+        ...data
+
+    };
+
+
+    aiGenerationState.currentMode =
+        data.mode;
+
+
+    showAILoading();
+
+
+    try {
+
+        const response =
+            await fetch(
+                endpoint,
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Accept":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            mode:
+                                data.mode,
+
+                            language:
+                                data.language,
+
+                            name:
+                                data.name,
+
+                            message:
+                                data.message,
+
+                            style:
+                                data.style
+
+                        })
+
+                }
+            );
+
+
+        let responseData =
+            null;
+
+
+        try {
+
+            responseData =
+                await response.json();
+
+        }
+        catch {
+
+            throw new Error(
+                getTranslation(
+                    "ai.error.invalidResponse",
+                    "The server returned an invalid response."
+                )
+            );
+
+        }
+
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                responseData.error ||
+                responseData.message ||
+                getTranslation(
+                    "ai.error.server",
+                    "The AI server returned an error."
+                )
+            );
+
+        }
+
+
+        /*
+         * Some backends don't use success:true.
+         *
+         * Therefore only reject explicit success:false.
+         */
+
+        if (
+            responseData.success ===
+                false
+        ) {
+
+            throw new Error(
+                responseData.error ||
+                responseData.message ||
+                getTranslation(
+                    "ai.error.server",
+                    "The AI server returned an error."
+                )
+            );
+
+        }
+
+
+        const result =
+            extractAIResult(
+                responseData
+            );
+
+
+        if (!result) {
+
+            throw new Error(
+                getTranslation(
+                    "ai.error.emptyResult",
+                    "The AI did not return a message."
+                )
+            );
+
+        }
+
+
+        hideAILoading();
+
+
+        renderAIResult(
+            result
+        );
+
+
+        return result;
+
+    }
+    catch (error) {
+
+        console.error(
+            "AI GENERATION ERROR:",
+            error
+        );
+
+
+        showAIError(
+            error.message ||
+            getTranslation(
+                "ai.error.generic",
+                "Something went wrong. Please try again."
+            )
+        );
+
+
+        return null;
+
+    }
+
+}
+
+
+/* =====================================================
+   REGENERATE AI CONTENT
+===================================================== */
+
+async function regenerateAI() {
+
+    /*
+     * No previous request.
+     */
+
+    if (
+        !aiGenerationState.lastRequest
+    ) {
+
+        /*
+         * Fall back to current form.
+         */
+
+        return generateAI();
+
+    }
+
+
+    /*
+     * Refresh language.
+     *
+     * This is important when the user generated
+     * an English message, then changed navbar
+     * language to Indonesian and pressed Regenerate.
+     */
+
+    const request = {
+
+        ...aiGenerationState.lastRequest,
+
+        language:
+            getAILanguage()
+
+    };
+
+
+    /*
+     * Update the saved request.
+     */
+
+    aiGenerationState.lastRequest =
+        request;
+
+
+    return generateAI(
+        request
+    );
+
+}
+
+
+/* =====================================================
+   COPY AI RESULT
+===================================================== */
+
+async function copyAIResult() {
+
+    const text =
+        aiGenerationState.lastResult ||
+        window.NaylaAI?.lastResult ||
+        "";
+
+
+    if (!text) {
+
+        showToast(
+            getTranslation(
+                "ai.error.nothingToCopy",
+                "There is no message to copy yet."
+            )
+        );
+
+
+        return false;
+
+    }
+
+
+    try {
+
+        if (
+            navigator.clipboard &&
+            typeof navigator.clipboard.writeText ===
+                "function"
+        ) {
+
+            await navigator.clipboard.writeText(
+                text
+            );
+
+        }
+        else {
+
+            /*
+             * Legacy fallback.
+             */
+
+            const textarea =
+                document.createElement(
+                    "textarea"
+                );
+
+
+            textarea.value =
+                text;
+
+
+            textarea.style.position =
+                "fixed";
+
+            textarea.style.opacity =
+                "0";
+
+
+            document.body.appendChild(
+                textarea
+            );
+
+
+            textarea.select();
+
+
+            const copied =
+                document.execCommand(
+                    "copy"
+                );
+
+
+            textarea.remove();
+
+
+            if (!copied) {
+
+                throw new Error(
+                    "Copy command failed."
+                );
+
+            }
+
+        }
+
+
+        showToast(
+            getTranslation(
+                "ai.messages.copied",
+                "Copied! ✓"
+            )
+        );
+
+
+        return true;
+
+    }
+    catch (error) {
+
+        console.error(
+            "COPY AI RESULT ERROR:",
+            error
+        );
+
+
+        showToast(
+            getTranslation(
+                "ai.error.copyFailed",
+                "Unable to copy the message."
+            )
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/* =====================================================
+   USE AI RESULT IN GUESTBOOK
+===================================================== */
+
+function useAIResultInGuestbook() {
+
+    const text =
+        aiGenerationState.lastResult ||
+        window.NaylaAI?.lastResult ||
+        "";
+
+
+    if (!text) {
+
+        showToast(
+            getTranslation(
+                "ai.error.noGuestbookMessage",
+                "Generate a message first."
+            )
+        );
+
+
+        return false;
+
+    }
+
+
+    /*
+     * Try common Guestbook textarea IDs.
+     */
+
+    const guestbookInput =
+        document.querySelector(
+            "#guestbookMessage, " +
+            "#guestbook-message, " +
+            "textarea[name='guestbook_message'], " +
+            "textarea[name='message']"
+        );
+
+
+    if (guestbookInput) {
+
+        guestbookInput.value =
+            text;
+
+
+        /*
+         * Trigger input/change events so frameworks
+         * and existing Guestbook code notice it.
+         */
+
+        guestbookInput.dispatchEvent(
+            new Event(
+                "input",
+                {
+                    bubbles:
+                        true
+                }
+            )
+        );
+
+
+        guestbookInput.dispatchEvent(
+            new Event(
+                "change",
+                {
+                    bubbles:
+                        true
+                }
+            )
+        );
+
+
+        guestbookInput.focus();
+
+
+        showToast(
+            getTranslation(
+                "ai.messages.guestbookReady",
+                "Your message is ready for the Guestbook! 🌸"
+            )
+        );
+
+
+        return true;
+
+    }
+
+
+    /*
+     * Fallback:
+     *
+     * Save it so the existing Guestbook page
+     * can pick it up.
+     */
+
+    try {
+
+        sessionStorage.setItem(
+            "aiGuestbookMessage",
+            text
+        );
+
+        localStorage.setItem(
+            "aiGuestbookMessage",
+            text
+        );
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Unable to save Guestbook message:",
+            error
+        );
+
+    }
+
+
+    /*
+     * If the project already exposes a Guestbook
+     * function, use it.
+     */
+
+    const guestbookFunctions = [
+
+        window.openGuestbook,
+
+        window.showGuestbook,
+
+        window.goToGuestbook
+
+    ];
+
+
+    for (
+        const fn of guestbookFunctions
+    ) {
+
+        if (
+            typeof fn ===
+                "function"
+        ) {
+
+            try {
+
+                fn(
+                    text
+                );
+
+                return true;
+
+            }
+            catch (error) {
+
+                console.warn(
+                    "Guestbook integration warning:",
+                    error
+                );
+
+            }
+
+        }
+
+    }
+
+
+    showToast(
+        getTranslation(
+            "ai.messages.guestbookSaved",
+            "Message saved for Guestbook. 🌸"
+        )
+    );
+
+
+    return true;
+
+}
+
+
+/* =====================================================
+   GENERATE BUTTON EVENT
+===================================================== */
+
+function bindAIGenerateButton() {
+
+    const button =
+        document.querySelector(
+            "#generateAI, #generateButton, [data-action='generate-ai']"
+        );
+
+
+    if (
+        !button ||
+        button.dataset.aiGenerateBound ===
+            "true"
+    ) {
+
+        return;
+
+    }
+
+
+    button.dataset.aiGenerateBound =
+        "true";
+
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+
+            generateAI();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   REGENERATE BUTTON EVENT
+===================================================== */
+
+function bindAIRegenerateButton() {
+
+    const button =
+        document.querySelector(
+            "#regenerateAI, #regenerateButton, [data-action='regenerate-ai']"
+        );
+
+
+    if (
+        !button ||
+        button.dataset.aiRegenerateBound ===
+            "true"
+    ) {
+
+        return;
+
+    }
+
+
+    button.dataset.aiRegenerateBound =
+        "true";
+
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+
+            regenerateAI();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   COPY BUTTON EVENT
+===================================================== */
+
+function bindAICopyButton() {
+
+    const button =
+        document.querySelector(
+            "#copyAI, #copyButton, [data-action='copy-ai']"
+        );
+
+
+    if (
+        !button ||
+        button.dataset.aiCopyBound ===
+            "true"
+    ) {
+
+        return;
+
+    }
+
+
+    button.dataset.aiCopyBound =
+        "true";
+
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+
+            copyAIResult();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   GUESTBOOK BUTTON EVENT
+===================================================== */
+
+function bindAIGuestbookButton() {
+
+    const button =
+        document.querySelector(
+            "#useInGuestbook, #guestbookButton, [data-action='guestbook']"
+        );
+
+
+    if (
+        !button ||
+        button.dataset.aiGuestbookBound ===
+            "true"
+    ) {
+
+        return;
+
+    }
+
+
+    button.dataset.aiGuestbookBound =
+        "true";
+
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+
+            useAIResultInGuestbook();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   BIND ALL AI ACTIONS
+===================================================== */
+
+function bindAIActions() {
+
+    bindAIGenerateButton();
+
+    bindAIRegenerateButton();
+
+    bindAICopyButton();
+
+    bindAIGuestbookButton();
+
+}
+
+
+/* =====================================================
+   INITIALIZE AI GENERATION ENGINE
+===================================================== */
+
+function initializeAIGenerationEngine() {
+
+    bindAIActions();
+
+}
+
+
+/* =====================================================
+   DOM READY
+===================================================== */
+
+if (
+    document.readyState ===
+        "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeAIGenerationEngine,
+        {
+            once:
+                true
+        }
+    );
+
+}
+else {
+
+    initializeAIGenerationEngine();
+
+}
+
+
+/* =====================================================
+   PUBLIC AI API
+===================================================== */
+
+window.NaylaAI =
+    window.NaylaAI || {};
+
+
+window.NaylaAI.generate =
+    generateAI;
+
+
+window.NaylaAI.regenerate =
+    regenerateAI;
+
+
+window.NaylaAI.copy =
+    copyAIResult;
+
+
+window.NaylaAI.useInGuestbook =
+    useAIResultInGuestbook;
+
+
+window.NaylaAI.getFormData =
+    getAIFormData;
+
+
+window.NaylaAI.state =
+    aiGenerationState;
+
+
+/*
+ * Backward-compatible global functions.
+ */
+
+window.generateAI =
+    generateAI;
+
+
+window.regenerateAI =
+    regenerateAI;
+
+
+window.copyAIResult =
+    copyAIResult;
+
+
+window.useAIResultInGuestbook =
+    useAIResultInGuestbook;
+/* =========================================================
+   PART 7 / 10
+   AI TOOL / MODE SWITCHING
+========================================================= */
+
+
+/* =====================================================
+   TOOL DEFINITIONS
+===================================================== */
+
+const AI_TOOL_MODES = [
+
+    "wish",
+
+    "enhance",
+
+    "fortune",
+
+    "letter",
+
+    "trivia"
+
+];
+
+
+/* =====================================================
+   GET ALL AI TOOL BUTTONS
+===================================================== */
+
+function getAIToolButtons() {
+
+    return Array.from(
+        document.querySelectorAll(
+            "[data-ai-tool], " +
+            "[data-tool], " +
+            "[data-mode]"
+        )
+    );
+
+}
+
+
+/* =====================================================
+   NORMALIZE TOOL MODE
+===================================================== */
+
+function normalizeAIMode(
+    mode
+) {
+
+    if (
+        typeof mode !==
+            "string"
+    ) {
+
+        return null;
+
+    }
+
+
+    const normalized =
+        mode
+            .trim()
+            .toLowerCase();
+
+
+    /*
+     * Direct match.
+     */
+
+    if (
+        AI_TOOL_MODES.includes(
+            normalized
+        )
+    ) {
+
+        return normalized;
+
+    }
+
+
+    /*
+     * Common aliases.
+     */
+
+    const aliases = {
+
+        "ai-wish":
+            "wish",
+
+        "wish-ai":
+            "wish",
+
+        "enhancer":
+            "enhance",
+
+        "ai-enhance":
+            "enhance",
+
+        "fortune":
+            "fortune",
+
+        "seijin":
+            "fortune",
+
+        "seijin-ai":
+            "fortune",
+
+        "letter-ai":
+            "letter",
+
+        "ai-letter":
+            "letter",
+
+        "ai-trivia":
+            "trivia",
+
+        "trivia-battle":
+            "trivia"
+
+    };
+
+
+    return (
+        aliases[normalized] ||
+        null
+    );
+
+}
+
+
+/* =====================================================
+   SET ACTIVE TOOL UI
+===================================================== */
+
+function setActiveAITool(
+    mode
+) {
+
+    const normalizedMode =
+        normalizeAIMode(
+            mode
+        );
+
+
+    if (!normalizedMode) {
+
+        return;
+
+    }
+
+
+    getAIToolButtons()
+        .forEach(
+            button => {
+
+                const buttonMode =
+                    normalizeAIMode(
+
+                        button.dataset.aiTool ||
+                        button.dataset.tool ||
+                        button.dataset.mode
+
+                    );
+
+
+                const active =
+                    buttonMode ===
+                    normalizedMode;
+
+
+                button.classList.toggle(
+                    "active",
+                    active
+                );
+
+
+                button.classList.toggle(
+                    "selected",
+                    active
+                );
+
+
+                button.setAttribute(
+                    "aria-selected",
+                    active
+                        ? "true"
+                        : "false"
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   CLEAR AI WORKSPACE STATE
+===================================================== */
+
+function clearAIWorkspaceState(
+    options = {}
+) {
+
+    const {
+
+        keepForm =
+            false,
+
+        keepResult =
+            false,
+
+        keepMode =
+            false
+
+    } = options;
+
+
+    /*
+     * Hide loading.
+     */
+
+    hideAILoading();
+
+
+    /*
+     * Remove error/loading classes.
+     */
+
+    const result =
+        document.querySelector(
+            "#aiResult, .ai-result, .result-state"
+        );
+
+
+    if (result) {
+
+        result.classList.remove(
+            "error"
+        );
+
+        result.classList.remove(
+            "is-loading"
+        );
+
+    }
+
+
+    /*
+     * Clear result if requested.
+     */
+
+    if (
+        !keepResult
+    ) {
+
+        const resultContent =
+            document.querySelector(
+                "#aiResultContent, " +
+                ".ai-result-content, " +
+                ".result-content"
+            );
+
+
+        if (resultContent) {
+
+            resultContent.textContent =
+                "";
+
+        }
+
+
+        if (result) {
+
+            result.style.display =
+                "none";
+
+        }
+
+
+        aiGenerationState.lastResult =
+            "";
+
+
+        if (
+            window.NaylaAI
+        ) {
+
+            window.NaylaAI.lastResult =
+                "";
+
+        }
+
+    }
+
+
+    /*
+     * Clear form if requested.
+     */
+
+    if (
+        !keepForm
+    ) {
+
+        const elements =
+            getAIWorkspaceElements();
+
+
+        if (
+            elements.nameInput
+        ) {
+
+            elements.nameInput.value =
+                "";
+
+        }
+
+
+        if (
+            elements.messageInput
+        ) {
+
+            elements.messageInput.value =
+                "";
+
+        }
+
+    }
+
+
+    /*
+     * Clear previous request when changing
+     * to another tool.
+     */
+
+    if (
+        !keepMode
+    ) {
+
+        aiGenerationState.lastRequest =
+            null;
+
+        aiGenerationState.currentMode =
+            null;
+
+    }
+
+}
+
+
+/* =====================================================
+   RESET NORMAL AI FORM
+===================================================== */
+
+function resetAINormalForm(
+    keepName = false
+) {
+
+    const elements =
+        getAIWorkspaceElements();
+
+
+    if (
+        !keepName &&
+        elements.nameInput
+    ) {
+
+        elements.nameInput.value =
+            "";
+
+    }
+
+
+    if (
+        elements.messageInput
+    ) {
+
+        elements.messageInput.value =
+            "";
+
+    }
+
+
+    /*
+     * Reset style to the first valid option.
+     */
+
+    if (
+        elements.styleSelect
+    ) {
+
+        const firstEnabled =
+            Array.from(
+                elements.styleSelect.options
+            )
+            .find(
+                option =>
+                    !option.disabled
+            );
+
+
+        if (
+            firstEnabled
+        ) {
+
+            elements.styleSelect.value =
+                firstEnabled.value;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   SHOW / HIDE WORKSPACE
+===================================================== */
+
+function updateAIWorkspaceVisibility(
+    mode
+) {
+
+    const normalizedMode =
+        normalizeAIMode(
+            mode
+        );
+
+
+    const normalWorkspace =
+        document.querySelector(
+            "#aiWorkspace, " +
+            ".ai-workspace, " +
+            "[data-workspace='ai']"
+        );
+
+
+    const triviaWorkspace =
+        document.querySelector(
+            "#triviaWorkspace, " +
+            ".trivia-workspace, " +
+            "[data-workspace='trivia']"
+        );
+
+
+    /*
+     * If dedicated Trivia workspace exists,
+     * switch visibility.
+     */
+
+    if (
+        triviaWorkspace
+    ) {
+
+        triviaWorkspace.style.display =
+            normalizedMode ===
+                "trivia"
+                ? ""
+                : "none";
+
+    }
+
+
+    /*
+     * Normal AI workspace.
+     */
+
+    if (
+        normalWorkspace
+    ) {
+
+        normalWorkspace.style.display =
+            normalizedMode ===
+                "trivia"
+                ? "none"
+                : "";
+
+    }
+
+}
+
+
+/* =====================================================
+   STOP ACTIVE TRIVIA SAFELY
+===================================================== */
+
+function stopTriviaSafely() {
+
+    /*
+     * We intentionally DO NOT call a random
+     * stopTrivia() function unless it exists.
+     */
+
+    if (
+        typeof window.stopTrivia ===
+            "function"
+    ) {
+
+        try {
+
+            window.stopTrivia();
+
+        }
+        catch (error) {
+
+            console.warn(
+                "stopTrivia warning:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Reset only if the global state exists.
+     */
+
+    if (
+        window.triviaState
+    ) {
+
+        window.triviaState.active =
+            false;
+
+        window.triviaState.currentQuestion =
+            null;
+
+        window.triviaState.currentQuestionIndex =
+            0;
+
+        window.triviaState.score =
+            0;
+
+    }
+
+
+    /*
+     * Hide Trivia UI if it has its own
+     * wrapper.
+     */
+
+    const triviaWorkspace =
+        document.querySelector(
+            "#triviaWorkspace, .trivia-workspace"
+        );
+
+
+    if (
+        triviaWorkspace
+    ) {
+
+        triviaWorkspace.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =====================================================
+   ENTER TRIVIA MODE
+===================================================== */
+
+function enterTriviaMode() {
+
+    /*
+     * Clear normal AI result.
+     */
+
+    clearAIWorkspaceState({
+
+        keepForm:
+            false,
+
+        keepResult:
+            false,
+
+        keepMode:
+            true
+
+    });
+
+
+    /*
+     * Set mode globally.
+     */
+
+    if (
+        typeof currentMode !==
+            "undefined"
+    ) {
+
+        currentMode =
+            "trivia";
+
+    }
+
+
+    aiGenerationState.currentMode =
+        "trivia";
+
+
+    aiGenerationState.lastRequest =
+        null;
+
+
+    /*
+     * Update UI.
+     */
+
+    setActiveAITool(
+        "trivia"
+    );
+
+
+    updateAIWorkspaceVisibility(
+        "trivia"
+    );
+
+
+    /*
+     * Apply translated Trivia static labels.
+     */
+
+    translateTriviaDynamic();
+
+
+    /*
+     * IMPORTANT:
+     *
+     * We do NOT automatically restart an existing
+     * trivia game here.
+     *
+     * User must explicitly press START.
+     */
+
+}
+
+
+/* =====================================================
+   ENTER NORMAL AI MODE
+===================================================== */
+
+function enterNormalAIMode(
+    mode
+) {
+
+    const normalizedMode =
+        normalizeAIMode(
+            mode
+        );
+
+
+    if (
+        !normalizedMode ||
+        normalizedMode ===
+            "trivia"
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * If Trivia is active, stop it before
+     * changing to another AI tool.
+     */
+
+    if (
+        window.triviaState &&
+        window.triviaState.active ===
+            true
+    ) {
+
+        stopTriviaSafely();
+
+    }
+
+
+    /*
+     * Clear old AI state.
+     */
+
+    clearAIWorkspaceState({
+
+        keepForm:
+            false,
+
+        keepResult:
+            false,
+
+        keepMode:
+            true
+
+    });
+
+
+    /*
+     * Set global mode.
+     */
+
+    if (
+        typeof currentMode !==
+            "undefined"
+    ) {
+
+        currentMode =
+            normalizedMode;
+
+    }
+
+
+    aiGenerationState.currentMode =
+        normalizedMode;
+
+
+    aiGenerationState.lastRequest =
+        null;
+
+
+    /*
+     * Update tool buttons.
+     */
+
+    setActiveAITool(
+        normalizedMode
+    );
+
+
+    /*
+     * Show normal workspace.
+     */
+
+    updateAIWorkspaceVisibility(
+        normalizedMode
+    );
+
+
+    /*
+     * Reset form.
+
+     * Name can be preserved because users often
+     * use the same name for multiple tools.
+     */
+
+    resetAINormalForm(
+        true
+    );
+
+
+    /*
+     * Translate the newly selected mode.
+     */
+
+    translateCurrentMode();
+
+    translateCurrentAIWorkspace();
+
+}
+
+
+/* =====================================================
+   SWITCH AI MODE
+===================================================== */
+
+function switchAIMode(
+    mode
+) {
+
+    const normalizedMode =
+        normalizeAIMode(
+            mode
+        );
+
+
+    if (!normalizedMode) {
+
+        console.warn(
+            "Unknown AI mode:",
+            mode
+        );
+
+
+        return false;
+
+    }
+
+
+    /*
+     * Avoid unnecessary resets when clicking
+     * the already-active tool.
+     */
+
+    const existingMode =
+        getCurrentAIMode();
+
+
+    if (
+        existingMode ===
+        normalizedMode
+    ) {
+
+        setActiveAITool(
+            normalizedMode
+        );
+
+
+        return true;
+
+    }
+
+
+    if (
+        normalizedMode ===
+            "trivia"
+    ) {
+
+        enterTriviaMode();
+
+    }
+    else {
+
+        enterNormalAIMode(
+            normalizedMode
+        );
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =====================================================
+   TOOL CLICK HANDLER
+===================================================== */
+
+function handleAIToolClick(
+    event
+) {
+
+    const button =
+        event.currentTarget;
+
+
+    const mode =
+        button.dataset.aiTool ||
+        button.dataset.tool ||
+        button.dataset.mode;
+
+
+    const normalizedMode =
+        normalizeAIMode(
+            mode
+        );
+
+
+    if (!normalizedMode) {
+
+        return;
+
+    }
+
+
+    event.preventDefault();
+
+
+    switchAIMode(
+        normalizedMode
+    );
+
+}
+
+
+/* =====================================================
+   BIND TOOL BUTTONS
+===================================================== */
+
+function bindAIToolButtons() {
+
+    getAIToolButtons()
+        .forEach(
+            button => {
+
+                /*
+                 * Avoid duplicate event handlers.
+                 */
+
+                if (
+                    button.dataset.aiToolBound ===
+                        "true"
+                ) {
+
+                    return;
+
+                }
+
+
+                const mode =
+                    normalizeAIMode(
+
+                        button.dataset.aiTool ||
+                        button.dataset.tool ||
+                        button.dataset.mode
+
+                    );
+
+
+                /*
+                 * Only bind actual AI tool buttons.
+                 *
+                 * This prevents random elements with
+                 * data-mode values from becoming tools.
+                 */
+
+                if (
+                    !AI_TOOL_MODES.includes(
+                        mode
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                button.dataset.aiToolBound =
+                    "true";
+
+
+                button.addEventListener(
+                    "click",
+                    handleAIToolClick
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   INITIAL TOOL STATE
+===================================================== */
+
+function initializeAIToolMode() {
+
+    /*
+     * Prefer the existing currentMode if valid.
+     */
+
+    let mode =
+        getCurrentAIMode();
+
+
+    mode =
+        normalizeAIMode(
+            mode
+        );
+
+
+    /*
+     * If nothing is selected,
+     * default to Wish.
+     */
+
+    if (!mode) {
+
+        mode =
+            "wish";
+
+    }
+
+
+    if (
+        mode ===
+            "trivia"
+    ) {
+
+        /*
+         * Do not start Trivia automatically.
+         */
+
+        if (
+            typeof currentMode !==
+                "undefined"
+        ) {
+
+            currentMode =
+                "trivia";
+
+        }
+
+
+        aiGenerationState.currentMode =
+            "trivia";
+
+
+        setActiveAITool(
+            "trivia"
+        );
+
+
+        updateAIWorkspaceVisibility(
+            "trivia"
+        );
+
+
+        translateTriviaDynamic();
+
+    }
+    else {
+
+        if (
+            typeof currentMode !==
+                "undefined"
+        ) {
+
+            currentMode =
+                mode;
+
+        }
+
+
+        aiGenerationState.currentMode =
+            mode;
+
+
+        setActiveAITool(
+            mode
+        );
+
+
+        updateAIWorkspaceVisibility(
+            mode
+        );
+
+
+        translateCurrentMode();
+
+    }
+
+}
+
+
+/* =====================================================
+   OBSERVE DYNAMIC TOOL BUTTONS
+===================================================== */
+
+let aiToolObserver =
+    null;
+
+
+function initializeAIToolObserver() {
+
+    if (
+        aiToolObserver
+    ) {
+
+        return;
+
+    }
+
+
+    aiToolObserver =
+        new MutationObserver(
+            mutations => {
+
+                let added =
+                    false;
+
+
+                for (
+                    const mutation of mutations
+                ) {
+
+                    if (
+                        mutation.addedNodes &&
+                        mutation.addedNodes.length
+                    ) {
+
+                        added =
+                            true;
+
+                        break;
+
+                    }
+
+                }
+
+
+                if (
+                    !added
+                ) {
+
+                    return;
+
+                }
+
+
+                bindAIToolButtons();
+
+            }
+        );
+
+
+    aiToolObserver.observe(
+        document.body,
+        {
+
+            childList:
+                true,
+
+            subtree:
+                true
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   INITIALIZE TOOL SYSTEM
+===================================================== */
+
+function initializeAIToolSystem() {
+
+    bindAIToolButtons();
+
+    initializeAIToolMode();
+
+    initializeAIToolObserver();
+
+}
+
+
+/* =====================================================
+   DOM READY
+===================================================== */
+
+if (
+    document.readyState ===
+        "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeAIToolSystem,
+        {
+            once:
+                true
+        }
+    );
+
+}
+else {
+
+    initializeAIToolSystem();
+
+}
+
+
+/* =====================================================
+   PUBLIC TOOL API
+===================================================== */
+
+window.NaylaAI =
+    window.NaylaAI || {};
+
+
+window.NaylaAI.tools =
+    window.NaylaAI.tools || {};
+
+
+window.NaylaAI.tools.switch =
+    switchAIMode;
+
+
+window.NaylaAI.tools.current =
+    getCurrentAIMode;
+
+
+window.NaylaAI.tools.setActive =
+    setActiveAITool;
+
+
+window.NaylaAI.tools.reset =
+    clearAIWorkspaceState;
+
+
+window.switchAIMode =
+    switchAIMode;
+/* =========================================================
+   PART 8A
+   TRIVIA STATE
+========================================================= */
+
+window.triviaState =
+    window.triviaState || {
+
+        active: false,
+
+        loading: false,
+
+        questions: [],
+
+        currentQuestionIndex: 0,
+
+        currentQuestion: null,
+
+        selectedAnswer: null,
+
+        score: 0,
+
+        totalQuestions: 0,
+
+        answered: false
+
+    };
+/* =========================================================
+   TRIVIA ELEMENTS
+========================================================= */
+
+function getTriviaElements() {
+
+    return {
+
+        startButton:
+            document.getElementById(
+                "startTrivia"
+            ),
+
+        nextButton:
+            document.getElementById(
+                "nextTrivia"
+            ),
+
+        restartButton:
+            document.getElementById(
+                "restartTrivia"
+            ),
+
+        question:
+            document.getElementById(
+                "triviaQuestion"
+            ),
+
+        answers:
+            document.getElementById(
+                "triviaAnswers"
+            ),
+
+        score:
+            document.getElementById(
+                "triviaScore"
+            ),
+
+        level:
+            document.getElementById(
+                "triviaLevel"
+            ),
+
+        result:
+            document.getElementById(
+                "triviaResult"
+            )
+
+    };
+
+}
+/* =========================================================
+   START TRIVIA
+========================================================= */
+
+async function startTrivia() {
+
+    if (
+        triviaState.loading
+    ) {
+
+        return;
+    }
+
+    triviaState.loading =
+        true;
+
+    try {
+
+        const language =
+            getAILanguage();
+
+        const response =
+            await fetch(
+                "/api/ai/trivia/start",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body: JSON.stringify({
+
+                        language
+
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                data.error ||
+                "Trivia failed"
+            );
+
+        }
+
+        triviaState.active =
+            true;
+
+        triviaState.questions =
+            data.questions || [];
+
+        triviaState.totalQuestions =
+            triviaState.questions.length;
+
+        triviaState.currentQuestionIndex =
+            0;
+
+        triviaState.score =
+            0;
+
+        triviaState.answered =
+            false;
+
+        renderCurrentTriviaQuestion();
+
+    }
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+        showToast(
+            error.message
+        );
+
+    }
+    finally {
+
+        triviaState.loading =
+            false;
+
+    }
+
+}
+/* =========================================================
+   RENDER QUESTION
+========================================================= */
+
+function renderCurrentTriviaQuestion() {
+
+    const elements =
+        getTriviaElements();
+
+    const question =
+        triviaState.questions[
+            triviaState.currentQuestionIndex
+        ];
+
+    if (
+        !question
+    ) {
+
+        finishTrivia();
+
+        return;
+    }
+
+    triviaState.currentQuestion =
+        question;
+
+    triviaState.answered =
+        false;
+
+    triviaState.selectedAnswer =
+        null;
+
+    /*
+     * IMPORTANT
+     * NEVER TRANSLATE QUESTION
+     */
+
+    elements.question.textContent =
+        question.question;
+
+    elements.answers.innerHTML =
+        "";
+
+    question.answers.forEach(
+        (
+            answer,
+            index
+        ) => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.type =
+                "button";
+
+            button.className =
+                "trivia-answer";
+
+            button.textContent =
+                answer;
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectTriviaAnswer(
+                        index
+                    );
+
+                }
+            );
+
+            elements.answers.appendChild(
+                button
+            );
+
+        }
+    );
+
+    updateTriviaStats();
+
+    updateTriviaNextButton();
+
+}
+/* =========================================================
+   SELECT ANSWER
+========================================================= */
+
+function selectTriviaAnswer(
+    answerIndex
+) {
+
+    if (
+        triviaState.answered
+    ) {
+
+        return;
+    }
+
+    triviaState.selectedAnswer =
+        answerIndex;
+
+    triviaState.answered =
+        true;
+
+    const question =
+        triviaState.currentQuestion;
+
+    const buttons =
+        document.querySelectorAll(
+            ".trivia-answer"
+        );
+
+    buttons.forEach(
+        (
+            button,
+            index
+        ) => {
+
+            button.disabled =
+                true;
+
+            if (
+                index ===
+                question.correctAnswer
+            ) {
+
+                button.classList.add(
+                    "correct"
+                );
+
+            }
+
+            if (
+                index ===
+                    answerIndex &&
+                index !==
+                    question.correctAnswer
+            ) {
+
+                button.classList.add(
+                    "wrong"
+                );
+
+            }
+
+        }
+    );
+
+    if (
+        answerIndex ===
+        question.correctAnswer
+    ) {
+
+        triviaState.score++;
+
+    }
+
+    updateTriviaStats();
+
+    updateTriviaNextButton();
+
+}
+/* =========================================================
+   NEXT BUTTON
+========================================================= */
+
+function updateTriviaNextButton() {
+
+    const elements =
+        getTriviaElements();
+
+    if (
+        !elements.nextButton
+    ) {
+
+        return;
+    }
+
+    elements.nextButton.disabled =
+        !triviaState.answered;
+
+    elements.nextButton.textContent =
+        getTranslation(
+            "trivia.game.next",
+            "Next Question →"
+        );
+
+}
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+function nextTriviaQuestion() {
+
+    if (
+        !triviaState.answered
+    ) {
+
+        return;
+    }
+
+    triviaState.currentQuestionIndex++;
+
+    if (
+        triviaState.currentQuestionIndex >=
+        triviaState.totalQuestions
+    ) {
+
+        finishTrivia();
+
+        return;
+    }
+
+    renderCurrentTriviaQuestion();
+
+}
+/* =========================================================
+   SCORE
+========================================================= */
+
+function updateTriviaStats() {
+
+    const elements =
+        getTriviaElements();
+
+    if (
+        elements.score
+    ) {
+
+        elements.score.textContent =
+            triviaState.score;
+    }
+
+    if (
+        elements.level
+    ) {
+
+        elements.level.textContent =
+            `${triviaState.currentQuestionIndex + 1}/${triviaState.totalQuestions}`;
+    }
+
+}
+/* =========================================================
+   SCORE
+========================================================= */
+
+function updateTriviaStats() {
+
+    const elements =
+        getTriviaElements();
+
+    if (
+        elements.score
+    ) {
+
+        elements.score.textContent =
+            triviaState.score;
+    }
+
+    if (
+        elements.level
+    ) {
+
+        elements.level.textContent =
+            `${triviaState.currentQuestionIndex + 1}/${triviaState.totalQuestions}`;
+    }
+
+}
+/* =========================================================
+   TRIVIA LANGUAGE FIX
+========================================================= */
+
+function refreshTriviaLanguage() {
+
+    if (
+        !triviaState.active
+    ) {
+
+        return;
+    }
+
+    /*
+     * ONLY LABELS
+     */
+
+    translateTriviaDynamic();
+
+    updateTriviaNextButton();
+
+}
+/* =========================================================
+   FINISH TRIVIA
+========================================================= */
+
+function finishTrivia() {
+
+    triviaState.active =
+        false;
+
+    const percentage =
+        triviaState.totalQuestions > 0
+            ? Math.round(
+                (
+                    triviaState.score /
+                    triviaState.totalQuestions
+                ) * 100
+            )
+            : 0;
+
+    renderTriviaResult(
+        percentage
+    );
+
+}
+/* =========================================================
+   ACHIEVEMENTS
+========================================================= */
+
+function getTriviaAchievement(
+    score,
+    total
+) {
+
+    const percentage =
+        total > 0
+            ? score / total
+            : 0;
+
+    if (
+        percentage === 1
+    ) {
+
+        return {
+
+            title:
+                "👑 Nayla Ultimate Master",
+
+            description:
+                "Perfect score. You know Nayla extremely well."
+
+        };
+
+    }
+
+    if (
+        percentage >= 0.8
+    ) {
+
+        return {
+
+            title:
+                "🌸 Nayla Expert",
+
+            description:
+                "Amazing knowledge about Nayla."
+
+        };
+
+    }
+
+    if (
+        percentage >= 0.6
+    ) {
+
+        return {
+
+            title:
+                "⭐ Nayla Fan",
+
+            description:
+                "You know many things about Nayla."
+
+        };
+
+    }
+
+    if (
+        percentage >= 0.4
+    ) {
+
+        return {
+
+            title:
+                "🎀 Casual Supporter",
+
+            description:
+                "A good start. Keep learning."
+
+        };
+
+    }
+
+    return {
+
+        title:
+            "🌱 New Challenger",
+
+        description:
+            "Try again and improve your score."
+
+    };
+
+}
+/* =========================================================
+   MEMORY MESSAGE
+========================================================= */
+
+function getTriviaMemoryMessage(
+    percentage
+) {
+
+    if (
+        percentage >= 90
+    ) {
+
+        return getTranslation(
+            "trivia.memory.legend",
+            "Your memories of Nayla shine brightly."
+        );
+
+    }
+
+    if (
+        percentage >= 70
+    ) {
+
+        return getTranslation(
+            "trivia.memory.excellent",
+            "You clearly follow Nayla closely."
+        );
+
+    }
+
+    if (
+        percentage >= 50
+    ) {
+
+        return getTranslation(
+            "trivia.memory.good",
+            "You know quite a lot already."
+        );
+
+    }
+
+    return getTranslation(
+        "trivia.memory.beginner",
+        "Every fan journey starts somewhere."
+    );
+
+}
+/* =========================================================
+   RESULT SCREEN
+========================================================= */
+
+function renderTriviaResult(
+    percentage
+) {
+
+    const achievement =
+        getTriviaAchievement(
+
+            triviaState.score,
+
+            triviaState.totalQuestions
+
+        );
+
+    const result =
+        document.getElementById(
+            "triviaResult"
+        );
+
+    if (!result) {
+
+        return;
+
+    }
+
+    result.innerHTML =
+        `
+        <div class="trivia-result-card">
+
+            <div class="trivia-result-score">
+
+                ${triviaState.score}
+                /
+                ${triviaState.totalQuestions}
+
+            </div>
+
+            <div class="trivia-result-percentage">
+
+                ${percentage}%
+
+            </div>
+
+            <div class="trivia-achievement">
+
+                <h3>
+                    ${achievement.title}
+                </h3>
+
+                <p>
+                    ${achievement.description}
+                </p>
+
+            </div>
+
+            <div class="trivia-memory">
+
+                ${getTriviaMemoryMessage(
+                    percentage
+                )}
+
+            </div>
+
+        </div>
+        `;
+
+    result.style.display =
+        "block";
+
+    translateTriviaDynamic();
+
+}
+/* =========================================================
+   RESTART TRIVIA
+========================================================= */
+
+function restartTrivia() {
+
+    triviaState.active =
+        false;
+
+    triviaState.loading =
+        false;
+
+    triviaState.questions =
+        [];
+
+    triviaState.currentQuestion =
+        null;
+
+    triviaState.currentQuestionIndex =
+        0;
+
+    triviaState.selectedAnswer =
+        null;
+
+    triviaState.score =
+        0;
+
+    triviaState.totalQuestions =
+        0;
+
+    triviaState.answered =
+        false;
+
+    const result =
+        document.getElementById(
+            "triviaResult"
+        );
+
+    if (
+        result
+    ) {
+
+        result.style.display =
+            "none";
+
+        result.innerHTML =
+            "";
+
+    }
+
+    startTrivia();
+
+}
+/* =========================================================
+   START BUTTON
+========================================================= */
+
+function bindTriviaStartButton() {
+
+    const button =
+        document.getElementById(
+            "startTrivia"
+        );
+
+    if (
+        !button ||
+        button.dataset.bound ===
+            "true"
+    ) {
+
+        return;
+
+    }
+
+    button.dataset.bound =
+        "true";
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            startTrivia();
+
+        }
+    );
+
+}
+/* =========================================================
+   NEXT BUTTON
+========================================================= */
+
+function bindTriviaNextButton() {
+
+    const button =
+        document.getElementById(
+            "nextTrivia"
+        );
+
+    if (
+        !button ||
+        button.dataset.bound ===
+            "true"
+    ) {
+
+        return;
+
+    }
+
+    button.dataset.bound =
+        "true";
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            nextTriviaQuestion();
+
+        }
+    );
+
+}
+/* =========================================================
+   RESTART BUTTON
+========================================================= */
+
+function bindTriviaRestartButton() {
+
+    const button =
+        document.getElementById(
+            "restartTrivia"
+        );
+
+    if (
+        !button ||
+        button.dataset.bound ===
+            "true"
+    ) {
+
+        return;
+
+    }
+
+    button.dataset.bound =
+        "true";
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            restartTrivia();
+
+        }
+    );
+
+}
+/* =========================================================
+   TRIVIA EVENTS
+========================================================= */
+
+function initializeTriviaEvents() {
+
+    bindTriviaStartButton();
+
+    bindTriviaNextButton();
+
+    bindTriviaRestartButton();
+
+}
+/* =========================================================
+   DOM READY
+========================================================= */
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeTriviaEvents,
+        {
+            once: true
+        }
+    );
+
+}
+else {
+
+    initializeTriviaEvents();
+
+}
+/* =========================================================
+   PUBLIC API
+========================================================= */
+
+window.startTrivia =
+    startTrivia;
+
+window.restartTrivia =
+    restartTrivia;
+
+window.nextTriviaQuestion =
+    nextTriviaQuestion;
+
+window.renderTriviaResult =
+    renderTriviaResult;
+/* =========================================================
+   PART 10 / 10
+   FINAL INTEGRATION
+========================================================= */
+
+
+/* =====================================================
+   GLOBAL INIT LOCK
+===================================================== */
+
+window.NaylaAI =
+    window.NaylaAI || {};
+
+
+window.NaylaAI.initialized =
+    window.NaylaAI.initialized || false;
+
+
+/* =====================================================
+   SAFE TOAST
+===================================================== */
+
+if (
+    typeof window.showToast !==
+    "function"
+) {
+
+    window.showToast =
+        function (
+            message
+        ) {
+
+            console.log(
+                "[Toast]",
+                message
+            );
+
+        };
+
+}
+
+
+/* =====================================================
+   SAFE ERROR LOGGER
+===================================================== */
+
+function logAIError(
+    error,
+    context = ""
+) {
+
+    console.error(
+
+        "[NaylaAI]",
+
+        context,
+
+        error
+
+    );
+
+}
+
+
+/* =====================================================
+   REBIND ALL EVENTS
+===================================================== */
+
+function rebindAllAIEvents() {
+
+    try {
+
+        bindAIActions();
+
+    }
+    catch (error) {
+
+        logAIError(
+            error,
+            "bindAIActions"
+        );
+
+    }
+
+
+    try {
+
+        bindAIToolButtons();
+
+    }
+    catch (error) {
+
+        logAIError(
+            error,
+            "bindAIToolButtons"
+        );
+
+    }
+
+
+    try {
+
+        bindTriviaStartButton();
+
+    }
+    catch (error) {
+
+        logAIError(
+            error,
+            "bindTriviaStartButton"
+        );
+
+    }
+
+
+    try {
+
+        bindTriviaNextButton();
+
+    }
+    catch (error) {
+
+        logAIError(
+            error,
+            "bindTriviaNextButton"
+        );
+
+    }
+
+
+    try {
+
+        bindTriviaRestartButton();
+
+    }
+    catch (error) {
+
+        logAIError(
+            error,
+            "bindTriviaRestartButton"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SAFE LANGUAGE REFRESH
+===================================================== */
+
+function refreshEntireAIUI() {
+
+    try {
+
+        translateAIPage();
+
+    }
+    catch (error) {
+
+        logAIError(
+            error,
+            "translateAIPage"
+        );
+
+    }
+
+
+    try {
+
+        translateCurrentAIWorkspace();
+
+    }
+    catch (error) {
+
+        logAIError(
+            error,
+            "translateCurrentAIWorkspace"
+        );
+
+    }
+
+
+    try {
+
+        translateCurrentMode();
+
+    }
+    catch (error) {
+
+        logAIError(
+            error,
+            "translateCurrentMode"
+        );
+
+    }
+
+
+    /*
+     * IMPORTANT
+     *
+     * Only labels.
+     *
+     * NEVER re-render question.
+     */
+
+    try {
+
+        refreshTriviaLanguage();
+
+    }
+    catch (error) {
+
+        logAIError(
+            error,
+            "refreshTriviaLanguage"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LANGUAGE OBSERVER
+===================================================== */
+
+let lastKnownLanguage =
+    getAILanguage();
+
+
+function monitorLanguageChanges() {
+
+    setInterval(
+        () => {
+
+            const currentLanguage =
+                getAILanguage();
+
+            if (
+                currentLanguage ===
+                lastKnownLanguage
+            ) {
+
+                return;
+
+            }
+
+            lastKnownLanguage =
+                currentLanguage;
+
+            refreshEntireAIUI();
+
+        },
+        500
+    );
+
+}
+
+
+/* =====================================================
+   DOM OBSERVER
+===================================================== */
+
+let globalAIObserver =
+    null;
+
+
+function initializeGlobalObserver() {
+
+    if (
+        globalAIObserver
+    ) {
+
+        return;
+
+    }
+
+    globalAIObserver =
+        new MutationObserver(
+            mutations => {
+
+                let needsRebind =
+                    false;
+
+                for (
+                    const mutation of mutations
+                ) {
+
+                    if (
+                        mutation.addedNodes &&
+                        mutation.addedNodes.length
+                    ) {
+
+                        needsRebind =
+                            true;
+
+                        break;
+
+                    }
+
+                }
+
+                if (
+                    !needsRebind
+                ) {
+
+                    return;
+
+                }
+
+                rebindAllAIEvents();
+
+            }
+        );
+
+    globalAIObserver.observe(
+        document.body,
+        {
+
+            childList:
+                true,
+
+            subtree:
+                true
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FIX NEXT BUTTON TEXT
+===================================================== */
+
+function ensureTriviaNextButtonText() {
+
+    const button =
+        document.getElementById(
+            "nextTrivia"
+        );
+
+    if (!button) {
+
+        return;
+
+    }
+
+    const invalidTexts = [
+
+        "trivia.game.next",
+
+        "undefined",
+
+        "null"
+
+    ];
+
+    if (
+        invalidTexts.includes(
+            button.textContent.trim()
+        )
+    ) {
+
+        button.textContent =
+            getTranslation(
+
+                "trivia.game.next",
+
+                "Next Question →"
+
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   FIX QUESTION PLACEHOLDER
+===================================================== */
+
+function ensureTriviaQuestionText() {
 
     const question =
         document.getElementById(
@@ -6285,373 +9847,164 @@ function translateTriviaDynamic() {
         );
 
     if (!question) {
+
         return;
+
     }
 
-    /*
-    =====================================================
-    ACTIVE TRIVIA
+    const invalidTexts = [
 
-    Jangan pernah mengganti pertanyaan aktif.
+        "trivia.game.defaultQuestion",
 
-    Pertanyaan aktif berasal dari:
-        /api/ai/trivia/start
+        "undefined",
 
-    dan sudah diterjemahkan oleh backend.
-    =====================================================
-    */
+        "null"
+
+    ];
 
     if (
-        triviaState &&
-        triviaState.active === true
+        invalidTexts.includes(
+            question.textContent.trim()
+        )
     ) {
-        return;
-    }
 
-    /*
-    =====================================================
-    BEFORE TRIVIA START
-
-    Hanya tampilkan placeholder sesuai bahasa.
-    =====================================================
-    */
-
-    const translation =
-        getTranslation(
-            "trivia.game.defaultQuestion"
-        );
-
-    if (
-        translation !== null &&
-        translation !== undefined &&
-        String(translation).trim()
-    ) {
+        /*
+         * IMPORTANT
+         *
+         * Don't translate fake question.
+         * Only clear it.
+         */
 
         question.textContent =
-            translation;
+            "";
 
     }
 
 }
 
-    /* =====================================================
-       LISTEN TO NAVBAR LANGUAGE SYSTEM
-    ===================================================== */
 
-    window.addEventListener(
-        "languageChanged",
-        function (event) {
+/* =====================================================
+   PERIODIC REPAIR
+===================================================== */
 
-            const language =
-                event.detail?.language;
+function startPeriodicRepair() {
 
+    setInterval(
+        () => {
 
-            if (!language) {
-                return;
-            }
+            ensureTriviaNextButtonText();
 
+            ensureTriviaQuestionText();
 
-            if (
-                !supportedLanguages.includes(
-                    language
-                )
-            ) {
-
-                console.warn(
-                    "[AI Translation] Unsupported language:",
-                    language
-                );
-
-                return;
-
-            }
-
-
-            currentLanguage =
-                language;
-
-            /*
-=====================================================
-IF TRIVIA IS CURRENTLY ACTIVE
-=====================================================
-
-Restart trivia using the newly selected language.
-
-This guarantees that:
-- question
-- options
-- correct answer
-- explanation
-
-all come from the same language bank.
-*/
-
-if (
-    triviaState &&
-    triviaState.active === true
-) {
-
-    startTrivia();
-
-    return;
+        },
+        1000
+    );
 
 }
-                
-            /*
-                Navbar already saves:
-
-                localStorage.setItem(
-                    "language",
-                    language
-                );
-
-                So AI does NOT need to save
-                another language key.
-            */
 
 
-            translateAIPage();
+/* =====================================================
+   SAFE GLOBAL EVENTS
+===================================================== */
+
+window.addEventListener(
+    "error",
+    event => {
+
+        logAIError(
+            event.error,
+            "window.error"
+        );
+
+    }
+);
 
 
-            document.dispatchEvent(
-                new CustomEvent(
-                    "aiLanguageChanged",
-                    {
-                        detail: {
-                            language:
-                                language
-                        }
-                    }
-                )
-            );
+window.addEventListener(
+    "unhandledrejection",
+    event => {
+
+        logAIError(
+            event.reason,
+            "promise"
+        );
+
+    }
+);
 
 
-            console.log(
-                "[AI Translation] Navbar language changed:",
-                language
-            );
+/* =====================================================
+   FINAL INITIALIZATION
+===================================================== */
 
+function initializeNaylaAI() {
+
+    if (
+        window.NaylaAI.initialized
+    ) {
+
+        return;
+    }
+
+    window.NaylaAI.initialized =
+        true;
+
+
+    rebindAllAIEvents();
+
+    refreshEntireAIUI();
+
+    initializeGlobalObserver();
+
+    monitorLanguageChanges();
+
+    startPeriodicRepair();
+
+    console.log(
+        "NaylaAI initialized"
+    );
+
+}
+
+
+/* =====================================================
+   DOM READY
+===================================================== */
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeNaylaAI,
+        {
+            once: true
         }
     );
 
+}
+else {
 
-    /* =====================================================
-       GLOBAL AI LANGUAGE API
-       OPTIONAL
-    ===================================================== */
+    initializeNaylaAI();
 
-    window.setAILanguage =
-        function(language) {
+}
 
-            if (
-                !supportedLanguages.includes(
-                    language
-                )
-            ) {
 
-                console.warn(
-                    "[AI Translation] Unsupported language:",
-                    language
-                );
+/* =====================================================
+   PUBLIC API
+===================================================== */
 
-                return;
+window.NaylaAI.refresh =
+    refreshEntireAIUI;
 
-            }
+window.NaylaAI.rebind =
+    rebindAllAIEvents;
 
+window.NaylaAI.initialize =
+    initializeNaylaAI;
 
-            /*
-                Update the MASTER navbar system.
-
-                This keeps navbar + AI synchronized.
-            */
-
-            localStorage.setItem(
-                "language",
-                language
-            );
-
-
-            currentLanguage =
-                language;
-
-
-            translateAIPage();
-
-
-            /*
-                Notify other components.
-            */
-
-            window.dispatchEvent(
-                new CustomEvent(
-                    "languageChanged",
-                    {
-                        detail: {
-                            language:
-                                language
-                        }
-                    }
-                )
-            );
-
-        };
-
-
-    /* =====================================================
-       GET AI LANGUAGE
-    ===================================================== */
-
-    window.getAILanguage =
-        function() {
-
-            return currentLanguage;
-
-        };
-
-
-    /* =====================================================
-       TRANSLATION HELPER
-    ===================================================== */
-
-    window.aiTranslate =
-        function(
-            path,
-            fallback = ""
-        ) {
-
-            const result =
-                getTranslation(
-                    path
-                );
-
-
-            return (
-                result !== null &&
-                result !== undefined
-            )
-                ? result
-                : fallback;
-
-        };
-
-
-    /* =====================================================
-       OBSERVE DYNAMIC AI CONTENT
-    ===================================================== */
-
-    const aiPage =
-        document.querySelector(
-            ".ai-page"
-        );
-
-
-    if (aiPage) {
-
-        const observer =
-            new MutationObserver(
-                mutations => {
-
-                    let shouldTranslate =
-                        false;
-
-
-                    mutations.forEach(
-                        mutation => {
-
-                            if (
-                                mutation.type ===
-                                "childList" ||
-
-                                mutation.type ===
-                                "attributes"
-                            ) {
-
-                                shouldTranslate =
-                                    true;
-
-                            }
-
-                        }
-                    );
-
-
-                    if (shouldTranslate) {
-
-                        clearTimeout(
-                            window._aiTranslationTimer
-                        );
-
-
-                        window._aiTranslationTimer =
-                            setTimeout(
-                                () => {
-
-                                    translateAIPage();
-
-                                },
-                                30
-                            );
-
-                    }
-
-                }
-            );
-
-
-        observer.observe(
-            aiPage,
-            {
-
-                childList:
-                    true,
-
-                subtree:
-                    true,
-
-                attributes:
-                    true,
-
-                attributeFilter: [
-                    "class",
-                    "style"
-                ]
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       INITIAL TRANSLATION
-    ===================================================== */
-
-    translateAIPage();
-
-
-    console.log(
-        "================================="
-    );
-
-    console.log(
-        "AI TRANSLATION READY"
-    );
-
-    console.log(
-        "Language:",
-        currentLanguage
-    );
-
-    console.log(
-        "================================="
-    );
-
-
-    /* =====================================================
-       INITIAL GLOBAL API
-    ===================================================== */
-
-    window.AITranslations =
-        AI_TRANSLATIONS;
-
-});
+window.NaylaAI.repair =
+    startPeriodicRepair;
+    });
