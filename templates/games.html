@@ -12,15 +12,15 @@
 
         <div class="booth-title-area">
 
-            <div class="eyebrow">
+            <div class="eyebrow" data-i18n="booth.header_eyebrow">
                 NAYLA FESTIVAL · SEIJIN SHIKI 2026
             </div>
 
-            <h1>
+            <h1 data-i18n="booth.header_title">
                 🎪 Nayla Festival Booth
             </h1>
 
-            <p>
+            <p data-i18n="booth.header_description">
                 Siapkan pesanan customer dan layani mereka
                 untuk mendapatkan score dan money.
             </p>
@@ -32,7 +32,8 @@
             <button
                 type="button"
                 id="openBoothButton"
-                class="booth-btn booth-btn-primary">
+                class="booth-btn booth-btn-primary"
+                data-i18n="booth.btn_open_booth">
 
                 🏪 BUKA BOOTH
 
@@ -41,7 +42,8 @@
             <button
                 type="button"
                 id="priceSettingsButton"
-                class="booth-btn booth-btn-secondary">
+                class="booth-btn booth-btn-secondary"
+                data-i18n="booth.btn_price_settings">
 
                 ⚙️ ATUR HARGA
 
@@ -60,7 +62,7 @@
 
         <div class="booth-stat">
 
-            <span class="booth-stat-label">
+            <span class="booth-stat-label" data-i18n="booth.stat_score">
                 SCORE
             </span>
 
@@ -77,7 +79,7 @@
 
         <div class="booth-stat">
 
-            <span class="booth-stat-label">
+            <span class="booth-stat-label" data-i18n="booth.stat_money">
                 MONEY
             </span>
 
@@ -94,7 +96,7 @@
 
         <div class="booth-stat">
 
-            <span class="booth-stat-label">
+            <span class="booth-stat-label" data-i18n="booth.stat_combo">
                 COMBO
             </span>
 
@@ -111,7 +113,7 @@
 
         <div class="booth-stat">
 
-            <span class="booth-stat-label">
+            <span class="booth-stat-label" data-i18n="booth.stat_customers">
                 CUSTOMERS
             </span>
 
@@ -128,7 +130,7 @@
 
         <div class="booth-stat timer-stat">
 
-            <span class="booth-stat-label">
+            <span class="booth-stat-label" data-i18n="booth.stat_time">
                 TIME
             </span>
 
@@ -231,7 +233,7 @@
 
                 <div class="booth-roof">
 
-                    <div class="booth-roof-text">
+                    <div class="booth-roof-text" data-i18n="booth.roof_text">
                         NAYLA FESTIVAL BOOTH
                     </div>
 
@@ -280,7 +282,7 @@
 
                     <div class="request-title">
 
-                        <span>
+                        <span data-i18n="booth.request_title">
                             🛍️ PESANAN CUSTOMER
                         </span>
 
@@ -315,7 +317,8 @@
 
                 <span
                     id="customerName"
-                    class="customer-name">
+                    class="customer-name"
+                    data-i18n="booth.customer_default_name">
 
                     Customer
 
@@ -349,15 +352,15 @@
                         🏪
                     </div>
 
-                    <div class="eyebrow">
+                    <div class="eyebrow" data-i18n="booth.start_eyebrow">
                         NAYLA FESTIVAL
                     </div>
 
-                    <h2>
+                    <h2 data-i18n="booth.start_title">
                         Nayla Festival Booth
                     </h2>
 
-                    <p>
+                    <p data-i18n="booth.start_description">
                         Kamu bertugas sebagai penjaga booth.
                         Customer akan datang dan memesan barang.
                         Siapkan barang yang mereka minta,
@@ -367,7 +370,8 @@
                     <button
                         type="button"
                         id="startGameButton"
-                        class="booth-btn booth-btn-primary start-button">
+                        class="booth-btn booth-btn-primary start-button"
+                        data-i18n="booth.start_button">
 
                         🎪 BUKA BOOTH & MULAI
 
@@ -392,11 +396,11 @@
 
                 <div>
 
-                    <span class="preparation-kicker">
+                    <span class="preparation-kicker" data-i18n="booth.prep_kicker">
                         BOOTH WORKSPACE
                     </span>
 
-                    <strong class="preparation-title">
+                    <strong class="preparation-title" data-i18n="booth.prep_title">
                         🧺 Preparation Tray
                     </strong>
 
@@ -404,7 +408,8 @@
 
                 <span
                     id="preparationStatus"
-                    class="preparation-status">
+                    class="preparation-status"
+                    data-i18n="booth.prep_status_empty">
 
                     Belum ada pesanan
 
@@ -417,7 +422,7 @@
                 id="preparationItems"
                 class="preparation-items">
 
-                <div class="empty-tray">
+                <div class="empty-tray" data-i18n="booth.prep_placeholder">
 
                     Pilih barang sesuai pesanan customer
 
@@ -431,7 +436,8 @@
                 <button
                     type="button"
                     id="clearPreparationButton"
-                    class="booth-btn booth-btn-danger">
+                    class="booth-btn booth-btn-danger"
+                    data-i18n="booth.btn_clear">
 
                     ↺ CLEAR
 
@@ -441,6 +447,7 @@
                     type="button"
                     id="serveButton"
                     class="booth-btn booth-btn-success"
+                    data-i18n="booth.btn_serve"
                     disabled>
 
                     ✓ SERVE CUSTOMER
@@ -464,17 +471,17 @@
 
                     <div>
 
-                        <span class="panel-kicker">
+                        <span class="panel-kicker" data-i18n="booth.inventory_kicker">
                             INVENTORY
                         </span>
 
-                        <h3>
+                        <h3 data-i18n="booth.inventory_title">
                             🛍️ Produk Booth
                         </h3>
 
                     </div>
 
-                    <span>
+                    <span data-i18n="booth.inventory_hint">
                         Klik produk untuk menyiapkan order
                     </span>
 
@@ -496,17 +503,17 @@
 
                     <div>
 
-                        <span class="panel-kicker">
+                        <span class="panel-kicker" data-i18n="booth.price_kicker">
                             CURRENT PRICE
                         </span>
 
-                        <h3>
+                        <h3 data-i18n="booth.price_title">
                             💰 Harga
                         </h3>
 
                     </div>
 
-                    <span>
+                    <span data-i18n="booth.price_hint">
                         Bisa diatur
                     </span>
 
@@ -542,11 +549,11 @@
 
             <div>
 
-                <span class="panel-kicker">
+                <span class="panel-kicker" data-i18n="booth.modal_kicker">
                     BOOTH SETTINGS
                 </span>
 
-                <h2>
+                <h2 data-i18n="booth.modal_title">
                     ⚙️ Atur Harga Barang
                 </h2>
 
@@ -576,7 +583,8 @@
             <button
                 type="button"
                 id="cancelPriceButton"
-                class="booth-btn booth-btn-secondary">
+                class="booth-btn booth-btn-secondary"
+                data-i18n="booth.btn_cancel">
 
                 BATAL
 
@@ -585,7 +593,8 @@
             <button
                 type="button"
                 id="savePriceButton"
-                class="booth-btn booth-btn-primary">
+                class="booth-btn booth-btn-primary"
+                data-i18n="booth.btn_save">
 
                 SIMPAN HARGA
 
@@ -612,22 +621,22 @@
             ✨
         </div>
 
-        <span class="completion-label">
+        <span class="completion-label" data-i18n="booth.completion_label">
             PESANAN SELESAI
         </span>
 
-        <h2>
+        <h2 data-i18n="booth.completion_title">
             Customer Senang! 🎉
         </h2>
 
-        <p id="completionText">
+        <p id="completionText" data-i18n="booth.completion_default_text">
             Pesanan berhasil disajikan.
         </p>
 
         <div class="completion-stats">
 
             <div>
-                <span>
+                <span data-i18n="booth.completion_score_label">
                     +SCORE
                 </span>
 
@@ -637,7 +646,7 @@
             </div>
 
             <div>
-                <span>
+                <span data-i18n="booth.completion_money_label">
                     +MONEY
                 </span>
 
@@ -651,7 +660,8 @@
         <button
             type="button"
             id="closeCompletionButton"
-            class="booth-btn booth-btn-primary">
+            class="booth-btn booth-btn-primary"
+            data-i18n="booth.btn_continue">
 
             LANJUTKAN
 
@@ -664,4 +674,4 @@
 
 <script src="{{ url_for('static', filename='js/games.js') }}"></script>
 
-{% endblock %}  
+{% endblock %}
