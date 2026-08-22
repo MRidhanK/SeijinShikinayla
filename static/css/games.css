@@ -1,0 +1,2924 @@
+/* =========================================================
+   NAYLA FESTIVAL BOOTH
+   COMPLETE CSS
+========================================================= */
+
+:root {
+
+    --bg:
+        #061421;
+
+    --bg-soft:
+        #0a1b2b;
+
+    --panel:
+        rgba(12, 27, 45, .94);
+
+    --panel-light:
+        rgba(19, 38, 61, .94);
+
+    --border:
+        rgba(255,255,255,.09);
+
+    --text:
+        #f5f8ff;
+
+    --muted:
+        #8292a8;
+
+    --pink:
+        #ff5c9a;
+
+    --pink-dark:
+        #e84483;
+
+    --green:
+        #28d48a;
+
+    --yellow:
+        #ffd166;
+
+    --red:
+        #ff5470;
+
+    --blue:
+        #63a8ff;
+
+    --shadow:
+        0 25px 70px rgba(0,0,0,.28);
+
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.booth-game-page {
+
+    width: 100%;
+    min-height: 100vh;
+
+    box-sizing: border-box;
+
+    padding:
+        105px 24px 80px;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(88,110,220,.14),
+            transparent 35%
+        ),
+        linear-gradient(
+            180deg,
+            #061725 0%,
+            #061522 100%
+        );
+
+    color: var(--text);
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.booth-game-header {
+
+    width:
+        min(1280px, 100%);
+
+    margin:
+        0 auto 18px;
+
+    display:
+        flex;
+
+    align-items:
+        flex-end;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+}
+
+
+.booth-title-area {
+
+    max-width:
+        700px;
+
+}
+
+
+.eyebrow,
+.panel-kicker {
+
+    display:
+        block;
+
+    margin-bottom:
+        6px;
+
+    font-size:
+        9px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .2em;
+
+    color:
+        var(--yellow);
+
+}
+
+
+.booth-title-area h1 {
+
+    margin:
+        0;
+
+    font-size:
+        clamp(28px, 4vw, 42px);
+
+    line-height:
+        1.05;
+
+    font-weight:
+        950;
+
+}
+
+
+.booth-title-area p {
+
+    margin:
+        9px 0 0;
+
+    color:
+        var(--muted);
+
+    font-size:
+        13px;
+
+}
+
+
+.booth-header-actions {
+
+    display:
+        flex;
+
+    gap:
+        8px;
+
+    flex-shrink:
+        0;
+
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.booth-btn {
+
+    min-height:
+        43px;
+
+    border:
+        1px solid transparent;
+
+    border-radius:
+        12px;
+
+    padding:
+        11px 16px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    font-weight:
+        900;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform .18s ease,
+        filter .18s ease,
+        opacity .18s ease,
+        box-shadow .18s ease;
+
+}
+
+
+.booth-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    filter:
+        brightness(1.08);
+
+}
+
+
+.booth-btn:active {
+
+    transform:
+        translateY(0);
+
+}
+
+
+.booth-btn:disabled {
+
+    opacity:
+        .38;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+
+}
+
+
+.booth-btn-primary {
+
+    color:
+        white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pink),
+            var(--pink-dark)
+        );
+
+    box-shadow:
+        0 8px 22px rgba(255,78,143,.22);
+
+}
+
+
+.booth-btn-secondary {
+
+    color:
+        #d8e2ef;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border-color:
+        var(--border);
+
+}
+
+
+.booth-btn-success {
+
+    color:
+        #042117;
+
+    background:
+        var(--green);
+
+}
+
+
+.booth-btn-danger {
+
+    color:
+        #ffb7c3;
+
+    background:
+        rgba(255,84,112,.08);
+
+    border-color:
+        rgba(255,84,112,.25);
+
+}
+
+
+/* =========================================================
+   SCOREBOARD
+========================================================= */
+
+.booth-scoreboard {
+
+    width:
+        min(1280px, 100%);
+
+    margin:
+        0 auto 16px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap:
+        9px;
+
+}
+
+
+.booth-stat {
+
+    min-height:
+        67px;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        11px 15px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16,34,55,.94),
+            rgba(8,21,36,.94)
+        );
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.12);
+
+}
+
+
+.booth-stat-label {
+
+    color:
+        #71829a;
+
+    font-size:
+        9px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .13em;
+
+}
+
+
+.booth-stat-value {
+
+    margin-top:
+        5px;
+
+    font-size:
+        20px;
+
+    line-height:
+        1;
+
+}
+
+
+.timer-stat .booth-stat-value {
+
+    color:
+        var(--yellow);
+
+}
+
+
+/* =========================================================
+   GAME WRAPPER
+========================================================= */
+
+.booth-game-wrapper {
+
+    width:
+        min(1280px, 100%);
+
+    margin:
+        0 auto;
+
+}
+
+
+/* =========================================================
+   ARENA
+========================================================= */
+
+.booth-arena {
+
+    position:
+        relative;
+
+    height:
+        570px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    border-radius:
+        26px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #121c42 0%,
+            #101936 56%,
+            #0b1728 100%
+        );
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+/* subtle grid */
+
+.booth-arena::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.035) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        44px 44px;
+
+    pointer-events:
+        none;
+
+}
+
+
+/* glow */
+
+.arena-glow {
+
+    position:
+        absolute;
+
+    width:
+        500px;
+
+    height:
+        500px;
+
+    left:
+        50%;
+
+    top:
+        120px;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(86,107,235,.15),
+            transparent 70%
+        );
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   CEILING
+========================================================= */
+
+.arena-ceiling {
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    height:
+        140px;
+
+    display:
+        flex;
+
+    justify-content:
+        space-around;
+
+    overflow:
+        hidden;
+
+}
+
+
+.arena-ceiling span {
+
+    width:
+        4px;
+
+    height:
+        140px;
+
+    background:
+        rgba(118,134,219,.12);
+
+}
+
+
+.arena-ceiling span:nth-child(3n) {
+
+    background:
+        rgba(255,255,255,.08);
+
+}
+
+
+/* =========================================================
+   SIGN
+========================================================= */
+
+.arena-sign {
+
+    position:
+        absolute;
+
+    top:
+        24px;
+
+    left:
+        50%;
+
+    transform:
+        translateX(-50%);
+
+    width:
+        245px;
+
+    padding:
+        14px 20px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    gap:
+        3px;
+
+    background:
+        rgba(4,13,28,.94);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.25);
+
+    z-index:
+        10;
+
+}
+
+
+.arena-sign-small {
+
+    color:
+        var(--yellow);
+
+    font-size:
+        9px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .22em;
+
+}
+
+
+.arena-sign-title {
+
+    font-size:
+        28px;
+
+    letter-spacing:
+        .08em;
+
+}
+
+
+/* =========================================================
+   FLOOR
+========================================================= */
+
+.arena-floor {
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    bottom:
+        0;
+
+    height:
+        60px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #116a4d 0 50px,
+            #0d5d45 50px 100px
+        );
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
+
+}
+
+
+/* =========================================================
+   NAYLA
+========================================================= */
+
+.nayla-character {
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    bottom:
+        122px;
+
+    transform:
+        translateX(-50%);
+
+    z-index:
+        45;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    pointer-events:
+        none;
+
+}
+
+
+.nayla-photo-frame {
+
+    width:
+        135px;
+
+    height:
+        160px;
+
+    padding:
+        4px;
+
+    box-sizing:
+        border-box;
+
+    overflow:
+        hidden;
+
+    border:
+        3px solid white;
+
+    border-radius:
+        70px 70px 30px 30px;
+
+    background:
+        #eaf4f6;
+
+    box-shadow:
+        0 14px 35px rgba(0,0,0,.35);
+
+    animation:
+        naylaFloat 3s ease-in-out infinite;
+
+}
+
+
+.nayla-photo-frame img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
+
+    object-position:
+        center top;
+
+    display:
+        block;
+
+}
+
+
+@keyframes naylaFloat {
+
+    0%,
+    100% {
+        transform:
+            translateY(0);
+    }
+
+    50% {
+        transform:
+            translateY(-5px);
+    }
+
+}
+
+
+.nayla-name-tag {
+
+    margin-top:
+        -1px;
+
+    padding:
+        5px 14px;
+
+    border-radius:
+        999px;
+
+    color:
+        white;
+
+    background:
+        var(--pink);
+
+    font-size:
+        9px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .1em;
+
+}
+
+
+/* =========================================================
+   BOOTH
+========================================================= */
+
+.nayla-booth {
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    bottom:
+        46px;
+
+    transform:
+        translateX(-50%);
+
+    width:
+        310px;
+
+    height:
+        185px;
+
+    z-index:
+        35;
+
+}
+
+
+.booth-roof {
+
+    height:
+        72px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        22px 22px 9px 9px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ff65a2,
+            #ed4384
+        );
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.2);
+
+}
+
+
+.booth-roof-text {
+
+    font-size:
+        20px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .04em;
+
+}
+
+
+.booth-counter {
+
+    position:
+        absolute;
+
+    left:
+        13px;
+
+    right:
+        13px;
+
+    bottom:
+        19px;
+
+    height:
+        85px;
+
+    border-radius:
+        12px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ff61a0,
+            #eb3f80
+        );
+
+    box-shadow:
+        0 14px 25px rgba(0,0,0,.2);
+
+}
+
+
+.booth-products-display {
+
+    height:
+        100%;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        13px;
+
+}
+
+
+.booth-products-display span {
+
+    width:
+        35px;
+
+    height:
+        35px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(255,255,255,.14);
+
+    font-size:
+        20px;
+
+}
+
+
+.booth-table {
+
+    position:
+        absolute;
+
+    left:
+        32px;
+
+    right:
+        32px;
+
+    bottom:
+        0;
+
+    height:
+        25px;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+}
+
+
+.booth-table span {
+
+    width:
+        12px;
+
+    height:
+        32px;
+
+    border-radius:
+        0 0 5px 5px;
+
+    background:
+        #db3474;
+
+}
+
+
+/* =========================================================
+   CUSTOMER
+========================================================= */
+
+.customer {
+
+    position:
+        absolute;
+
+    left:
+        -130px;
+
+    bottom:
+        57px;
+
+    width:
+        82px;
+
+    height:
+        120px;
+
+    z-index:
+        80;
+
+    transition:
+        left 1.8s cubic-bezier(.22,.61,.36,1);
+
+}
+
+
+.customer.customer-hidden {
+
+    display:
+        none;
+
+}
+
+
+.customer.customer-entering {
+
+    display:
+        block;
+
+}
+
+
+.customer.customer-at-booth {
+
+    left:
+        calc(50% + 205px);
+
+}
+
+
+.customer-avatar {
+
+    width:
+        65px;
+
+    height:
+        65px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        3px solid white;
+
+    border-radius:
+        50%;
+
+    background:
+        #f2f5fb;
+
+    font-size:
+        31px;
+
+    box-shadow:
+        0 10px 28px rgba(0,0,0,.3);
+
+}
+
+
+.customer-name {
+
+    position:
+        absolute;
+
+    left:
+        52px;
+
+    top:
+        27px;
+
+    padding:
+        6px 10px;
+
+    border-radius:
+        8px;
+
+    background:
+        #06101e;
+
+    color:
+        white;
+
+    white-space:
+        nowrap;
+
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+
+}
+
+
+/* =========================================================
+   CUSTOMER REQUEST
+========================================================= */
+
+.customer-request {
+
+    position:
+        absolute;
+
+    right:
+        -30px;
+
+    bottom:
+        88px;
+
+    width:
+        245px;
+
+    min-height:
+        95px;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        13px;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    border-radius:
+        16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17,31,53,.98),
+            rgba(6,16,29,.98)
+        );
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.38);
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    transform:
+        translateY(7px) scale(.97);
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+
+    z-index:
+        500;
+
+}
+
+
+.customer-request.visible {
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    transform:
+        translateY(0) scale(1);
+
+}
+
+
+.customer-request::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    right:
+        30px;
+
+    bottom:
+        -8px;
+
+    width:
+        16px;
+
+    height:
+        16px;
+
+    background:
+        #09172a;
+
+    border-right:
+        1px solid rgba(255,255,255,.12);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.12);
+
+    transform:
+        rotate(45deg);
+
+}
+
+
+.request-title {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        9px;
+
+    font-size:
+        9px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .08em;
+
+}
+
+
+.request-total {
+
+    color:
+        var(--yellow);
+
+    white-space:
+        nowrap;
+
+}
+
+
+.request-items {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        6px;
+
+}
+
+
+.request-item {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        5px;
+
+    padding:
+        7px 9px;
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid rgba(255,255,255,.06);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+.request-item strong {
+
+    color:
+        var(--yellow);
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.game-message {
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    top:
+        185px;
+
+    transform:
+        translateX(-50%) translateY(-8px);
+
+    padding:
+        9px 15px;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(5,14,27,.9);
+
+    border:
+        1px solid var(--border);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    opacity:
+        0;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity .2s,
+        transform .2s;
+
+    z-index:
+        200;
+
+}
+
+
+.game-message.show {
+
+    opacity:
+        1;
+
+    transform:
+        translateX(-50%) translateY(0);
+
+}
+
+
+/* =========================================================
+   START OVERLAY
+========================================================= */
+
+.booth-start-overlay {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    background:
+        rgba(3,10,20,.62);
+
+    backdrop-filter:
+        blur(5px);
+
+    z-index:
+        1000;
+
+}
+
+
+.booth-start-overlay.hidden {
+
+    display:
+        none;
+
+}
+
+
+.start-card {
+
+    width:
+        min(440px, calc(100% - 35px));
+
+    box-sizing:
+        border-box;
+
+    padding:
+        30px;
+
+    text-align:
+        center;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    border-radius:
+        24px;
+
+    background:
+        rgba(9,23,39,.98);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.4);
+
+}
+
+
+.start-card-icon {
+
+    font-size:
+        44px;
+
+    margin-bottom:
+        12px;
+
+}
+
+
+.start-card h2 {
+
+    margin:
+        5px 0 10px;
+
+    font-size:
+        26px;
+
+}
+
+
+.start-card p {
+
+    margin:
+        0 auto 20px;
+
+    max-width:
+        350px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        12px;
+
+    line-height:
+        1.7;
+
+}
+
+
+.start-button {
+
+    width:
+        100%;
+
+}
+
+
+/* =========================================================
+   PREPARATION PANEL
+========================================================= */
+
+.preparation-panel {
+
+    position:
+        relative;
+
+    width:
+        min(830px, calc(100% - 40px));
+
+    margin:
+        -70px auto 16px;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        13px;
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    border-radius:
+        20px;
+
+    background:
+        rgba(6,15,28,.96);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.35);
+
+    backdrop-filter:
+        blur(15px);
+
+    z-index:
+        150;
+
+}
+
+
+.preparation-header {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        8px;
+
+}
+
+
+.preparation-header > div {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+}
+
+
+.preparation-kicker {
+
+    color:
+        #65768d;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .15em;
+
+}
+
+
+.preparation-title {
+
+    margin-top:
+        2px;
+
+    font-size:
+        12px;
+
+}
+
+
+.preparation-status {
+
+    color:
+        var(--muted);
+
+    font-size:
+        9px;
+
+}
+
+
+.preparation-status.ready {
+
+    color:
+        var(--green);
+
+}
+
+
+.preparation-items {
+
+    min-height:
+        47px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    flex-wrap:
+        wrap;
+
+    padding:
+        7px;
+
+    border:
+        1px dashed rgba(255,255,255,.09);
+
+    border-radius:
+        11px;
+
+    background:
+        rgba(255,255,255,.025);
+
+}
+
+
+.empty-tray {
+
+    width:
+        100%;
+
+    text-align:
+        center;
+
+    color:
+        #607187;
+
+    font-size:
+        10px;
+
+}
+
+
+.prepared-item {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    padding:
+        7px 9px;
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+.prepared-item strong {
+
+    color:
+        var(--yellow);
+
+}
+
+
+.preparation-actions {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1.5fr;
+
+    gap:
+        8px;
+
+    margin-top:
+        8px;
+
+}
+
+
+.preparation-actions .booth-btn {
+
+    min-height:
+        38px;
+
+}
+
+
+/* =========================================================
+   PRODUCT AREA
+========================================================= */
+
+.product-panel {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1.6fr .8fr;
+
+    gap:
+        12px;
+
+    margin-top:
+        15px;
+
+}
+
+
+.products-container,
+.price-panel {
+
+    min-width:
+        0;
+
+    padding:
+        18px;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        18px;
+
+    background:
+        var(--panel);
+
+}
+
+
+.panel-heading {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    margin-bottom:
+        13px;
+
+}
+
+
+.panel-heading h3 {
+
+    margin:
+        0;
+
+    font-size:
+        15px;
+
+}
+
+
+.panel-heading > span {
+
+    color:
+        var(--muted);
+
+    font-size:
+        9px;
+
+}
+
+
+.products-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        9px;
+
+}
+
+
+.product-card {
+
+    position:
+        relative;
+
+    padding:
+        13px;
+
+    border:
+        1px solid rgba(255,255,255,.07);
+
+    border-radius:
+        14px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    cursor:
+        pointer;
+
+    transition:
+        transform .18s,
+        border-color .18s,
+        background .18s;
+
+}
+
+
+.product-card:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(255,255,255,.18);
+
+    background:
+        rgba(255,255,255,.06);
+
+}
+
+
+.product-card.not-requested {
+
+    opacity:
+        .45;
+
+}
+
+
+.product-card.selected {
+
+    border-color:
+        var(--green);
+
+    background:
+        rgba(40,212,138,.08);
+
+}
+
+
+.product-icon {
+
+    font-size:
+        27px;
+
+}
+
+
+.product-name {
+
+    margin-top:
+        7px;
+
+    font-size:
+        11px;
+
+    font-weight:
+        900;
+
+}
+
+
+.product-price {
+
+    margin-top:
+        3px;
+
+    color:
+        var(--yellow);
+
+    font-size:
+        10px;
+
+}
+
+
+.product-quantity {
+
+    position:
+        absolute;
+
+    right:
+        8px;
+
+    top:
+        8px;
+
+    min-width:
+        22px;
+
+    height:
+        22px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--green);
+
+    color:
+        #052017;
+
+    font-size:
+        10px;
+
+    font-weight:
+        950;
+
+}
+
+
+.product-card.not-requested {
+
+    cursor:
+        not-allowed;
+
+}
+
+
+/* =========================================================
+   PRICE LIST
+========================================================= */
+
+.price-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        7px;
+
+}
+
+
+.price-row {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        8px;
+
+    padding:
+        9px;
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(255,255,255,.04);
+
+}
+
+
+.price-row-left {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+}
+
+
+.price-row-icon {
+
+    font-size:
+        17px;
+
+}
+
+
+.price-row-name {
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+.price-row-value {
+
+    color:
+        var(--yellow);
+
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.price-modal {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    display:
+        none;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        20px;
+
+    background:
+        rgba(2,8,16,.75);
+
+    backdrop-filter:
+        blur(8px);
+
+    z-index:
+        5000;
+
+}
+
+
+.price-modal.show {
+
+    display:
+        flex;
+
+}
+
+
+.price-modal-card {
+
+    width:
+        min(560px, 100%);
+
+    max-height:
+        85vh;
+
+    overflow:
+        auto;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        22px;
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    border-radius:
+        22px;
+
+    background:
+        #0b1b2d;
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.5);
+
+}
+
+
+.price-modal-header {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        15px;
+
+    margin-bottom:
+        18px;
+
+}
+
+
+.price-modal-header h2 {
+
+    margin:
+        0;
+
+    font-size:
+        21px;
+
+}
+
+
+.close-modal {
+
+    width:
+        36px;
+
+    height:
+        36px;
+
+    border:
+        0;
+
+    border-radius:
+        10px;
+
+    color:
+        white;
+
+    background:
+        rgba(255,255,255,.06);
+
+    font-size:
+        24px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.modal-price-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        8px;
+
+}
+
+
+.modal-price-row {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 140px;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    padding:
+        10px;
+
+    border-radius:
+        11px;
+
+    background:
+        rgba(255,255,255,.04);
+
+}
+
+
+.modal-price-info {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+}
+
+
+.modal-price-info span {
+
+    font-size:
+        22px;
+
+}
+
+
+.modal-price-info strong {
+
+    font-size:
+        11px;
+
+}
+
+
+.price-input {
+
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        9px 10px;
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    border-radius:
+        9px;
+
+    outline:
+        none;
+
+    color:
+        white;
+
+    background:
+        rgba(0,0,0,.2);
+
+}
+
+
+.price-input:focus {
+
+    border-color:
+        var(--pink);
+
+}
+
+
+.modal-actions {
+
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        8px;
+
+    margin-top:
+        18px;
+
+}
+
+
+/* =========================================================
+   COMPLETION POPUP
+========================================================= */
+
+.completion-popup {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        20px;
+
+    background:
+        rgba(2,8,16,.62);
+
+    backdrop-filter:
+        blur(7px);
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity .25s ease;
+
+    z-index:
+        6000;
+
+}
+
+
+.completion-popup.show {
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    pointer-events:
+        auto;
+
+}
+
+
+.completion-card {
+
+    width:
+        min(390px, 100%);
+
+    padding:
+        28px;
+
+    box-sizing:
+        border-box;
+
+    text-align:
+        center;
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    border-radius:
+        24px;
+
+    background:
+        linear-gradient(
+            160deg,
+            #102944,
+            #091827
+        );
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.55);
+
+    transform:
+        translateY(15px) scale(.97);
+
+    transition:
+        transform .25s ease;
+
+}
+
+
+.completion-popup.show .completion-card {
+
+    transform:
+        translateY(0) scale(1);
+
+}
+
+
+.completion-icon {
+
+    width:
+        62px;
+
+    height:
+        62px;
+
+    margin:
+        0 auto 12px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(40,212,138,.12);
+
+    font-size:
+        32px;
+
+}
+
+
+.completion-label {
+
+    color:
+        var(--green);
+
+    font-size:
+        9px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .2em;
+
+}
+
+
+.completion-card h2 {
+
+    margin:
+        7px 0;
+
+    font-size:
+        25px;
+
+}
+
+
+.completion-card p {
+
+    margin:
+        0 0 17px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        11px;
+
+}
+
+
+.completion-stats {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        8px;
+
+    margin-bottom:
+        17px;
+
+}
+
+
+.completion-stats div {
+
+    padding:
+        12px;
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(255,255,255,.05);
+
+}
+
+
+.completion-stats span {
+
+    display:
+        block;
+
+    color:
+        var(--muted);
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+}
+
+
+.completion-stats strong {
+
+    display:
+        block;
+
+    margin-top:
+        5px;
+
+    color:
+        var(--yellow);
+
+    font-size:
+        17px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .booth-game-page {
+
+        padding-top:
+            85px;
+
+    }
+
+
+    .booth-game-header {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+    }
+
+
+    .booth-header-actions {
+
+        width:
+            100%;
+
+    }
+
+
+    .booth-scoreboard {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+
+    .product-panel {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .booth-game-page {
+
+        padding:
+            75px 10px 50px;
+
+    }
+
+
+    .booth-title-area h1 {
+
+        font-size:
+            27px;
+
+    }
+
+
+    .booth-header-actions {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .booth-scoreboard {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .booth-arena {
+
+        height:
+            540px;
+
+        border-radius:
+            18px;
+
+    }
+
+
+    .arena-sign {
+
+        width:
+            180px;
+
+        top:
+            18px;
+
+    }
+
+
+    .arena-sign-title {
+
+        font-size:
+            22px;
+
+    }
+
+
+    .nayla-photo-frame {
+
+        width:
+            105px;
+
+        height:
+            130px;
+
+    }
+
+
+    .nayla-character {
+
+        bottom:
+            118px;
+
+    }
+
+
+    .nayla-booth {
+
+        width:
+            250px;
+
+        height:
+            160px;
+
+    }
+
+
+    .booth-roof {
+
+        height:
+            58px;
+
+    }
+
+
+    .booth-roof-text {
+
+        font-size:
+            15px;
+
+    }
+
+
+    .customer.customer-at-booth {
+
+        left:
+            calc(50% + 125px);
+
+    }
+
+
+    .customer-request {
+
+        right:
+            -15px;
+
+        width:
+            215px;
+
+        bottom:
+            90px;
+
+    }
+
+
+    .preparation-panel {
+
+        width:
+            calc(100% - 20px);
+
+        margin-top:
+            -60px;
+
+    }
+
+
+    .preparation-actions {
+
+        grid-template-columns:
+            1fr 1.4fr;
+
+    }
+
+
+    .products-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .modal-price-row {
+
+        grid-template-columns:
+            1fr 110px;
+
+    }
+
+}
+
+
+@media (max-width: 430px) {
+
+    .booth-stat-value {
+
+        font-size:
+            17px;
+
+    }
+
+
+    .customer-request {
+
+        width:
+            195px;
+
+        right:
+            0;
+
+    }
+
+
+    .customer.customer-at-booth {
+
+        left:
+            calc(50% + 100px);
+
+    }
+
+
+    .nayla-photo-frame {
+
+        width:
+            90px;
+
+        height:
+            112px;
+
+    }
+
+
+    .nayla-booth {
+
+        width:
+            225px;
+
+    }
+
+
+    .booth-products-display {
+
+        gap:
+            5px;
+
+    }
+
+
+    .booth-products-display span {
+
+        width:
+            28px;
+
+        height:
+            28px;
+
+        font-size:
+            16px;
+
+    }
+
+}

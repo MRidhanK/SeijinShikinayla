@@ -2,12 +2,666 @@
 
 {% block content %}
 
-<section class="page-placeholder">
+<section class="booth-game-page">
 
-<h1>Page Under Construction</h1>
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-<p>This page will be built in the next phase.</p>
+    <header class="booth-game-header">
+
+        <div class="booth-title-area">
+
+            <div class="eyebrow">
+                NAYLA FESTIVAL · SEIJIN SHIKI 2026
+            </div>
+
+            <h1>
+                🎪 Nayla Festival Booth
+            </h1>
+
+            <p>
+                Siapkan pesanan customer dan layani mereka
+                untuk mendapatkan score dan money.
+            </p>
+
+        </div>
+
+        <div class="booth-header-actions">
+
+            <button
+                type="button"
+                id="openBoothButton"
+                class="booth-btn booth-btn-primary">
+
+                🏪 BUKA BOOTH
+
+            </button>
+
+            <button
+                type="button"
+                id="priceSettingsButton"
+                class="booth-btn booth-btn-secondary">
+
+                ⚙️ ATUR HARGA
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         SCOREBOARD
+    ====================================================== -->
+
+    <section class="booth-scoreboard">
+
+        <div class="booth-stat">
+
+            <span class="booth-stat-label">
+                SCORE
+            </span>
+
+            <strong
+                id="scoreValue"
+                class="booth-stat-value">
+
+                0
+
+            </strong>
+
+        </div>
+
+
+        <div class="booth-stat">
+
+            <span class="booth-stat-label">
+                MONEY
+            </span>
+
+            <strong
+                id="moneyValue"
+                class="booth-stat-value">
+
+                Rp 0
+
+            </strong>
+
+        </div>
+
+
+        <div class="booth-stat">
+
+            <span class="booth-stat-label">
+                COMBO
+            </span>
+
+            <strong
+                id="comboValue"
+                class="booth-stat-value">
+
+                x0
+
+            </strong>
+
+        </div>
+
+
+        <div class="booth-stat">
+
+            <span class="booth-stat-label">
+                CUSTOMERS
+            </span>
+
+            <strong
+                id="customerValue"
+                class="booth-stat-value">
+
+                0
+
+            </strong>
+
+        </div>
+
+
+        <div class="booth-stat timer-stat">
+
+            <span class="booth-stat-label">
+                TIME
+            </span>
+
+            <strong
+                id="timerValue"
+                class="booth-stat-value">
+
+                60
+
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         GAME AREA
+    ====================================================== -->
+
+    <main class="booth-game-wrapper">
+
+        <div
+            id="boothArena"
+            class="booth-arena">
+
+            <!-- BACKGROUND -->
+
+            <div class="arena-glow"></div>
+
+            <div class="arena-ceiling">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+
+            <!-- SIGN -->
+
+            <div class="arena-sign">
+
+                <span class="arena-sign-small">
+                    成人式
+                </span>
+
+                <strong class="arena-sign-title">
+                    NAYLA
+                </strong>
+
+                <span class="arena-sign-small">
+                    SEIJIN SHIKI 2026
+                </span>
+
+            </div>
+
+
+            <!-- FLOOR -->
+
+            <div class="arena-floor"></div>
+
+
+            <!-- =================================================
+                 NAYLA
+            ================================================== -->
+
+            <div class="nayla-character">
+
+                <div class="nayla-photo-frame">
+
+                    <img
+                        src="/static/img/NaylaKabesha.png"
+                        alt="Nayla"
+                        draggable="false">
+
+                </div>
+
+                <div class="nayla-name-tag">
+                    NAYLA
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 BOOTH
+            ================================================== -->
+
+            <div
+                id="naylaBooth"
+                class="nayla-booth">
+
+                <div class="booth-roof">
+
+                    <div class="booth-roof-text">
+                        NAYLA FESTIVAL BOOTH
+                    </div>
+
+                </div>
+
+
+                <div class="booth-counter">
+
+                    <div
+                        id="boothProductsDisplay"
+                        class="booth-products-display">
+
+                        <span>🎈</span>
+                        <span>🌸</span>
+                        <span>🧸</span>
+                        <span>🎁</span>
+                        <span>🍭</span>
+                        <span>🪭</span>
+
+                    </div>
+
+                </div>
+
+                <div class="booth-table">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CUSTOMER
+            ================================================== -->
+
+            <div
+                id="customer"
+                class="customer customer-hidden">
+
+                <div
+                    id="customerRequest"
+                    class="customer-request">
+
+                    <div class="request-title">
+
+                        <span>
+                            🛍️ PESANAN CUSTOMER
+                        </span>
+
+                        <span
+                            id="requestTotal"
+                            class="request-total">
+
+                            Rp 0
+
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="requestItems"
+                        class="request-items">
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="customerAvatar"
+                    class="customer-avatar">
+
+                    👩🏻
+
+                </div>
+
+
+                <span
+                    id="customerName"
+                    class="customer-name">
+
+                    Customer
+
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 STATUS MESSAGE
+            ================================================== -->
+
+            <div
+                id="gameMessage"
+                class="game-message">
+
+            </div>
+
+
+            <!-- =================================================
+                 START OVERLAY
+            ================================================== -->
+
+            <div
+                id="boothStartOverlay"
+                class="booth-start-overlay">
+
+                <div class="start-card">
+
+                    <div class="start-card-icon">
+                        🏪
+                    </div>
+
+                    <div class="eyebrow">
+                        NAYLA FESTIVAL
+                    </div>
+
+                    <h2>
+                        Nayla Festival Booth
+                    </h2>
+
+                    <p>
+                        Kamu bertugas sebagai penjaga booth.
+                        Customer akan datang dan memesan barang.
+                        Siapkan barang yang mereka minta,
+                        lalu tekan serve.
+                    </p>
+
+                    <button
+                        type="button"
+                        id="startGameButton"
+                        class="booth-btn booth-btn-primary start-button">
+
+                        🎪 BUKA BOOTH & MULAI
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             PREPARATION HUD
+        ====================================================== -->
+
+        <div
+            id="preparationPanel"
+            class="preparation-panel">
+
+            <div class="preparation-header">
+
+                <div>
+
+                    <span class="preparation-kicker">
+                        BOOTH WORKSPACE
+                    </span>
+
+                    <strong class="preparation-title">
+                        🧺 Preparation Tray
+                    </strong>
+
+                </div>
+
+                <span
+                    id="preparationStatus"
+                    class="preparation-status">
+
+                    Belum ada pesanan
+
+                </span>
+
+            </div>
+
+
+            <div
+                id="preparationItems"
+                class="preparation-items">
+
+                <div class="empty-tray">
+
+                    Pilih barang sesuai pesanan customer
+
+                </div>
+
+            </div>
+
+
+            <div class="preparation-actions">
+
+                <button
+                    type="button"
+                    id="clearPreparationButton"
+                    class="booth-btn booth-btn-danger">
+
+                    ↺ CLEAR
+
+                </button>
+
+                <button
+                    type="button"
+                    id="serveButton"
+                    class="booth-btn booth-btn-success"
+                    disabled>
+
+                    ✓ SERVE CUSTOMER
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             PRODUCTS
+        ====================================================== -->
+
+        <section class="product-panel">
+
+            <div class="products-container">
+
+                <div class="panel-heading">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            INVENTORY
+                        </span>
+
+                        <h3>
+                            🛍️ Produk Booth
+                        </h3>
+
+                    </div>
+
+                    <span>
+                        Klik produk untuk menyiapkan order
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="productsGrid"
+                    class="products-grid">
+
+                </div>
+
+            </div>
+
+
+            <div class="price-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            CURRENT PRICE
+                        </span>
+
+                        <h3>
+                            💰 Harga
+                        </h3>
+
+                    </div>
+
+                    <span>
+                        Bisa diatur
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="priceList"
+                    class="price-list">
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </section>
+
+
+<!-- =========================================================
+     PRICE MODAL
+========================================================== -->
+
+<div
+    id="priceModal"
+    class="price-modal">
+
+    <div class="price-modal-card">
+
+        <div class="price-modal-header">
+
+            <div>
+
+                <span class="panel-kicker">
+                    BOOTH SETTINGS
+                </span>
+
+                <h2>
+                    ⚙️ Atur Harga Barang
+                </h2>
+
+            </div>
+
+            <button
+                type="button"
+                id="closePriceModal"
+                class="close-modal">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="modalPriceList"
+            class="modal-price-list">
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                id="cancelPriceButton"
+                class="booth-btn booth-btn-secondary">
+
+                BATAL
+
+            </button>
+
+            <button
+                type="button"
+                id="savePriceButton"
+                class="booth-btn booth-btn-primary">
+
+                SIMPAN HARGA
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     COMPLETION POPUP
+========================================================== -->
+
+<div
+    id="completionPopup"
+    class="completion-popup">
+
+    <div class="completion-card">
+
+        <div class="completion-icon">
+            ✨
+        </div>
+
+        <span class="completion-label">
+            PESANAN SELESAI
+        </span>
+
+        <h2>
+            Customer Senang! 🎉
+        </h2>
+
+        <p id="completionText">
+            Pesanan berhasil disajikan.
+        </p>
+
+        <div class="completion-stats">
+
+            <div>
+                <span>
+                    +SCORE
+                </span>
+
+                <strong id="popupScore">
+                    +0
+                </strong>
+            </div>
+
+            <div>
+                <span>
+                    +MONEY
+                </span>
+
+                <strong id="popupMoney">
+                    Rp 0
+                </strong>
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            id="closeCompletionButton"
+            class="booth-btn booth-btn-primary">
+
+            LANJUTKAN
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/games.js') }}"></script>
 
 {% endblock %}  

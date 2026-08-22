@@ -120,7 +120,10 @@
     href="{{ url_for('static', filename='css/countdown.css') }}">
 </head>
 
-
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/games.css') }}">
+</head>
 
 <body>
 
@@ -173,6 +176,9 @@
             ></script>
                               <script
             src="{{ url_for('static', filename='js/navbar.js') }}"
+            ></script>
+                                          <script
+            src="{{ url_for('static', filename='js/games.js') }}"
             ></script>
       <script     
       src="{{ url_for('static', filename='js/developer-letter.js') }}">
