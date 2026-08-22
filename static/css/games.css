@@ -1,12 +1,12 @@
 /* =========================================================
    NAYLA FESTIVAL BOOTH + SEIJIN SHIKI PHOTO STUDIO
-   + NAYLA PHOTOCARD MATCH
+   + NAYLA PHOTOCARD MATCH + TORO NAGASHI LANTERN TIMING
    COMBINED CSS
-   (booth.css asli + studio-extra.css asli + memory-match
-   digabung jadi 1 file. Tidak ada logika yang diubah dari
-   dua game lama, cuma disatukan + ditambah 1 game baru
-   supaya cukup 1 <link> saja di halaman manapun yang memuat
-   satu / dua / ketiga game.)
+   (booth.css asli + studio-extra.css asli + memory-match +
+   timing-lantern digabung jadi 1 file. Tidak ada logika yang
+   diubah dari tiga game lama, cuma disatukan + ditambah 1
+   game baru supaya cukup 1 <link> saja di halaman manapun
+   yang memuat satu / dua / tiga / keempat game.)
 ========================================================= */
 
 :root {
@@ -31,6 +31,9 @@
 
     --memory-accent: #63a8ff;
     --memory-accent-dark: #3f7fd9;
+
+    --timing-accent: #ffb03b;
+    --timing-accent-dark: #e8901e;
 
 }
 
@@ -784,8 +787,6 @@
 
 /* =========================================================
    STUDIO ACCENT OVERRIDE
-   (Studio pakai ungu/lavender, booth pakai pink, biar dua
-   game terasa beda meski struktur HTML/CSS sama persis)
 ========================================================= */
 
 .studio-game-page .booth-btn-primary {
@@ -914,13 +915,7 @@
 
 
 /* =========================================================
-   NAYLA PHOTOCARD MATCH (game baru #3)
-   Bukan "prepare & serve" seperti booth/studio — ini game
-   memory-matching: balik 2 kartu, cari pasangan foto member
-   yang sama sebelum waktu habis. Struktur luar (header,
-   scoreboard, arena, start overlay, completion popup) masih
-   memakai komponen yang sama supaya konsisten secara visual,
-   tapi papan permainannya benar-benar mekanik berbeda.
+   NAYLA PHOTOCARD MATCH (game #3)
 ========================================================= */
 
 .memory-game-page .booth-btn-primary {
@@ -1028,5 +1023,145 @@
 
     .memory-board { top: 122px; height: 300px; gap: 6px; }
     .memory-card-back { font-size: 19px; }
+
+}
+
+
+/* =========================================================
+   TORO NAGASHI LANTERN TIMING (game baru #4)
+   Bukan "prepare & serve" (booth/studio) atau "flip & match"
+   (memory) — ini game precision-timing: jarum bolak-balik di
+   sepanjang bar, pemain klik tombol NYALAKAN pas jarum ada di
+   zona hijau untuk "menyalakan lentera" dan mengirimnya ke
+   sungai. Makin banyak lentera menyala berturut-turut, makin
+   sempit zona & makin cepat jarumnya (combo & difficulty
+   naik). Struktur luar (header, scoreboard, arena, start
+   overlay, completion popup) masih memakai komponen yang sama
+   supaya konsisten secara visual dengan tiga game lainnya.
+========================================================= */
+
+.timing-game-page .booth-btn-primary {
+    background: linear-gradient(135deg, var(--timing-accent), var(--timing-accent-dark));
+    box-shadow: 0 8px 22px rgba(255,176,59,.28);
+}
+
+.timing-sign { border-color: rgba(255,176,59,.3); }
+.timing-sign .arena-sign-title { color: var(--timing-accent); }
+
+.timing-arena { background: linear-gradient(180deg, #071a2c 0%, #0a2338 55%, #051422 100%); }
+
+.timing-river {
+    background: repeating-linear-gradient(90deg, #0f4f6b 0 50px, #0c4460 50px 100px);
+    overflow: visible;
+}
+
+
+/* ===== FLOATING LANTERN ROW (progress, decorative) ===== */
+
+.timing-lantern-row {
+    position: absolute;
+    left: 0; right: 0; bottom: 12px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    z-index: 30;
+    pointer-events: none;
+}
+
+.timing-lantern {
+    font-size: 20px;
+    opacity: .16;
+    filter: grayscale(1);
+    transition: opacity .3s ease, filter .3s ease, transform .3s ease;
+}
+
+.timing-lantern.lit {
+    opacity: 1;
+    filter: grayscale(0) drop-shadow(0 0 7px rgba(255,176,59,.75));
+    transform: translateY(-5px);
+}
+
+
+/* ===== TIMING BAR (the precision meter) ===== */
+
+.timing-bar-wrap {
+    position: absolute;
+    left: 50%;
+    top: 195px;
+    transform: translateX(-50%);
+    width: min(540px, calc(100% - 60px));
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.timing-bar-wrap.miss-shake { animation: timingShake .4s ease; }
+
+@keyframes timingShake {
+    0%, 100% { transform: translateX(-50%); }
+    25% { transform: translateX(calc(-50% - 6px)); }
+    75% { transform: translateX(calc(-50% + 6px)); }
+}
+
+.timing-instructions {
+    text-align: center;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.timing-track {
+    position: relative;
+    width: 100%;
+    height: 26px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    overflow: hidden;
+}
+
+.timing-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(40,212,138,.55), rgba(40,212,138,.85));
+    box-shadow: inset 0 0 0 1px rgba(40,212,138,.6);
+}
+
+.timing-needle {
+    position: absolute;
+    top: -7px;
+    bottom: -7px;
+    width: 4px;
+    border-radius: 3px;
+    background: white;
+    box-shadow: 0 0 10px rgba(255,255,255,.85);
+    transform: translateX(-50%);
+    left: 0%;
+}
+
+.timing-track.hit-success .timing-needle { background: var(--green); box-shadow: 0 0 12px rgba(40,212,138,.9); }
+.timing-track.hit-miss .timing-needle { background: var(--red); box-shadow: 0 0 12px rgba(255,84,112,.9); }
+
+.timing-hit-button { min-width: 230px; }
+
+
+@media (max-width: 700px) {
+
+    .timing-bar-wrap { top: 180px; width: calc(100% - 34px); gap: 18px; }
+    .timing-lantern-row { gap: 8px; }
+    .timing-lantern { font-size: 17px; }
+
+}
+
+
+@media (max-width: 430px) {
+
+    .timing-bar-wrap { top: 165px; gap: 15px; }
+    .timing-track { height: 22px; }
+    .timing-hit-button { min-width: 0; width: 100%; }
 
 }

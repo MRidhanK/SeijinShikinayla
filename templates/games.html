@@ -397,9 +397,6 @@
 
 <!-- =========================================================
      SEIJIN SHIKI PHOTO STUDIO
-     (struktur HTML identik dengan booth di atas — hanya id,
-     namespace teks "studio.*", dan produk yang berbeda —
-     dijalankan oleh engine generik yang sama di games.js)
 ========================================================== -->
 
 <section class="booth-game-page studio-game-page">
@@ -779,11 +776,6 @@
 
 <!-- =========================================================
      NAYLA PHOTOCARD MATCH
-     Game ketiga — mekanik BEDA dari booth & studio di atas:
-     bukan prepare & serve, tapi memory-matching. Balik 2
-     kartu, cari pasangan foto member yang sama sebelum waktu
-     habis. Dijalankan oleh engine terpisah (createMemoryGame)
-     di games.js — bukan createShopGame.
 ========================================================== -->
 
 <section class="booth-game-page memory-game-page">
@@ -956,6 +948,220 @@
             id="closeMemoryCompletionButton"
             class="booth-btn booth-btn-primary"
             data-i18n="memory.btn_continue">
+
+            LANJUTKAN
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TORO NAGASHI LANTERN TIMING
+     Game keempat — mekanik BEDA lagi dari tiga game di atas:
+     bukan prepare & serve, bukan flip & match, tapi
+     precision-timing. Jarum bergerak bolak-balik terus di
+     sepanjang bar, pemain klik "NYALAKAN" tepat saat jarum ada
+     di zona hijau untuk menyalakan lentera dan mengirimnya ke
+     sungai. Makin presisi & berturut-turut, zona makin sempit
+     dan jarum makin cepat — combo & score makin besar.
+     Dijalankan oleh engine terpisah (createTimingGame) di
+     games.js — bukan createShopGame atau createMemoryGame.
+========================================================== -->
+
+<section class="booth-game-page timing-game-page">
+
+    <header class="booth-game-header">
+
+        <div class="booth-title-area">
+
+            <div class="eyebrow" data-i18n="timing.header_eyebrow">
+                NAYLA FESTIVAL · SEIJIN SHIKI 2026
+            </div>
+
+            <h1 data-i18n="timing.header_title">
+                🏮 Toro Nagashi Lantern Timing
+            </h1>
+
+            <p data-i18n="timing.header_description">
+                Klik NYALAKAN pas jarum ada di zona hijau untuk menyalakan
+                lentera dan mengirimnya ke sungai. Semakin presisi, semakin
+                besar combo dan score.
+            </p>
+
+        </div>
+
+        <div class="booth-header-actions">
+
+            <button
+                type="button"
+                id="openTimingButton"
+                class="booth-btn booth-btn-primary"
+                data-i18n="timing.btn_open_timing">
+
+                🏮 MULAI ACARA
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <section class="booth-scoreboard">
+
+        <div class="booth-stat">
+            <span class="booth-stat-label" data-i18n="timing.stat_score">SCORE</span>
+            <strong id="timingScoreValue" class="booth-stat-value">0</strong>
+        </div>
+
+        <div class="booth-stat">
+            <span class="booth-stat-label" data-i18n="timing.stat_money">MONEY</span>
+            <strong id="timingMoneyValue" class="booth-stat-value">Rp 0</strong>
+        </div>
+
+        <div class="booth-stat">
+            <span class="booth-stat-label" data-i18n="timing.stat_combo">COMBO</span>
+            <strong id="timingComboValue" class="booth-stat-value">x0</strong>
+        </div>
+
+        <div class="booth-stat">
+            <span class="booth-stat-label" data-i18n="timing.stat_lanterns">LENTERA</span>
+            <strong id="timingLanternsValue" class="booth-stat-value">0</strong>
+        </div>
+
+        <div class="booth-stat timer-stat">
+            <span class="booth-stat-label" data-i18n="timing.stat_time">TIME</span>
+            <strong id="timingTimerValue" class="booth-stat-value">60</strong>
+        </div>
+
+    </section>
+
+
+    <main class="booth-game-wrapper">
+
+        <div id="timingArena" class="booth-arena timing-arena">
+
+            <div class="arena-glow"></div>
+
+            <div class="arena-ceiling">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+            </div>
+
+            <div class="arena-sign timing-sign">
+                <span class="arena-sign-small" data-i18n="timing.sign_small_top">成人式</span>
+                <strong class="arena-sign-title" data-i18n="timing.sign_title">TORO NAGASHI</strong>
+                <span class="arena-sign-small" data-i18n="timing.sign_small_bottom">
+                    LANTERN TIMING
+                </span>
+            </div>
+
+            <div class="arena-floor timing-river">
+                <div id="timingLanternRow" class="timing-lantern-row"></div>
+            </div>
+
+
+            <div id="timingBarWrap" class="timing-bar-wrap">
+
+                <span class="timing-instructions" data-i18n="timing.instructions">
+                    Klik NYALAKAN saat jarum berada di zona hijau
+                </span>
+
+                <div id="timingTrack" class="timing-track">
+                    <div id="timingZone" class="timing-zone"></div>
+                    <div id="timingNeedle" class="timing-needle"></div>
+                </div>
+
+                <button
+                    type="button"
+                    id="timingHitButton"
+                    class="booth-btn booth-btn-primary timing-hit-button"
+                    data-i18n="timing.btn_hit">
+
+                    🏮 NYALAKAN
+
+                </button>
+
+            </div>
+
+
+            <div id="timingGameMessage" class="game-message"></div>
+
+
+            <div id="timingStartOverlay" class="booth-start-overlay">
+
+                <div class="start-card">
+
+                    <div class="start-card-icon">🏮</div>
+
+                    <div class="eyebrow" data-i18n="timing.start_eyebrow">NAYLA FESTIVAL</div>
+
+                    <h2 data-i18n="timing.start_title">Toro Nagashi Lantern Timing</h2>
+
+                    <p data-i18n="timing.start_description">
+                        Jarum akan bergerak bolak-balik di sepanjang bar. Tekan
+                        tombol NYALAKAN tepat saat jarum berada di zona hijau
+                        untuk menyalakan lentera. Semakin presisi dan
+                        berturut-turut, semakin sempit zona & semakin cepat
+                        jarumnya — tapi score dan combo-mu juga makin besar.
+                    </p>
+
+                    <button
+                        type="button"
+                        id="startGameButtonT"
+                        class="booth-btn booth-btn-primary start-button"
+                        data-i18n="timing.start_button">
+
+                        🏮 MULAI ACARA
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</section>
+
+
+<div id="timingCompletionPopup" class="completion-popup">
+
+    <div class="completion-card">
+
+        <div class="completion-icon">🏮</div>
+
+        <span class="completion-label" data-i18n="timing.completion_label">WAKTU HABIS</span>
+
+        <h2 data-i18n="timing.completion_title">Sungai Dipenuhi Cahaya! 🏮</h2>
+
+        <p id="timingCompletionText"></p>
+
+        <div class="completion-stats">
+
+            <div>
+                <span data-i18n="timing.completion_score_label">+SCORE</span>
+                <strong id="timingPopupScore">+0</strong>
+            </div>
+
+            <div>
+                <span data-i18n="timing.completion_money_label">+MONEY</span>
+                <strong id="timingPopupMoney">Rp 0</strong>
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            id="closeTimingCompletionButton"
+            class="booth-btn booth-btn-primary"
+            data-i18n="timing.btn_continue">
 
             LANJUTKAN
 

@@ -1,21 +1,24 @@
 /* =========================================================
    NAYLA FESTIVAL BOOTH + SEIJIN SHIKI PHOTO STUDIO
-   + NAYLA PHOTOCARD MATCH
+   + NAYLA PHOTOCARD MATCH + TORO NAGASHI LANTERN TIMING
    COMBINED GAME JS + I18N SYSTEM
 
-   Satu file ini menjalankan KETIGA game:
+   Satu file ini menjalankan KEEMPAT game:
    - booth   : jual barang (prepare & serve)
    - studio  : dandani & foto (prepare & serve, tema beda)
-   - memory  : cari pasangan photocard (mekanik BEDA — bukan
-               prepare & serve, tapi flip & match)
+   - memory  : cari pasangan photocard (flip & match)
+   - timing  : nyalakan lentera pas jarum di zona hijau
+               (precision-timing — mekanik BEDA lagi dari
+               ketiganya di atas)
 
    booth & studio masih memakai mesin permainan yang sama
-   (createShopGame factory) — bedanya cuma id elemen DOM,
-   daftar produk, dan namespace teks. memory memakai mesin
-   sendiri (createMemoryGame) karena alur permainannya
-   berbeda (papan kartu, bukan preparation tray + produk).
-   Kalau elemen "open button" salah satu game tidak ada di
-   halaman, game itu otomatis tidak dijalankan.
+   (createShopGame factory). memory memakai mesin sendiri
+   (createMemoryGame). timing memakai mesin sendiri lagi
+   (createTimingGame) karena alurnya beda: bukan papan kartu
+   atau preparation tray + produk, tapi jarum yang bergerak
+   terus-menerus dan pemain menekan tombol pas momen yang
+   tepat. Kalau elemen "open button" salah satu game tidak
+   ada di halaman, game itu otomatis tidak dijalankan.
 ========================================================= */
 
 "use strict";
@@ -195,6 +198,39 @@ const GAMES_TRANSLATIONS = {
             completion_score_label: "+SCORE",
             completion_money_label: "+MONEY",
             btn_continue: "LANJUTKAN"
+        },
+
+        timing: {
+            header_eyebrow: "NAYLA FESTIVAL · SEIJIN SHIKI 2026",
+            header_title: "🏮 Toro Nagashi Lantern Timing",
+            header_description: "Klik NYALAKAN pas jarum ada di zona hijau untuk menyalakan lentera dan mengirimnya ke sungai. Semakin presisi, semakin besar combo dan score.",
+            btn_open_timing: "🏮 MULAI ACARA",
+            btn_open_timing_active: "🔴 SEDANG BERLANGSUNG",
+            stat_score: "SCORE",
+            stat_money: "MONEY",
+            stat_combo: "COMBO",
+            stat_lanterns: "LENTERA",
+            stat_time: "TIME",
+            sign_small_top: "成人式",
+            sign_title: "TORO NAGASHI",
+            sign_small_bottom: "LANTERN TIMING",
+            start_eyebrow: "NAYLA FESTIVAL",
+            start_title: "Toro Nagashi Lantern Timing",
+            start_description: "Jarum akan bergerak bolak-balik di sepanjang bar. Tekan tombol NYALAKAN tepat saat jarum berada di zona hijau untuk menyalakan lentera. Semakin presisi dan berturut-turut, semakin sempit zona & semakin cepat jarumnya — tapi score dan combo-mu juga makin besar.",
+            start_button: "🏮 MULAI ACARA",
+            instructions: "Klik NYALAKAN saat jarum berada di zona hijau",
+            btn_hit: "🏮 NYALAKAN",
+            msg_open_first: "Mulai acara terlebih dahulu.",
+            msg_hit_success: "✨ Lentera menyala!",
+            msg_hit_miss: "Meleset, coba lagi.",
+            msg_game_opened: "Acara dimulai! Perhatikan jarumnya.",
+            msg_game_closed: "Acara dihentikan.",
+            completion_label: "WAKTU HABIS",
+            completion_title: "Sungai Dipenuhi Cahaya! 🏮",
+            completion_timeup_text: "Waktu habis! Score akhir kamu {score}.",
+            completion_score_label: "+SCORE",
+            completion_money_label: "+MONEY",
+            btn_continue: "LANJUTKAN"
         }
 
     },
@@ -364,6 +400,39 @@ const GAMES_TRANSLATIONS = {
             msg_game_closed: "Game stopped.",
             completion_label: "TIME'S UP",
             completion_title: "Great Job! 🎴",
+            completion_timeup_text: "Time's up! Your final score is {score}.",
+            completion_score_label: "+SCORE",
+            completion_money_label: "+MONEY",
+            btn_continue: "CONTINUE"
+        },
+
+        timing: {
+            header_eyebrow: "NAYLA FESTIVAL · SEIJIN SHIKI 2026",
+            header_title: "🏮 Toro Nagashi Lantern Timing",
+            header_description: "Press LIGHT IT when the needle is in the green zone to light a lantern and send it down the river. The more precise you are, the bigger your combo and score.",
+            btn_open_timing: "🏮 START THE CEREMONY",
+            btn_open_timing_active: "🔴 IN PROGRESS",
+            stat_score: "SCORE",
+            stat_money: "MONEY",
+            stat_combo: "COMBO",
+            stat_lanterns: "LANTERNS",
+            stat_time: "TIME",
+            sign_small_top: "成人式",
+            sign_title: "TORO NAGASHI",
+            sign_small_bottom: "LANTERN TIMING",
+            start_eyebrow: "NAYLA FESTIVAL",
+            start_title: "Toro Nagashi Lantern Timing",
+            start_description: "A needle will move back and forth along the bar. Press LIGHT IT exactly when the needle is inside the green zone to light a lantern. The more precise and consecutive your hits, the narrower the zone and the faster the needle gets — but your score and combo grow too.",
+            start_button: "🏮 START THE CEREMONY",
+            instructions: "Click LIGHT IT when the needle is in the green zone",
+            btn_hit: "🏮 LIGHT IT",
+            msg_open_first: "Start the ceremony first.",
+            msg_hit_success: "✨ Lantern lit!",
+            msg_hit_miss: "Missed, try again.",
+            msg_game_opened: "Ceremony started! Watch the needle.",
+            msg_game_closed: "Ceremony stopped.",
+            completion_label: "TIME'S UP",
+            completion_title: "The River Glows! 🏮",
             completion_timeup_text: "Time's up! Your final score is {score}.",
             completion_score_label: "+SCORE",
             completion_money_label: "+MONEY",
@@ -541,6 +610,39 @@ const GAMES_TRANSLATIONS = {
             completion_score_label: "+スコア",
             completion_money_label: "+お金",
             btn_continue: "続ける"
+        },
+
+        timing: {
+            header_eyebrow: "NAYLA FESTIVAL · 成人式 2026",
+            header_title: "🏮 灯籠流しランタンタイミング",
+            header_description: "針が緑のゾーンにあるときに「点灯」を押して灯籠に火を灯し、川へ流そう。正確であるほどコンボとスコアが大きくなる。",
+            btn_open_timing: "🏮 儀式を始める",
+            btn_open_timing_active: "🔴 進行中",
+            stat_score: "スコア",
+            stat_money: "お金",
+            stat_combo: "コンボ",
+            stat_lanterns: "灯籠",
+            stat_time: "時間",
+            sign_small_top: "成人式",
+            sign_title: "TORO NAGASHI",
+            sign_small_bottom: "LANTERN TIMING",
+            start_eyebrow: "NAYLA FESTIVAL",
+            start_title: "灯籠流しランタンタイミング",
+            start_description: "針がバーの上を左右に動き続けます。針が緑のゾーンに入った瞬間に「点灯」を押して灯籠に火を灯しましょう。正確に連続で成功するほどゾーンは狭くなり針は速くなりますが、スコアとコンボも大きくなります。",
+            start_button: "🏮 儀式を始める",
+            instructions: "針が緑のゾーンにあるときに「点灯」をクリック",
+            btn_hit: "🏮 点灯する",
+            msg_open_first: "まず儀式を始めてください。",
+            msg_hit_success: "✨ 灯籠が灯りました！",
+            msg_hit_miss: "外れました、もう一度。",
+            msg_game_opened: "儀式が始まりました！針をよく見て。",
+            msg_game_closed: "儀式を停止しました。",
+            completion_label: "時間切れ",
+            completion_title: "川が光で満たされた！🏮",
+            completion_timeup_text: "時間切れ！最終スコアは{score}です。",
+            completion_score_label: "+スコア",
+            completion_money_label: "+お金",
+            btn_continue: "続ける"
         }
 
     },
@@ -710,6 +812,39 @@ const GAMES_TRANSLATIONS = {
             msg_game_closed: "게임이 중지되었습니다.",
             completion_label: "시간 종료",
             completion_title: "잘했어요! 🎴",
+            completion_timeup_text: "시간 종료! 최종 점수는 {score}입니다.",
+            completion_score_label: "+점수",
+            completion_money_label: "+돈",
+            btn_continue: "계속하기"
+        },
+
+        timing: {
+            header_eyebrow: "NAYLA FESTIVAL · 성인식 2026",
+            header_title: "🏮 토로나가시 랜턴 타이밍",
+            header_description: "바늘이 초록 구역에 있을 때 '점등'을 눌러 등불을 밝히고 강으로 흘려보내세요. 정확할수록 콤보와 점수가 커집니다.",
+            btn_open_timing: "🏮 의식 시작하기",
+            btn_open_timing_active: "🔴 진행 중",
+            stat_score: "점수",
+            stat_money: "돈",
+            stat_combo: "콤보",
+            stat_lanterns: "등불",
+            stat_time: "시간",
+            sign_small_top: "成人式",
+            sign_title: "TORO NAGASHI",
+            sign_small_bottom: "LANTERN TIMING",
+            start_eyebrow: "NAYLA FESTIVAL",
+            start_title: "토로나가시 랜턴 타이밍",
+            start_description: "바늘이 바를 따라 좌우로 계속 움직입니다. 바늘이 초록 구역 안에 있을 때 정확히 '점등'을 눌러 등불을 밝히세요. 연속으로 정확하게 성공할수록 구역은 좁아지고 바늘은 빨라지지만, 점수와 콤보도 커집니다.",
+            start_button: "🏮 의식 시작하기",
+            instructions: "바늘이 초록 구역에 있을 때 '점등'을 클릭하세요",
+            btn_hit: "🏮 점등하기",
+            msg_open_first: "먼저 의식을 시작하세요.",
+            msg_hit_success: "✨ 등불이 밝혀졌어요!",
+            msg_hit_miss: "빗나갔어요, 다시 시도하세요.",
+            msg_game_opened: "의식이 시작되었습니다! 바늘을 잘 보세요.",
+            msg_game_closed: "의식이 중지되었습니다.",
+            completion_label: "시간 종료",
+            completion_title: "강이 빛으로 가득 찼어요! 🏮",
             completion_timeup_text: "시간 종료! 최종 점수는 {score}입니다.",
             completion_score_label: "+점수",
             completion_money_label: "+돈",
@@ -887,6 +1022,39 @@ const GAMES_TRANSLATIONS = {
             completion_score_label: "+分数",
             completion_money_label: "+金钱",
             btn_continue: "继续"
+        },
+
+        timing: {
+            header_eyebrow: "NAYLA FESTIVAL · 成人式 2026",
+            header_title: "🏮 灯笼放流计时",
+            header_description: "当指针位于绿色区域时点击“点亮”，让灯笼漂向河流。越精准，连击和分数就越高。",
+            btn_open_timing: "🏮 开始仪式",
+            btn_open_timing_active: "🔴 进行中",
+            stat_score: "分数",
+            stat_money: "金钱",
+            stat_combo: "连击",
+            stat_lanterns: "灯笼",
+            stat_time: "时间",
+            sign_small_top: "成人式",
+            sign_title: "TORO NAGASHI",
+            sign_small_bottom: "LANTERN TIMING",
+            start_eyebrow: "NAYLA FESTIVAL",
+            start_title: "灯笼放流计时",
+            start_description: "指针会沿着长条来回移动。当指针正好在绿色区域内时点击“点亮”，即可点亮一盏灯笼。连续精准命中，区域会变窄、指针会变快，但你的分数和连击也会随之提高。",
+            start_button: "🏮 开始仪式",
+            instructions: "指针在绿色区域时点击“点亮”",
+            btn_hit: "🏮 点亮",
+            msg_open_first: "请先开始仪式。",
+            msg_hit_success: "✨ 灯笼点亮了！",
+            msg_hit_miss: "没点中，再试一次。",
+            msg_game_opened: "仪式开始！注意指针。",
+            msg_game_closed: "仪式已停止。",
+            completion_label: "时间到",
+            completion_title: "河流被点亮了！🏮",
+            completion_timeup_text: "时间到！你的最终分数是{score}。",
+            completion_score_label: "+分数",
+            completion_money_label: "+金钱",
+            btn_continue: "继续"
         }
 
     }
@@ -945,8 +1113,9 @@ function getNestedValue(object, path) {
 /*
  * gamesT(key, params)
  * key format: "<namespace>.<field>", e.g. "booth.btn_serve",
- * "studio.btn_serve" or "memory.btn_continue". params opsional
- * untuk template {placeholder}.
+ * "studio.btn_serve", "memory.btn_continue" or
+ * "timing.btn_hit". params opsional untuk template
+ * {placeholder}.
  */
 
 function gamesT(key, params) {
@@ -993,13 +1162,13 @@ function applyGamesTranslations() {
 
 /* =========================================================
    02. SHARED CUSTOMER / MEMBER POOL — JKT48 MEMBERS
-   (Nama tetap sama di semua bahasa & dipakai oleh ketiga
+   (Nama tetap sama di semua bahasa & dipakai oleh keempat
    game, baik sebagai "customer" booth, "fotografer" studio,
-   maupun photocard di memory. Setiap member sudah punya path
-   foto sendiri di /static/img/members/<slug>.png — begitu
-   file fotonya diupload, foto otomatis muncul; selama belum
-   ada, otomatis fallback ke avatar default lewat onerror di
-   JS.)
+   photocard di memory, maupun photocard lentera di timing.
+   Setiap member sudah punya path foto sendiri di
+   /static/img/members/<slug>.png — begitu file fotonya
+   diupload, foto otomatis muncul; selama belum ada, otomatis
+   fallback ke avatar default lewat onerror di JS.)
 ========================================================= */
 
 function slugifyMemberName(name) {
@@ -1044,8 +1213,8 @@ const DEFAULT_MEMBER_AVATAR =
 
 
 /* =========================================================
-   03. PRODUCT SETS (booth & studio only — memory tidak
-   pakai "produk", cuma photocard member)
+   03. PRODUCT SETS (booth & studio only — memory & timing
+   tidak pakai "produk")
 ========================================================= */
 
 const BOOTH_PRODUCTS = [
@@ -1164,6 +1333,30 @@ const MEMORY_IDS = {
     comboValue: "memoryComboValue",
     matchesValue: "memoryMatchesValue",
     timerValue: "memoryTimerValue"
+};
+
+
+const TIMING_IDS = {
+    openButton: "openTimingButton",
+    startGameButton: "startGameButtonT",
+    startOverlay: "timingStartOverlay",
+    barWrap: "timingBarWrap",
+    track: "timingTrack",
+    zone: "timingZone",
+    needle: "timingNeedle",
+    hitButton: "timingHitButton",
+    lanternRow: "timingLanternRow",
+    gameMessage: "timingGameMessage",
+    completionPopup: "timingCompletionPopup",
+    closeCompletionButton: "closeTimingCompletionButton",
+    popupScore: "timingPopupScore",
+    popupMoney: "timingPopupMoney",
+    completionText: "timingCompletionText",
+    scoreValue: "timingScoreValue",
+    moneyValue: "timingMoneyValue",
+    comboValue: "timingComboValue",
+    lanternsValue: "timingLanternsValue",
+    timerValue: "timingTimerValue"
 };
 
 
@@ -2306,6 +2499,407 @@ function createMemoryGame(ids) {
 
 
 /* =========================================================
+   05c. TIMING GAME ENGINE (mekanik BEDA lagi — bukan prepare
+   & serve, bukan flip & match, tapi precision-timing: jarum
+   bergerak bolak-balik terus-menerus di sepanjang bar, dan
+   pemain harus menekan tombol "NYALAKAN" tepat saat jarum
+   berada di dalam zona hijau yang posisinya berpindah-pindah.
+   Tidak ada "customer" atau "produk" di game ini — cuma satu
+   loop animasi + satu tombol aksi.)
+========================================================= */
+
+function createTimingGame(ids) {
+
+    const $ = id => document.getElementById(id);
+
+    const openButton = $(ids.openButton);
+    if (!openButton) return null;
+
+    const startGameButton = $(ids.startGameButton);
+    const startOverlay = $(ids.startOverlay);
+    const barWrap = $(ids.barWrap);
+    const track = $(ids.track);
+    const zoneEl = $(ids.zone);
+    const needleEl = $(ids.needle);
+    const hitButton = $(ids.hitButton);
+    const lanternRow = $(ids.lanternRow);
+    const gameMessage = $(ids.gameMessage);
+    const completionPopup = $(ids.completionPopup);
+    const closeCompletionButton = $(ids.closeCompletionButton);
+    const popupScore = $(ids.popupScore);
+    const popupMoney = $(ids.popupMoney);
+    const completionText = $(ids.completionText);
+
+    const HIT_SCORE_BASE = 10;
+    const HIT_MONEY = 12000;
+    const LANTERN_SLOTS = 8;
+
+    const BASE_SPEED = 55;     // % bar per detik
+    const MAX_SPEED = 145;
+    const SPEED_PER_LANTERN = 4;
+
+    const BASE_ZONE_WIDTH = 24; // % lebar bar
+    const MIN_ZONE_WIDTH = 9;
+    const ZONE_SHRINK_PER_LANTERN = 0.8;
+
+    const state = {
+        isOpen: false,
+        gameOver: false,
+        score: 0,
+        money: 0,
+        combo: 0,
+        lanterns: 0,
+        timeLeft: 60,
+        timer: null,
+        rafId: null,
+        lastFrameTime: null,
+        needlePos: 0,
+        direction: 1,
+        zone: { left: 40, width: BASE_ZONE_WIDTH },
+        flashTimeout: null
+    };
+
+
+    function t(key, params) { return gamesT(`timing.${key}`, params); }
+
+    function formatMoney(value) {
+        return "Rp " + Number(value || 0).toLocaleString("id-ID");
+    }
+
+    function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
+    /* ===== SCOREBOARD ===== */
+
+    function updateScoreboard() {
+
+        $(ids.scoreValue).textContent = state.score.toLocaleString("id-ID");
+        $(ids.moneyValue).textContent = formatMoney(state.money);
+        $(ids.comboValue).textContent = "x" + state.combo;
+        $(ids.lanternsValue).textContent = state.lanterns;
+        $(ids.timerValue).textContent = state.timeLeft;
+
+        $(ids.timerValue).style.color = state.timeLeft <= 10 ? "#ff5470" : "";
+
+    }
+
+
+    /* ===== MESSAGE ===== */
+
+    let messageTimeout = null;
+
+    function showMessage(key, params) {
+
+        if (!gameMessage) return;
+
+        gameMessage.textContent = t(key, params);
+        gameMessage.classList.add("show");
+
+        clearTimeout(messageTimeout);
+        messageTimeout = setTimeout(() => {
+            gameMessage.classList.remove("show");
+        }, 1400);
+
+    }
+
+
+    /* ===== LANTERN ROW (decorative progress) ===== */
+
+    function renderLanterns() {
+
+        if (!lanternRow) return;
+
+        lanternRow.innerHTML = "";
+
+        const litCount = state.lanterns % LANTERN_SLOTS === 0 && state.lanterns > 0
+            ? LANTERN_SLOTS
+            : state.lanterns % LANTERN_SLOTS;
+
+        for (let i = 0; i < LANTERN_SLOTS; i++) {
+
+            const span = document.createElement("span");
+            span.className = "timing-lantern" + (i < litCount ? " lit" : "");
+            span.textContent = "🏮";
+
+            lanternRow.appendChild(span);
+
+        }
+
+    }
+
+
+    /* ===== ZONE ===== */
+
+    function currentZoneWidth() {
+
+        const width = BASE_ZONE_WIDTH - (state.lanterns * ZONE_SHRINK_PER_LANTERN);
+
+        return Math.max(MIN_ZONE_WIDTH, width);
+
+    }
+
+
+    function currentSpeed() {
+
+        const speed = BASE_SPEED + (state.lanterns * SPEED_PER_LANTERN);
+
+        return Math.min(MAX_SPEED, speed);
+
+    }
+
+
+    function generateZone() {
+
+        const width = currentZoneWidth();
+        const left = randomInt(2, Math.max(2, 98 - width));
+
+        state.zone = { left, width };
+
+        zoneEl.style.left = left + "%";
+        zoneEl.style.width = width + "%";
+
+    }
+
+
+    /* ===== NEEDLE ANIMATION LOOP ===== */
+
+    function needleLoop(timestamp) {
+
+        if (!state.isOpen || state.gameOver) return;
+
+        if (state.lastFrameTime === null) state.lastFrameTime = timestamp;
+
+        const deltaSeconds = (timestamp - state.lastFrameTime) / 1000;
+        state.lastFrameTime = timestamp;
+
+        const speed = currentSpeed();
+
+        state.needlePos += state.direction * speed * deltaSeconds;
+
+        if (state.needlePos >= 100) {
+            state.needlePos = 100;
+            state.direction = -1;
+        } else if (state.needlePos <= 0) {
+            state.needlePos = 0;
+            state.direction = 1;
+        }
+
+        needleEl.style.left = state.needlePos + "%";
+
+        state.rafId = requestAnimationFrame(needleLoop);
+
+    }
+
+
+    function startNeedle() {
+
+        cancelAnimationFrame(state.rafId);
+        state.lastFrameTime = null;
+        state.rafId = requestAnimationFrame(needleLoop);
+
+    }
+
+
+    function stopNeedle() {
+
+        cancelAnimationFrame(state.rafId);
+        state.rafId = null;
+        state.lastFrameTime = null;
+
+    }
+
+
+    /* ===== HIT LOGIC ===== */
+
+    function flashTrack(className) {
+
+        track.classList.remove("hit-success", "hit-miss");
+        track.classList.add(className);
+
+        clearTimeout(state.flashTimeout);
+        state.flashTimeout = setTimeout(() => {
+            track.classList.remove("hit-success", "hit-miss");
+        }, 350);
+
+    }
+
+
+    function attemptHit() {
+
+        if (!state.isOpen || state.gameOver) {
+            showMessage("msg_open_first");
+            return;
+        }
+
+        const withinZone =
+            state.needlePos >= state.zone.left &&
+            state.needlePos <= state.zone.left + state.zone.width;
+
+        if (withinZone) {
+
+            state.combo += 1;
+            state.lanterns += 1;
+
+            const earned = HIT_SCORE_BASE + state.combo * 3;
+
+            state.score += earned;
+            state.money += HIT_MONEY;
+
+            updateScoreboard();
+            renderLanterns();
+            showMessage("msg_hit_success");
+            flashTrack("hit-success");
+
+            generateZone();
+
+        } else {
+
+            state.combo = 0;
+
+            updateScoreboard();
+            showMessage("msg_hit_miss");
+            flashTrack("hit-miss");
+
+            barWrap.classList.remove("miss-shake");
+            void barWrap.offsetWidth;
+            barWrap.classList.add("miss-shake");
+
+        }
+
+    }
+
+
+    /* ===== TIMER / LIFECYCLE ===== */
+
+    function startTimer() {
+
+        clearInterval(state.timer);
+
+        state.timer = setInterval(() => {
+
+            if (!state.isOpen || state.gameOver) return;
+
+            state.timeLeft--;
+            updateScoreboard();
+
+            if (state.timeLeft <= 0) endGame();
+
+        }, 1000);
+
+    }
+
+
+    function endGame() {
+
+        state.gameOver = true;
+        state.isOpen = false;
+
+        clearInterval(state.timer);
+        stopNeedle();
+
+        completionText.textContent = t("completion_timeup_text", { score: state.score });
+        popupScore.textContent = state.score;
+        popupMoney.textContent = formatMoney(state.money);
+
+        completionPopup.classList.add("show");
+
+        openButton.textContent = t("btn_open_timing");
+
+    }
+
+
+    function startGame() {
+
+        state.isOpen = true;
+        state.gameOver = false;
+        state.score = 0;
+        state.money = 0;
+        state.combo = 0;
+        state.lanterns = 0;
+        state.timeLeft = 60;
+        state.needlePos = 0;
+        state.direction = 1;
+
+        updateScoreboard();
+        renderLanterns();
+        generateZone();
+
+        needleEl.style.left = "0%";
+        track.classList.remove("hit-success", "hit-miss");
+
+        startOverlay.classList.add("hidden");
+        openButton.textContent = t("btn_open_timing_active");
+
+        showMessage("msg_game_opened");
+
+        startTimer();
+        startNeedle();
+
+    }
+
+
+    function toggleGame() {
+
+        if (state.isOpen) {
+
+            state.isOpen = false;
+            clearInterval(state.timer);
+            stopNeedle();
+
+            openButton.textContent = t("btn_open_timing");
+
+            showMessage("msg_game_closed");
+
+            return;
+
+        }
+
+        startGame();
+
+    }
+
+
+    /* ===== EVENTS ===== */
+
+    openButton.addEventListener("click", toggleGame);
+    startGameButton.addEventListener("click", startGame);
+    hitButton.addEventListener("click", attemptHit);
+
+    closeCompletionButton.addEventListener("click", () => {
+
+        completionPopup.classList.remove("show");
+        startOverlay.classList.remove("hidden");
+        openButton.textContent = t("btn_open_timing");
+
+    });
+
+
+    /* ===== LANGUAGE REFRESH ===== */
+
+    function refreshDynamicTexts() {
+
+        openButton.textContent = state.isOpen
+            ? t("btn_open_timing_active")
+            : t("btn_open_timing");
+
+    }
+
+
+    /* ===== INITIAL RENDER ===== */
+
+    updateScoreboard();
+    renderLanterns();
+    generateZone();
+
+
+    return { refreshDynamicTexts };
+
+}
+
+
+/* =========================================================
    06. BOOTSTRAP — runs once the DOM is ready
 ========================================================= */
 
@@ -2318,8 +2912,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // activeButtonKey menentukan key "btn_open_<x>" / "btn_open_<x>_active"
     // di dalam namespace masing-masing. Untuk booth key-nya "open_booth",
-    // untuk studio key-nya "open_studio". Memory tidak pakai
-    // activeButtonKey karena keynya sudah tetap "btn_open_memory".
+    // untuk studio key-nya "open_studio". Memory & timing tidak pakai
+    // activeButtonKey karena key-nya sudah tetap ("btn_open_memory" /
+    // "btn_open_timing").
 
     const boothGame = createShopGame({
         namespace: "booth",
@@ -2337,7 +2932,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const memoryGame = createMemoryGame(MEMORY_IDS);
 
-    const activeGames = [boothGame, studioGame, memoryGame].filter(Boolean);
+    const timingGame = createTimingGame(TIMING_IDS);
+
+    const activeGames = [boothGame, studioGame, memoryGame, timingGame].filter(Boolean);
 
 
     function refreshAll() {
@@ -2374,7 +2971,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "galleryLanguageChanged",
         "boothLanguageChanged",
         "studioLanguageChanged",
-        "memoryLanguageChanged"
+        "memoryLanguageChanged",
+        "timingLanguageChanged"
     ].forEach(eventName => {
         window.addEventListener(eventName, handleGamesLanguageChange);
     });
