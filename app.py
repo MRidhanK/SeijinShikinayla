@@ -1112,28 +1112,28 @@ def secret_letter():
 # # FAVICON
 # # =========================================================
 
-# @app.route("/favicon.ico")
-# def favicon():
+@app.route("/favicon.ico")
+def favicon():
 
-#     static_folder = app.static_folder
+    static_folder = app.static_folder
 
-#     if static_folder:
+    if static_folder:
 
-#         favicon_path = os.path.join(
-#             static_folder,
-#             "favicon.ico"
-#         )
+        favicon_path = os.path.join(
+            static_folder,
+            "favicon.ico"
+        )
 
-#         if os.path.isfile(
-#             favicon_path
-#         ):
+        if os.path.isfile(
+            favicon_path
+        ):
 
-#             return send_from_directory(
-#                 static_folder,
-#                 "favicon.ico"
-#             )
+            return send_from_directory(
+                static_folder,
+                "favicon.ico"
+            )
 
-#     return "", 204
+    return "", 204
 
 
 # =========================================================
@@ -1203,6 +1203,235 @@ def get_guestbook():
             "error": "Unable to load guestbook.",
         }), 500
 
+# =========================================================
+# SEIJIN SHIKI - CEREMONY ENTRY
+# =========================================================
+
+@app.route("/api/ceremony-entry", methods=["POST"])
+def ceremony_entry():
+
+    try:
+
+        # =================================================
+        # CHECK SUPABASE
+        # =================================================
+
+        if supabase_client is None:
+
+            print(
+                "CEREMONY ENTRY ERROR: "
+                "supabase_client is None"
+            )
+
+            return jsonify({
+                "success": False,
+                "error": "Supabase client is not initialized."
+            }), 500
+
+
+        # =================================================
+        # GET USER AGENT
+        # =================================================
+
+        user_agent = request.headers.get(
+            "User-Agent",
+            ""
+        )
+
+        user_agent = user_agent[:500]
+
+
+        # =================================================
+        # GET IP
+        # =================================================
+
+        ip_address = get_client_ip()
+
+        ip_address = str(ip_address)[:100]
+
+
+        # =================================================
+        # DETECT BROWSER
+        # =================================================
+
+        ua = user_agent.lower()
+
+
+        if "edg/" in ua:
+
+            browser = "Microsoft Edge"
+
+        elif "opr/" in ua or "opera" in ua:
+
+            browser = "Opera"
+
+        elif "firefox/" in ua:
+
+            browser = "Mozilla Firefox"
+
+        elif "chrome/" in ua:
+
+            browser = "Google Chrome"
+
+        elif "safari/" in ua:
+
+            browser = "Safari"
+
+        elif "trident/" in ua:
+
+            browser = "Internet Explorer"
+
+        else:
+
+            browser = "Unknown"
+
+
+        # =================================================
+        # DETECT DEVICE
+        # =================================================
+
+        if "ipad" in ua:
+
+            device = "iPad"
+
+        elif "iphone" in ua:
+
+            device = "iPhone"
+
+        elif "android" in ua:
+
+            if "mobile" in ua:
+
+                device = "Android Phone"
+
+            else:
+
+                device = "Android Tablet"
+
+        elif "windows" in ua:
+
+            device = "Windows PC"
+
+        elif (
+            "macintosh" in ua
+            or "mac os x" in ua
+        ):
+
+            device = "Mac"
+
+        elif "linux" in ua:
+
+            device = "Linux PC"
+
+        else:
+
+            device = "Unknown"
+
+
+        # =================================================
+        # TIME
+        # =================================================
+
+        entered_at = datetime.now(
+            timezone.utc
+        ).isoformat()
+
+
+        # =================================================
+        # DATA
+        # =================================================
+
+        entry_data = {
+
+            "event": "Enter Ceremony",
+
+            "ip_address": ip_address,
+
+            "device": device,
+
+            "browser": browser,
+
+            "user_agent": user_agent,
+
+            "entered_at": entered_at
+
+        }
+
+
+        # =================================================
+        # DEBUG
+        # =================================================
+
+        print("")
+        print("========================================")
+        print("CEREMONY ENTRY")
+        print("========================================")
+        print("IP       :", ip_address)
+        print("DEVICE   :", device)
+        print("BROWSER  :", browser)
+        print("USER AGENT:", user_agent)
+        print("========================================")
+
+
+        # =================================================
+        # INSERT SUPABASE
+        # =================================================
+
+        result = (
+            supabase_client
+            .table("ceremony_entries")
+            .insert(entry_data)
+            .execute()
+        )
+
+
+        # =================================================
+        # SUCCESS
+        # =================================================
+
+        print(
+            "CEREMONY ENTRY SAVED:",
+            result.data
+        )
+
+
+        return jsonify({
+
+            "success": True,
+
+            "message":
+                "Ceremony entry saved."
+
+        }), 200
+
+
+    except Exception as e:
+
+        # =================================================
+        # PRINT ERROR ASLI
+        # =================================================
+
+        print("")
+        print("========================================")
+        print("!!! CEREMONY ENTRY ERROR !!!")
+        print("========================================")
+        print("ERROR TYPE:")
+        print(type(e).__name__)
+        print("")
+        print("ERROR MESSAGE:")
+        print(str(e))
+        print("========================================")
+        print("")
+
+
+        return jsonify({
+
+            "success": False,
+
+            "error":
+                str(e)
+
+        }), 500
 
 # =========================================================
 # POST GUESTBOOK
