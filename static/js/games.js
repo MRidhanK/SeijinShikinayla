@@ -231,6 +231,51 @@ const GAMES_TRANSLATIONS = {
             completion_score_label: "+SCORE",
             completion_money_label: "+MONEY",
             btn_continue: "LANJUTKAN"
+        },
+        shodo: {
+            header_eyebrow: "NAYLA FESTIVAL · SEIJIN SHIKI 2026",
+            header_title: "🖌️ Shodo Brush Tracing",
+            header_description: "Ikuti guratan kanji panduan pakai kuas tintamu untuk mendapatkan score dan money.",
+            btn_open_shodo: "🖌️ Kuas",
+            btn_tool_eraser: "🧹 Hapus",
+            btn_open_shodo_active: "🔴 SEDANG MENULIS",
+            stat_score: "SCORE",
+            stat_money: "MONEY",
+            stat_combo: "COMBO",
+            stat_chars: "KANJI",
+            stat_time: "TIME",
+            sign_small_top: "成人式",
+            sign_title: "SHODO",
+            sign_small_bottom: "BRUSH TRACING",
+            start_eyebrow: "NAYLA FESTIVAL",
+            start_title: "Shodo Brush Tracing",
+            start_description: "Kanji panduan akan muncul samar-samar di kanvas. Gambar ulang mengikuti bentuknya pakai jari atau mouse. Semakin dekat jalurmu ke panduan, semakin besar score yang kamu dapat.",
+            start_button: "🖌️ MULAI MENULIS",
+            canvas_hint: "Ikuti guratan kanji samar mengikuti bentuknya",
+            btn_clear: "↺ ULANGI",
+            btn_submit: "🖌️ SELESAI",
+            msg_open_first: "Mulai menulis terlebih dahulu.",
+            msg_draw_first: "Gambar dulu sebelum menyelesaikan.",
+            msg_tier_excellent: "✨ Guratan sempurna!",
+            msg_tier_good: "👍 Guratan bagus!",
+            msg_tier_try_again: "Coba ikuti panduannya lebih dekat lagi.",
+            msg_cleared: "Kanvas dibersihkan.",
+            msg_game_opened: "Sesi menulis dimulai! Ikuti panduan kanjinya.",
+            msg_game_closed: "Sesi menulis dihentikan.",
+            completion_label: "GURATAN SELESAI",
+            completion_title: "Tinta Mengalir Indah! 🖌️",
+            completion_default_text: "Guratan berhasil diselesaikan.",
+            completion_char_text: "{char} ({meaning}) — akurasi {accuracy}%.",
+            completion_timeup_text: "Waktu habis! Score akhir kamu {score}.",
+            completion_score_label: "+SCORE",
+            completion_money_label: "+MONEY",
+            btn_continue: "LANJUTKAN",
+            meaning_kotobuki: "umur panjang & rejeki",
+            meaning_fuku: "keberuntungan",
+            meaning_ai: "cinta",
+            meaning_yume: "mimpi & cita-cita",
+            meaning_bi: "keindahan",
+            meaning_wa: "harmoni & kedamaian"
         }
 
     },
@@ -437,8 +482,53 @@ const GAMES_TRANSLATIONS = {
             completion_score_label: "+SCORE",
             completion_money_label: "+MONEY",
             btn_continue: "CONTINUE"
+        },
+                shodo: {
+            header_eyebrow: "NAYLA FESTIVAL · SEIJIN SHIKI 2026",
+            header_title: "🖌️ Shodo Brush Tracing",
+            header_description: "Trace the guide kanji with your ink brush to earn score and money.",
+            btn_open_shodo: "🖌️ Brush",
+            btn_tool_eraser: "🧹 Eraser",
+            btn_open_shodo_active: "🔴 WRITING",
+            stat_score: "SCORE",
+            stat_money: "MONEY",
+            stat_combo: "COMBO",
+            stat_chars: "KANJI",
+            stat_time: "TIME",
+            sign_small_top: "成人式",
+            sign_title: "SHODO",
+            sign_small_bottom: "BRUSH TRACING",
+            start_eyebrow: "NAYLA FESTIVAL",
+            start_title: "Shodo Brush Tracing",
+            start_description: "A faint guide kanji will appear on the canvas. Trace over it with your finger or mouse. The closer your strokes follow the guide, the bigger your score.",
+            start_button: "🖌️ START WRITING",
+            canvas_hint: "Trace the faint kanji following its shape",
+            btn_clear: "↺ REDO",
+            btn_submit: "🖌️ FINISH",
+            msg_open_first: "Start the session first.",
+            msg_draw_first: "Draw something before finishing.",
+            msg_tier_excellent: "✨ Perfect stroke!",
+            msg_tier_good: "👍 Nice stroke!",
+            msg_tier_try_again: "Try to follow the guide more closely.",
+            msg_cleared: "Canvas cleared.",
+            msg_game_opened: "Writing session started! Follow the kanji guide.",
+            msg_game_closed: "Writing session stopped.",
+            completion_label: "STROKE COMPLETE",
+            completion_title: "The Ink Flows Beautifully! 🖌️",
+            completion_default_text: "Stroke completed successfully.",
+            completion_char_text: "{char} ({meaning}) — {accuracy}% accuracy.",
+            completion_timeup_text: "Time's up! Your final score is {score}.",
+            completion_score_label: "+SCORE",
+            completion_money_label: "+MONEY",
+            btn_continue: "CONTINUE",
+            meaning_kotobuki: "longevity & blessing",
+            meaning_fuku: "good fortune",
+            meaning_ai: "love",
+            meaning_yume: "dream & aspiration",
+            meaning_bi: "beauty",
+            meaning_wa: "harmony & peace"
         }
-
+    
     },
 
 
@@ -643,6 +733,51 @@ const GAMES_TRANSLATIONS = {
             completion_score_label: "+スコア",
             completion_money_label: "+お金",
             btn_continue: "続ける"
+        },
+ shodo: {
+            header_eyebrow: "NAYLA FESTIVAL · 成人式 2026",
+            header_title: "🖌️ 書道 筆なぞり",
+            header_description: "お手本の漢字を筆でなぞってスコアとお金を稼ごう。",
+            btn_open_shodo: "🖌️ 筆",
+            btn_tool_eraser: "🧹 消しゴム",
+            btn_open_shodo_active: "🔴 執筆中",
+            stat_score: "スコア",
+            stat_money: "お金",
+            stat_combo: "コンボ",
+            stat_chars: "漢字",
+            stat_time: "時間",
+            sign_small_top: "成人式",
+            sign_title: "書道",
+            sign_small_bottom: "BRUSH TRACING",
+            start_eyebrow: "NAYLA FESTIVAL",
+            start_title: "書道 筆なぞり",
+            start_description: "キャンバスに薄いお手本の漢字が表示されます。指かマウスでなぞってください。お手本に近いほどスコアが高くなります。",
+            start_button: "🖌️ 書き始める",
+            canvas_hint: "薄く表示された漢字の形をなぞってください",
+            btn_clear: "↺ やり直す",
+            btn_submit: "🖌️ 完成",
+            msg_open_first: "まずセッションを開始してください。",
+            msg_draw_first: "完成する前に何か書いてください。",
+            msg_tier_excellent: "✨ 完璧な筆遣い！",
+            msg_tier_good: "👍 いい筆遣い！",
+            msg_tier_try_again: "お手本にもっと近づけてみましょう。",
+            msg_cleared: "キャンバスをクリアしました。",
+            msg_game_opened: "執筆セッションが始まりました！漢字のお手本をなぞりましょう。",
+            msg_game_closed: "執筆セッションを停止しました。",
+            completion_label: "完成",
+            completion_title: "美しい墨の流れ！🖌️",
+            completion_default_text: "筆遣いが完成しました。",
+            completion_char_text: "{char}（{meaning}）— 精度{accuracy}%。",
+            completion_timeup_text: "時間切れ！最終スコアは{score}です。",
+            completion_score_label: "+スコア",
+            completion_money_label: "+お金",
+            btn_continue: "続ける",
+            meaning_kotobuki: "長寿と幸福",
+            meaning_fuku: "幸運",
+            meaning_ai: "愛",
+            meaning_yume: "夢と願い",
+            meaning_bi: "美しさ",
+            meaning_wa: "調和と平和"
         }
 
     },
@@ -849,6 +984,51 @@ const GAMES_TRANSLATIONS = {
             completion_score_label: "+점수",
             completion_money_label: "+돈",
             btn_continue: "계속하기"
+        },
+                shodo: {
+            header_eyebrow: "NAYLA FESTIVAL · 성인식 2026",
+            header_title: "🖌️ 서도 붓 따라 그리기",
+            header_description: "안내 한자를 붓으로 따라 그려 점수와 돈을 획득하세요.",
+            btn_open_shodo: "🖌️ 붓",
+            btn_tool_eraser: "🧹 지우개",
+            btn_open_shodo_active: "🔴 쓰는 중",
+            stat_score: "점수",
+            stat_money: "돈",
+            stat_combo: "콤보",
+            stat_chars: "한자",
+            stat_time: "시간",
+            sign_small_top: "成人式",
+            sign_title: "SHODO",
+            sign_small_bottom: "BRUSH TRACING",
+            start_eyebrow: "NAYLA FESTIVAL",
+            start_title: "서도 붓 따라 그리기",
+            start_description: "캔버스에 흐릿한 안내 한자가 나타납니다. 손가락이나 마우스로 따라 그려보세요. 안내선에 가까울수록 점수가 커집니다.",
+            start_button: "🖌️ 쓰기 시작",
+            canvas_hint: "흐릿하게 보이는 한자 모양을 따라 그리세요",
+            btn_clear: "↺ 다시 하기",
+            btn_submit: "🖌️ 완성",
+            msg_open_first: "먼저 세션을 시작하세요.",
+            msg_draw_first: "완성하기 전에 먼저 그려주세요.",
+            msg_tier_excellent: "✨ 완벽한 필치!",
+            msg_tier_good: "👍 멋진 필치!",
+            msg_tier_try_again: "안내선에 더 가깝게 따라가 보세요.",
+            msg_cleared: "캔버스가 초기화되었습니다.",
+            msg_game_opened: "쓰기 세션이 시작되었습니다! 한자 안내를 따라가세요.",
+            msg_game_closed: "쓰기 세션이 중지되었습니다.",
+            completion_label: "완성",
+            completion_title: "먹물이 아름답게 흐르네요! 🖌️",
+            completion_default_text: "필치가 성공적으로 완성되었습니다.",
+            completion_char_text: "{char}({meaning}) — 정확도 {accuracy}%.",
+            completion_timeup_text: "시간 종료! 최종 점수는 {score}입니다.",
+            completion_score_label: "+점수",
+            completion_money_label: "+돈",
+            btn_continue: "계속하기",
+            meaning_kotobuki: "장수와 복",
+            meaning_fuku: "행운",
+            meaning_ai: "사랑",
+            meaning_yume: "꿈과 포부",
+            meaning_bi: "아름다움",
+            meaning_wa: "화합과 평화"
         }
 
     },
@@ -1055,6 +1235,51 @@ const GAMES_TRANSLATIONS = {
             completion_score_label: "+分数",
             completion_money_label: "+金钱",
             btn_continue: "继续"
+        },
+                shodo: {
+            header_eyebrow: "NAYLA FESTIVAL · 成人式 2026",
+            header_title: "🖌️ 书道 毛笔临摹",
+            header_description: "用你的墨笔临摹引导汉字，赚取分数和金钱。",
+            btn_open_shodo: "🖌️ 毛笔",
+            btn_tool_eraser: "🧹 橡皮擦",
+            btn_open_shodo_active: "🔴 书写中",
+            stat_score: "分数",
+            stat_money: "金钱",
+            stat_combo: "连击",
+            stat_chars: "汉字",
+            stat_time: "时间",
+            sign_small_top: "成人式",
+            sign_title: "书道",
+            sign_small_bottom: "BRUSH TRACING",
+            start_eyebrow: "NAYLA FESTIVAL",
+            start_title: "书道 毛笔临摹",
+            start_description: "画布上会出现一个淡淡的引导汉字。用手指或鼠标沿着它临摹。笔迹越贴近引导，分数就越高。",
+            start_button: "🖌️ 开始书写",
+            canvas_hint: "沿着淡淡的汉字轮廓临摹",
+            btn_clear: "↺ 重来",
+            btn_submit: "🖌️ 完成",
+            msg_open_first: "请先开始书写。",
+            msg_draw_first: "请先书写内容再完成。",
+            msg_tier_excellent: "✨ 笔迹完美！",
+            msg_tier_good: "👍 笔迹不错！",
+            msg_tier_try_again: "试着更贴近引导轮廓。",
+            msg_cleared: "画布已清空。",
+            msg_game_opened: "书写环节开始！请跟随汉字引导。",
+            msg_game_closed: "书写环节已停止。",
+            completion_label: "笔迹完成",
+            completion_title: "墨韵流畅动人！🖌️",
+            completion_default_text: "笔迹已成功完成。",
+            completion_char_text: "{char}（{meaning}）— 准确度{accuracy}%。",
+            completion_timeup_text: "时间到！你的最终分数是{score}。",
+            completion_score_label: "+分数",
+            completion_money_label: "+金钱",
+            btn_continue: "继续",
+            meaning_kotobuki: "长寿与福气",
+            meaning_fuku: "好运",
+            meaning_ai: "爱",
+            meaning_yume: "梦想与志向",
+            meaning_bi: "美丽",
+            meaning_wa: "和谐与平静"
         }
 
     }
@@ -1359,7 +1584,39 @@ const TIMING_IDS = {
     timerValue: "timingTimerValue"
 };
 
+const SHODO_KANJI_SET = [
+    { char: "寿", meaningKey: "meaning_kotobuki" },
+    { char: "福", meaningKey: "meaning_fuku" },
+    { char: "愛", meaningKey: "meaning_ai" },
+    { char: "夢", meaningKey: "meaning_yume" },
+    { char: "美", meaningKey: "meaning_bi" },
+    { char: "和", meaningKey: "meaning_wa" }
+];
 
+
+const SHODO_IDS = {
+    openButton: "openShodoButton",
+    startGameButton: "startGameButtonSh",
+    startOverlay: "shodoStartOverlay",
+    canvas: "shodoCanvas",
+    guideCanvas: "shodoGuideCanvas", 
+    charMeaning: "shodoCharMeaning",
+    clearButton: "shodoClearButton",
+    submitButton: "shodoSubmitButton",
+    gameMessage: "shodoGameMessage",
+    completionPopup: "shodoCompletionPopup",
+    closeCompletionButton: "closeShodoCompletionButton",
+    popupScore: "shodoPopupScore",
+    popupMoney: "shodoPopupMoney",
+    completionText: "shodoCompletionText",
+    scoreValue: "shodoScoreValue",
+    moneyValue: "shodoMoneyValue",
+    comboValue: "shodoComboValue",
+    charsValue: "shodoCharsValue",
+    timerValue: "shodoTimerValue",
+    brushButton: "shodoBrushButton",
+    eraserButton: "shodoEraserButton"
+};
 /* =========================================================
    05. GENERIC SHOP GAME ENGINE (booth & studio)
    (dipakai untuk booth maupun studio — satu-satunya bedanya
@@ -2898,6 +3155,685 @@ function createTimingGame(ids) {
 
 }
 
+/* =========================================================
+   05d. SHODO BRUSH TRACING ENGINE (mekanik BEDA lagi — bukan
+   prepare & serve, bukan flip & match, bukan precision-timing
+   dengan tombol, tapi continuous drawing: kanji panduan tipis
+   muncul di canvas, pemain menelusurinya dengan jari/mouse.
+   Ketebalan kuas berubah otomatis sesuai kecepatan gerakan
+   (lambat = tebal, cepat = tipis + percikan tinta). Scoring
+   memakai grid 46x46 yang menandai sel mana yang mengandung
+   tinta kanji ("guide"), lalu dibandingkan dengan sel yang
+   berhasil dilewati kuas pemain (coverage) dan seberapa sering
+   kuas tetap berada di jalur (precision).
+========================================================= */
+
+function createShodoGame(ids) {
+
+    const $ = id => document.getElementById(id);
+
+    const openButton = $(ids.openButton);
+    if (!openButton) return null;
+
+    const startGameButton = $(ids.startGameButton);
+    const startOverlay = $(ids.startOverlay);
+    const guideCanvas = $(ids.guideCanvas);
+    const canvas = $(ids.canvas);
+    const charMeaningEl = $(ids.charMeaning);
+    const clearButton = $(ids.clearButton);
+    const submitButton = $(ids.submitButton);
+    const brushButton = $(ids.brushButton);
+    const eraserButton = $(ids.eraserButton);
+    const gameMessage = $(ids.gameMessage);
+    const completionPopup = $(ids.completionPopup);
+    const closeCompletionButton = $(ids.closeCompletionButton);
+    const popupScore = $(ids.popupScore);
+    const popupMoney = $(ids.popupMoney);
+    const completionText = $(ids.completionText);
+
+    const guideCtx = guideCanvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
+
+    const GRID = 46;
+    const SUBMIT_SCORE_BASE = 40;
+    const SUBMIT_MONEY_BASE = 20000;
+    const MIN_COVERAGE_TO_SUBMIT = 0.04;
+    const INK_ALPHA_THRESHOLD = 40;
+
+    const INK_COLOR = "#1c1b2e";
+    const GUIDE_COLOR = "#8B5E34";
+    const MIN_BRUSH = 2.5;
+    const MAX_BRUSH = 15;
+    const ERASER_RADIUS = 17;
+
+
+    const state = {
+        isOpen: false,
+        gameOver: false,
+        score: 0,
+        money: 0,
+        combo: 0,
+        charsCompleted: 0,
+        timeLeft: 60,
+        timer: null,
+        currentKanji: null,
+        guideGrid: null,
+        totalGuideCells: 0,
+        hasDrawn: false,
+        drawing: false,
+        tool: "brush",
+        lastX: 0,
+        lastY: 0,
+        lastTime: 0,
+        cellSize: 0,
+        canvasSize: 320
+    };
+
+
+    function t(key, params) { return gamesT(`shodo.${key}`, params); }
+
+    function formatMoney(value) {
+        return "Rp " + Number(value || 0).toLocaleString("id-ID");
+    }
+
+    function randomFrom(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    }
+
+
+    /* ===== SCOREBOARD ===== */
+
+    function updateScoreboard() {
+
+        $(ids.scoreValue).textContent = state.score.toLocaleString("id-ID");
+        $(ids.moneyValue).textContent = formatMoney(state.money);
+        $(ids.comboValue).textContent = "x" + state.combo;
+        $(ids.charsValue).textContent = state.charsCompleted;
+        $(ids.timerValue).textContent = state.timeLeft;
+
+        $(ids.timerValue).style.color = state.timeLeft <= 10 ? "#ff5470" : "";
+
+    }
+
+
+    /* ===== MESSAGE ===== */
+
+    let messageTimeout = null;
+
+    function showMessage(key, params) {
+
+        if (!gameMessage) return;
+
+        gameMessage.textContent = t(key, params);
+        gameMessage.classList.add("show");
+
+        clearTimeout(messageTimeout);
+        messageTimeout = setTimeout(() => {
+            gameMessage.classList.remove("show");
+        }, 1800);
+
+    }
+
+
+    /* ===== CANVAS SETUP (kedua layer disamakan resolusinya) ===== */
+
+    function setupCanvasResolution() {
+
+        const rect = canvas.getBoundingClientRect();
+        const size = Math.round(rect.width || state.canvasSize);
+        const dpr = window.devicePixelRatio || 1;
+
+        [guideCanvas, canvas].forEach(target => {
+            target.width = size * dpr;
+            target.height = size * dpr;
+        });
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        guideCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        state.canvasSize = size;
+        state.cellSize = size / GRID;
+
+    }
+
+
+    /* ===== GUIDE BUILD (layer bawah — tidak pernah kena hapus) ===== */
+
+    function buildGuide(kanji) {
+
+        const size = state.canvasSize;
+
+        // grid kecil untuk deteksi bentuk kanji (dipakai scoring)
+        const sampleCanvas = document.createElement("canvas");
+        sampleCanvas.width = GRID;
+        sampleCanvas.height = GRID;
+
+        const sampleCtx = sampleCanvas.getContext("2d");
+        sampleCtx.clearRect(0, 0, GRID, GRID);
+        sampleCtx.fillStyle = "#000";
+        sampleCtx.textAlign = "center";
+        sampleCtx.textBaseline = "middle";
+        sampleCtx.font = `${Math.round(GRID * 0.82)}px "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", serif`;
+        sampleCtx.fillText(kanji.char, GRID / 2, GRID / 2 + GRID * 0.04);
+
+        const sampleData = sampleCtx.getImageData(0, 0, GRID, GRID).data;
+
+        const guideGrid = new Uint8Array(GRID * GRID);
+        let totalGuideCells = 0;
+
+        for (let i = 0; i < GRID * GRID; i++) {
+            if (sampleData[i * 4 + 3] > 90) {
+                guideGrid[i] = 1;
+                totalGuideCells++;
+            }
+        }
+
+        state.guideGrid = guideGrid;
+        state.totalGuideCells = Math.max(1, totalGuideCells);
+
+        // render guide visual (samar) ke layer bawah
+        guideCtx.clearRect(0, 0, size, size);
+        guideCtx.save();
+        guideCtx.globalAlpha = 0.22;
+        guideCtx.fillStyle = `rgb(${GUIDE_COLOR})`;
+        guideCtx.textAlign = "center";
+        guideCtx.textBaseline = "middle";
+        guideCtx.font = `${Math.round(size * 0.72)}px "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", serif`;
+        guideCtx.fillText(kanji.char, size / 2, size / 2 + size * 0.04);
+        guideCtx.restore();
+
+    }
+
+
+    function clearInkLayer() {
+
+        const size = state.canvasSize;
+
+        ctx.save();
+        ctx.globalCompositeOperation = "source-over";
+        ctx.clearRect(0, 0, size, size);
+        ctx.restore();
+
+        state.hasDrawn = false;
+
+    }
+
+
+    function renderMeaning() {
+
+        if (!charMeaningEl || !state.currentKanji) return;
+
+        charMeaningEl.textContent =
+            state.currentKanji.char + " · " + t(state.currentKanji.meaningKey);
+
+    }
+
+
+    function newRound() {
+
+        state.currentKanji = randomFrom(SHODO_KANJI_SET);
+
+        buildGuide(state.currentKanji);
+        clearInkLayer();
+        renderMeaning();
+
+        submitButton.disabled = false;
+
+    }
+
+
+    /* ===== TOOL SWITCH (kuas / penghapus) ===== */
+
+    function setTool(tool) {
+
+        state.tool = tool;
+
+        brushButton.classList.toggle("active", tool === "brush");
+        eraserButton.classList.toggle("active", tool === "eraser");
+
+        canvas.classList.toggle("eraser-mode", tool === "eraser");
+
+    }
+
+
+    /* ===== DRAWING / ERASING (semua di layer tinta saja) ===== */
+
+    function pointerPosition(event) {
+
+        const rect = canvas.getBoundingClientRect();
+
+        return {
+            x: event.clientX - rect.left,
+            y: event.clientY - rect.top
+        };
+
+    }
+
+
+    function spawnSplatter(x, y) {
+
+        const dropletCount = 2 + Math.floor(Math.random() * 2);
+
+        for (let i = 0; i < dropletCount; i++) {
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 4 + Math.random() * 10;
+            const radius = 0.6 + Math.random() * 1.6;
+
+            ctx.save();
+            ctx.globalCompositeOperation = "source-over";
+            ctx.globalAlpha = 0.35 + Math.random() * 0.25;
+            ctx.fillStyle = INK_COLOR;
+            ctx.beginPath();
+            ctx.arc(
+                x + Math.cos(angle) * distance,
+                y + Math.sin(angle) * distance,
+                radius, 0, Math.PI * 2
+            );
+            ctx.fill();
+            ctx.restore();
+
+        }
+
+    }
+
+
+    function beginStroke(x, y) {
+
+        state.drawing = true;
+        state.lastX = x;
+        state.lastY = y;
+        state.lastTime = performance.now();
+
+        if (state.tool === "eraser") {
+
+            ctx.save();
+            ctx.globalCompositeOperation = "destination-out";
+            ctx.beginPath();
+            ctx.arc(x, y, ERASER_RADIUS / 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+        } else {
+
+            state.hasDrawn = true;
+
+            ctx.save();
+            ctx.globalCompositeOperation = "source-over";
+            ctx.fillStyle = INK_COLOR;
+            ctx.beginPath();
+            ctx.arc(x, y, MIN_BRUSH / 1.4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+        }
+
+    }
+
+
+    function continueStroke(x, y) {
+
+        if (!state.drawing) return;
+
+        const now = performance.now();
+        const dt = Math.max(8, now - state.lastTime);
+        const dist = Math.hypot(x - state.lastX, y - state.lastY);
+        const speed = dist / dt;
+
+        if (state.tool === "eraser") {
+
+            ctx.save();
+            ctx.globalCompositeOperation = "destination-out";
+            ctx.strokeStyle = "rgba(0,0,0,1)";
+            ctx.lineWidth = ERASER_RADIUS;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+
+            ctx.beginPath();
+            ctx.moveTo(state.lastX, state.lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(x, y, ERASER_RADIUS / 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+        } else {
+
+            state.hasDrawn = true;
+
+            const speedRatio = Math.min(speed / 1.6, 1);
+            const width = MAX_BRUSH - speedRatio * (MAX_BRUSH - MIN_BRUSH);
+
+            ctx.save();
+            ctx.globalCompositeOperation = "source-over";
+            ctx.strokeStyle = INK_COLOR;
+            ctx.lineWidth = width;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+
+            ctx.beginPath();
+            ctx.moveTo(state.lastX, state.lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.restore();
+
+            if (speedRatio > 0.72 && Math.random() < 0.28) {
+                spawnSplatter(x, y);
+            }
+
+        }
+
+        state.lastX = x;
+        state.lastY = y;
+        state.lastTime = now;
+
+    }
+
+
+    function endStroke() {
+        state.drawing = false;
+    }
+
+
+    function handlePointerDown(event) {
+
+        if (!state.isOpen || state.gameOver) {
+            showMessage("msg_open_first");
+            return;
+        }
+
+        event.preventDefault();
+        canvas.setPointerCapture(event.pointerId);
+
+        const pos = pointerPosition(event);
+        beginStroke(pos.x, pos.y);
+
+    }
+
+
+    function handlePointerMove(event) {
+
+        if (!state.drawing) return;
+
+        event.preventDefault();
+
+        const pos = pointerPosition(event);
+        continueStroke(pos.x, pos.y);
+
+    }
+
+
+    function handlePointerUp(event) {
+
+        if (!state.drawing) return;
+
+        event.preventDefault();
+        endStroke();
+
+    }
+
+
+    /* ===== ULANGI (reset layer tinta ke kanji yang sama) ===== */
+
+    function clearCanvas() {
+
+        if (!state.currentKanji) return;
+
+        clearInkLayer();
+        showMessage("msg_cleared");
+
+    }
+
+
+    /* ===== SCORING — dibaca dari kanvas tinta akhir (mendukung hasil hapusan) ===== */
+
+    function sampleInkAccuracy() {
+
+        const size = state.canvasSize;
+
+        const sampleCanvas = document.createElement("canvas");
+        sampleCanvas.width = GRID;
+        sampleCanvas.height = GRID;
+
+        const sampleCtx = sampleCanvas.getContext("2d");
+        sampleCtx.clearRect(0, 0, GRID, GRID);
+        sampleCtx.drawImage(canvas, 0, 0, size, size, 0, 0, GRID, GRID);
+
+        const data = sampleCtx.getImageData(0, 0, GRID, GRID).data;
+
+        let totalInkCells = 0;
+        let onTargetCells = 0;
+
+        for (let i = 0; i < GRID * GRID; i++) {
+
+            if (data[i * 4 + 3] > INK_ALPHA_THRESHOLD) {
+
+                totalInkCells++;
+
+                if (state.guideGrid[i] === 1) onTargetCells++;
+
+            }
+
+        }
+
+        const coverage = onTargetCells / state.totalGuideCells;
+        const precision = totalInkCells > 0 ? onTargetCells / totalInkCells : 0;
+
+        return { coverage, precision, totalInkCells };
+
+    }
+
+
+    /* ===== SUBMIT ===== */
+
+    function finishStroke() {
+
+        if (!state.isOpen || state.gameOver) {
+            showMessage("msg_open_first");
+            return;
+        }
+
+        const { coverage, precision, totalInkCells } = sampleInkAccuracy();
+
+        if (!state.hasDrawn || totalInkCells === 0 || coverage < MIN_COVERAGE_TO_SUBMIT) {
+            showMessage("msg_draw_first");
+            return;
+        }
+
+        const accuracy = Math.round(
+            Math.min(1, coverage * 0.62 + precision * 0.38) * 100
+        );
+
+        let tierKey = "msg_tier_try_again";
+        let tierGood = false;
+
+        if (accuracy >= 82) {
+            tierKey = "msg_tier_excellent";
+            tierGood = true;
+        } else if (accuracy >= 58) {
+            tierKey = "msg_tier_good";
+            tierGood = true;
+        }
+
+        state.combo = tierGood ? state.combo + 1 : 0;
+
+        const earnedScore = Math.max(
+            5,
+            Math.round((accuracy / 100) * SUBMIT_SCORE_BASE) + state.combo * 4
+        );
+
+        const earnedMoney = Math.round((accuracy / 100) * SUBMIT_MONEY_BASE / 1000) * 1000;
+
+        state.score += earnedScore;
+        state.money += earnedMoney;
+        state.charsCompleted += 1;
+
+        updateScoreboard();
+        showMessage(tierKey);
+
+        popupScore.textContent = "+" + earnedScore;
+        popupMoney.textContent = formatMoney(earnedMoney);
+
+        completionText.textContent = t("completion_char_text", {
+            char: state.currentKanji.char,
+            meaning: t(state.currentKanji.meaningKey),
+            accuracy
+        });
+
+        setTimeout(() => {
+            if (!state.gameOver) completionPopup.classList.add("show");
+        }, 250);
+
+    }
+
+
+    /* ===== TIMER / LIFECYCLE ===== */
+
+    function startTimer() {
+
+        clearInterval(state.timer);
+
+        state.timer = setInterval(() => {
+
+            if (!state.isOpen || state.gameOver) return;
+
+            state.timeLeft--;
+            updateScoreboard();
+
+            if (state.timeLeft <= 0) endGame();
+
+        }, 1000);
+
+    }
+
+
+    function endGame() {
+
+        state.gameOver = true;
+        state.isOpen = false;
+
+        clearInterval(state.timer);
+        completionPopup.classList.remove("show");
+
+        completionText.textContent = t("completion_timeup_text", { score: state.score });
+        popupScore.textContent = state.score;
+        popupMoney.textContent = formatMoney(state.money);
+
+        setTimeout(() => completionPopup.classList.add("show"), 50);
+
+        openButton.textContent = t("btn_open_shodo");
+
+    }
+
+
+    function startGame() {
+
+        state.isOpen = true;
+        state.gameOver = false;
+        state.score = 0;
+        state.money = 0;
+        state.combo = 0;
+        state.charsCompleted = 0;
+        state.timeLeft = 60;
+
+        updateScoreboard();
+
+        setupCanvasResolution();
+        setTool("brush");
+        newRound();
+
+        startOverlay.classList.add("hidden");
+        openButton.textContent = t("btn_open_shodo_active");
+
+        showMessage("msg_game_opened");
+
+        startTimer();
+
+    }
+
+
+    function toggleGame() {
+
+        if (state.isOpen) {
+
+            state.isOpen = false;
+            clearInterval(state.timer);
+
+            openButton.textContent = t("btn_open_shodo");
+
+            showMessage("msg_game_closed");
+
+            return;
+
+        }
+
+        startGame();
+
+    }
+
+
+    /* ===== EVENTS ===== */
+
+    openButton.addEventListener("click", toggleGame);
+    startGameButton.addEventListener("click", startGame);
+    clearButton.addEventListener("click", clearCanvas);
+    submitButton.addEventListener("click", finishStroke);
+
+    brushButton.addEventListener("click", () => setTool("brush"));
+    eraserButton.addEventListener("click", () => setTool("eraser"));
+
+    canvas.addEventListener("pointerdown", handlePointerDown);
+    canvas.addEventListener("pointermove", handlePointerMove);
+    canvas.addEventListener("pointerup", handlePointerUp);
+    canvas.addEventListener("pointerleave", handlePointerUp);
+    canvas.addEventListener("pointercancel", handlePointerUp);
+
+    closeCompletionButton.addEventListener("click", () => {
+
+        completionPopup.classList.remove("show");
+
+        if (state.gameOver) {
+            startOverlay.classList.remove("hidden");
+            openButton.textContent = t("btn_open_shodo");
+            return;
+        }
+
+        newRound();
+
+    });
+
+    window.addEventListener("resize", () => {
+        if (state.isOpen && state.currentKanji) {
+            setupCanvasResolution();
+            buildGuide(state.currentKanji);
+        }
+    });
+
+
+    /* ===== LANGUAGE REFRESH ===== */
+
+    function refreshDynamicTexts() {
+
+        openButton.textContent = state.isOpen
+            ? t("btn_open_shodo_active")
+            : t("btn_open_shodo");
+
+        renderMeaning();
+
+    }
+
+
+    /* ===== INITIAL RENDER ===== */
+
+    updateScoreboard();
+    setTool("brush");
+
+
+    return { refreshDynamicTexts };
+
+}
 
 /* =========================================================
    06. BOOTSTRAP — runs once the DOM is ready
@@ -2934,8 +3870,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const timingGame = createTimingGame(TIMING_IDS);
 
-    const activeGames = [boothGame, studioGame, memoryGame, timingGame].filter(Boolean);
+    const shodoGame = createShodoGame(SHODO_IDS);
 
+    const activeGames = [boothGame, studioGame, memoryGame, timingGame, shodoGame].filter(Boolean);
 
     function refreshAll() {
 

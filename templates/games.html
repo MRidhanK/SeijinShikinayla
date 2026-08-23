@@ -1171,6 +1171,237 @@
 
 </div>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
+
+<section class="booth-game-page shodo-game-page">
+
+    <header class="booth-game-header">
+
+        <div class="booth-title-area">
+
+            <div class="eyebrow" data-i18n="shodo.header_eyebrow">
+                NAYLA FESTIVAL · SEIJIN SHIKI 2026
+            </div>
+
+            <h1 data-i18n="shodo.header_title">
+                🖌️ Shodo Brush Tracing
+            </h1>
+
+            <p data-i18n="shodo.header_description">
+                Ikuti guratan kanji panduan pakai kuas tintamu untuk
+                mendapatkan score dan money.
+            </p>
+
+        </div>
+
+        <div class="booth-header-actions">
+
+            <button
+                type="button"
+                id="openShodoButton"
+                class="booth-btn booth-btn-primary"
+                data-i18n="shodo.btn_open_shodo">
+
+                🖌️ MULAI MENULIS
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <section class="booth-scoreboard">
+
+        <div class="booth-stat">
+            <span class="booth-stat-label" data-i18n="shodo.stat_score">SCORE</span>
+            <strong id="shodoScoreValue" class="booth-stat-value">0</strong>
+        </div>
+
+        <div class="booth-stat">
+            <span class="booth-stat-label" data-i18n="shodo.stat_money">MONEY</span>
+            <strong id="shodoMoneyValue" class="booth-stat-value">Rp 0</strong>
+        </div>
+
+        <div class="booth-stat">
+            <span class="booth-stat-label" data-i18n="shodo.stat_combo">COMBO</span>
+            <strong id="shodoComboValue" class="booth-stat-value">x0</strong>
+        </div>
+
+        <div class="booth-stat">
+            <span class="booth-stat-label" data-i18n="shodo.stat_chars">KANJI</span>
+            <strong id="shodoCharsValue" class="booth-stat-value">0</strong>
+        </div>
+
+        <div class="booth-stat timer-stat">
+            <span class="booth-stat-label" data-i18n="shodo.stat_time">TIME</span>
+            <strong id="shodoTimerValue" class="booth-stat-value">60</strong>
+        </div>
+
+    </section>
+
+
+    <main class="booth-game-wrapper">
+
+        <div id="shodoArena" class="booth-arena shodo-arena">
+
+            <div class="arena-glow"></div>
+
+            <div class="arena-sign shodo-sign">
+                <span class="arena-sign-small" data-i18n="shodo.sign_small_top">成人式</span>
+                <strong class="arena-sign-title" data-i18n="shodo.sign_title">SHODO</strong>
+                <span class="arena-sign-small" data-i18n="shodo.sign_small_bottom">
+                    BRUSH TRACING
+                </span>
+            </div>
+
+
+            <div class="shodo-canvas-wrap">
+
+                <div class="shodo-canvas-meta">
+                    <span id="shodoCharMeaning" class="shodo-char-meaning"></span>
+                </div>
+
+                <div class="shodo-toolbar">
+
+                    <button
+                        type="button"
+                        id="shodoBrushButton"
+                        class="shodo-tool-btn active"
+                        data-i18n="shodo.btn_open_shodo">
+
+                        🖌️ KUAS
+
+                    </button>
+
+                    <button
+                        type="button"
+                        id="shodoEraserButton"
+                        class="shodo-tool-btn"
+                        data-i18n="shodo.btn_tool_eraser">
+
+                        🧹 HAPUS
+
+                    </button>
+
+                </div>
+
+                <div class="shodo-canvas-frame">
+                    <canvas id="shodoGuideCanvas" class="shodo-canvas shodo-guide-canvas" width="320" height="320"></canvas>
+                    <canvas id="shodoCanvas" class="shodo-canvas shodo-ink-canvas" width="320" height="320"></canvas>
+                </div>
+
+                <span class="shodo-instructions" data-i18n="shodo.canvas_hint">
+                    Ikuti guratan kanji samar mengikuti bentuknya
+                </span>
+
+                <div class="shodo-actions">
+
+                    <button
+                        type="button"
+                        id="shodoClearButton"
+                        class="booth-btn booth-btn-danger"
+                        data-i18n="shodo.btn_clear">
+
+                        ↺ ULANGI
+
+                    </button>
+
+                    <button
+                        type="button"
+                        id="shodoSubmitButton"
+                        class="booth-btn booth-btn-success"
+                        data-i18n="shodo.btn_submit">
+
+                        🖌️ SELESAI
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div id="shodoGameMessage" class="game-message"></div>
+
+
+            <div id="shodoStartOverlay" class="booth-start-overlay">
+
+                <div class="start-card">
+
+                    <div class="start-card-icon">🖌️</div>
+
+                    <div class="eyebrow" data-i18n="shodo.start_eyebrow">NAYLA FESTIVAL</div>
+
+                    <h2 data-i18n="shodo.start_title">Shodo Brush Tracing</h2>
+
+                    <p data-i18n="shodo.start_description">
+                        Kanji panduan akan muncul samar-samar di kanvas. Gambar
+                        ulang mengikuti bentuknya pakai jari atau mouse. Semakin
+                        dekat jalurmu ke panduan, semakin besar score yang kamu
+                        dapat.
+                    </p>
+
+                    <button
+                        type="button"
+                        id="startGameButtonSh"
+                        class="booth-btn booth-btn-primary start-button"
+                        data-i18n="shodo.start_button">
+
+                        🖌️ MULAI MENULIS
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</section>
+
+
+<div id="shodoCompletionPopup" class="completion-popup">
+
+    <div class="completion-card">
+
+        <div class="completion-icon">🖌️</div>
+
+        <span class="completion-label" data-i18n="shodo.completion_label">WAKTU HABIS</span>
+
+        <h2 data-i18n="shodo.completion_title">Tinta Mengalir Indah! 🖌️</h2>
+
+        <p id="shodoCompletionText"></p>
+
+        <div class="completion-stats">
+
+            <div>
+                <span data-i18n="shodo.completion_score_label">+SCORE</span>
+                <strong id="shodoPopupScore">+0</strong>
+            </div>
+
+            <div>
+                <span data-i18n="shodo.completion_money_label">+MONEY</span>
+                <strong id="shodoPopupMoney">Rp 0</strong>
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            id="closeShodoCompletionButton"
+            class="booth-btn booth-btn-primary"
+            data-i18n="shodo.btn_continue">
+
+            LANJUTKAN
+
+        </button>
+
+    </div>
+
 <script src="{{ url_for('static', filename='js/games.js') }}"></script>
 
 {% endblock %}
