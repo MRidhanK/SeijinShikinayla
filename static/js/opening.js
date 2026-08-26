@@ -20,6 +20,38 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector(".torii");
 
 
+    /* =========================================
+       JEMBATAN AUDIO (dipakai bareng countdown.js)
+
+       Dipakai supaya lagu ulang tahun HANYA diputar
+       ketika user benar-benar "masuk" ke halaman,
+       bukan otomatis begitu countdown selesai.
+    ========================================= */
+
+    window.NaylaCeremonyAudio = window.NaylaCeremonyAudio || {
+        entered: false,
+        pending: false,
+        play: null
+    };
+
+    function triggerPendingBirthdaySong() {
+
+        window.NaylaCeremonyAudio.entered = true;
+
+        if (
+            window.NaylaCeremonyAudio.pending &&
+            typeof window.NaylaCeremonyAudio.play === "function"
+        ) {
+
+            window.NaylaCeremonyAudio.play();
+
+            window.NaylaCeremonyAudio.pending = false;
+
+        }
+
+    }
+
+
     const nav =
         performance.getEntriesByType("navigation")[0];
 
@@ -49,6 +81,14 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.remove(
             "ceremony-locked"
         );
+
+        /*
+            User dianggap sudah "masuk" di sesi ini,
+            jadi kalau perayaan ulang tahun sedang
+            menunggu (pending), langsung mainkan lagunya.
+        */
+
+        triggerPendingBirthdaySong();
 
         return;
     }
@@ -218,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             /*
-                AUDIO
+                AUDIO OPENING (musik torii/gerbang)
             */
 
             if (audio) {
@@ -228,6 +268,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 audio.play().catch(() => {});
 
             }
+
+
+            /*
+                User resmi "masuk" ke halaman sekarang.
+                Kalau lagu ulang tahun sedang pending
+                (countdown sudah selesai sebelumnya),
+                mainkan sekarang.
+            */
+
+            triggerPendingBirthdaySong();
 
 
             /*

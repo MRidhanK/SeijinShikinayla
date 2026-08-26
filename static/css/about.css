@@ -421,6 +421,10 @@
 
 }
 
+@keyframes banner-glow {
+    0%, 100% { filter: drop-shadow(0 0 10px rgba(229,189,85,.55)); }
+    50%      { filter: drop-shadow(0 0 22px rgba(247,226,154,.75)); }
+}
 
 .twenty-background-number {
 

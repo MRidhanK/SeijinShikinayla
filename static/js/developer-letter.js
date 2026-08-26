@@ -4,7 +4,7 @@
 
    FEATURES
    ---------------------------------------------------------
-   • Birthday countdown
+   • Birthday countdown (sinkron dengan sistem countdown.js)
    • Automatic unlock on 18 June 2027
    • Multi-language translation
    • Indonesia
@@ -20,7 +20,7 @@
    UNLOCK DATE
    ---------------------------------------------------------
    18 June 2027
-   00:00:00
+   00:00:00 (WIB / +07:00)
 
 ========================================================= */
 
@@ -649,17 +649,17 @@
 
 
     /* =====================================================
-       BIRTHDAY
+       TARGET DATE
+       -----------------------------------------------------
+       Disamakan dengan pola di countdown.js: disimpan
+       sebagai timestamp (ms) hasil dari getTime(), bukan
+       objek Date mentah. Ini membuat perhitungan selisih
+       waktu (distance) konsisten di seluruh script, dan
+       menghindari duplikasi logika year/month/day terpisah
+       seperti pada versi sebelumnya.
     ===================================================== */
 
-    const birthday = new Date(
-        2027,
-        5,      // June = 5
-        18,     // 18
-        0,      // hour
-        0,      // minute
-        0       // second
-    );
+    const targetDate = new Date("2027-06-18T00:00:00+07:00").getTime();
 
 
     /* =====================================================
@@ -679,6 +679,21 @@
         }
 
         return "en";
+    }
+
+
+    /* =====================================================
+       FORMAT ANGKA
+       -----------------------------------------------------
+       Sama seperti formatNumber() di countdown.js, supaya
+       tampilan dua digit (00, 01, 02, ...) konsisten di
+       seluruh situs.
+    ===================================================== */
+
+    function formatNumber(number) {
+
+        return String(number).padStart(2, "0");
+
     }
 
 
@@ -798,6 +813,14 @@
 
     /* =====================================================
        UPDATE COUNTDOWN
+       -----------------------------------------------------
+       Disamakan dengan updateCountdown() di countdown.js:
+       pakai Date.now() dan distance = targetDate - now,
+       lalu breakdown ke days/hours/minutes/seconds dengan
+       formatNumber(). Bedanya di sini hasilnya dirender ke
+       dalam satu string terjemahan, bukan ke elemen digit
+       terpisah, karena struktur HTML letter berbeda dari
+       struktur HTML countdown utama.
     ===================================================== */
 
     function updateCountdown() {
@@ -814,20 +837,19 @@
 
 
         const now =
-            new Date();
+            Date.now();
 
 
-        const difference =
-            birthday.getTime() -
-            now.getTime();
+        const distance =
+            targetDate - now;
 
 
         /* =============================================
-           BIRTHDAY HAS ARRIVED
+           TARGET DATE HAS ARRIVED
         ============================================= */
 
         if (
-            difference <= 0
+            distance <= 0
         ) {
 
             unlockLetter();
@@ -843,7 +865,7 @@
 
         const days =
             Math.floor(
-                difference /
+                distance /
                 (1000 * 60 * 60 * 24)
             );
 
@@ -851,7 +873,7 @@
         const hours =
             Math.floor(
                 (
-                    difference /
+                    distance /
                     (1000 * 60 * 60)
                 ) % 24
             );
@@ -860,7 +882,7 @@
         const minutes =
             Math.floor(
                 (
-                    difference /
+                    distance /
                     (1000 * 60)
                 ) % 60
             );
@@ -869,7 +891,7 @@
         const seconds =
             Math.floor(
                 (
-                    difference /
+                    distance /
                     1000
                 ) % 60
             );
@@ -904,16 +926,16 @@
 
             <span class="letter-countdown-time">
 
-                ${days}
+                ${formatNumber(days)}
                 ${dictionary["secret.countdown.days"]}
 
-                ${hours}
+                ${formatNumber(hours)}
                 ${dictionary["secret.countdown.hours"]}
 
-                ${minutes}
+                ${formatNumber(minutes)}
                 ${dictionary["secret.countdown.minutes"]}
 
-                ${seconds}
+                ${formatNumber(seconds)}
                 ${dictionary["secret.countdown.seconds"]}
 
             </span>
@@ -976,7 +998,13 @@
 
 
     /* =====================================================
-       CHECK BIRTHDAY
+       CHECK TARGET DATE
+       -----------------------------------------------------
+       Dipanggil setiap detik, sama seperti updateCountdown()
+       di countdown.js. Nama fungsi tetap checkBirthday()
+       untuk kompatibilitas dengan kode lain yang mungkin
+       memanggilnya, tapi logikanya sekarang memakai
+       targetDate/distance yang konsisten dengan countdown.js.
     ===================================================== */
 
     function checkBirthday() {
@@ -993,16 +1021,15 @@
 
 
         const now =
-            new Date();
+            Date.now();
 
 
-        const difference =
-            birthday.getTime() -
-            now.getTime();
+        const distance =
+            targetDate - now;
 
 
         if (
-            difference <= 0
+            distance <= 0
         ) {
 
             unlockLetter();
@@ -1172,8 +1199,8 @@
         );
 
         console.log(
-            "Birthday:",
-            birthday.toString()
+            "Target date:",
+            new Date(targetDate).toString()
         );
 
         console.log(
