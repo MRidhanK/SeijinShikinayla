@@ -5,7 +5,7 @@
 <section class="ai-page">
 
     <!-- ==========================================
-         HERO
+        HERO
     ========================================== -->
 
     <section class="ai-hero">
@@ -35,7 +35,7 @@
 
 
     <!-- ==========================================
-         AI INTRO
+        AI INTRO
     ========================================== -->
 
     <section class="ai-section">
@@ -61,14 +61,14 @@
 
 
         <!-- ==========================================
-             AI TOOLS
+            AI TOOLS
         ========================================== -->
 
         <div class="ai-tools-grid">
 
 
             <!-- ======================================
-                 WISH GENERATOR
+                WISH GENERATOR
             ======================================= -->
 
             <button
@@ -97,7 +97,7 @@
 
 
             <!-- ======================================
-                 MESSAGE ENHANCER
+                MESSAGE ENHANCER
             ======================================= -->
 
             <button
@@ -126,7 +126,7 @@
 
 
             <!-- ======================================
-                 SEIJIN MESSAGE
+                SEIJIN MESSAGE
             ======================================= -->
 
             <button
@@ -155,7 +155,7 @@
 
 
             <!-- ======================================
-                 LETTER GENERATOR
+                LETTER GENERATOR
             ======================================= -->
 
             <button
@@ -184,7 +184,39 @@
 
 
             <!-- ======================================
-                 NAYLA TRIVIA MASTER
+                POEM & HAIKU GENERATOR
+                (FIXED: dipindahkan ke dalam .ai-tools-grid
+                supaya sejajar dengan tool card lainnya,
+                sebelumnya nyasar di luar grid)
+            ======================================= -->
+
+            <button
+                type="button"
+                class="ai-tool-card"
+                data-ai-mode="poem">
+
+                <div class="ai-tool-icon">
+                    🍃
+                </div>
+
+                <h3 data-i18n="ai.tools.poem.title">
+                    Poem & Haiku Generator
+                </h3>
+
+                <p data-i18n="ai.tools.poem.description">
+                    Create a short poem or haiku
+                    inspired by Nayla and the seasons.
+                </p>
+
+                <span data-i18n="ai.tools.poem.button">
+                    Write Poem →
+                </span>
+
+            </button>
+
+
+            <!-- ======================================
+                NAYLA TRIVIA MASTER
             ======================================= -->
 
             <button
@@ -211,11 +243,44 @@
 
             </button>
 
+
+            <!-- ======================================
+                FAN CERTIFICATE
+                (FIXED: dipindahkan ke sini dari dalam
+                #triviaResult supaya tampil di grid dan
+                tidak "hilang" sampai user menyelesaikan
+                trivia)
+            ======================================= -->
+
+            <button
+                type="button"
+                class="ai-tool-card"
+                data-ai-mode="certificate">
+
+                <div class="ai-tool-icon">
+                    🎴
+                </div>
+
+                <h3 data-i18n="certificate.tool.title">
+                    Fan Certificate
+                </h3>
+
+                <p data-i18n="certificate.tool.description">
+                    Get an official certificate celebrating
+                    your fandom for Nayla.
+                </p>
+
+                <span data-i18n="certificate.tool.button">
+                    Get Certificate →
+                </span>
+
+            </button>
+
         </div>
 
 
         <!-- ==========================================
-             AI WORKSPACE
+            AI WORKSPACE
         ========================================== -->
 
         <section
@@ -224,7 +289,7 @@
 
 
             <!-- ======================================
-                 WORKSPACE HEADER
+                WORKSPACE HEADER
             ======================================= -->
 
             <div class="ai-workspace-header">
@@ -263,7 +328,7 @@
 
 
             <!-- ======================================
-                 AI FORM
+                AI FORM
             ======================================= -->
 
             <div class="ai-form">
@@ -367,6 +432,40 @@
                 </div>
 
 
+                <!-- POEM FORMAT
+                    (only shown when Poem & Haiku mode is active,
+                    toggled by JS via #aiPoemTypeField) -->
+
+                <div
+                    class="ai-field"
+                    id="aiPoemTypeField"
+                    style="display: none;">
+
+                    <label
+                        for="aiPoemType"
+                        data-i18n="ai.form.poemType">
+                        Poem format
+                    </label>
+
+                    <select id="aiPoemType">
+
+                        <option
+                            value="haiku"
+                            data-i18n="ai.poemTypes.haiku">
+                            Haiku (5-7-5)
+                        </option>
+
+                        <option
+                            value="short"
+                            data-i18n="ai.poemTypes.short">
+                            Short Poem (3-5 lines)
+                        </option>
+
+                    </select>
+
+                </div>
+
+
                 <!-- GENERATE -->
 
                 <button
@@ -381,7 +480,7 @@
 
 
                 <!-- ==================================
-                     LOADING
+                    LOADING
                 =================================== -->
 
                 <div
@@ -405,7 +504,7 @@
 
 
                 <!-- ==================================
-                     ERROR
+                    ERROR
                 =================================== -->
 
                 <div
@@ -418,7 +517,7 @@
 
 
             <!-- ======================================
-                 RESULT
+                RESULT
             ======================================= -->
 
             <div
@@ -484,7 +583,7 @@
 
 
             <!-- ======================================
-                 ACTIONS
+                ACTIONS
             ======================================= -->
 
             <div
@@ -530,7 +629,7 @@
 
 
         <!-- ==========================================
-             NAYLA TRIVIA MASTER
+            NAYLA TRIVIA MASTER
         ========================================== -->
 
         <section
@@ -875,15 +974,199 @@
 
                 </button>
 
+                <!--
+                    CATATAN PERBAIKAN:
+                    Tombol "Fan Certificate" yang sebelumnya
+                    nyasar di sini (di dalam #triviaResult)
+                    sudah DIHAPUS dari lokasi ini dan
+                    DIPINDAHKAN ke dalam .ai-tools-grid
+                    di bagian atas halaman, sejajar dengan
+                    tool card lainnya.
+                -->
+
             </div>
 
         </section>
 
     </section>
 
+<!-- =========================================================
+    AI CERTIFICATE WORKSPACE
+    Taruh section ini setelah </section> penutup
+    #triviaWorkspace, sebelum ai-closing.
+========================================================= -->
+
+<section
+    id="certificateWorkspace"
+    class="certificate-workspace">
+
+    <div class="certificate-header">
+
+        <div>
+
+            <span
+                class="section-label"
+                data-i18n="certificate.header.label">
+                🎴 FAN CERTIFICATE
+            </span>
+
+            <h2 data-i18n="certificate.header.title">
+                Create Your Fan Certificate
+            </h2>
+
+            <p data-i18n="certificate.header.description">
+                Fill in your details and receive a sealed,
+                one-of-a-kind certificate.
+            </p>
+
+        </div>
+
+        <button
+            type="button"
+            id="closeCertificate"
+            class="ai-close"
+            aria-label="Close Certificate workspace">
+
+            ×
+
+        </button>
+
+    </div>
+
+
+    <!-- ======================================
+        FORM (hidden once certificate is issued)
+    ======================================= -->
+
+    <div
+        id="certificateForm"
+        class="certificate-form">
+
+        <div class="ai-field">
+
+            <label
+                for="certName"
+                data-i18n="certificate.form.name">
+                Your name
+            </label>
+
+            <input
+                id="certName"
+                type="text"
+                maxlength="40"
+                autocomplete="name"
+                data-i18n-placeholder="certificate.form.namePlaceholder"
+                placeholder="e.g. Sakura">
+
+        </div>
+
+        <div class="ai-field">
+
+            <label
+                for="certSince"
+                data-i18n="certificate.form.since">
+                Fan since (year)
+            </label>
+
+            <select id="certSince"></select>
+
+        </div>
+
+        <div class="ai-field">
+
+            <label
+                for="certMemory"
+                data-i18n="certificate.form.memory">
+                Favorite memory (optional)
+            </label>
+
+            <textarea
+                id="certMemory"
+                maxlength="140"
+                rows="3"
+                data-i18n-placeholder="certificate.form.memoryPlaceholder"
+                placeholder="A stage, a moment, a song..."></textarea>
+
+            <div class="ai-character-counter">
+                <span id="certCharCount">0</span> / 140
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            id="issueCertificate"
+            class="ai-generate-button"
+            data-i18n="certificate.form.generate">
+
+            🎴 Issue Certificate
+
+        </button>
+
+        <div
+            id="certificateError"
+            class="ai-error"
+            style="display:none;">
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+        RESULT (canvas certificate + actions)
+    ======================================= -->
+
+    <div
+        id="certificateResult"
+        class="certificate-result"
+        style="display:none;">
+
+        <div class="certificate-canvas-wrap">
+
+            <canvas
+                id="certificateCanvas"
+                width="1000"
+                height="680">
+            </canvas>
+
+            <div
+                id="certificateStamp"
+                class="certificate-stamp">
+                認定
+            </div>
+
+        </div>
+
+        <div class="certificate-actions">
+
+            <button
+                type="button"
+                id="downloadCertificate"
+                class="ai-action-button ai-primary-action"
+                data-i18n="certificate.actions.download">
+
+                ⬇️ Download Certificate
+
+            </button>
+
+            <button
+                type="button"
+                id="regenerateCertificate"
+                class="ai-action-button"
+                data-i18n="certificate.actions.another">
+
+                🔄 Make Another
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
 
     <!-- ==========================================
-         CLOSING
+        CLOSING
     ========================================== -->
 
     <section class="ai-closing">

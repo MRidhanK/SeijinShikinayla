@@ -842,34 +842,79 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const frames = [
 
-        {
-            name: "Seijin Sakura",
-            theme: "seijin",
-            brand: "SEIJIN",
-            small: "BIRTHDAY",
-            footer: "SEIJIN SHIKI · BIRTHDAY",
-            date: "20th Birthday"
-        },
+    {
+        name: "Seijin Sakura",
+        theme: "seijin",
+        brand: "SEIJIN",
+        small: "BIRTHDAY",
+        footer: "SEIJIN SHIKI · BIRTHDAY",
+        date: "20th Birthday"
+    },
 
-        {
-            name: "Sakura Celebration",
-            theme: "sakura",
-            brand: "SAKURA",
-            small: "SAKURA CELEBRATION",
-            footer: "SAKURA · BIRTHDAY",
-            date: "20th Birthday"
-        },
+    {
+        name: "Sakura Celebration",
+        theme: "sakura",
+        brand: "SAKURA",
+        small: "SAKURA CELEBRATION",
+        footer: "SAKURA · BIRTHDAY",
+        date: "20th Birthday"
+    },
 
-        {
-            name: "Fuji Celebration",
-            theme: "fuji",
-            brand: "FUJI",
-            small: "FUJI CELEBRATION",
-            footer: "FUJI · BIRTHDAY",
-            date: "20th Birthday"
-        }
+    {
+        name: "Fuji Celebration",
+        theme: "fuji",
+        brand: "FUJI",
+        small: "FUJI CELEBRATION",
+        footer: "FUJI · BIRTHDAY",
+        date: "20th Birthday"
+    },
 
-    ];
+    {
+        name: "Momiji Autumn",
+        theme: "momiji",
+        brand: "MOMIJI",
+        small: "AUTUMN CELEBRATION",
+        footer: "MOMIJI · BIRTHDAY",
+        date: "20th Birthday"
+    },
+
+    {
+        name: "Yuki Winter",
+        theme: "yuki",
+        brand: "YUKI",
+        small: "WINTER CELEBRATION",
+        footer: "YUKI · BIRTHDAY",
+        date: "20th Birthday"
+    },
+
+    {
+        name: "Matsuri Festival",
+        theme: "matsuri",
+        brand: "MATSURI",
+        small: "FESTIVAL CELEBRATION",
+        footer: "MATSURI · BIRTHDAY",
+        date: "20th Birthday"
+    },
+
+    {
+        name: "Tsuki Moon",
+        theme: "tsuki",
+        brand: "TSUKI",
+        small: "MOONLIGHT CELEBRATION",
+        footer: "TSUKI · BIRTHDAY",
+        date: "20th Birthday"
+    },
+
+    {
+        name: "Hanabi Fireworks",
+        theme: "hanabi",
+        brand: "HANABI",
+        small: "FIREWORKS CELEBRATION",
+        footer: "HANABI · BIRTHDAY",
+        date: "20th Birthday"
+    }
+
+];
 
 
     /* =========================================================
@@ -878,37 +923,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const frameNames = {
 
-        id: [
-            "Seijin Sakura",
-            "Perayaan Sakura",
-            "Perayaan Fuji"
-        ],
+    id: [
+        "Seijin Sakura",
+        "Perayaan Sakura",
+        "Perayaan Fuji",
+        "Momiji Musim Gugur",
+        "Yuki Musim Dingin",
+        "Festival Matsuri",
+        "Tsuki Bulan Purnama",
+        "Hanabi Kembang Api"
+    ],
 
-        en: [
-            "Seijin Sakura",
-            "Sakura Celebration",
-            "Fuji Celebration"
-        ],
+    en: [
+        "Seijin Sakura",
+        "Sakura Celebration",
+        "Fuji Celebration",
+        "Momiji Autumn",
+        "Yuki Winter",
+        "Matsuri Festival",
+        "Tsuki Moon",
+        "Hanabi Fireworks"
+    ],
 
-        ja: [
-            "成人式さくら",
-            "桜のお祝い",
-            "富士のお祝い"
-        ],
+    ja: [
+        "成人式さくら",
+        "桜のお祝い",
+        "富士のお祝い",
+        "紅葉の秋",
+        "雪の冬",
+        "夏祭り",
+        "月夜のお祝い",
+        "花火のお祝い"
+    ],
 
-        zh: [
-            "成人樱花",
-            "樱花庆典",
-            "富士庆典"
-        ],
+    zh: [
+        "成人樱花",
+        "樱花庆典",
+        "富士庆典",
+        "红叶秋日",
+        "雪之冬季",
+        "夏日祭典",
+        "月夜庆典",
+        "烟花庆典"
+    ],
 
-        ko: [
-            "성인식 사쿠라",
-            "사쿠라 축하",
-            "후지 축하"
-        ]
+    ko: [
+        "성인식 사쿠라",
+        "사쿠라 축하",
+        "후지 축하",
+        "모미지 가을",
+        "유키 겨울",
+        "마츠리 축제",
+        "츠키 달빛",
+        "하나비 불꽃놀이"
+    ]
 
-    };
+};
 
 
     function updateFrameName() {

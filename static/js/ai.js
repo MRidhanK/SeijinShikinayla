@@ -3796,6 +3796,31 @@ function finishTrivia() {
 
             },
 
+            certificate: {
+                tool: {
+                    title: "Fan Certificate",
+                    description: "Get an official certificate celebrating your fandom for Nayla.",
+                    button: "Get Certificate →"
+                },
+                header: {
+                    label: "🎴 AI FAN CERTIFICATE",
+                    title: "Issue Your Certificate",
+                    description: "Fill in your details to receive a personalized certificate of fandom."
+                },
+                form: {
+                    name: "Your name",
+                    namePlaceholder: "Your name",
+                    since: "Fan since",
+                    memory: "A favorite memory (optional)",
+                    memoryPlaceholder: "Share a favorite memory about Nayla...",
+                    generate: "🎴 Issue Certificate"
+                },
+                actions: {
+                    download: "⬇️ Download Certificate",
+                    another: "🔄 Make Another"
+                }
+            },
+
 
             trivia: {
 
@@ -4248,6 +4273,30 @@ function finishTrivia() {
 
             },
 
+            certificate: {
+                tool: {
+                    title: "Sertifikat Fan",
+                    description: "Dapatkan sertifikat resmi yang merayakan kecintaanmu pada Nayla.",
+                    button: "Dapatkan Sertifikat →"
+                },
+                header: {
+                    label: "🎴 AI SERTIFIKAT FAN",
+                    title: "Terbitkan Sertifikatmu",
+                    description: "Isi detailmu untuk mendapatkan sertifikat fan yang personal."
+                },
+                form: {
+                    name: "Nama kamu",
+                    namePlaceholder: "Nama kamu",
+                    since: "Fan sejak",
+                    memory: "Kenangan favorit (opsional)",
+                    memoryPlaceholder: "Bagikan kenangan favoritmu tentang Nayla...",
+                    generate: "🎴 Terbitkan Sertifikat"
+                },
+                actions: {
+                    download: "⬇️ Unduh Sertifikat",
+                    another: "🔄 Buat Lagi"
+                }
+            },
 
             trivia: {
 
@@ -4551,6 +4600,8 @@ function finishTrivia() {
                             "手紙を書く →"
                     },
 
+
+                    
                     trivia: {
                         title:
                             "Nayla Trivia Master",
@@ -4700,7 +4751,30 @@ function finishTrivia() {
 
             },
 
-
+            certificate: {
+                tool: {
+                    title: "ファン証明書",
+                    description: "Naylaのファンであることを証明する公式証明書を取得しよう。",
+                    button: "証明書を取得 →"
+                },
+                header: {
+                    label: "🎴 AIファン証明書",
+                    title: "証明書を発行する",
+                    description: "情報を入力して、あなただけのファン証明書を受け取ろう。"
+                },
+                form: {
+                    name: "お名前",
+                    namePlaceholder: "お名前",
+                    since: "ファン歴",
+                    memory: "思い出（任意）",
+                    memoryPlaceholder: "Naylaとの思い出を教えてください...",
+                    generate: "🎴 証明書を発行"
+                },
+                actions: {
+                    download: "⬇️ 証明書をダウンロード",
+                    another: "🔄 もう一枚作る"
+                }
+            },
             trivia: {
 
                 header: {
@@ -5015,7 +5089,31 @@ function finishTrivia() {
                     }
 
                 },
-
+                // 🇨🇳 Chinese (zh)
+                certificate: {
+                    tool: {
+                        title: "粉丝证书",
+                        description: "获取一张证明你是Nayla粉丝的官方证书。",
+                        button: "获取证书 →"
+                    },
+                    header: {
+                        label: "🎴 AI粉丝证书",
+                        title: "签发你的证书",
+                        description: "填写你的信息，获取专属的粉丝证书。"
+                    },
+                    form: {
+                        name: "你的名字",
+                        namePlaceholder: "你的名字",
+                        since: "成为粉丝的年份",
+                        memory: "美好回忆（可选）",
+                        memoryPlaceholder: "分享一段关于Nayla的美好回忆...",
+                        generate: "🎴 签发证书"
+                    },
+                    actions: {
+                        download: "⬇️ 下载证书",
+                        another: "🔄 再生成一张"
+                    }
+                },
 
                 form: {
 
@@ -5469,6 +5567,31 @@ function finishTrivia() {
                 },
 
 
+                    // 🇰🇷 Korean (ko)
+                certificate: {
+                    tool: {
+                        title: "팬 인증서",
+                        description: "Nayla의 팬임을 증명하는 공식 인증서를 받아보세요.",
+                        button: "인증서 받기 →"
+                    },
+                    header: {
+                        label: "🎴 AI 팬 인증서",
+                        title: "인증서 발급받기",
+                        description: "정보를 입력하고 나만의 팬 인증서를 받아보세요."
+                    },
+                    form: {
+                        name: "이름",
+                        namePlaceholder: "이름을 입력하세요",
+                        since: "팬이 된 연도",
+                        memory: "소중한 추억 (선택 사항)",
+                        memoryPlaceholder: "Nayla와의 추억을 남겨주세요...",
+                        generate: "🎴 인증서 발급"
+                    },
+                    actions: {
+                        download: "⬇️ 인증서 다운로드",
+                        another: "🔄 다시 만들기"
+                    }
+                },
                 form: {
 
                     name:
@@ -6106,7 +6229,8 @@ function finishTrivia() {
 
                 const isAIKey =
                     key.startsWith("ai.") ||
-                    key.startsWith("trivia.");
+                    key.startsWith("trivia.") ||
+                    key.startsWith("certificate."); 
 
 
                 if (!isAIKey) {
@@ -6177,7 +6301,8 @@ function finishTrivia() {
 
                 const isAIKey =
                     key.startsWith("ai.") ||
-                    key.startsWith("trivia.");
+                    key.startsWith("trivia.") ||
+                    key.startsWith("certificate.");
 
 
                 if (!isAIKey) {
@@ -6966,4 +7091,494 @@ function finishTrivia() {
 
 
 })();
-    
+    /* =========================================================
+   AI FAN CERTIFICATE
+   Nayla Seijin Shiki
+   ---------------------------------------------------------
+   Self-contained module. Reuses /api/ai/generate with
+   mode "certificate" when available; falls back to a local
+   template so the feature works even before the backend
+   is updated.
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const toolCard = document.querySelector('.ai-tool-card[data-ai-mode="certificate"]');
+    const workspace = document.getElementById("certificateWorkspace");
+
+    if (!workspace || !toolCard) {
+        return;
+    }
+
+    const closeButton = document.getElementById("closeCertificate");
+    const form = document.getElementById("certificateForm");
+    const nameInput = document.getElementById("certName");
+    const sinceSelect = document.getElementById("certSince");
+    const memoryInput = document.getElementById("certMemory");
+    const charCount = document.getElementById("certCharCount");
+    const issueButton = document.getElementById("issueCertificate");
+    const errorBox = document.getElementById("certificateError");
+
+    const resultBox = document.getElementById("certificateResult");
+    const canvas = document.getElementById("certificateCanvas");
+    const stamp = document.getElementById("certificateStamp");
+    const downloadButton = document.getElementById("downloadCertificate");
+    const regenerateButton = document.getElementById("regenerateCertificate");
+
+    const ctx = canvas.getContext("2d");
+
+    let issuing = false;
+    let lastFileName = "nayla-fan-certificate.png";
+
+    /* =====================================================
+       YEAR OPTIONS — from Nayla's debut year to this year
+    ===================================================== */
+
+    function populateYears() {
+
+        const currentYear = new Date().getFullYear();
+        const startYear = 2018; // JKT48 Gen 12 era
+
+        sinceSelect.innerHTML = "";
+
+        for (let year = currentYear; year >= startYear; year--) {
+
+            const option = document.createElement("option");
+            option.value = String(year);
+            option.textContent = String(year);
+            sinceSelect.appendChild(option);
+
+        }
+
+    }
+
+    populateYears();
+
+    /* =====================================================
+       CHARACTER COUNTER
+    ===================================================== */
+
+    memoryInput.addEventListener("input", () => {
+        charCount.textContent = memoryInput.value.length;
+    });
+
+    /* =====================================================
+       OPEN / CLOSE
+    ===================================================== */
+
+    toolCard.addEventListener("click", () => {
+
+        // Let the trivia mode / main AI workspace close themselves;
+        // this only manages its own panel.
+        const aiWorkspace = document.getElementById("aiWorkspace");
+        const triviaWorkspace = document.getElementById("triviaWorkspace");
+
+        if (aiWorkspace) aiWorkspace.classList.remove("active");
+        if (triviaWorkspace) triviaWorkspace.classList.remove("active");
+
+        document.querySelectorAll(".ai-tool-card").forEach(card => {
+            card.classList.remove("active");
+        });
+
+        toolCard.classList.add("active");
+        workspace.classList.add("active");
+        resetToForm();
+
+        setTimeout(() => {
+            workspace.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+
+    });
+
+    if (closeButton) {
+
+        closeButton.addEventListener("click", () => {
+            workspace.classList.remove("active");
+            toolCard.classList.remove("active");
+        });
+
+    }
+
+    document.addEventListener("keydown", event => {
+
+        if (event.key === "Escape" && workspace.classList.contains("active")) {
+            workspace.classList.remove("active");
+            toolCard.classList.remove("active");
+        }
+
+    });
+
+    function resetToForm() {
+
+        form.style.display = "flex";
+        resultBox.style.display = "none";
+        stamp.classList.remove("stamped");
+        hideError();
+
+    }
+
+    /* =====================================================
+       ERROR HELPERS
+    ===================================================== */
+
+    function showError(message) {
+
+        errorBox.textContent = "⚠️ " + message;
+        errorBox.style.display = "block";
+
+    }
+
+    function hideError() {
+
+        errorBox.style.display = "none";
+        errorBox.textContent = "";
+
+    }
+
+    /* =====================================================
+       ISSUE CERTIFICATE
+    ===================================================== */
+
+    issueButton.addEventListener("click", issueCertificate);
+
+    if (regenerateButton) {
+        regenerateButton.addEventListener("click", resetToForm);
+    }
+
+    async function issueCertificate() {
+
+        if (issuing) return;
+
+        const name = nameInput.value.trim();
+        const since = sinceSelect.value;
+        const memory = memoryInput.value.trim();
+
+        if (!name) {
+            showError("Please enter your name.");
+            nameInput.focus();
+            return;
+        }
+
+        if (name.length > 40) {
+            showError("Name is too long.");
+            return;
+        }
+
+        hideError();
+        issuing = true;
+        issueButton.disabled = true;
+        issueButton.textContent = "🎴 Sealing...";
+
+        let citation;
+
+        try {
+
+            citation = await fetchCitation(name, since, memory);
+
+        } catch (error) {
+
+            console.warn("Certificate AI generation failed, using local fallback:", error);
+            citation = localCitation(name, since, memory);
+
+        }
+
+        drawCertificate({ name, since, memory, citation });
+
+        lastFileName = `nayla-fan-certificate-${slugify(name)}.png`;
+
+        form.style.display = "none";
+        resultBox.style.display = "flex";
+        stamp.classList.remove("stamped");
+
+        // Trigger the stamp press slightly after the canvas paints,
+        // so it visibly lands on top of finished artwork.
+        requestAnimationFrame(() => {
+            setTimeout(() => stamp.classList.add("stamped"), 220);
+        });
+
+        issuing = false;
+        issueButton.disabled = false;
+        issueButton.textContent = "🎴 Issue Certificate";
+
+    }
+
+    /* =====================================================
+       AI TEXT (reuses existing /api/ai/generate endpoint)
+    ===================================================== */
+
+    async function fetchCitation(name, since, memory) {
+
+        const language = localStorage.getItem("language") || "en";
+
+        const prompt = memory
+            ? `Write one short, elegant certificate citation line (max 20 words, no quotes) certifying ${name} as an official fan of Nayla since ${since}, weaving in this memory: ${memory}`
+            : `Write one short, elegant certificate citation line (max 20 words, no quotes) certifying ${name} as an official fan of Nayla since ${since}.`;
+
+        const response = await fetch("/api/ai/generate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                mode: "certificate",
+                name,
+                prompt,
+                style: "elegant",
+                language
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success || !data.message || !data.message.trim()) {
+            throw new Error(data.error || "AI certificate text unavailable.");
+        }
+
+        return data.message.trim().replace(/^["'“]|["'”]$/g, "");
+
+    }
+
+    /* =====================================================
+       LOCAL FALLBACK CITATIONS
+       Used if the backend doesn't support mode "certificate"
+       yet, or the request fails — the feature still works.
+    ===================================================== */
+
+    function localCitation(name, since, memory) {
+
+        const templates = [
+            `for unwavering support and devotion since ${since}`,
+            `in recognition of loyal fandom and warm heart since ${since}`,
+            `for cheering every stage and every step since ${since}`,
+            `as a steadfast light in Nayla's journey since ${since}`
+        ];
+
+        const base = templates[Math.floor(Math.random() * templates.length)];
+
+        return memory
+            ? `${base}, remembered always for: "${memory}"`
+            : base;
+
+    }
+
+    function slugify(text) {
+
+        return text
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "") || "fan";
+
+    }
+
+    /* =====================================================
+       CANVAS RENDER
+    ===================================================== */
+
+    async function ensureFontsLoaded() {
+
+        try {
+
+            await Promise.all([
+                document.fonts.load('800 44px "Shippori Mincho"'),
+                document.fonts.load('600 20px "Shippori Mincho"'),
+                document.fonts.load('600 52px "Cormorant Garamond"'),
+                document.fonts.load('italic 500 22px "Cormorant Garamond"'),
+                document.fonts.load('400 16px "Noto Sans"')
+            ]);
+
+        } catch (error) {
+
+            console.warn("Font preload skipped:", error);
+
+        }
+
+    }
+
+    async function drawCertificate({ name, since, memory, citation }) {
+
+        await ensureFontsLoaded();
+
+        const width = canvas.width;
+        const height = canvas.height;
+
+        // --- background: washi paper ---
+        const bg = ctx.createLinearGradient(0, 0, width, height);
+        bg.addColorStop(0, "#f6f0e0");
+        bg.addColorStop(1, "#ece1c8");
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, width, height);
+
+        // subtle fiber texture
+        ctx.save();
+        ctx.globalAlpha = 0.05;
+        for (let i = 0; i < 260; i++) {
+            ctx.strokeStyle = "#241f1c";
+            ctx.beginPath();
+            const x = Math.random() * width;
+            const y = Math.random() * height;
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + (Math.random() * 20 - 10), y + (Math.random() * 20 - 10));
+            ctx.stroke();
+        }
+        ctx.restore();
+
+        // --- outer + inner border frame ---
+        ctx.strokeStyle = "#b9985a";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(28, 28, width - 56, height - 56);
+
+        ctx.lineWidth = 1;
+        ctx.strokeRect(42, 42, width - 84, height - 84);
+
+        // corner sakura marks
+        drawCorner(52, 52, 1, 1);
+        drawCorner(width - 52, 52, -1, 1);
+        drawCorner(52, height - 52, 1, -1);
+        drawCorner(width - 52, height - 52, -1, -1);
+
+        function drawCorner(x, y, dx, dy) {
+            ctx.save();
+            ctx.fillStyle = "#e7b8c4";
+            ctx.font = "22px serif";
+            ctx.textAlign = dx > 0 ? "left" : "right";
+            ctx.textBaseline = dy > 0 ? "top" : "bottom";
+            ctx.fillText("🌸", x, y);
+            ctx.restore();
+        }
+
+        // --- eyebrow ---
+        ctx.fillStyle = "#a8362d";
+        ctx.font = "600 18px 'Noto Sans', sans-serif";
+        ctx.textAlign = "center";
+        ctx.letterSpacing = "3px";
+        ctx.fillText("人工知能 • OFFICIAL FAN CERTIFICATE", width / 2, 110);
+
+        // --- title (Japanese + English) ---
+        ctx.fillStyle = "#241f1c";
+        ctx.font = "800 46px 'Shippori Mincho', serif";
+        ctx.fillText("会員証", width / 2, 168);
+
+        ctx.font = "600 20px 'Shippori Mincho', serif";
+        ctx.fillStyle = "#4a423b";
+        ctx.fillText("Certificate of Fandom", width / 2, 200);
+
+        // --- divider ---
+        ctx.strokeStyle = "#b9985a";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(width / 2 - 90, 224);
+        ctx.lineTo(width / 2 + 90, 224);
+        ctx.stroke();
+
+        // --- body copy ---
+        ctx.fillStyle = "#4a423b";
+        ctx.font = "400 17px 'Noto Sans', sans-serif";
+        ctx.fillText("This certifies that", width / 2, 272);
+
+        // --- name (signature element) ---
+        ctx.fillStyle = "#a8362d";
+        ctx.font = "600 58px 'Cormorant Garamond', serif";
+        fitText(name, width / 2, 340, width - 220, 58, "'Cormorant Garamond', serif", 600);
+
+        // --- subline ---
+        ctx.fillStyle = "#4a423b";
+        ctx.font = "400 17px 'Noto Sans', sans-serif";
+        ctx.fillText(`is a recognized supporter of Nayla, fan since ${since}`, width / 2, 388);
+
+        // --- citation (AI text or fallback), wrapped ---
+        ctx.fillStyle = "#241f1c";
+        ctx.font = "italic 500 21px 'Cormorant Garamond', serif";
+        wrapText(citation, width / 2, 440, width - 320, 30);
+
+        // --- issue date + signature line ---
+        const issued = new Date().toLocaleDateString(undefined, {
+            year: "numeric", month: "long", day: "numeric"
+        });
+
+        ctx.textAlign = "left";
+        ctx.font = "400 14px 'Noto Sans', sans-serif";
+        ctx.fillStyle = "#4a423b";
+        ctx.fillText(`Issued ${issued}`, 80, height - 78);
+
+        ctx.textAlign = "left";
+        ctx.font = "600 15px 'Shippori Mincho', serif";
+        ctx.fillStyle = "#241f1c";
+        ctx.fillText("Nayla Seijin Shiki", 80, height - 56);
+        ctx.strokeStyle = "#241f1c";
+        ctx.lineWidth = 0.75;
+        ctx.beginPath();
+        ctx.moveTo(78, height - 44);
+        ctx.lineTo(240, height - 44);
+        ctx.stroke();
+
+        ctx.textAlign = "center";
+
+        /* ---------- helpers ---------- */
+
+        function fitText(text, x, y, maxWidth, baseSize, font, weight) {
+
+            let size = baseSize;
+            ctx.font = `${weight} ${size}px ${font}`;
+
+            while (ctx.measureText(text).width > maxWidth && size > 24) {
+                size -= 2;
+                ctx.font = `${weight} ${size}px ${font}`;
+            }
+
+            ctx.fillText(text, x, y);
+
+        }
+
+        function wrapText(text, x, y, maxWidth, lineHeight) {
+
+            const words = text.split(" ");
+            let line = "";
+            let lines = [];
+
+            words.forEach(word => {
+
+                const testLine = line ? `${line} ${word}` : word;
+
+                if (ctx.measureText(testLine).width > maxWidth && line) {
+                    lines.push(line);
+                    line = word;
+                } else {
+                    line = testLine;
+                }
+
+            });
+
+            if (line) lines.push(line);
+
+            // cap at 3 lines to keep layout intact
+            lines = lines.slice(0, 3);
+
+            const startY = y - ((lines.length - 1) * lineHeight) / 2;
+
+            lines.forEach((l, i) => {
+                ctx.fillText(`“${l}”`.length > 0 ? l : l, x, startY + i * lineHeight);
+            });
+
+        }
+
+    }
+
+    /* =====================================================
+       DOWNLOAD
+    ===================================================== */
+
+    if (downloadButton) {
+
+        downloadButton.addEventListener("click", () => {
+
+            const link = document.createElement("a");
+            link.download = lastFileName;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+
+        });
+
+    }
+
+});
