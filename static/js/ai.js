@@ -42,6 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const styleSelect =
         document.getElementById("aiStyle");
 
+    const poemTypeField =
+        document.getElementById("aiPoemTypeField");
+
+    const poemTypeSelect =
+        document.getElementById("aiPoemType");
+
     const generateButton =
         document.getElementById("generateAI");
 
@@ -221,6 +227,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
             resultLabel:
                 "💌 Letter Generated"
+
+        },
+
+ poem: {
+
+            label:
+                "🍃 AI POEM & HAIKU GENERATOR",
+
+            title:
+                "Write a Poem",
+
+            description:
+                "Create a short poem or haiku inspired by Nayla and the seasons.",
+
+            placeholder:
+                "Write what feeling, season, or moment you want the poem to capture...",
+
+            resultLabel:
+                "🍃 Poem Generated"
 
         },
 
@@ -725,6 +750,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 resetWorkspace();
 
+                if (poemTypeField) {
+
+                    poemTypeField.style.display =
+                        mode === "poem"
+                            ? "block"
+                            : "none";
+
+                }
+
                 toolCards.forEach(item => {
 
                     item.classList.remove(
@@ -784,6 +818,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     "active"
                 );
 
+                if (poemTypeField) {
+
+                    poemTypeField.style.display =
+                        "none";
+
+                }
+
                 toolCards.forEach(card => {
 
                     card.classList.remove(
@@ -796,7 +837,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     }
-
 
     /* =====================================================
        ESCAPE
@@ -904,6 +944,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? styleSelect.value
                 : "heartfelt";
 
+        const poemType =
+            poemTypeSelect
+                ? poemTypeSelect.value
+                : "haiku";
 
         if (!prompt) {
 
@@ -970,7 +1014,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 prompt,
 
             style:
-                style
+                style,
+
+            poem_type:
+                currentMode === "poem"
+                    ? poemType
+                    : undefined
 
         };
 
@@ -3643,6 +3692,16 @@ function finishTrivia() {
                             "Write Letter →"
                     },
 
+                    poem: {
+                        title:
+                            "Poem & Haiku Generator",
+
+                        description:
+                            "Create a short poem or haiku inspired by Nayla and the seasons.",
+
+                        button:
+                            "Write Poem →"
+                    },
 
                     trivia: {
                         title:
@@ -3675,6 +3734,9 @@ function finishTrivia() {
                     style:
                         "Writing style",
 
+                    poemType:
+                        "Poem format",
+
                     generate:
                         "✨ Generate"
 
@@ -3700,6 +3762,15 @@ function finishTrivia() {
 
                 },
 
+                poemTypes: {
+
+                    haiku:
+                        "Haiku (5-7-5)",
+
+                    short:
+                        "Short Poem (3-5 lines)"
+
+                },
 
                 loading: {
 
@@ -3779,7 +3850,16 @@ function finishTrivia() {
                         "Write a Letter for Nayla",
 
                     letterDescription:
-                        "Create a longer and more personal letter for Nayla's Seijin Shiki."
+                        "Create a longer and more personal letter for Nayla's Seijin Shiki.",
+
+                    poemLabel:
+                        "🍃 AI POEM & HAIKU GENERATOR",
+
+                    poemTitle:
+                        "Write a Poem",
+
+                    poemDescription:
+                        "Create a short poem or haiku inspired by Nayla and the seasons."
 
                 },
 
@@ -4124,6 +4204,18 @@ function finishTrivia() {
                             "Tulis Surat →"
                     },
 
+                    poem: {
+
+                        title:
+                            "Pembuat Puisi & Haiku",
+
+                        description:
+                            "Buat puisi pendek atau haiku terinspirasi dari Nayla dan musim.",
+
+                        button:
+                            "Tulis Puisi →"
+                    },
+
                     trivia: {
                         title:
                             "Nayla Trivia Master",
@@ -4155,6 +4247,9 @@ function finishTrivia() {
                     style:
                         "Gaya tulisan",
 
+                    poemType:
+                        "Format puisi",
+
                     generate:
                         "✨ Buat Pesan"
 
@@ -4177,6 +4272,16 @@ function finishTrivia() {
 
                     poetic:
                         "Puitis"
+
+                },
+
+                poemTypes: {
+
+                    haiku:
+                        "Haiku (5-7-5)",
+
+                    short:
+                        "Puisi Pendek (3-5 baris)"
 
                 },
 
@@ -4256,7 +4361,16 @@ function finishTrivia() {
                         "Tulis Surat untuk Nayla",
 
                     letterDescription:
-                        "Buat surat yang lebih panjang dan personal untuk Seijin Shiki Nayla."
+                        "Buat surat yang lebih panjang dan personal untuk Seijin Shiki Nayla.",
+
+                    poemLabel:
+                        "🍃 AI PEMBUAT PUISI & HAIKU",
+
+                    poemTitle:
+                        "Tulis Puisimu",
+
+                    poemDescription:
+                        "Buat puisi pendek atau haiku terinspirasi dari Nayla dan musim."
 
                 },
 
@@ -4600,8 +4714,19 @@ function finishTrivia() {
                             "手紙を書く →"
                     },
 
+                    poem: {
 
-                    
+                        title:
+                            "詩・俳句ジェネレーター",
+
+                        description:
+                            "Naylaと季節にインスパイアされた短い詩や俳句を作ります。",
+
+                        button:
+                            "詩を書く →"
+                    },
+
+
                     trivia: {
                         title:
                             "Nayla Trivia Master",
@@ -4633,6 +4758,9 @@ function finishTrivia() {
                     style:
                         "文章のスタイル",
 
+                    poemType:
+                        "詩の形式",
+
                     generate:
                         "✨ メッセージを作る"
 
@@ -4655,6 +4783,16 @@ function finishTrivia() {
 
                     poetic:
                         "詩的"
+
+                },
+
+                poemTypes: {
+
+                    haiku:
+                        "俳句（5-7-5）",
+
+                    short:
+                        "短い詩（3〜5行）"
 
                 },
 
@@ -4734,7 +4872,16 @@ function finishTrivia() {
                         "Naylaへの手紙を書く",
 
                     letterDescription:
-                        "Naylaの成人式のために、より長くパーソナルな手紙を作ります。"
+                        "Naylaの成人式のために、より長くパーソナルな手紙を作ります。",
+
+                    poemLabel:
+                        "🍃 AI 詩・俳句ジェネレーター",
+
+                    poemTitle:
+                        "詩を書く",
+
+                    poemDescription:
+                        "Naylaと季節にインスパイアされた短い詩や俳句を作ります。"
 
                 },
 
@@ -5077,6 +5224,18 @@ function finishTrivia() {
                             "写一封信 →"
                     },
 
+                    poem: {
+
+                        title:
+                            "诗歌与俳句生成器",
+
+                        description:
+                            "创作一首受 Nayla 与四季启发的短诗或俳句。",
+
+                        button:
+                            "写一首诗 →"
+                    },
+
                     trivia: {
                         title:
                             "Nayla Trivia Master",
@@ -5132,6 +5291,9 @@ function finishTrivia() {
                     style:
                         "写作风格",
 
+                    poemType:
+                        "诗歌格式",
+
                     generate:
                         "✨ 生成留言"
 
@@ -5154,6 +5316,16 @@ function finishTrivia() {
 
                     poetic:
                         "诗意"
+
+                },
+
+                poemTypes: {
+
+                    haiku:
+                        "俳句（5-7-5）",
+
+                    short:
+                        "短诗（3-5行）"
 
                 },
 
@@ -5233,7 +5405,16 @@ function finishTrivia() {
                         "写一封给 Nayla 的信",
 
                     letterDescription:
-                        "为 Nayla 的成人礼创作一封更长、更个人化的信。"
+                        "为 Nayla 的成人礼创作一封更长、更个人化的信。",
+
+                    poemLabel:
+                        "🍃 AI 诗歌与俳句生成器",
+
+                    poemTitle:
+                        "创作你的诗",
+
+                    poemDescription:
+                        "创作一首受 Nayla 与四季启发的短诗或俳句。"
 
                 },
 
@@ -5553,6 +5734,18 @@ function finishTrivia() {
                             "편지 쓰기 →"
                     },
 
+                    poem: {
+
+                        title:
+                            "시·하이쿠 생성기",
+
+                        description:
+                            "Nayla와 계절에서 영감을 받은 짧은 시나 하이쿠를 만들어보세요.",
+
+                        button:
+                            "시 쓰기 →"
+                    },
+
                     trivia: {
                         title:
                             "Nayla Trivia Master",
@@ -5609,6 +5802,9 @@ function finishTrivia() {
                     style:
                         "글쓰기 스타일",
 
+                    poemType:
+                        "시 형식",
+
                     generate:
                         "✨ 메시지 만들기"
 
@@ -5631,6 +5827,16 @@ function finishTrivia() {
 
                     poetic:
                         "시적인"
+
+                },
+
+                poemTypes: {
+
+                    haiku:
+                        "하이쿠 (5-7-5)",
+
+                    short:
+                        "짧은 시 (3-5행)"
 
                 },
 
@@ -5710,7 +5916,16 @@ function finishTrivia() {
                         "Nayla에게 편지 쓰기",
 
                     letterDescription:
-                        "Nayla의 성인식을 위한 더 길고 개인적인 편지를 만들어보세요."
+                        "Nayla의 성인식을 위한 더 길고 개인적인 편지를 만들어보세요.",
+
+                    poemLabel:
+                        "🍃 AI 시·하이쿠 생성기",
+
+                    poemTitle:
+                        "시 쓰기",
+
+                    poemDescription:
+                        "Nayla와 계절에서 영감을 받은 짧은 시나 하이쿠를 만들어보세요."
 
                 },
 
@@ -5728,6 +5943,7 @@ function finishTrivia() {
             },
 
 
+            
             trivia: {
 
                 header: {
@@ -6343,7 +6559,7 @@ function finishTrivia() {
 
         const options =
             document.querySelectorAll(
-                "#aiStyle option[data-i18n]"
+                "#aiStyle option[data-i18n], #aiPoemType option[data-i18n]"
             );
 
 
@@ -6468,6 +6684,19 @@ function finishTrivia() {
 
                 description:
                     "ai.dynamic.letterDescription"
+
+            },
+
+            poem: {
+
+                label:
+                    "ai.dynamic.poemLabel",
+
+                title:
+                    "ai.dynamic.poemTitle",
+
+                description:
+                    "ai.dynamic.poemDescription"
 
             }
 

@@ -2088,6 +2088,18 @@ def generate_ai():
             "heartfelt"
         ).lower()
 
+        poem_type = safe_string(
+            data.get(
+                "poem_type",
+                "haiku"
+            ),
+            "haiku"
+        ).lower()
+
+        source_text = safe_string(
+            data.get("source_text")
+        )
+
         source_text = safe_string(
             data.get("source_text")
         )
@@ -2112,6 +2124,7 @@ def generate_ai():
             "enhance",
             "fortune",
             "letter",
+            "poem",
             "personalize",
         }
 
@@ -2133,6 +2146,24 @@ def generate_ai():
         if style not in allowed_styles:
             style = "heartfelt"
 
+        # =================================================
+        # POEM TYPE
+        # =================================================
+
+        allowed_poem_types = {
+            "haiku",
+            "short",
+        }
+
+        if poem_type not in allowed_poem_types:
+            poem_type = "haiku"
+
+        if mode == "poem":
+            if poem_type not in {
+                "haiku",
+                "short",
+            }:
+                poem_type = "haiku"
         # =================================================
         # VALIDATION
         # =================================================
@@ -2402,6 +2433,54 @@ Target:
 180–280 words for Indonesian/English.
 
 350–550 Japanese characters.
+""",
+            "poem": f"""
+Create a short poem for Nayla
+inspired by the visitor's thoughts.
+
+The poem must be warm,
+positive, sincere and respectful.
+
+The poem format is:
+
+{poem_type}
+
+If the format is "haiku":
+- Write exactly 3 lines.
+- Follow the traditional 5-7-5 syllable structure
+  as naturally as possible in the target language.
+- Keep the imagery simple and meaningful.
+- Do not add a title.
+- Do not add explanations.
+
+If the format is "short":
+- Write exactly 3–5 lines.
+- Keep each line concise.
+- Use gentle poetic imagery.
+- Do not add a title.
+- Do not add explanations.
+
+Possible themes:
+- Nayla
+- birthday
+- Seijin Shiki
+- seasons
+- growth
+- dreams
+- hope
+- gratitude
+- encouragement
+- happiness
+- new beginnings
+
+Use the visitor's original thoughts
+as the emotional foundation.
+
+Do not invent memories,
+events, achievements,
+relationships or private information.
+
+Return only the poem.
 """,
 
             "personalize": """
@@ -2739,6 +2818,10 @@ Mode:
 Style:
 
 {style}
+
+        Poem format:
+
+        {poem_type if mode == "poem" else "Not applicable"}
 
 Target language:
 
