@@ -1,1320 +1,266 @@
-{% extends "base.html" %}
+    {% extends "base.html" %}
 
-{% block content %}
+    {% block content %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/games.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/games.css') }}">
 
-<!-- =========================================================
-     NAYLA FESTIVAL BOOTH
-========================================================== -->
+    <!-- =========================================================
+        NAYLA FESTIVAL BOOTH
+    ========================================================== -->
 
-<section class="booth-game-page">
+    <section class="booth-game-page">
 
-    <header class="booth-game-header">
+        <header class="booth-game-header">
 
-        <div class="booth-title-area">
+            <div class="booth-title-area">
 
-            <div class="eyebrow" data-i18n="booth.header_eyebrow">
-                NAYLA FESTIVAL · SEIJIN SHIKI 2026
-            </div>
-
-            <h1 data-i18n="booth.header_title">
-                🎪 Nayla Festival Booth
-            </h1>
-
-            <p data-i18n="booth.header_description">
-                Siapkan pesanan customer dan layani mereka
-                untuk mendapatkan score dan money.
-            </p>
-
-        </div>
-
-        <div class="booth-header-actions">
-
-            <button
-                type="button"
-                id="openBoothButton"
-                class="booth-btn booth-btn-primary"
-                data-i18n="booth.btn_open_booth">
-
-                🏪 BUKA BOOTH
-
-            </button>
-
-            <button
-                type="button"
-                id="priceSettingsButton"
-                class="booth-btn booth-btn-secondary"
-                data-i18n="booth.btn_price_settings">
-
-                ⚙️ ATUR HARGA
-
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <section class="booth-scoreboard">
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="booth.stat_score">SCORE</span>
-            <strong id="scoreValue" class="booth-stat-value">0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="booth.stat_money">MONEY</span>
-            <strong id="moneyValue" class="booth-stat-value">Rp 0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="booth.stat_combo">COMBO</span>
-            <strong id="comboValue" class="booth-stat-value">x0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="booth.stat_customers">CUSTOMERS</span>
-            <strong id="customerValue" class="booth-stat-value">0</strong>
-        </div>
-
-        <div class="booth-stat timer-stat">
-            <span class="booth-stat-label" data-i18n="booth.stat_time">TIME</span>
-            <strong id="timerValue" class="booth-stat-value">60</strong>
-        </div>
-
-    </section>
-
-
-    <main class="booth-game-wrapper">
-
-        <div id="boothArena" class="booth-arena">
-
-            <div class="arena-glow"></div>
-
-            <div class="arena-ceiling">
-                <span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span>
-            </div>
-
-            <div class="arena-sign">
-                <span class="arena-sign-small">成人式</span>
-                <strong class="arena-sign-title">NAYLA</strong>
-                <span class="arena-sign-small">SEIJIN SHIKI 2026</span>
-            </div>
-
-            <div class="arena-floor"></div>
-
-
-            <div class="nayla-character">
-
-                <div class="nayla-photo-frame">
-                    <img src="/static/img/members/nayla.png" alt="Nayla" draggable="false">
+                <div class="eyebrow" data-i18n="booth.header_eyebrow">
+                    NAYLA FESTIVAL · SEIJIN SHIKI 2026
                 </div>
 
-                <div class="nayla-name-tag">NAYLA</div>
+                <h1 data-i18n="booth.header_title">
+                    🎪 Nayla Festival Booth
+                </h1>
+
+                <p data-i18n="booth.header_description">
+                    Siapkan pesanan customer dan layani mereka
+                    untuk mendapatkan score dan money.
+                </p>
 
             </div>
 
+            <div class="booth-header-actions">
 
-            <div id="naylaBooth" class="nayla-booth">
+                <button
+                    type="button"
+                    id="openBoothButton"
+                    class="booth-btn booth-btn-primary"
+                    data-i18n="booth.btn_open_booth">
 
-                <div class="booth-roof">
-                    <div class="booth-roof-text" data-i18n="booth.roof_text">
-                        NAYLA FESTIVAL BOOTH
+                    🏪 BUKA BOOTH
+
+                </button>
+
+                <button
+                    type="button"
+                    id="priceSettingsButton"
+                    class="booth-btn booth-btn-secondary"
+                    data-i18n="booth.btn_price_settings">
+
+                    ⚙️ ATUR HARGA
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <section class="booth-scoreboard">
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="booth.stat_score">SCORE</span>
+                <strong id="scoreValue" class="booth-stat-value">0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="booth.stat_money">MONEY</span>
+                <strong id="moneyValue" class="booth-stat-value">Rp 0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="booth.stat_combo">COMBO</span>
+                <strong id="comboValue" class="booth-stat-value">x0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="booth.stat_customers">CUSTOMERS</span>
+                <strong id="customerValue" class="booth-stat-value">0</strong>
+            </div>
+
+            <div class="booth-stat timer-stat">
+                <span class="booth-stat-label" data-i18n="booth.stat_time">TIME</span>
+                <strong id="timerValue" class="booth-stat-value">60</strong>
+            </div>
+
+        </section>
+
+
+        <main class="booth-game-wrapper">
+
+            <div id="boothArena" class="booth-arena">
+
+                <div class="arena-glow"></div>
+
+                <div class="arena-ceiling">
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                </div>
+
+                <div class="arena-sign">
+                    <span class="arena-sign-small">成人式</span>
+                    <strong class="arena-sign-title">NAYLA</strong>
+                    <span class="arena-sign-small">SEIJIN SHIKI 2026</span>
+                </div>
+
+                <div class="arena-floor"></div>
+
+
+                <div class="nayla-character">
+
+                    <div class="nayla-photo-frame">
+                        <img src="/static/img/members/nayla.png" alt="Nayla" draggable="false">
                     </div>
+
+                    <div class="nayla-name-tag">NAYLA</div>
+
                 </div>
 
-                <div class="booth-counter">
-                    <div id="boothProductsDisplay" class="booth-products-display">
-                        <span>🎈</span><span>🌸</span><span>🧸</span>
-                        <span>🎁</span><span>🍭</span><span>🪭</span>
+
+                <div id="naylaBooth" class="nayla-booth">
+
+                    <div class="booth-roof">
+                        <div class="booth-roof-text" data-i18n="booth.roof_text">
+                            NAYLA FESTIVAL BOOTH
+                        </div>
                     </div>
+
+                    <div class="booth-counter">
+                        <div id="boothProductsDisplay" class="booth-products-display">
+                            <span>🎈</span><span>🌸</span><span>🧸</span>
+                            <span>🎁</span><span>🍭</span><span>🪭</span>
+                        </div>
+                    </div>
+
+                    <div class="booth-table">
+                        <span></span><span></span><span></span>
+                    </div>
+
                 </div>
 
-                <div class="booth-table">
-                    <span></span><span></span><span></span>
+
+                <div id="customer" class="customer customer-hidden">
+
+                    <div id="customerRequest" class="customer-request">
+
+                        <div class="request-title">
+                            <span data-i18n="booth.request_title">🛍️ PESANAN CUSTOMER</span>
+                            <span id="requestTotal" class="request-total">Rp 0</span>
+                        </div>
+
+                        <div id="requestItems" class="request-items"></div>
+
+                    </div>
+
+                    <img id="customerAvatar" class="customer-avatar" src="" alt="Customer" draggable="false">
+
+                    <span id="customerName" class="customer-name" data-i18n="booth.customer_default_name">
+                        Customer
+                    </span>
+
+                </div>
+
+
+                <div id="gameMessage" class="game-message"></div>
+
+
+                <div id="boothStartOverlay" class="booth-start-overlay">
+
+                    <div class="start-card">
+
+                        <div class="start-card-icon">🏪</div>
+
+                        <div class="eyebrow" data-i18n="booth.start_eyebrow">NAYLA FESTIVAL</div>
+
+                        <h2 data-i18n="booth.start_title">Nayla Festival Booth</h2>
+
+                        <p data-i18n="booth.start_description">
+                            Kamu bertugas sebagai penjaga booth. Customer akan datang
+                            dan memesan barang. Siapkan barang yang mereka minta,
+                            lalu tekan serve.
+                        </p>
+
+                        <button
+                            type="button"
+                            id="startGameButton"
+                            class="booth-btn booth-btn-primary start-button"
+                            data-i18n="booth.start_button">
+
+                            🎪 BUKA BOOTH & MULAI
+
+                        </button>
+
+                    </div>
+
                 </div>
 
             </div>
 
 
-            <div id="customer" class="customer customer-hidden">
+            <div id="preparationPanel" class="preparation-panel">
 
-                <div id="customerRequest" class="customer-request">
+                <div class="preparation-header">
 
-                    <div class="request-title">
+                    <div>
+                        <span class="preparation-kicker" data-i18n="booth.prep_kicker">BOOTH WORKSPACE</span>
+                        <strong class="preparation-title" data-i18n="booth.prep_title">🧺 Preparation Tray</strong>
+                    </div>
+
+                    <span id="preparationStatus" class="preparation-status" data-i18n="booth.prep_status_empty">
+                        Belum ada pesanan
+                    </span>
+
+                </div>
+
+
+                <div id="mobileOrderSummary" class="mobile-order-summary">
+
+                    <div class="mobile-order-summary-title">
                         <span data-i18n="booth.request_title">🛍️ PESANAN CUSTOMER</span>
-                        <span id="requestTotal" class="request-total">Rp 0</span>
                     </div>
 
-                    <div id="requestItems" class="request-items"></div>
+                    <div id="mobileRequestItems" class="mobile-order-summary-items">
+                        <div class="mobile-order-summary-empty" data-i18n="booth.mobile_order_empty">
+                            Menunggu pesanan customer...
+                        </div>
+                    </div>
+
+                    <div class="mobile-order-summary-total">
+                        <span data-i18n="booth.request_total_label">Total</span>
+                        <strong id="mobileRequestTotal">Rp 0</strong>
+                    </div>
 
                 </div>
 
-                <img id="customerAvatar" class="customer-avatar" src="" alt="Customer" draggable="false">
 
-                <span id="customerName" class="customer-name" data-i18n="booth.customer_default_name">
-                    Customer
-                </span>
-
-            </div>
-
-
-            <div id="gameMessage" class="game-message"></div>
+                <div id="preparationItems" class="preparation-items">
+                    <div class="empty-tray" data-i18n="booth.prep_placeholder">
+                        Pilih barang sesuai pesanan customer
+                    </div>
+                </div>
 
 
-            <div id="boothStartOverlay" class="booth-start-overlay">
-
-                <div class="start-card">
-
-                    <div class="start-card-icon">🏪</div>
-
-                    <div class="eyebrow" data-i18n="booth.start_eyebrow">NAYLA FESTIVAL</div>
-
-                    <h2 data-i18n="booth.start_title">Nayla Festival Booth</h2>
-
-                    <p data-i18n="booth.start_description">
-                        Kamu bertugas sebagai penjaga booth. Customer akan datang
-                        dan memesan barang. Siapkan barang yang mereka minta,
-                        lalu tekan serve.
-                    </p>
+                <div class="preparation-actions">
 
                     <button
                         type="button"
-                        id="startGameButton"
-                        class="booth-btn booth-btn-primary start-button"
-                        data-i18n="booth.start_button">
-
-                        🎪 BUKA BOOTH & MULAI
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div id="preparationPanel" class="preparation-panel">
-
-            <div class="preparation-header">
-
-                <div>
-                    <span class="preparation-kicker" data-i18n="booth.prep_kicker">BOOTH WORKSPACE</span>
-                    <strong class="preparation-title" data-i18n="booth.prep_title">🧺 Preparation Tray</strong>
-                </div>
-
-                <span id="preparationStatus" class="preparation-status" data-i18n="booth.prep_status_empty">
-                    Belum ada pesanan
-                </span>
-
-            </div>
-
-
-            <div id="mobileOrderSummary" class="mobile-order-summary">
-
-                <div class="mobile-order-summary-title">
-                    <span data-i18n="booth.request_title">🛍️ PESANAN CUSTOMER</span>
-                </div>
-
-                <div id="mobileRequestItems" class="mobile-order-summary-items">
-                    <div class="mobile-order-summary-empty" data-i18n="booth.mobile_order_empty">
-                        Menunggu pesanan customer...
-                    </div>
-                </div>
-
-                <div class="mobile-order-summary-total">
-                    <span data-i18n="booth.request_total_label">Total</span>
-                    <strong id="mobileRequestTotal">Rp 0</strong>
-                </div>
-
-            </div>
-
-
-            <div id="preparationItems" class="preparation-items">
-                <div class="empty-tray" data-i18n="booth.prep_placeholder">
-                    Pilih barang sesuai pesanan customer
-                </div>
-            </div>
-
-
-            <div class="preparation-actions">
-
-                <button
-                    type="button"
-                    id="clearPreparationButton"
-                    class="booth-btn booth-btn-danger"
-                    data-i18n="booth.btn_clear">
-
-                    ↺ CLEAR
-
-                </button>
-
-                <button
-                    type="button"
-                    id="serveButton"
-                    class="booth-btn booth-btn-success"
-                    data-i18n="booth.btn_serve"
-                    disabled>
-
-                    ✓ SERVE CUSTOMER
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <section class="product-panel">
-
-            <div class="products-container">
-
-                <div class="panel-heading">
-                    <div>
-                        <span class="panel-kicker" data-i18n="booth.inventory_kicker">INVENTORY</span>
-                        <h3 data-i18n="booth.inventory_title">🛍️ Produk Booth</h3>
-                    </div>
-                    <span data-i18n="booth.inventory_hint">Klik produk untuk menyiapkan order</span>
-                </div>
-
-                <div id="productsGrid" class="products-grid"></div>
-
-            </div>
-
-            <div class="price-panel">
-
-                <div class="panel-heading">
-                    <div>
-                        <span class="panel-kicker" data-i18n="booth.price_kicker">CURRENT PRICE</span>
-                        <h3 data-i18n="booth.price_title">💰 Harga</h3>
-                    </div>
-                    <span data-i18n="booth.price_hint">Bisa diatur</span>
-                </div>
-
-                <div id="priceList" class="price-list"></div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</section>
-
-
-<div id="priceModal" class="price-modal">
-
-    <div class="price-modal-card">
-
-        <div class="price-modal-header">
-
-            <div>
-                <span class="panel-kicker" data-i18n="booth.modal_kicker">BOOTH SETTINGS</span>
-                <h2 data-i18n="booth.modal_title">⚙️ Atur Harga Barang</h2>
-            </div>
-
-            <button type="button" id="closePriceModal" class="close-modal">×</button>
-
-        </div>
-
-        <div id="modalPriceList" class="modal-price-list"></div>
-
-        <div class="modal-actions">
-
-            <button
-                type="button"
-                id="cancelPriceButton"
-                class="booth-btn booth-btn-secondary"
-                data-i18n="booth.btn_cancel">
-
-                BATAL
-
-            </button>
-
-            <button
-                type="button"
-                id="savePriceButton"
-                class="booth-btn booth-btn-primary"
-                data-i18n="booth.btn_save">
-
-                SIMPAN HARGA
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<div id="completionPopup" class="completion-popup">
-
-    <div class="completion-card">
-
-        <div class="completion-icon">✨</div>
-
-        <span class="completion-label" data-i18n="booth.completion_label">PESANAN SELESAI</span>
-
-        <h2 data-i18n="booth.completion_title">Customer Senang! 🎉</h2>
-
-        <p id="completionText" data-i18n="booth.completion_default_text">
-            Pesanan berhasil disajikan.
-        </p>
-
-        <div class="completion-stats">
-
-            <div>
-                <span data-i18n="booth.completion_score_label">+SCORE</span>
-                <strong id="popupScore">+0</strong>
-            </div>
-
-            <div>
-                <span data-i18n="booth.completion_money_label">+MONEY</span>
-                <strong id="popupMoney">Rp 0</strong>
-            </div>
-
-        </div>
-
-        <button
-            type="button"
-            id="closeCompletionButton"
-            class="booth-btn booth-btn-primary"
-            data-i18n="booth.btn_continue">
-
-            LANJUTKAN
-
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     SEIJIN SHIKI PHOTO STUDIO
-========================================================== -->
-
-<section class="booth-game-page studio-game-page">
-
-    <header class="booth-game-header">
-
-        <div class="booth-title-area">
-
-            <div class="eyebrow" data-i18n="studio.header_eyebrow">
-                NAYLA FESTIVAL · SEIJIN SHIKI 2026
-            </div>
-
-            <h1 data-i18n="studio.header_title">
-                📸 Seijin Shiki Photo Studio
-            </h1>
-
-            <p data-i18n="studio.header_description">
-                Dandani member sesuai permintaan fotografer, lalu ambil foto
-                untuk mendapatkan score dan money.
-            </p>
-
-        </div>
-
-        <div class="booth-header-actions">
-
-            <button
-                type="button"
-                id="openStudioButton"
-                class="booth-btn booth-btn-primary"
-                data-i18n="studio.btn_open_studio">
-
-                🎬 BUKA STUDIO
-
-            </button>
-
-            <button
-                type="button"
-                id="priceSettingsButtonS"
-                class="booth-btn booth-btn-secondary"
-                data-i18n="studio.btn_price_settings">
-
-                ⚙️ ATUR HARGA
-
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <section class="booth-scoreboard">
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="studio.stat_score">SCORE</span>
-            <strong id="studioScoreValue" class="booth-stat-value">0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="studio.stat_money">MONEY</span>
-            <strong id="studioMoneyValue" class="booth-stat-value">Rp 0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="studio.stat_combo">COMBO</span>
-            <strong id="studioComboValue" class="booth-stat-value">x0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="studio.stat_customers">SESI FOTO</span>
-            <strong id="studioCustomerValue" class="booth-stat-value">0</strong>
-        </div>
-
-        <div class="booth-stat timer-stat">
-            <span class="booth-stat-label" data-i18n="studio.stat_time">TIME</span>
-            <strong id="studioTimerValue" class="booth-stat-value">60</strong>
-        </div>
-
-    </section>
-
-
-    <main class="booth-game-wrapper">
-
-        <div id="studioArena" class="booth-arena studio-arena">
-
-            <div class="arena-glow"></div>
-
-            <div class="arena-ceiling">
-                <span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span>
-            </div>
-
-            <div class="arena-sign studio-sign">
-                <span class="arena-sign-small">成人式</span>
-                <strong class="arena-sign-title">STUDIO</strong>
-                <span class="arena-sign-small" data-i18n="studio.studio_sign_text">
-                    SEIJIN SHIKI PHOTO STUDIO
-                </span>
-            </div>
-
-            <div class="arena-floor studio-floor"></div>
-
-
-            <div class="studio-backdrop">
-                <div class="studio-camera-rig">
-                    <div class="studio-camera">📷</div>
-                    <div class="studio-tripod"></div>
-                </div>
-            </div>
-
-
-            <div class="nayla-character studio-model">
-
-                <div class="nayla-photo-frame studio-frame">
-                    <img src="/static/img/members/nayla.png" alt="Model" draggable="false">
-                </div>
-
-                <div class="nayla-name-tag studio-nametag">MODEL</div>
-
-            </div>
-
-
-            <div id="studioCustomer" class="customer customer-hidden">
-
-                <div id="studioCustomerRequest" class="customer-request">
-
-                    <div class="request-title">
-                        <span data-i18n="studio.request_title">📋 PERMINTAAN FOTO</span>
-                        <span id="studioRequestTotal" class="request-total">Rp 0</span>
-                    </div>
-
-                    <div id="studioRequestItems" class="request-items"></div>
-
-                </div>
-
-                <img id="studioCustomerAvatar" class="customer-avatar" src="" alt="Fotografer" draggable="false">
-
-                <span id="studioCustomerName" class="customer-name" data-i18n="studio.customer_default_name">
-                    Fotografer
-                </span>
-
-            </div>
-
-
-            <div id="studioGameMessage" class="game-message"></div>
-
-
-            <div id="studioStartOverlay" class="booth-start-overlay">
-
-                <div class="start-card">
-
-                    <div class="start-card-icon">📸</div>
-
-                    <div class="eyebrow" data-i18n="studio.start_eyebrow">NAYLA FESTIVAL</div>
-
-                    <h2 data-i18n="studio.start_title">Seijin Shiki Photo Studio</h2>
-
-                    <p data-i18n="studio.start_description">
-                        Kamu bertugas sebagai stylist studio foto. Fotografer akan
-                        datang dan meminta kombinasi busana tertentu. Siapkan item
-                        yang diminta, lalu ambil foto.
-                    </p>
-
-                    <button
-                        type="button"
-                        id="startGameButtonS"
-                        class="booth-btn booth-btn-primary start-button"
-                        data-i18n="studio.start_button">
-
-                        🎬 BUKA STUDIO & MULAI
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div id="studioPreparationPanel" class="preparation-panel">
-
-            <div class="preparation-header">
-
-                <div>
-                    <span class="preparation-kicker" data-i18n="studio.prep_kicker">STYLING WORKSPACE</span>
-                    <strong class="preparation-title" data-i18n="studio.prep_title">👘 Meja Rias</strong>
-                </div>
-
-                <span id="studioPreparationStatus" class="preparation-status" data-i18n="studio.prep_status_empty">
-                    Belum ada permintaan
-                </span>
-
-            </div>
-
-
-            <div id="studioMobileOrderSummary" class="mobile-order-summary">
-
-                <div class="mobile-order-summary-title">
-                    <span data-i18n="studio.request_title">📋 PERMINTAAN FOTO</span>
-                </div>
-
-                <div id="studioMobileRequestItems" class="mobile-order-summary-items">
-                    <div class="mobile-order-summary-empty" data-i18n="studio.mobile_order_empty">
-                        Menunggu permintaan foto...
-                    </div>
-                </div>
-
-                <div class="mobile-order-summary-total">
-                    <span data-i18n="studio.request_total_label">Total</span>
-                    <strong id="studioMobileRequestTotal">Rp 0</strong>
-                </div>
-
-            </div>
-
-
-            <div id="studioPreparationItems" class="preparation-items">
-                <div class="empty-tray" data-i18n="studio.prep_placeholder">
-                    Pilih busana sesuai permintaan foto
-                </div>
-            </div>
-
-
-            <div class="preparation-actions">
-
-                <button
-                    type="button"
-                    id="studioClearPreparationButton"
-                    class="booth-btn booth-btn-danger"
-                    data-i18n="studio.btn_clear">
-
-                    ↺ CLEAR
-
-                </button>
-
-                <button
-                    type="button"
-                    id="studioServeButton"
-                    class="booth-btn booth-btn-success"
-                    data-i18n="studio.btn_serve"
-                    disabled>
-
-                    📸 AMBIL FOTO
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <section class="product-panel">
-
-            <div class="products-container">
-
-                <div class="panel-heading">
-                    <div>
-                        <span class="panel-kicker" data-i18n="studio.inventory_kicker">WARDROBE</span>
-                        <h3 data-i18n="studio.inventory_title">👘 Item Busana</h3>
-                    </div>
-                    <span data-i18n="studio.inventory_hint">Klik item untuk menyiapkan gaya</span>
-                </div>
-
-                <div id="studioProductsGrid" class="products-grid"></div>
-
-            </div>
-
-            <div class="price-panel">
-
-                <div class="panel-heading">
-                    <div>
-                        <span class="panel-kicker" data-i18n="studio.price_kicker">HARGA SAAT INI</span>
-                        <h3 data-i18n="studio.price_title">💰 Harga</h3>
-                    </div>
-                    <span data-i18n="studio.price_hint">Bisa diatur</span>
-                </div>
-
-                <div id="studioPriceList" class="price-list"></div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-</section>
-
-
-<div id="studioPriceModal" class="price-modal">
-
-    <div class="price-modal-card">
-
-        <div class="price-modal-header">
-
-            <div>
-                <span class="panel-kicker" data-i18n="studio.modal_kicker">STUDIO SETTINGS</span>
-                <h2 data-i18n="studio.modal_title">⚙️ Atur Harga Item</h2>
-            </div>
-
-            <button type="button" id="closeStudioPriceModal" class="close-modal">×</button>
-
-        </div>
-
-        <div id="studioModalPriceList" class="modal-price-list"></div>
-
-        <div class="modal-actions">
-
-            <button
-                type="button"
-                id="cancelStudioPriceButton"
-                class="booth-btn booth-btn-secondary"
-                data-i18n="studio.btn_cancel">
-
-                BATAL
-
-            </button>
-
-            <button
-                type="button"
-                id="saveStudioPriceButton"
-                class="booth-btn booth-btn-primary"
-                data-i18n="studio.btn_save">
-
-                SIMPAN HARGA
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<div id="studioCompletionPopup" class="completion-popup">
-
-    <div class="completion-card">
-
-        <div class="completion-icon">✨</div>
-
-        <span class="completion-label" data-i18n="studio.completion_label">FOTO SELESAI</span>
-
-        <h2 data-i18n="studio.completion_title">Hasil Foto Memukau! ✨</h2>
-
-        <p id="studioCompletionText" data-i18n="studio.completion_default_text">
-            Sesi foto berhasil diselesaikan.
-        </p>
-
-        <div class="completion-stats">
-
-            <div>
-                <span data-i18n="studio.completion_score_label">+SCORE</span>
-                <strong id="studioPopupScore">+0</strong>
-            </div>
-
-            <div>
-                <span data-i18n="studio.completion_money_label">+MONEY</span>
-                <strong id="studioPopupMoney">Rp 0</strong>
-            </div>
-
-        </div>
-
-        <button
-            type="button"
-            id="closeStudioCompletionButton"
-            class="booth-btn booth-btn-primary"
-            data-i18n="studio.btn_continue">
-
-            LANJUTKAN
-
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     NAYLA PHOTOCARD MATCH
-========================================================== -->
-
-<section class="booth-game-page memory-game-page">
-
-    <header class="booth-game-header">
-
-        <div class="booth-title-area">
-
-            <div class="eyebrow" data-i18n="memory.header_eyebrow">
-                NAYLA FESTIVAL · SEIJIN SHIKI 2026
-            </div>
-
-            <h1 data-i18n="memory.header_title">
-                🎴 Nayla Photocard Match
-            </h1>
-
-            <p data-i18n="memory.header_description">
-                Balik kartu dan temukan pasangan photocard member
-                sebelum waktu habis untuk mendapatkan score dan money.
-            </p>
-
-        </div>
-
-        <div class="booth-header-actions">
-
-            <button
-                type="button"
-                id="openMemoryButton"
-                class="booth-btn booth-btn-primary"
-                data-i18n="memory.btn_open_memory">
-
-                🎴 BUKA PERMAINAN
-
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <section class="booth-scoreboard">
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="memory.stat_score">SCORE</span>
-            <strong id="memoryScoreValue" class="booth-stat-value">0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="memory.stat_money">MONEY</span>
-            <strong id="memoryMoneyValue" class="booth-stat-value">Rp 0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="memory.stat_combo">COMBO</span>
-            <strong id="memoryComboValue" class="booth-stat-value">x0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="memory.stat_matches">MATCHES</span>
-            <strong id="memoryMatchesValue" class="booth-stat-value">0</strong>
-        </div>
-
-        <div class="booth-stat timer-stat">
-            <span class="booth-stat-label" data-i18n="memory.stat_time">TIME</span>
-            <strong id="memoryTimerValue" class="booth-stat-value">60</strong>
-        </div>
-
-    </section>
-
-
-    <main class="booth-game-wrapper">
-
-        <div id="memoryArena" class="booth-arena memory-arena">
-
-            <div class="arena-glow"></div>
-
-            <div class="arena-ceiling">
-                <span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span>
-            </div>
-
-            <div class="arena-sign memory-sign">
-                <span class="arena-sign-small" data-i18n="memory.sign_small_top">成人式</span>
-                <strong class="arena-sign-title" data-i18n="memory.sign_title">MEMORY</strong>
-                <span class="arena-sign-small" data-i18n="memory.sign_small_bottom">
-                    PHOTOCARD MATCH
-                </span>
-            </div>
-
-            <div class="arena-floor memory-floor"></div>
-
-
-            <div class="memory-board-heading">
-                <span class="panel-kicker" data-i18n="memory.board_kicker">MEMORY BOARD</span>
-                <span data-i18n="memory.board_hint">Klik kartu untuk membuka</span>
-            </div>
-
-            <div id="memoryBoard" class="memory-board"></div>
-
-
-            <div id="memoryGameMessage" class="game-message"></div>
-
-
-            <div id="memoryStartOverlay" class="booth-start-overlay">
-
-                <div class="start-card">
-
-                    <div class="start-card-icon">🎴</div>
-
-                    <div class="eyebrow" data-i18n="memory.start_eyebrow">NAYLA FESTIVAL</div>
-
-                    <h2 data-i18n="memory.start_title">Nayla Photocard Match</h2>
-
-                    <p data-i18n="memory.start_description">
-                        Balik dua kartu untuk menemukan pasangan member yang sama.
-                        Semakin cepat dan berturut-turut kamu menemukan pasangan,
-                        semakin besar combo dan score yang kamu dapat.
-                    </p>
-
-                    <button
-                        type="button"
-                        id="startGameButtonM"
-                        class="booth-btn booth-btn-primary start-button"
-                        data-i18n="memory.start_button">
-
-                        🎴 MULAI BERMAIN
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </main>
-
-</section>
-
-
-<div id="memoryCompletionPopup" class="completion-popup">
-
-    <div class="completion-card">
-
-        <div class="completion-icon">🎴</div>
-
-        <span class="completion-label" data-i18n="memory.completion_label">WAKTU HABIS</span>
-
-        <h2 data-i18n="memory.completion_title">Kerja Bagus! 🎴</h2>
-
-        <p id="memoryCompletionText"></p>
-
-        <div class="completion-stats">
-
-            <div>
-                <span data-i18n="memory.completion_score_label">+SCORE</span>
-                <strong id="memoryPopupScore">+0</strong>
-            </div>
-
-            <div>
-                <span data-i18n="memory.completion_money_label">+MONEY</span>
-                <strong id="memoryPopupMoney">Rp 0</strong>
-            </div>
-
-        </div>
-
-        <button
-            type="button"
-            id="closeMemoryCompletionButton"
-            class="booth-btn booth-btn-primary"
-            data-i18n="memory.btn_continue">
-
-            LANJUTKAN
-
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     TORO NAGASHI LANTERN TIMING
-     Game keempat — mekanik BEDA lagi dari tiga game di atas:
-     bukan prepare & serve, bukan flip & match, tapi
-     precision-timing. Jarum bergerak bolak-balik terus di
-     sepanjang bar, pemain klik "NYALAKAN" tepat saat jarum ada
-     di zona hijau untuk menyalakan lentera dan mengirimnya ke
-     sungai. Makin presisi & berturut-turut, zona makin sempit
-     dan jarum makin cepat — combo & score makin besar.
-     Dijalankan oleh engine terpisah (createTimingGame) di
-     games.js — bukan createShopGame atau createMemoryGame.
-========================================================== -->
-
-<section class="booth-game-page timing-game-page">
-
-    <header class="booth-game-header">
-
-        <div class="booth-title-area">
-
-            <div class="eyebrow" data-i18n="timing.header_eyebrow">
-                NAYLA FESTIVAL · SEIJIN SHIKI 2026
-            </div>
-
-            <h1 data-i18n="timing.header_title">
-                🏮 Toro Nagashi Lantern Timing
-            </h1>
-
-            <p data-i18n="timing.header_description">
-                Klik NYALAKAN pas jarum ada di zona hijau untuk menyalakan
-                lentera dan mengirimnya ke sungai. Semakin presisi, semakin
-                besar combo dan score.
-            </p>
-
-        </div>
-
-        <div class="booth-header-actions">
-
-            <button
-                type="button"
-                id="openTimingButton"
-                class="booth-btn booth-btn-primary"
-                data-i18n="timing.btn_open_timing">
-
-                🏮 MULAI ACARA
-
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <section class="booth-scoreboard">
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="timing.stat_score">SCORE</span>
-            <strong id="timingScoreValue" class="booth-stat-value">0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="timing.stat_money">MONEY</span>
-            <strong id="timingMoneyValue" class="booth-stat-value">Rp 0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="timing.stat_combo">COMBO</span>
-            <strong id="timingComboValue" class="booth-stat-value">x0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="timing.stat_lanterns">LENTERA</span>
-            <strong id="timingLanternsValue" class="booth-stat-value">0</strong>
-        </div>
-
-        <div class="booth-stat timer-stat">
-            <span class="booth-stat-label" data-i18n="timing.stat_time">TIME</span>
-            <strong id="timingTimerValue" class="booth-stat-value">60</strong>
-        </div>
-
-    </section>
-
-
-    <main class="booth-game-wrapper">
-
-        <div id="timingArena" class="booth-arena timing-arena">
-
-            <div class="arena-glow"></div>
-
-            <div class="arena-ceiling">
-                <span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span></span>
-            </div>
-
-            <div class="arena-sign timing-sign">
-                <span class="arena-sign-small" data-i18n="timing.sign_small_top">成人式</span>
-                <strong class="arena-sign-title" data-i18n="timing.sign_title">TORO NAGASHI</strong>
-                <span class="arena-sign-small" data-i18n="timing.sign_small_bottom">
-                    LANTERN TIMING
-                </span>
-            </div>
-
-            <div class="arena-floor timing-river">
-                <div id="timingLanternRow" class="timing-lantern-row"></div>
-            </div>
-
-
-            <div id="timingBarWrap" class="timing-bar-wrap">
-
-                <span class="timing-instructions" data-i18n="timing.instructions">
-                    Klik NYALAKAN saat jarum berada di zona hijau
-                </span>
-
-                <div id="timingTrack" class="timing-track">
-                    <div id="timingZone" class="timing-zone"></div>
-                    <div id="timingNeedle" class="timing-needle"></div>
-                </div>
-
-                <button
-                    type="button"
-                    id="timingHitButton"
-                    class="booth-btn booth-btn-primary timing-hit-button"
-                    data-i18n="timing.btn_hit">
-
-                    🏮 NYALAKAN
-
-                </button>
-
-            </div>
-
-
-            <div id="timingGameMessage" class="game-message"></div>
-
-
-            <div id="timingStartOverlay" class="booth-start-overlay">
-
-                <div class="start-card">
-
-                    <div class="start-card-icon">🏮</div>
-
-                    <div class="eyebrow" data-i18n="timing.start_eyebrow">NAYLA FESTIVAL</div>
-
-                    <h2 data-i18n="timing.start_title">Toro Nagashi Lantern Timing</h2>
-
-                    <p data-i18n="timing.start_description">
-                        Jarum akan bergerak bolak-balik di sepanjang bar. Tekan
-                        tombol NYALAKAN tepat saat jarum berada di zona hijau
-                        untuk menyalakan lentera. Semakin presisi dan
-                        berturut-turut, semakin sempit zona & semakin cepat
-                        jarumnya — tapi score dan combo-mu juga makin besar.
-                    </p>
-
-                    <button
-                        type="button"
-                        id="startGameButtonT"
-                        class="booth-btn booth-btn-primary start-button"
-                        data-i18n="timing.start_button">
-
-                        🏮 MULAI ACARA
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </main>
-
-</section>
-
-
-<div id="timingCompletionPopup" class="completion-popup">
-
-    <div class="completion-card">
-
-        <div class="completion-icon">🏮</div>
-
-        <span class="completion-label" data-i18n="timing.completion_label">WAKTU HABIS</span>
-
-        <h2 data-i18n="timing.completion_title">Sungai Dipenuhi Cahaya! 🏮</h2>
-
-        <p id="timingCompletionText"></p>
-
-        <div class="completion-stats">
-
-            <div>
-                <span data-i18n="timing.completion_score_label">+SCORE</span>
-                <strong id="timingPopupScore">+0</strong>
-            </div>
-
-            <div>
-                <span data-i18n="timing.completion_money_label">+MONEY</span>
-                <strong id="timingPopupMoney">Rp 0</strong>
-            </div>
-
-        </div>
-
-        <button
-            type="button"
-            id="closeTimingCompletionButton"
-            class="booth-btn booth-btn-primary"
-            data-i18n="timing.btn_continue">
-
-            LANJUTKAN
-
-        </button>
-
-    </div>
-
-</div>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
-
-<section class="booth-game-page shodo-game-page">
-
-    <header class="booth-game-header">
-
-        <div class="booth-title-area">
-
-            <div class="eyebrow" data-i18n="shodo.header_eyebrow">
-                NAYLA FESTIVAL · SEIJIN SHIKI 2026
-            </div>
-
-            <h1 data-i18n="shodo.header_title">
-                🖌️ Shodo Brush Tracing
-            </h1>
-
-            <p data-i18n="shodo.header_description">
-                Ikuti guratan kanji panduan pakai kuas tintamu untuk
-                mendapatkan score dan money.
-            </p>
-
-        </div>
-
-        <div class="booth-header-actions">
-
-            <button
-                type="button"
-                id="openShodoButton"
-                class="booth-btn booth-btn-primary"
-                data-i18n="shodo.btn_open_shodo">
-
-                🖌️ MULAI MENULIS
-
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <section class="booth-scoreboard">
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="shodo.stat_score">SCORE</span>
-            <strong id="shodoScoreValue" class="booth-stat-value">0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="shodo.stat_money">MONEY</span>
-            <strong id="shodoMoneyValue" class="booth-stat-value">Rp 0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="shodo.stat_combo">COMBO</span>
-            <strong id="shodoComboValue" class="booth-stat-value">x0</strong>
-        </div>
-
-        <div class="booth-stat">
-            <span class="booth-stat-label" data-i18n="shodo.stat_chars">KANJI</span>
-            <strong id="shodoCharsValue" class="booth-stat-value">0</strong>
-        </div>
-
-        <div class="booth-stat timer-stat">
-            <span class="booth-stat-label" data-i18n="shodo.stat_time">TIME</span>
-            <strong id="shodoTimerValue" class="booth-stat-value">60</strong>
-        </div>
-
-    </section>
-
-
-    <main class="booth-game-wrapper">
-
-        <div id="shodoArena" class="booth-arena shodo-arena">
-
-            <div class="arena-glow"></div>
-
-            <div class="arena-sign shodo-sign">
-                <span class="arena-sign-small" data-i18n="shodo.sign_small_top">成人式</span>
-                <strong class="arena-sign-title" data-i18n="shodo.sign_title">SHODO</strong>
-                <span class="arena-sign-small" data-i18n="shodo.sign_small_bottom">
-                    BRUSH TRACING
-                </span>
-            </div>
-
-
-            <div class="shodo-canvas-wrap">
-
-                <div class="shodo-canvas-meta">
-                    <span id="shodoCharMeaning" class="shodo-char-meaning"></span>
-                </div>
-
-                <div class="shodo-toolbar">
-
-                    <button
-                        type="button"
-                        id="shodoBrushButton"
-                        class="shodo-tool-btn active"
-                        data-i18n="shodo.btn_open_shodo">
-
-                        🖌️ KUAS
-
-                    </button>
-
-                    <button
-                        type="button"
-                        id="shodoEraserButton"
-                        class="shodo-tool-btn"
-                        data-i18n="shodo.btn_tool_eraser">
-
-                        🧹 HAPUS
-
-                    </button>
-
-                </div>
-
-                <div class="shodo-canvas-frame">
-                    <canvas id="shodoGuideCanvas" class="shodo-canvas shodo-guide-canvas" width="320" height="320"></canvas>
-                    <canvas id="shodoCanvas" class="shodo-canvas shodo-ink-canvas" width="320" height="320"></canvas>
-                </div>
-
-                <span class="shodo-instructions" data-i18n="shodo.canvas_hint">
-                    Ikuti guratan kanji samar mengikuti bentuknya
-                </span>
-
-                <div class="shodo-actions">
-
-                    <button
-                        type="button"
-                        id="shodoClearButton"
+                        id="clearPreparationButton"
                         class="booth-btn booth-btn-danger"
-                        data-i18n="shodo.btn_clear">
+                        data-i18n="booth.btn_clear">
 
-                        ↺ ULANGI
+                        ↺ CLEAR
 
                     </button>
 
                     <button
                         type="button"
-                        id="shodoSubmitButton"
+                        id="serveButton"
                         class="booth-btn booth-btn-success"
-                        data-i18n="shodo.btn_submit">
+                        data-i18n="booth.btn_serve"
+                        disabled>
 
-                        🖌️ SELESAI
+                        ✓ SERVE CUSTOMER
 
                     </button>
 
@@ -1323,35 +269,1892 @@
             </div>
 
 
-            <div id="shodoGameMessage" class="game-message"></div>
+            <section class="product-panel">
+
+                <div class="products-container">
+
+                    <div class="panel-heading">
+                        <div>
+                            <span class="panel-kicker" data-i18n="booth.inventory_kicker">INVENTORY</span>
+                            <h3 data-i18n="booth.inventory_title">🛍️ Produk Booth</h3>
+                        </div>
+                        <span data-i18n="booth.inventory_hint">Klik produk untuk menyiapkan order</span>
+                    </div>
+
+                    <div id="productsGrid" class="products-grid"></div>
+
+                </div>
+
+                <div class="price-panel">
+
+                    <div class="panel-heading">
+                        <div>
+                            <span class="panel-kicker" data-i18n="booth.price_kicker">CURRENT PRICE</span>
+                            <h3 data-i18n="booth.price_title">💰 Harga</h3>
+                        </div>
+                        <span data-i18n="booth.price_hint">Bisa diatur</span>
+                    </div>
+
+                    <div id="priceList" class="price-list"></div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </section>
 
 
-            <div id="shodoStartOverlay" class="booth-start-overlay">
+    <div id="priceModal" class="price-modal">
 
-                <div class="start-card">
+        <div class="price-modal-card">
 
-                    <div class="start-card-icon">🖌️</div>
+            <div class="price-modal-header">
 
-                    <div class="eyebrow" data-i18n="shodo.start_eyebrow">NAYLA FESTIVAL</div>
+                <div>
+                    <span class="panel-kicker" data-i18n="booth.modal_kicker">BOOTH SETTINGS</span>
+                    <h2 data-i18n="booth.modal_title">⚙️ Atur Harga Barang</h2>
+                </div>
 
-                    <h2 data-i18n="shodo.start_title">Shodo Brush Tracing</h2>
+                <button type="button" id="closePriceModal" class="close-modal">×</button>
 
-                    <p data-i18n="shodo.start_description">
-                        Kanji panduan akan muncul samar-samar di kanvas. Gambar
-                        ulang mengikuti bentuknya pakai jari atau mouse. Semakin
-                        dekat jalurmu ke panduan, semakin besar score yang kamu
-                        dapat.
-                    </p>
+            </div>
+
+            <div id="modalPriceList" class="modal-price-list"></div>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    id="cancelPriceButton"
+                    class="booth-btn booth-btn-secondary"
+                    data-i18n="booth.btn_cancel">
+
+                    BATAL
+
+                </button>
+
+                <button
+                    type="button"
+                    id="savePriceButton"
+                    class="booth-btn booth-btn-primary"
+                    data-i18n="booth.btn_save">
+
+                    SIMPAN HARGA
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="completionPopup" class="completion-popup">
+
+        <div class="completion-card">
+
+            <div class="completion-icon">✨</div>
+
+            <span class="completion-label" data-i18n="booth.completion_label">PESANAN SELESAI</span>
+
+            <h2 data-i18n="booth.completion_title">Customer Senang! 🎉</h2>
+
+            <p id="completionText" data-i18n="booth.completion_default_text">
+                Pesanan berhasil disajikan.
+            </p>
+
+            <div class="completion-stats">
+
+                <div>
+                    <span data-i18n="booth.completion_score_label">+SCORE</span>
+                    <strong id="popupScore">+0</strong>
+                </div>
+
+                <div>
+                    <span data-i18n="booth.completion_money_label">+MONEY</span>
+                    <strong id="popupMoney">Rp 0</strong>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                id="closeCompletionButton"
+                class="booth-btn booth-btn-primary"
+                data-i18n="booth.btn_continue">
+
+                LANJUTKAN
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+        SEIJIN SHIKI PHOTO STUDIO
+    ========================================================== -->
+
+    <section class="booth-game-page studio-game-page">
+
+        <header class="booth-game-header">
+
+            <div class="booth-title-area">
+
+                <div class="eyebrow" data-i18n="studio.header_eyebrow">
+                    NAYLA FESTIVAL · SEIJIN SHIKI 2026
+                </div>
+
+                <h1 data-i18n="studio.header_title">
+                    📸 Seijin Shiki Photo Studio
+                </h1>
+
+                <p data-i18n="studio.header_description">
+                    Dandani member sesuai permintaan fotografer, lalu ambil foto
+                    untuk mendapatkan score dan money.
+                </p>
+
+            </div>
+
+            <div class="booth-header-actions">
+
+                <button
+                    type="button"
+                    id="openStudioButton"
+                    class="booth-btn booth-btn-primary"
+                    data-i18n="studio.btn_open_studio">
+
+                    🎬 BUKA STUDIO
+
+                </button>
+
+                <button
+                    type="button"
+                    id="priceSettingsButtonS"
+                    class="booth-btn booth-btn-secondary"
+                    data-i18n="studio.btn_price_settings">
+
+                    ⚙️ ATUR HARGA
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <section class="booth-scoreboard">
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="studio.stat_score">SCORE</span>
+                <strong id="studioScoreValue" class="booth-stat-value">0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="studio.stat_money">MONEY</span>
+                <strong id="studioMoneyValue" class="booth-stat-value">Rp 0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="studio.stat_combo">COMBO</span>
+                <strong id="studioComboValue" class="booth-stat-value">x0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="studio.stat_customers">SESI FOTO</span>
+                <strong id="studioCustomerValue" class="booth-stat-value">0</strong>
+            </div>
+
+            <div class="booth-stat timer-stat">
+                <span class="booth-stat-label" data-i18n="studio.stat_time">TIME</span>
+                <strong id="studioTimerValue" class="booth-stat-value">60</strong>
+            </div>
+
+        </section>
+
+
+        <main class="booth-game-wrapper">
+
+            <div id="studioArena" class="booth-arena studio-arena">
+
+                <div class="arena-glow"></div>
+
+                <div class="arena-ceiling">
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                </div>
+
+                <div class="arena-sign studio-sign">
+                    <span class="arena-sign-small">成人式</span>
+                    <strong class="arena-sign-title">STUDIO</strong>
+                    <span class="arena-sign-small" data-i18n="studio.studio_sign_text">
+                        SEIJIN SHIKI PHOTO STUDIO
+                    </span>
+                </div>
+
+                <div class="arena-floor studio-floor"></div>
+
+
+                <div class="studio-backdrop">
+                    <div class="studio-camera-rig">
+                        <div class="studio-camera">📷</div>
+                        <div class="studio-tripod"></div>
+                    </div>
+                </div>
+
+
+                <div class="nayla-character studio-model">
+
+                    <div class="nayla-photo-frame studio-frame">
+                        <img src="/static/img/members/nayla.png" alt="Model" draggable="false">
+                    </div>
+
+                    <div class="nayla-name-tag studio-nametag">MODEL</div>
+
+                </div>
+
+
+                <div id="studioCustomer" class="customer customer-hidden">
+
+                    <div id="studioCustomerRequest" class="customer-request">
+
+                        <div class="request-title">
+                            <span data-i18n="studio.request_title">📋 PERMINTAAN FOTO</span>
+                            <span id="studioRequestTotal" class="request-total">Rp 0</span>
+                        </div>
+
+                        <div id="studioRequestItems" class="request-items"></div>
+
+                    </div>
+
+                    <img id="studioCustomerAvatar" class="customer-avatar" src="" alt="Fotografer" draggable="false">
+
+                    <span id="studioCustomerName" class="customer-name" data-i18n="studio.customer_default_name">
+                        Fotografer
+                    </span>
+
+                </div>
+
+
+                <div id="studioGameMessage" class="game-message"></div>
+
+
+                <div id="studioStartOverlay" class="booth-start-overlay">
+
+                    <div class="start-card">
+
+                        <div class="start-card-icon">📸</div>
+
+                        <div class="eyebrow" data-i18n="studio.start_eyebrow">NAYLA FESTIVAL</div>
+
+                        <h2 data-i18n="studio.start_title">Seijin Shiki Photo Studio</h2>
+
+                        <p data-i18n="studio.start_description">
+                            Kamu bertugas sebagai stylist studio foto. Fotografer akan
+                            datang dan meminta kombinasi busana tertentu. Siapkan item
+                            yang diminta, lalu ambil foto.
+                        </p>
+
+                        <button
+                            type="button"
+                            id="startGameButtonS"
+                            class="booth-btn booth-btn-primary start-button"
+                            data-i18n="studio.start_button">
+
+                            🎬 BUKA STUDIO & MULAI
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div id="studioPreparationPanel" class="preparation-panel">
+
+                <div class="preparation-header">
+
+                    <div>
+                        <span class="preparation-kicker" data-i18n="studio.prep_kicker">STYLING WORKSPACE</span>
+                        <strong class="preparation-title" data-i18n="studio.prep_title">👘 Meja Rias</strong>
+                    </div>
+
+                    <span id="studioPreparationStatus" class="preparation-status" data-i18n="studio.prep_status_empty">
+                        Belum ada permintaan
+                    </span>
+
+                </div>
+
+
+                <div id="studioMobileOrderSummary" class="mobile-order-summary">
+
+                    <div class="mobile-order-summary-title">
+                        <span data-i18n="studio.request_title">📋 PERMINTAAN FOTO</span>
+                    </div>
+
+                    <div id="studioMobileRequestItems" class="mobile-order-summary-items">
+                        <div class="mobile-order-summary-empty" data-i18n="studio.mobile_order_empty">
+                            Menunggu permintaan foto...
+                        </div>
+                    </div>
+
+                    <div class="mobile-order-summary-total">
+                        <span data-i18n="studio.request_total_label">Total</span>
+                        <strong id="studioMobileRequestTotal">Rp 0</strong>
+                    </div>
+
+                </div>
+
+
+                <div id="studioPreparationItems" class="preparation-items">
+                    <div class="empty-tray" data-i18n="studio.prep_placeholder">
+                        Pilih busana sesuai permintaan foto
+                    </div>
+                </div>
+
+
+                <div class="preparation-actions">
 
                     <button
                         type="button"
-                        id="startGameButtonSh"
-                        class="booth-btn booth-btn-primary start-button"
-                        data-i18n="shodo.start_button">
+                        id="studioClearPreparationButton"
+                        class="booth-btn booth-btn-danger"
+                        data-i18n="studio.btn_clear">
 
-                        🖌️ MULAI MENULIS
+                        ↺ CLEAR
 
                     </button>
+
+                    <button
+                        type="button"
+                        id="studioServeButton"
+                        class="booth-btn booth-btn-success"
+                        data-i18n="studio.btn_serve"
+                        disabled>
+
+                        📸 AMBIL FOTO
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <section class="product-panel">
+
+                <div class="products-container">
+
+                    <div class="panel-heading">
+                        <div>
+                            <span class="panel-kicker" data-i18n="studio.inventory_kicker">WARDROBE</span>
+                            <h3 data-i18n="studio.inventory_title">👘 Item Busana</h3>
+                        </div>
+                        <span data-i18n="studio.inventory_hint">Klik item untuk menyiapkan gaya</span>
+                    </div>
+
+                    <div id="studioProductsGrid" class="products-grid"></div>
+
+                </div>
+
+                <div class="price-panel">
+
+                    <div class="panel-heading">
+                        <div>
+                            <span class="panel-kicker" data-i18n="studio.price_kicker">HARGA SAAT INI</span>
+                            <h3 data-i18n="studio.price_title">💰 Harga</h3>
+                        </div>
+                        <span data-i18n="studio.price_hint">Bisa diatur</span>
+                    </div>
+
+                    <div id="studioPriceList" class="price-list"></div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </section>
+
+
+    <div id="studioPriceModal" class="price-modal">
+
+        <div class="price-modal-card">
+
+            <div class="price-modal-header">
+
+                <div>
+                    <span class="panel-kicker" data-i18n="studio.modal_kicker">STUDIO SETTINGS</span>
+                    <h2 data-i18n="studio.modal_title">⚙️ Atur Harga Item</h2>
+                </div>
+
+                <button type="button" id="closeStudioPriceModal" class="close-modal">×</button>
+
+            </div>
+
+            <div id="studioModalPriceList" class="modal-price-list"></div>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    id="cancelStudioPriceButton"
+                    class="booth-btn booth-btn-secondary"
+                    data-i18n="studio.btn_cancel">
+
+                    BATAL
+
+                </button>
+
+                <button
+                    type="button"
+                    id="saveStudioPriceButton"
+                    class="booth-btn booth-btn-primary"
+                    data-i18n="studio.btn_save">
+
+                    SIMPAN HARGA
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="studioCompletionPopup" class="completion-popup">
+
+        <div class="completion-card">
+
+            <div class="completion-icon">✨</div>
+
+            <span class="completion-label" data-i18n="studio.completion_label">FOTO SELESAI</span>
+
+            <h2 data-i18n="studio.completion_title">Hasil Foto Memukau! ✨</h2>
+
+            <p id="studioCompletionText" data-i18n="studio.completion_default_text">
+                Sesi foto berhasil diselesaikan.
+            </p>
+
+            <div class="completion-stats">
+
+                <div>
+                    <span data-i18n="studio.completion_score_label">+SCORE</span>
+                    <strong id="studioPopupScore">+0</strong>
+                </div>
+
+                <div>
+                    <span data-i18n="studio.completion_money_label">+MONEY</span>
+                    <strong id="studioPopupMoney">Rp 0</strong>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                id="closeStudioCompletionButton"
+                class="booth-btn booth-btn-primary"
+                data-i18n="studio.btn_continue">
+
+                LANJUTKAN
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+        NAYLA PHOTOCARD MATCH
+    ========================================================== -->
+
+    <section class="booth-game-page memory-game-page">
+
+        <header class="booth-game-header">
+
+            <div class="booth-title-area">
+
+                <div class="eyebrow" data-i18n="memory.header_eyebrow">
+                    NAYLA FESTIVAL · SEIJIN SHIKI 2026
+                </div>
+
+                <h1 data-i18n="memory.header_title">
+                    🎴 Nayla Photocard Match
+                </h1>
+
+                <p data-i18n="memory.header_description">
+                    Balik kartu dan temukan pasangan photocard member
+                    sebelum waktu habis untuk mendapatkan score dan money.
+                </p>
+
+            </div>
+
+            <div class="booth-header-actions">
+
+                <button
+                    type="button"
+                    id="openMemoryButton"
+                    class="booth-btn booth-btn-primary"
+                    data-i18n="memory.btn_open_memory">
+
+                    🎴 BUKA PERMAINAN
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <section class="booth-scoreboard">
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="memory.stat_score">SCORE</span>
+                <strong id="memoryScoreValue" class="booth-stat-value">0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="memory.stat_money">MONEY</span>
+                <strong id="memoryMoneyValue" class="booth-stat-value">Rp 0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="memory.stat_combo">COMBO</span>
+                <strong id="memoryComboValue" class="booth-stat-value">x0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="memory.stat_matches">MATCHES</span>
+                <strong id="memoryMatchesValue" class="booth-stat-value">0</strong>
+            </div>
+
+            <div class="booth-stat timer-stat">
+                <span class="booth-stat-label" data-i18n="memory.stat_time">TIME</span>
+                <strong id="memoryTimerValue" class="booth-stat-value">60</strong>
+            </div>
+
+        </section>
+
+
+        <main class="booth-game-wrapper">
+
+            <div id="memoryArena" class="booth-arena memory-arena">
+
+                <div class="arena-glow"></div>
+
+                <div class="arena-ceiling">
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                </div>
+
+                <div class="arena-sign memory-sign">
+                    <span class="arena-sign-small" data-i18n="memory.sign_small_top">成人式</span>
+                    <strong class="arena-sign-title" data-i18n="memory.sign_title">MEMORY</strong>
+                    <span class="arena-sign-small" data-i18n="memory.sign_small_bottom">
+                        PHOTOCARD MATCH
+                    </span>
+                </div>
+
+                <div class="arena-floor memory-floor"></div>
+
+
+                <div class="memory-board-heading">
+                    <span class="panel-kicker" data-i18n="memory.board_kicker">MEMORY BOARD</span>
+                    <span data-i18n="memory.board_hint">Klik kartu untuk membuka</span>
+                </div>
+
+                <div id="memoryBoard" class="memory-board"></div>
+
+
+                <div id="memoryGameMessage" class="game-message"></div>
+
+
+                <div id="memoryStartOverlay" class="booth-start-overlay">
+
+                    <div class="start-card">
+
+                        <div class="start-card-icon">🎴</div>
+
+                        <div class="eyebrow" data-i18n="memory.start_eyebrow">NAYLA FESTIVAL</div>
+
+                        <h2 data-i18n="memory.start_title">Nayla Photocard Match</h2>
+
+                        <p data-i18n="memory.start_description">
+                            Balik dua kartu untuk menemukan pasangan member yang sama.
+                            Semakin cepat dan berturut-turut kamu menemukan pasangan,
+                            semakin besar combo dan score yang kamu dapat.
+                        </p>
+
+                        <button
+                            type="button"
+                            id="startGameButtonM"
+                            class="booth-btn booth-btn-primary start-button"
+                            data-i18n="memory.start_button">
+
+                            🎴 MULAI BERMAIN
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <div id="memoryCompletionPopup" class="completion-popup">
+
+        <div class="completion-card">
+
+            <div class="completion-icon">🎴</div>
+
+            <span class="completion-label" data-i18n="memory.completion_label">WAKTU HABIS</span>
+
+            <h2 data-i18n="memory.completion_title">Kerja Bagus! 🎴</h2>
+
+            <p id="memoryCompletionText"></p>
+
+            <div class="completion-stats">
+
+                <div>
+                    <span data-i18n="memory.completion_score_label">+SCORE</span>
+                    <strong id="memoryPopupScore">+0</strong>
+                </div>
+
+                <div>
+                    <span data-i18n="memory.completion_money_label">+MONEY</span>
+                    <strong id="memoryPopupMoney">Rp 0</strong>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                id="closeMemoryCompletionButton"
+                class="booth-btn booth-btn-primary"
+                data-i18n="memory.btn_continue">
+
+                LANJUTKAN
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+        TORO NAGASHI LANTERN TIMING
+        Game keempat — mekanik BEDA lagi dari tiga game di atas:
+        bukan prepare & serve, bukan flip & match, tapi
+        precision-timing. Jarum bergerak bolak-balik terus di
+        sepanjang bar, pemain klik "NYALAKAN" tepat saat jarum ada
+        di zona hijau untuk menyalakan lentera dan mengirimnya ke
+        sungai. Makin presisi & berturut-turut, zona makin sempit
+        dan jarum makin cepat — combo & score makin besar.
+        Dijalankan oleh engine terpisah (createTimingGame) di
+        games.js — bukan createShopGame atau createMemoryGame.
+    ========================================================== -->
+
+    <section class="booth-game-page timing-game-page">
+
+        <header class="booth-game-header">
+
+            <div class="booth-title-area">
+
+                <div class="eyebrow" data-i18n="timing.header_eyebrow">
+                    NAYLA FESTIVAL · SEIJIN SHIKI 2026
+                </div>
+
+                <h1 data-i18n="timing.header_title">
+                    🏮 Toro Nagashi Lantern Timing
+                </h1>
+
+                <p data-i18n="timing.header_description">
+                    Klik NYALAKAN pas jarum ada di zona hijau untuk menyalakan
+                    lentera dan mengirimnya ke sungai. Semakin presisi, semakin
+                    besar combo dan score.
+                </p>
+
+            </div>
+
+            <div class="booth-header-actions">
+
+                <button
+                    type="button"
+                    id="openTimingButton"
+                    class="booth-btn booth-btn-primary"
+                    data-i18n="timing.btn_open_timing">
+
+                    🏮 MULAI ACARA
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <section class="booth-scoreboard">
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="timing.stat_score">SCORE</span>
+                <strong id="timingScoreValue" class="booth-stat-value">0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="timing.stat_money">MONEY</span>
+                <strong id="timingMoneyValue" class="booth-stat-value">Rp 0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="timing.stat_combo">COMBO</span>
+                <strong id="timingComboValue" class="booth-stat-value">x0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="timing.stat_lanterns">LENTERA</span>
+                <strong id="timingLanternsValue" class="booth-stat-value">0</strong>
+            </div>
+
+            <div class="booth-stat timer-stat">
+                <span class="booth-stat-label" data-i18n="timing.stat_time">TIME</span>
+                <strong id="timingTimerValue" class="booth-stat-value">60</strong>
+            </div>
+
+        </section>
+
+
+        <main class="booth-game-wrapper">
+
+            <div id="timingArena" class="booth-arena timing-arena">
+
+                <div class="arena-glow"></div>
+
+                <div class="arena-ceiling">
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                </div>
+
+                <div class="arena-sign timing-sign">
+                    <span class="arena-sign-small" data-i18n="timing.sign_small_top">成人式</span>
+                    <strong class="arena-sign-title" data-i18n="timing.sign_title">TORO NAGASHI</strong>
+                    <span class="arena-sign-small" data-i18n="timing.sign_small_bottom">
+                        LANTERN TIMING
+                    </span>
+                </div>
+
+                <div class="arena-floor timing-river">
+                    <div id="timingLanternRow" class="timing-lantern-row"></div>
+                </div>
+
+
+                <div id="timingBarWrap" class="timing-bar-wrap">
+
+                    <span class="timing-instructions" data-i18n="timing.instructions">
+                        Klik NYALAKAN saat jarum berada di zona hijau
+                    </span>
+
+                    <div id="timingTrack" class="timing-track">
+                        <div id="timingZone" class="timing-zone"></div>
+                        <div id="timingNeedle" class="timing-needle"></div>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="timingHitButton"
+                        class="booth-btn booth-btn-primary timing-hit-button"
+                        data-i18n="timing.btn_hit">
+
+                        🏮 NYALAKAN
+
+                    </button>
+
+                </div>
+
+
+                <div id="timingGameMessage" class="game-message"></div>
+
+
+                <div id="timingStartOverlay" class="booth-start-overlay">
+
+                    <div class="start-card">
+
+                        <div class="start-card-icon">🏮</div>
+
+                        <div class="eyebrow" data-i18n="timing.start_eyebrow">NAYLA FESTIVAL</div>
+
+                        <h2 data-i18n="timing.start_title">Toro Nagashi Lantern Timing</h2>
+
+                        <p data-i18n="timing.start_description">
+                            Jarum akan bergerak bolak-balik di sepanjang bar. Tekan
+                            tombol NYALAKAN tepat saat jarum berada di zona hijau
+                            untuk menyalakan lentera. Semakin presisi dan
+                            berturut-turut, semakin sempit zona & semakin cepat
+                            jarumnya — tapi score dan combo-mu juga makin besar.
+                        </p>
+
+                        <button
+                            type="button"
+                            id="startGameButtonT"
+                            class="booth-btn booth-btn-primary start-button"
+                            data-i18n="timing.start_button">
+
+                            🏮 MULAI ACARA
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <div id="timingCompletionPopup" class="completion-popup">
+
+        <div class="completion-card">
+
+            <div class="completion-icon">🏮</div>
+
+            <span class="completion-label" data-i18n="timing.completion_label">WAKTU HABIS</span>
+
+            <h2 data-i18n="timing.completion_title">Sungai Dipenuhi Cahaya! 🏮</h2>
+
+            <p id="timingCompletionText"></p>
+
+            <div class="completion-stats">
+
+                <div>
+                    <span data-i18n="timing.completion_score_label">+SCORE</span>
+                    <strong id="timingPopupScore">+0</strong>
+                </div>
+
+                <div>
+                    <span data-i18n="timing.completion_money_label">+MONEY</span>
+                    <strong id="timingPopupMoney">Rp 0</strong>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                id="closeTimingCompletionButton"
+                class="booth-btn booth-btn-primary"
+                data-i18n="timing.btn_continue">
+
+                LANJUTKAN
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
+
+    <section class="booth-game-page shodo-game-page">
+
+        <header class="booth-game-header">
+
+            <div class="booth-title-area">
+
+                <div class="eyebrow" data-i18n="shodo.header_eyebrow">
+                    NAYLA FESTIVAL · SEIJIN SHIKI 2026
+                </div>
+
+                <h1 data-i18n="shodo.header_title">
+                    🖌️ Shodo Brush Tracing
+                </h1>
+
+                <p data-i18n="shodo.header_description">
+                    Ikuti guratan kanji panduan pakai kuas tintamu untuk
+                    mendapatkan score dan money.
+                </p>
+
+            </div>
+
+            <div class="booth-header-actions">
+
+                <button
+                    type="button"
+                    id="openShodoButton"
+                    class="booth-btn booth-btn-primary"
+                    data-i18n="shodo.btn_open_shodo">
+
+                    🖌️ MULAI MENULIS
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <section class="booth-scoreboard">
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="shodo.stat_score">SCORE</span>
+                <strong id="shodoScoreValue" class="booth-stat-value">0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="shodo.stat_money">MONEY</span>
+                <strong id="shodoMoneyValue" class="booth-stat-value">Rp 0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="shodo.stat_combo">COMBO</span>
+                <strong id="shodoComboValue" class="booth-stat-value">x0</strong>
+            </div>
+
+            <div class="booth-stat">
+                <span class="booth-stat-label" data-i18n="shodo.stat_chars">KANJI</span>
+                <strong id="shodoCharsValue" class="booth-stat-value">0</strong>
+            </div>
+
+            <div class="booth-stat timer-stat">
+                <span class="booth-stat-label" data-i18n="shodo.stat_time">TIME</span>
+                <strong id="shodoTimerValue" class="booth-stat-value">60</strong>
+            </div>
+
+        </section>
+
+
+        <main class="booth-game-wrapper">
+
+            <div id="shodoArena" class="booth-arena shodo-arena">
+
+                <div class="arena-glow"></div>
+
+                <div class="arena-sign shodo-sign">
+                    <span class="arena-sign-small" data-i18n="shodo.sign_small_top">成人式</span>
+                    <strong class="arena-sign-title" data-i18n="shodo.sign_title">SHODO</strong>
+                    <span class="arena-sign-small" data-i18n="shodo.sign_small_bottom">
+                        BRUSH TRACING
+                    </span>
+                </div>
+
+
+                <div class="shodo-canvas-wrap">
+
+                    <div class="shodo-canvas-meta">
+                        <span id="shodoCharMeaning" class="shodo-char-meaning"></span>
+                    </div>
+
+                    <div class="shodo-toolbar">
+
+                        <button
+                            type="button"
+                            id="shodoBrushButton"
+                            class="shodo-tool-btn active"
+                            data-i18n="shodo.btn_open_shodo">
+
+                            🖌️ KUAS
+
+                        </button>
+
+                        <button
+                            type="button"
+                            id="shodoEraserButton"
+                            class="shodo-tool-btn"
+                            data-i18n="shodo.btn_tool_eraser">
+
+                            🧹 HAPUS
+
+                        </button>
+
+                    </div>
+
+                    <div class="shodo-canvas-frame">
+                        <canvas id="shodoGuideCanvas" class="shodo-canvas shodo-guide-canvas" width="320" height="320"></canvas>
+                        <canvas id="shodoCanvas" class="shodo-canvas shodo-ink-canvas" width="320" height="320"></canvas>
+                    </div>
+
+                    <span class="shodo-instructions" data-i18n="shodo.canvas_hint">
+                        Ikuti guratan kanji samar mengikuti bentuknya
+                    </span>
+
+                    <div class="shodo-actions">
+
+                        <button
+                            type="button"
+                            id="shodoClearButton"
+                            class="booth-btn booth-btn-danger"
+                            data-i18n="shodo.btn_clear">
+
+                            ↺ ULANGI
+
+                        </button>
+
+                        <button
+                            type="button"
+                            id="shodoSubmitButton"
+                            class="booth-btn booth-btn-success"
+                            data-i18n="shodo.btn_submit">
+
+                            🖌️ SELESAI
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div id="shodoGameMessage" class="game-message"></div>
+
+
+                <div id="shodoStartOverlay" class="booth-start-overlay">
+
+                    <div class="start-card">
+
+                        <div class="start-card-icon">🖌️</div>
+
+                        <div class="eyebrow" data-i18n="shodo.start_eyebrow">NAYLA FESTIVAL</div>
+
+                        <h2 data-i18n="shodo.start_title">Shodo Brush Tracing</h2>
+
+                        <p data-i18n="shodo.start_description">
+                            Kanji panduan akan muncul samar-samar di kanvas. Gambar
+                            ulang mengikuti bentuknya pakai jari atau mouse. Semakin
+                            dekat jalurmu ke panduan, semakin besar score yang kamu
+                            dapat.
+                        </p>
+
+                        <button
+                            type="button"
+                            id="startGameButtonSh"
+                            class="booth-btn booth-btn-primary start-button"
+                            data-i18n="shodo.start_button">
+
+                            🖌️ MULAI MENULIS
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <div id="shodoCompletionPopup" class="completion-popup">
+
+        <div class="completion-card">
+
+            <div class="completion-icon">🖌️</div>
+
+            <span class="completion-label" data-i18n="shodo.completion_label">WAKTU HABIS</span>
+
+            <h2 data-i18n="shodo.completion_title">Tinta Mengalir Indah! 🖌️</h2>
+
+            <p id="shodoCompletionText"></p>
+
+            <div class="completion-stats">
+
+                <div>
+                    <span data-i18n="shodo.completion_score_label">+SCORE</span>
+                    <strong id="shodoPopupScore">+0</strong>
+                </div>
+
+                <div>
+                    <span data-i18n="shodo.completion_money_label">+MONEY</span>
+                    <strong id="shodoPopupMoney">Rp 0</strong>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                id="closeShodoCompletionButton"
+                class="booth-btn booth-btn-primary"
+                data-i18n="shodo.btn_continue">
+
+                LANJUTKAN
+
+            </button>
+
+        </div>
+</div>
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/fashion-designer.css') }}">
+
+<section id="fashionDesignerGame"
+         class="fashion-designer-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="fashion-header">
+
+        <div class="fashion-header-copy">
+
+            <span class="fashion-eyebrow"
+                  data-fashion-i18n="header.eyebrow">
+                NAYLA ATELIER · 3D FASHION STUDIO
+            </span>
+
+            <h1 data-fashion-i18n="header.title">
+                ✦ Nayla Fashion Designer
+            </h1>
+
+            <p data-fashion-i18n="header.description">
+                Rancang outfit, putar character 360°, padukan fashion item,
+                dan ciptakan style terbaikmu.
+            </p>
+
+        </div>
+
+        <div class="fashion-header-actions">
+
+            <button type="button"
+                    id="fashionRandomButton"
+                    class="fashion-button fashion-button-secondary">
+
+                <span>✨</span>
+
+                <span data-fashion-i18n="buttons.random">
+                    RANDOM STYLE
+                </span>
+
+            </button>
+
+            <button type="button"
+                    id="fashionChallengeButton"
+                    class="fashion-button fashion-button-primary">
+
+                <span>🎯</span>
+
+                <span data-fashion-i18n="buttons.challenge">
+                    FASHION CHALLENGE
+                </span>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         STATS
+         ===================================================== -->
+
+    <section class="fashion-stats">
+
+        <div class="fashion-stat-card">
+            <span>LEVEL</span>
+            <strong id="fashionLevel">1</strong>
+        </div>
+
+        <div class="fashion-stat-card">
+            <span>FASHION POINTS</span>
+            <strong id="fashionPoints">0</strong>
+        </div>
+
+        <div class="fashion-stat-card">
+            <span>MONEY</span>
+            <strong id="fashionMoney">Rp 0</strong>
+        </div>
+
+        <div class="fashion-stat-card">
+            <span>COMBO</span>
+            <strong id="fashionCombo">x0</strong>
+        </div>
+
+        <div class="fashion-stat-card fashion-timer-card">
+            <span>TIME</span>
+            <strong id="fashionTimer">90</strong>
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         WORKSPACE
+         ===================================================== -->
+
+    <main class="fashion-workspace">
+
+
+        <!-- =================================================
+             WARDROBE
+             ================================================= -->
+
+        <aside class="fashion-sidebar fashion-wardrobe-panel">
+
+            <div class="fashion-panel-heading">
+
+                <div>
+                    <span class="fashion-panel-kicker">
+                        WARDROBE
+                    </span>
+
+                    <h2>
+                        Fashion Items
+                    </h2>
+                </div>
+
+                <span id="fashionWardrobeCount"
+                      class="fashion-item-count">
+                    0 / 0
+                </span>
+
+            </div>
+
+
+            <!-- CATEGORY -->
+
+            <div id="fashionCategories"
+                 class="fashion-categories">
+
+                <button type="button"
+                        class="fashion-category-button active"
+                        data-fashion-category="all">
+                    <span>✦</span>
+                    ALL
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="hair">
+                    <span>💇</span>
+                    HAIR
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="top">
+                    <span>👚</span>
+                    TOPS
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="dress">
+                    <span>👗</span>
+                    DRESSES
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="jacket">
+                    <span>🧥</span>
+                    JACKETS
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="bottom">
+                    <span>👖</span>
+                    BOTTOMS
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="shoes">
+                    <span>👠</span>
+                    SHOES
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="hat">
+                    <span>🎩</span>
+                    HATS
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="glasses">
+                    <span>🕶</span>
+                    GLASSES
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="bag">
+                    <span>👜</span>
+                    BAGS
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="accessory">
+                    <span>💎</span>
+                    ACCESSORIES
+                </button>
+
+            </div>
+
+
+            <!-- SEARCH -->
+
+            <div class="fashion-search">
+
+                <span>⌕</span>
+
+                <input type="text"
+                       id="fashionSearchInput"
+                       autocomplete="off"
+                       placeholder="Search fashion item...">
+
+            </div>
+
+
+            <!-- ITEMS -->
+
+            <div id="fashionItemsGrid"
+                 class="fashion-items-grid">
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             3D STUDIO
+             ================================================= -->
+
+        <section class="fashion-stage-panel">
+
+            <div class="fashion-stage-toolbar">
+
+                <div class="fashion-stage-title">
+
+                    <span class="fashion-panel-kicker">
+                        DESIGN STUDIO
+                    </span>
+
+                    <strong>
+                        3D FEMALE FASHION AVATAR
+                    </strong>
+
+                </div>
+
+                <div class="fashion-stage-tools">
+
+                    <button type="button"
+                            id="fashionRotateLeft"
+                            class="fashion-round-button"
+                            aria-label="Rotate left">
+                        ↶
+                    </button>
+
+                    <button type="button"
+                            id="fashionRotateRight"
+                            class="fashion-round-button"
+                            aria-label="Rotate right">
+                        ↷
+                    </button>
+
+                    <button type="button"
+                            id="fashionResetView"
+                            class="fashion-round-button"
+                            aria-label="Reset camera">
+                        ⟳
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STAGE
+                 ================================================= -->
+
+            <div id="fashionStage"
+                 class="fashion-stage">
+
+                <div class="fashion-stage-background">
+
+                    <div class="fashion-stage-glow glow-one"></div>
+                    <div class="fashion-stage-glow glow-two"></div>
+
+                    <div class="fashion-stage-grid"></div>
+
+                    <div class="fashion-stage-ring ring-one"></div>
+                    <div class="fashion-stage-ring ring-two"></div>
+                    <div class="fashion-stage-ring ring-three"></div>
+
+                </div>
+
+
+                <!-- THREE -->
+
+                <div id="fashionThreeContainer"
+                     class="fashion-three-container">
+                </div>
+
+
+                <!-- LOADING -->
+
+                <div id="fashion3DLoading"
+                     class="fashion-3d-loading">
+
+                    <div class="fashion-loader-orbit">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <strong>
+                        Loading 3D Studio
+                    </strong>
+
+                    <small>
+                        Preparing fashion avatar...
+                    </small>
+
+                </div>
+
+
+                <!-- ERROR -->
+
+                <div id="fashion3DError"
+                     class="fashion-3d-error"
+                     hidden>
+
+                    <div class="fashion-error-icon">
+                        !
+                    </div>
+
+                    <strong>
+                        3D Studio unavailable
+                    </strong>
+
+                    <span id="fashion3DErrorText">
+                        Three.js gagal dimuat.
+                    </span>
+
+                    <button type="button"
+                            id="fashionRetry3D"
+                            class="fashion-button fashion-button-primary">
+                        Reload 3D
+                    </button>
+
+                </div>
+
+
+                <!-- FLOOR -->
+
+                <div class="fashion-floor">
+                    <div class="fashion-floor-circle"></div>
+                </div>
+
+
+                <!-- DRAG HINT -->
+
+                <div id="fashionRotationHint"
+                     class="fashion-rotation-hint">
+
+                    <span>↔</span>
+
+                    <span>
+                        DRAG TO ROTATE
+                    </span>
+
+                </div>
+
+
+                <!-- ZOOM -->
+
+                <div class="fashion-zoom-controls">
+
+                    <button type="button"
+                            id="fashionZoomOut"
+                            class="fashion-zoom-button">
+                        −
+                    </button>
+
+                    <div class="fashion-zoom-track">
+                        <div id="fashionZoomFill"
+                             class="fashion-zoom-fill">
+                        </div>
+                    </div>
+
+                    <button type="button"
+                            id="fashionZoomIn"
+                            class="fashion-zoom-button">
+                        +
+                    </button>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="fashion-camera-status">
+
+                    <span class="camera-status-dot"></span>
+
+                    <span>3D</span>
+
+                </div>
+
+
+                <!-- STYLE -->
+
+                <div class="fashion-current-style">
+
+                    <span>
+                        CURRENT STYLE
+                    </span>
+
+                    <strong id="fashionStyleName">
+                        Classic Atelier
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 COLOR BAR
+                 ================================================= -->
+
+            <div class="fashion-stage-bottom">
+
+                <div class="fashion-color-control">
+
+                    <span>COLOR</span>
+
+                    <div id="fashionColorOptions"
+                         class="fashion-color-options">
+
+                        <button type="button"
+                                class="fashion-color-option active"
+                                data-color="rose"
+                                style="--swatch:#d99aaa;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="black"
+                                style="--swatch:#29262d;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="white"
+                                style="--swatch:#f5f0e8;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="lavender"
+                                style="--swatch:#a999d6;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="blue"
+                                style="--swatch:#709bc9;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="mint"
+                                style="--swatch:#83c5ae;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="gold"
+                                style="--swatch:#cba65b;">
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button type="button"
+                        id="fashionDeselectButton"
+                        class="fashion-text-button">
+
+                    × Remove selected
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             OUTFIT
+             ================================================= -->
+
+        <aside class="fashion-sidebar fashion-outfit-panel">
+
+            <div class="fashion-panel-heading">
+
+                <div>
+
+                    <span class="fashion-panel-kicker">
+                        OUTFIT
+                    </span>
+
+                    <h2>
+                        My Design
+                    </h2>
+
+                </div>
+
+                <span id="fashionRarity"
+                      class="fashion-rarity rarity-common">
+                    COMMON
+                </span>
+
+            </div>
+
+
+            <!-- SCORE -->
+
+            <div class="fashion-score-card">
+
+                <div class="fashion-score-header">
+
+                    <span>
+                        STYLE SCORE
+                    </span>
+
+                    <strong id="fashionScore">
+                        0
+                    </strong>
+
+                </div>
+
+                <div class="fashion-score-bar">
+
+                    <div id="fashionScoreFill"
+                         class="fashion-score-fill">
+                    </div>
+
+                </div>
+
+                <div class="fashion-score-rank">
+
+                    <span>RANK</span>
+
+                    <strong id="fashionRank">
+                        C
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- EQUIPMENT -->
+
+            <div class="fashion-equipment-summary">
+
+                <span class="fashion-panel-kicker">
+                    EQUIPMENT
+                </span>
+
+                <div id="fashionEquipmentSummary"
+                     class="fashion-equipment-summary-grid">
+
+                    <div class="equipment-slot" data-slot="hair">
+                        <span>HAIR</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="top">
+                        <span>TOP</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="dress">
+                        <span>DRESS</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="jacket">
+                        <span>JACKET</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="bottom">
+                        <span>BOTTOM</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="shoes">
+                        <span>SHOES</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="hat">
+                        <span>HAT</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="glasses">
+                        <span>GLASSES</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="bag">
+                        <span>BAG</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="accessory">
+                        <span>ACCESSORY</span>
+                        <strong>—</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SELECTED -->
+
+            <div class="fashion-selected-title">
+
+                <span>
+                    SELECTED ITEMS
+                </span>
+
+                <span id="fashionSelectedCount">
+                    0
+                </span>
+
+            </div>
+
+            <div id="fashionSelectedItems"
+                 class="fashion-selected-items">
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="fashion-design-actions">
+
+                <button type="button"
+                        id="fashionSaveButton"
+                        class="fashion-button fashion-button-primary fashion-full-button">
+                    💾 SAVE OUTFIT
+                </button>
+
+                <button type="button"
+                        id="fashionSubmitButton"
+                        class="fashion-button fashion-button-gold fashion-full-button">
+                    ✦ SUBMIT DESIGN
+                </button>
+<button type="button" data-fashion-save-image>Save as PNG</button>
+                <button type="button"
+                        id="fashionClearButton"
+                        class="fashion-button fashion-button-danger fashion-full-button">
+                    ↺ CLEAR OUTFIT
+                </button>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- =====================================================
+         CHALLENGE
+         ===================================================== -->
+
+    <section id="fashionChallengePanel"
+             class="fashion-challenge-panel">
+
+        <div class="fashion-challenge-inner">
+
+            <div class="fashion-challenge-heading">
+
+                <div>
+
+                    <span class="fashion-panel-kicker">
+                        FASHION CHALLENGE
+                    </span>
+
+                    <h2 id="fashionChallengeTitle">
+                        Tokyo Evening
+                    </h2>
+
+                </div>
+
+                <div class="fashion-challenge-timer">
+                    ⏱
+                    <strong id="fashionChallengeTimer">
+                        90
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="fashion-challenge-content">
+
+                <div class="fashion-challenge-brief">
+
+                    <span>
+                        CREATE THIS STYLE
+                    </span>
+
+                    <p id="fashionChallengeDescription">
+                        Elegant evening look with a modern Japanese touch.
+                    </p>
+
+                </div>
+
+                <div id="fashionChallengeRequirements"
+                     class="fashion-challenge-requirements">
+                </div>
+
+                <div class="fashion-challenge-progress">
+
+                    <div>
+                        <span>MATCH</span>
+
+                        <strong id="fashionChallengeMatch">
+                            0%
+                        </strong>
+                    </div>
+
+                    <div class="fashion-challenge-progress-bar">
+
+                        <div id="fashionChallengeFill"></div>
+
+                    </div>
 
                 </div>
 
@@ -1359,49 +2162,273 @@
 
         </div>
 
-    </main>
+    </section>
+
+
+    <!-- =====================================================
+         SAVED OUTFITS
+         ===================================================== -->
+
+    <section class="fashion-saved-section">
+
+        <div class="fashion-saved-heading">
+
+            <div>
+
+                <span class="fashion-panel-kicker">
+                    COLLECTION
+                </span>
+
+                <h2>
+                    Saved Outfits
+                </h2>
+
+            </div>
+
+            <span id="fashionSavedCount">
+                0 / 6
+            </span>
+
+        </div>
+
+        <div id="fashionSavedOutfits"
+             class="fashion-saved-grid">
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         RESULT MODAL
+         ===================================================== -->
+
+    <div id="fashionResultModal"
+         class="fashion-modal"
+         aria-hidden="true">
+
+        <div class="fashion-modal-card">
+
+            <button type="button"
+                    id="fashionCloseResult"
+                    class="fashion-modal-close">
+                ×
+            </button>
+
+            <div class="fashion-result-icon">
+                ✦
+            </div>
+
+            <span class="fashion-panel-kicker">
+                DESIGN COMPLETE
+            </span>
+
+            <h2 id="fashionResultTitle">
+                Amazing Design!
+            </h2>
+
+            <div id="fashionResultRank"
+                 class="fashion-result-rank">
+                A
+            </div>
+
+            <p id="fashionResultDescription">
+                Your outfit has great balance and personality.
+            </p>
+
+            <div class="fashion-result-stats">
+
+                <div>
+                    <span>SCORE</span>
+                    <strong id="fashionResultScore">
+                        +0
+                    </strong>
+                </div>
+
+                <div>
+                    <span>MONEY</span>
+                    <strong id="fashionResultMoney">
+                        Rp 0
+                    </strong>
+                </div>
+
+                <div>
+                    <span>POINTS</span>
+                    <strong id="fashionResultPoints">
+                        +0
+                    </strong>
+                </div>
+
+            </div>
+
+            <button type="button"
+                    id="fashionContinueButton"
+                    class="fashion-button fashion-button-primary fashion-full-button">
+                CONTINUE
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SAVE MODAL
+         ===================================================== -->
+
+    <div id="fashionSaveModal"
+         class="fashion-modal"
+         aria-hidden="true">
+
+        <div class="fashion-modal-card fashion-save-card">
+
+            <button type="button"
+                    id="fashionCloseSave"
+                    class="fashion-modal-close">
+                ×
+            </button>
+
+            <div class="fashion-result-icon">
+                💾
+            </div>
+
+            <span class="fashion-panel-kicker">
+                SAVE DESIGN
+            </span>
+
+            <h2>
+                Save Your Outfit
+            </h2>
+
+            <input type="text"
+                   id="fashionOutfitNameInput"
+                   maxlength="30"
+                   autocomplete="off"
+                   placeholder="Outfit name...">
+
+            <button type="button"
+                    id="fashionConfirmSave"
+                    class="fashion-button fashion-button-primary fashion-full-button">
+                💾 SAVE OUTFIT
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOAST
+         ===================================================== -->
+
+    <div id="fashionToast"
+         class="fashion-toast">
+
+        <span id="fashionToastIcon">
+            ✦
+        </span>
+
+        <span id="fashionToastText">
+            Style updated
+        </span>
+
+    </div>
 
 </section>
 
 
-<div id="shodoCompletionPopup" class="completion-popup">
+<!-- =========================================================
+     THREE.JS IMPORT MAP
 
-    <div class="completion-card">
+     WAJIB ADA sebelum <script type="module"> yang mengimpor
+     "three" dan "three/addons/...". Tanpa ini browser akan
+     gagal resolve module specifier "three" dan 3D Studio
+     akan selalu menampilkan "3D Studio unavailable".
 
-        <div class="completion-icon">🖌️</div>
+     Kalau project ini SUDAH punya importmap global di base
+     layout (base.html / index.html), HAPUS blok ini supaya
+     tidak terjadi duplikat importmap (dokumen HTML hanya
+     boleh punya satu <script type="importmap">), dan pastikan
+     versi three di importmap global >= 0.142 (dibutuhkan
+     untuk THREE.CapsuleGeometry yang dipakai di
+     fashion-designer.js).
+     ========================================================= -->
 
-        <span class="completion-label" data-i18n="shodo.completion_label">WAKTU HABIS</span>
+<script>
+(function () {
+    "use strict";
 
-        <h2 data-i18n="shodo.completion_title">Tinta Mengalir Indah! 🖌️</h2>
+    var THREE_VERSION = "0.160.0";
 
-        <p id="shodoCompletionText"></p>
+    var existingImportMap =
+        document.querySelector('script[type="importmap"]');
 
-        <div class="completion-stats">
+    if (!existingImportMap) {
 
-            <div>
-                <span data-i18n="shodo.completion_score_label">+SCORE</span>
-                <strong id="shodoPopupScore">+0</strong>
-            </div>
+        var importMap = document.createElement("script");
+        importMap.type = "importmap";
+        importMap.textContent = JSON.stringify({
+            imports: {
+                "three":
+                    "https://cdn.jsdelivr.net/npm/three@" + THREE_VERSION + "/build/three.module.js",
+                "three/addons/":
+                    "https://cdn.jsdelivr.net/npm/three@" + THREE_VERSION + "/examples/jsm/"
+            }
+        });
+        document.head.appendChild(importMap);
 
-            <div>
-                <span data-i18n="shodo.completion_money_label">+MONEY</span>
-                <strong id="shodoPopupMoney">Rp 0</strong>
-            </div>
+    } else {
 
-        </div>
+        console.info(
+            "[Fashion Designer] Importmap global sudah ada, dipakai itu. " +
+            "Pastikan versi three >= 0.142 (butuh THREE.CapsuleGeometry)."
+        );
 
-        <button
-            type="button"
-            id="closeShodoCompletionButton"
-            class="booth-btn booth-btn-primary"
-            data-i18n="shodo.btn_continue">
+    }
 
-            LANJUTKAN
+    var moduleScript = document.createElement("script");
+    moduleScript.type = "module";
+    moduleScript.src = "{{ url_for('static', filename='js/fashion-designer.js') }}";
 
-        </button>
+    moduleScript.onerror = function () {
+        console.error("[Fashion Designer] Gagal memuat fashion-designer.js");
 
-    </div>
+        var loading = document.getElementById("fashion3DLoading");
+        var errorBox = document.getElementById("fashion3DError");
+        var errorText = document.getElementById("fashion3DErrorText");
+
+        if (loading) loading.style.display = "none";
+        if (errorBox) errorBox.hidden = false;
+        if (errorText) {
+            errorText.textContent =
+                "File fashion-designer.js gagal dimuat (cek path static / 404).";
+        }
+    };
+
+    document.currentScript.after(moduleScript);
+}());
+</script>
+
+
+<!-- =========================================================
+     THREE.JS
+
+     HANYA SATU THREE.JS (via importmap di atas).
+     OrbitControls di-import dari three/addons/ di dalam
+     fashion-designer.js.
+     ========================================================= -->
+
+<script type="module"
+        src="{{ url_for('static', filename='js/fashion-designer.js') }}">
+</script>
+<!-- =========================================================
+     GLOBAL GAMES ENGINE
+     =========================================================
+
+     Jika games.js memang dibutuhkan untuk sistem game umum,
+     letakkan setelah fashion-designer.js.
+
+     JANGAN memakai </script> tambahan.
+     ========================================================= -->
 
 <script src="{{ url_for('static', filename='js/games.js') }}"></script>
-
-{% endblock %}
+    {% endblock %}
