@@ -1436,9 +1436,10 @@
 
             <button type="button"
                     id="fashionRandomButton"
-                    class="fashion-button fashion-button-secondary">
+                    class="fashion-button fashion-button-secondary"
+                    aria-label="Random Style">
 
-                <span>✨</span>
+                <span aria-hidden="true">✨</span>
 
                 <span data-fashion-i18n="buttons.random">
                     RANDOM STYLE
@@ -1446,11 +1447,13 @@
 
             </button>
 
+
             <button type="button"
                     id="fashionChallengeButton"
-                    class="fashion-button fashion-button-primary">
+                    class="fashion-button fashion-button-primary"
+                    aria-label="Fashion Challenge">
 
-                <span>🎯</span>
+                <span aria-hidden="true">🎯</span>
 
                 <span data-fashion-i18n="buttons.challenge">
                     FASHION CHALLENGE
@@ -1467,27 +1470,32 @@
          STATS
          ===================================================== -->
 
-    <section class="fashion-stats">
+    <section class="fashion-stats"
+             aria-label="Fashion statistics">
 
         <div class="fashion-stat-card">
             <span>LEVEL</span>
             <strong id="fashionLevel">1</strong>
         </div>
 
+
         <div class="fashion-stat-card">
             <span>FASHION POINTS</span>
             <strong id="fashionPoints">0</strong>
         </div>
+
 
         <div class="fashion-stat-card">
             <span>MONEY</span>
             <strong id="fashionMoney">Rp 0</strong>
         </div>
 
+
         <div class="fashion-stat-card">
             <span>COMBO</span>
             <strong id="fashionCombo">x0</strong>
         </div>
+
 
         <div class="fashion-stat-card fashion-timer-card">
             <span>TIME</span>
@@ -1508,11 +1516,13 @@
              WARDROBE
              ================================================= -->
 
-        <aside class="fashion-sidebar fashion-wardrobe-panel">
+        <aside class="fashion-sidebar fashion-wardrobe-panel"
+               aria-label="Fashion wardrobe">
 
             <div class="fashion-panel-heading">
 
                 <div>
+
                     <span class="fashion-panel-kicker">
                         WARDROBE
                     </span>
@@ -1520,6 +1530,7 @@
                     <h2>
                         Fashion Items
                     </h2>
+
                 </div>
 
                 <span id="fashionWardrobeCount"
@@ -1530,109 +1541,174 @@
             </div>
 
 
-            <!-- CATEGORY -->
+            <!-- =================================================
+                 CATEGORY
+                 ================================================= -->
 
             <div id="fashionCategories"
-                 class="fashion-categories">
+                 class="fashion-categories"
+                 role="tablist"
+                 aria-label="Fashion categories">
 
                 <button type="button"
                         class="fashion-category-button active"
-                        data-fashion-category="all">
-                    <span>✦</span>
+                        data-fashion-category="all"
+                        role="tab"
+                        aria-selected="true">
+
+                    <span aria-hidden="true">✦</span>
                     ALL
+
                 </button>
+
 
                 <button type="button"
                         class="fashion-category-button"
-                        data-fashion-category="hair">
-                    <span>💇</span>
+                        data-fashion-category="hair"
+                        role="tab"
+                        aria-selected="false">
+
+                    <span aria-hidden="true">💇</span>
                     HAIR
+
                 </button>
+
 
                 <button type="button"
                         class="fashion-category-button"
-                        data-fashion-category="top">
-                    <span>👚</span>
+                        data-fashion-category="top"
+                        role="tab"
+                        aria-selected="false">
+
+                    <span aria-hidden="true">👚</span>
                     TOPS
+
                 </button>
+
 
                 <button type="button"
                         class="fashion-category-button"
-                        data-fashion-category="dress">
-                    <span>👗</span>
+                        data-fashion-category="dress"
+                        role="tab"
+                        aria-selected="false">
+
+                    <span aria-hidden="true">👗</span>
                     DRESSES
+
                 </button>
+
 
                 <button type="button"
                         class="fashion-category-button"
-                        data-fashion-category="jacket">
-                    <span>🧥</span>
+                        data-fashion-category="jacket"
+                        role="tab"
+                        aria-selected="false">
+
+                    <span aria-hidden="true">🧥</span>
                     JACKETS
+
                 </button>
+
 
                 <button type="button"
                         class="fashion-category-button"
-                        data-fashion-category="bottom">
-                    <span>👖</span>
+                        data-fashion-category="bottom"
+                        role="tab"
+                        aria-selected="false">
+
+                    <span aria-hidden="true">👖</span>
                     BOTTOMS
+
                 </button>
+
 
                 <button type="button"
                         class="fashion-category-button"
-                        data-fashion-category="shoes">
-                    <span>👠</span>
+                        data-fashion-category="shoes"
+                        role="tab"
+                        aria-selected="false">
+
+                    <span aria-hidden="true">👠</span>
                     SHOES
+
                 </button>
+
 
                 <button type="button"
                         class="fashion-category-button"
-                        data-fashion-category="hat">
-                    <span>🎩</span>
+                        data-fashion-category="hat"
+                        role="tab"
+                        aria-selected="false">
+
+                    <span aria-hidden="true">🎩</span>
                     HATS
+
                 </button>
+
 
                 <button type="button"
                         class="fashion-category-button"
-                        data-fashion-category="glasses">
-                    <span>🕶</span>
+                        data-fashion-category="glasses"
+                        role="tab"
+                        aria-selected="false">
+
+                    <span aria-hidden="true">🕶</span>
                     GLASSES
+
                 </button>
+
 
                 <button type="button"
                         class="fashion-category-button"
-                        data-fashion-category="bag">
-                    <span>👜</span>
+                        data-fashion-category="bag"
+                        role="tab"
+                        aria-selected="false">
+
+                    <span aria-hidden="true">👜</span>
                     BAGS
+
                 </button>
+
 
                 <button type="button"
                         class="fashion-category-button"
-                        data-fashion-category="accessory">
-                    <span>💎</span>
+                        data-fashion-category="accessory"
+                        role="tab"
+                        aria-selected="false">
+
+                    <span aria-hidden="true">💎</span>
                     ACCESSORIES
+
                 </button>
 
             </div>
 
 
-            <!-- SEARCH -->
+            <!-- =================================================
+                 SEARCH
+                 ================================================= -->
 
             <div class="fashion-search">
 
-                <span>⌕</span>
+                <span aria-hidden="true">⌕</span>
 
-                <input type="text"
+                <input type="search"
                        id="fashionSearchInput"
                        autocomplete="off"
-                       placeholder="Search fashion item...">
+                       spellcheck="false"
+                       placeholder="Search fashion item..."
+                       aria-label="Search fashion item">
 
             </div>
 
 
-            <!-- ITEMS -->
+            <!-- =================================================
+                 ITEMS
+                 ================================================= -->
 
             <div id="fashionItemsGrid"
-                 class="fashion-items-grid">
+                 class="fashion-items-grid"
+                 aria-live="polite">
             </div>
 
         </aside>
@@ -1642,7 +1718,13 @@
              3D STUDIO
              ================================================= -->
 
-        <section class="fashion-stage-panel">
+        <section class="fashion-stage-panel"
+                 aria-label="3D Fashion Studio">
+
+
+            <!-- =================================================
+                 STAGE TOOLBAR
+                 ================================================= -->
 
             <div class="fashion-stage-toolbar">
 
@@ -1658,26 +1740,32 @@
 
                 </div>
 
+
                 <div class="fashion-stage-tools">
 
                     <button type="button"
                             id="fashionRotateLeft"
                             class="fashion-round-button"
-                            aria-label="Rotate left">
+                            aria-label="Rotate left"
+                            title="Rotate left">
                         ↶
                     </button>
+
 
                     <button type="button"
                             id="fashionRotateRight"
                             class="fashion-round-button"
-                            aria-label="Rotate right">
+                            aria-label="Rotate right"
+                            title="Rotate right">
                         ↷
                     </button>
+
 
                     <button type="button"
                             id="fashionResetView"
                             class="fashion-round-button"
-                            aria-label="Reset camera">
+                            aria-label="Reset camera"
+                            title="Reset camera">
                         ⟳
                     </button>
 
@@ -1687,42 +1775,59 @@
 
 
             <!-- =================================================
-                 STAGE
+                 3D STAGE
                  ================================================= -->
 
             <div id="fashionStage"
                  class="fashion-stage">
 
-                <div class="fashion-stage-background">
+
+                <!-- =================================================
+                     BACKGROUND
+                     ================================================= -->
+
+                <div class="fashion-stage-background"
+                     aria-hidden="true">
 
                     <div class="fashion-stage-glow glow-one"></div>
+
                     <div class="fashion-stage-glow glow-two"></div>
 
                     <div class="fashion-stage-grid"></div>
 
                     <div class="fashion-stage-ring ring-one"></div>
+
                     <div class="fashion-stage-ring ring-two"></div>
+
                     <div class="fashion-stage-ring ring-three"></div>
 
                 </div>
 
 
-                <!-- THREE -->
+                <!-- =================================================
+                     THREE.JS CONTAINER
+                     ================================================= -->
 
                 <div id="fashionThreeContainer"
-                     class="fashion-three-container">
+                     class="fashion-three-container"
+                     aria-label="3D fashion avatar">
                 </div>
 
 
-                <!-- LOADING -->
+                <!-- =================================================
+                     3D LOADING
+                     ================================================= -->
 
                 <div id="fashion3DLoading"
                      class="fashion-3d-loading">
 
-                    <div class="fashion-loader-orbit">
+                    <div class="fashion-loader-orbit"
+                         aria-hidden="true">
+
                         <span></span>
                         <span></span>
                         <span></span>
+
                     </div>
 
                     <strong>
@@ -1736,13 +1841,16 @@
                 </div>
 
 
-                <!-- ERROR -->
+                <!-- =================================================
+                     3D ERROR
+                     ================================================= -->
 
                 <div id="fashion3DError"
                      class="fashion-3d-error"
                      hidden>
 
-                    <div class="fashion-error-icon">
+                    <div class="fashion-error-icon"
+                         aria-hidden="true">
                         !
                     </div>
 
@@ -1763,19 +1871,28 @@
                 </div>
 
 
-                <!-- FLOOR -->
+                <!-- =================================================
+                     FLOOR
+                     ================================================= -->
 
-                <div class="fashion-floor">
+                <div class="fashion-floor"
+                     aria-hidden="true">
+
                     <div class="fashion-floor-circle"></div>
+
                 </div>
 
 
-                <!-- DRAG HINT -->
+                <!-- =================================================
+                     ROTATION HINT
+                     ================================================= -->
 
                 <div id="fashionRotationHint"
                      class="fashion-rotation-hint">
 
-                    <span>↔</span>
+                    <span aria-hidden="true">
+                        ↔
+                    </span>
 
                     <span>
                         DRAG TO ROTATE
@@ -1784,43 +1901,62 @@
                 </div>
 
 
-                <!-- ZOOM -->
+                <!-- =================================================
+                     ZOOM
+                     ================================================= -->
 
                 <div class="fashion-zoom-controls">
 
                     <button type="button"
                             id="fashionZoomOut"
-                            class="fashion-zoom-button">
+                            class="fashion-zoom-button"
+                            aria-label="Zoom out"
+                            title="Zoom out">
                         −
                     </button>
 
-                    <div class="fashion-zoom-track">
+
+                    <div class="fashion-zoom-track"
+                         aria-hidden="true">
+
                         <div id="fashionZoomFill"
                              class="fashion-zoom-fill">
                         </div>
+
                     </div>
+
 
                     <button type="button"
                             id="fashionZoomIn"
-                            class="fashion-zoom-button">
+                            class="fashion-zoom-button"
+                            aria-label="Zoom in"
+                            title="Zoom in">
                         +
                     </button>
 
                 </div>
 
 
-                <!-- STATUS -->
+                <!-- =================================================
+                     CAMERA STATUS
+                     ================================================= -->
 
                 <div class="fashion-camera-status">
 
-                    <span class="camera-status-dot"></span>
+                    <span class="camera-status-dot"
+                          aria-hidden="true">
+                    </span>
 
-                    <span>3D</span>
+                    <span>
+                        3D
+                    </span>
 
                 </div>
 
 
-                <!-- STYLE -->
+                <!-- =================================================
+                     CURRENT STYLE
+                     ================================================= -->
 
                 <div class="fashion-current-style">
 
@@ -1838,58 +1974,91 @@
 
 
             <!-- =================================================
-                 COLOR BAR
+                 COLOR CONTROL
                  ================================================= -->
 
             <div class="fashion-stage-bottom">
 
                 <div class="fashion-color-control">
 
-                    <span>COLOR</span>
+                    <span>
+                        COLOR
+                    </span>
+
 
                     <div id="fashionColorOptions"
-                         class="fashion-color-options">
+                         class="fashion-color-options"
+                         role="radiogroup"
+                         aria-label="Fashion color">
+
 
                         <button type="button"
                                 class="fashion-color-option active"
                                 data-color="rose"
-                                style="--swatch:#d99aaa;">
+                                style="--swatch:#d99aaa;"
+                                aria-label="Rose"
+                                aria-checked="true"
+                                role="radio">
                         </button>
+
 
                         <button type="button"
                                 class="fashion-color-option"
                                 data-color="black"
-                                style="--swatch:#29262d;">
+                                style="--swatch:#29262d;"
+                                aria-label="Black"
+                                aria-checked="false"
+                                role="radio">
                         </button>
+
 
                         <button type="button"
                                 class="fashion-color-option"
                                 data-color="white"
-                                style="--swatch:#f5f0e8;">
+                                style="--swatch:#f5f0e8;"
+                                aria-label="White"
+                                aria-checked="false"
+                                role="radio">
                         </button>
+
 
                         <button type="button"
                                 class="fashion-color-option"
                                 data-color="lavender"
-                                style="--swatch:#a999d6;">
+                                style="--swatch:#a999d6;"
+                                aria-label="Lavender"
+                                aria-checked="false"
+                                role="radio">
                         </button>
+
 
                         <button type="button"
                                 class="fashion-color-option"
                                 data-color="blue"
-                                style="--swatch:#709bc9;">
+                                style="--swatch:#709bc9;"
+                                aria-label="Blue"
+                                aria-checked="false"
+                                role="radio">
                         </button>
+
 
                         <button type="button"
                                 class="fashion-color-option"
                                 data-color="mint"
-                                style="--swatch:#83c5ae;">
+                                style="--swatch:#83c5ae;"
+                                aria-label="Mint"
+                                aria-checked="false"
+                                role="radio">
                         </button>
+
 
                         <button type="button"
                                 class="fashion-color-option"
                                 data-color="gold"
-                                style="--swatch:#cba65b;">
+                                style="--swatch:#cba65b;"
+                                aria-label="Gold"
+                                aria-checked="false"
+                                role="radio">
                         </button>
 
                     </div>
@@ -1911,10 +2080,16 @@
 
 
         <!-- =================================================
-             OUTFIT
+             OUTFIT PANEL
              ================================================= -->
 
-        <aside class="fashion-sidebar fashion-outfit-panel">
+        <aside class="fashion-sidebar fashion-outfit-panel"
+               aria-label="My outfit">
+
+
+            <!-- =================================================
+                 OUTFIT HEADER
+                 ================================================= -->
 
             <div class="fashion-panel-heading">
 
@@ -1930,6 +2105,7 @@
 
                 </div>
 
+
                 <span id="fashionRarity"
                       class="fashion-rarity rarity-common">
                     COMMON
@@ -1938,7 +2114,9 @@
             </div>
 
 
-            <!-- SCORE -->
+            <!-- =================================================
+                 SCORE
+                 ================================================= -->
 
             <div class="fashion-score-card">
 
@@ -1954,7 +2132,9 @@
 
                 </div>
 
-                <div class="fashion-score-bar">
+
+                <div class="fashion-score-bar"
+                     aria-hidden="true">
 
                     <div id="fashionScoreFill"
                          class="fashion-score-fill">
@@ -1962,9 +2142,12 @@
 
                 </div>
 
+
                 <div class="fashion-score-rank">
 
-                    <span>RANK</span>
+                    <span>
+                        RANK
+                    </span>
 
                     <strong id="fashionRank">
                         C
@@ -1975,7 +2158,9 @@
             </div>
 
 
-            <!-- EQUIPMENT -->
+            <!-- =================================================
+                 EQUIPMENT
+                 ================================================= -->
 
             <div class="fashion-equipment-summary">
 
@@ -1983,57 +2168,148 @@
                     EQUIPMENT
                 </span>
 
+
                 <div id="fashionEquipmentSummary"
                      class="fashion-equipment-summary-grid">
 
-                    <div class="equipment-slot" data-slot="hair">
-                        <span>HAIR</span>
-                        <strong>—</strong>
+
+                    <div class="equipment-slot"
+                         data-slot="hair">
+
+                        <span>
+                            HAIR
+                        </span>
+
+                        <strong>
+                            —
+                        </strong>
+
                     </div>
 
-                    <div class="equipment-slot" data-slot="top">
-                        <span>TOP</span>
-                        <strong>—</strong>
+
+                    <div class="equipment-slot"
+                         data-slot="top">
+
+                        <span>
+                            TOP
+                        </span>
+
+                        <strong>
+                            —
+                        </strong>
+
                     </div>
 
-                    <div class="equipment-slot" data-slot="dress">
-                        <span>DRESS</span>
-                        <strong>—</strong>
+
+                    <div class="equipment-slot"
+                         data-slot="dress">
+
+                        <span>
+                            DRESS
+                        </span>
+
+                        <strong>
+                            —
+                        </strong>
+
                     </div>
 
-                    <div class="equipment-slot" data-slot="jacket">
-                        <span>JACKET</span>
-                        <strong>—</strong>
+
+                    <div class="equipment-slot"
+                         data-slot="jacket">
+
+                        <span>
+                            JACKET
+                        </span>
+
+                        <strong>
+                            —
+                        </strong>
+
                     </div>
 
-                    <div class="equipment-slot" data-slot="bottom">
-                        <span>BOTTOM</span>
-                        <strong>—</strong>
+
+                    <div class="equipment-slot"
+                         data-slot="bottom">
+
+                        <span>
+                            BOTTOM
+                        </span>
+
+                        <strong>
+                            —
+                        </strong>
+
                     </div>
 
-                    <div class="equipment-slot" data-slot="shoes">
-                        <span>SHOES</span>
-                        <strong>—</strong>
+
+                    <div class="equipment-slot"
+                         data-slot="shoes">
+
+                        <span>
+                            SHOES
+                        </span>
+
+                        <strong>
+                            —
+                        </strong>
+
                     </div>
 
-                    <div class="equipment-slot" data-slot="hat">
-                        <span>HAT</span>
-                        <strong>—</strong>
+
+                    <div class="equipment-slot"
+                         data-slot="hat">
+
+                        <span>
+                            HAT
+                        </span>
+
+                        <strong>
+                            —
+                        </strong>
+
                     </div>
 
-                    <div class="equipment-slot" data-slot="glasses">
-                        <span>GLASSES</span>
-                        <strong>—</strong>
+
+                    <div class="equipment-slot"
+                         data-slot="glasses">
+
+                        <span>
+                            GLASSES
+                        </span>
+
+                        <strong>
+                            —
+                        </strong>
+
                     </div>
 
-                    <div class="equipment-slot" data-slot="bag">
-                        <span>BAG</span>
-                        <strong>—</strong>
+
+                    <div class="equipment-slot"
+                         data-slot="bag">
+
+                        <span>
+                            BAG
+                        </span>
+
+                        <strong>
+                            —
+                        </strong>
+
                     </div>
 
-                    <div class="equipment-slot" data-slot="accessory">
-                        <span>ACCESSORY</span>
-                        <strong>—</strong>
+
+                    <div class="equipment-slot"
+                         data-slot="accessory">
+
+                        <span>
+                            ACCESSORY
+                        </span>
+
+                        <strong>
+                            —
+                        </strong>
+
                     </div>
 
                 </div>
@@ -2041,7 +2317,9 @@
             </div>
 
 
-            <!-- SELECTED -->
+            <!-- =================================================
+                 SELECTED ITEMS
+                 ================================================= -->
 
             <div class="fashion-selected-title">
 
@@ -2055,31 +2333,54 @@
 
             </div>
 
+
             <div id="fashionSelectedItems"
-                 class="fashion-selected-items">
+                 class="fashion-selected-items"
+                 aria-live="polite">
             </div>
 
 
-            <!-- ACTIONS -->
+            <!-- =================================================
+                 ACTIONS
+                 ================================================= -->
 
             <div class="fashion-design-actions">
+
 
                 <button type="button"
                         id="fashionSaveButton"
                         class="fashion-button fashion-button-primary fashion-full-button">
+
                     💾 SAVE OUTFIT
+
                 </button>
+
 
                 <button type="button"
                         id="fashionSubmitButton"
                         class="fashion-button fashion-button-gold fashion-full-button">
+
                     ✦ SUBMIT DESIGN
+
                 </button>
-<button type="button" data-fashion-save-image>Save as PNG</button>
+
+
+                <button type="button"
+                        id="fashionSaveImageButton"
+                        data-fashion-save-image
+                        class="fashion-button fashion-button-secondary fashion-full-button">
+
+                    🖼 SAVE AS PNG
+
+                </button>
+
+
                 <button type="button"
                         id="fashionClearButton"
                         class="fashion-button fashion-button-danger fashion-full-button">
+
                     ↺ CLEAR OUTFIT
+
                 </button>
 
             </div>
@@ -2090,13 +2391,18 @@
 
 
     <!-- =====================================================
-         CHALLENGE
+         CHALLENGE PANEL
+         
+         PHASE 3 LOGIC BELUM DIAKTIFKAN.
+         MARKUP DISIAPKAN UNTUK INTEGRASI BERIKUTNYA.
          ===================================================== -->
 
     <section id="fashionChallengePanel"
-             class="fashion-challenge-panel">
+             class="fashion-challenge-panel"
+             hidden>
 
         <div class="fashion-challenge-inner">
+
 
             <div class="fashion-challenge-heading">
 
@@ -2112,17 +2418,24 @@
 
                 </div>
 
+
                 <div class="fashion-challenge-timer">
-                    ⏱
+
+                    <span aria-hidden="true">
+                        ⏱
+                    </span>
+
                     <strong id="fashionChallengeTimer">
                         90
                     </strong>
+
                 </div>
 
             </div>
 
 
             <div class="fashion-challenge-content">
+
 
                 <div class="fashion-challenge-brief">
 
@@ -2136,23 +2449,31 @@
 
                 </div>
 
+
                 <div id="fashionChallengeRequirements"
                      class="fashion-challenge-requirements">
                 </div>
 
+
                 <div class="fashion-challenge-progress">
 
                     <div>
-                        <span>MATCH</span>
+
+                        <span>
+                            MATCH
+                        </span>
 
                         <strong id="fashionChallengeMatch">
                             0%
                         </strong>
+
                     </div>
+
 
                     <div class="fashion-challenge-progress-bar">
 
-                        <div id="fashionChallengeFill"></div>
+                        <div id="fashionChallengeFill">
+                        </div>
 
                     </div>
 
@@ -2171,6 +2492,7 @@
 
     <section class="fashion-saved-section">
 
+
         <div class="fashion-saved-heading">
 
             <div>
@@ -2185,14 +2507,17 @@
 
             </div>
 
+
             <span id="fashionSavedCount">
                 0 / 6
             </span>
 
         </div>
 
+
         <div id="fashionSavedOutfits"
-             class="fashion-saved-grid">
+             class="fashion-saved-grid"
+             aria-live="polite">
         </div>
 
     </section>
@@ -2204,66 +2529,100 @@
 
     <div id="fashionResultModal"
          class="fashion-modal"
-         aria-hidden="true">
+         aria-hidden="true"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="fashionResultTitle">
+
 
         <div class="fashion-modal-card">
 
+
             <button type="button"
                     id="fashionCloseResult"
-                    class="fashion-modal-close">
+                    class="fashion-modal-close"
+                    aria-label="Close result">
                 ×
             </button>
 
-            <div class="fashion-result-icon">
+
+            <div class="fashion-result-icon"
+                 aria-hidden="true">
                 ✦
             </div>
+
 
             <span class="fashion-panel-kicker">
                 DESIGN COMPLETE
             </span>
 
+
             <h2 id="fashionResultTitle">
                 Amazing Design!
             </h2>
+
 
             <div id="fashionResultRank"
                  class="fashion-result-rank">
                 A
             </div>
 
+
             <p id="fashionResultDescription">
                 Your outfit has great balance and personality.
             </p>
 
+
             <div class="fashion-result-stats">
 
+
                 <div>
-                    <span>SCORE</span>
+
+                    <span>
+                        SCORE
+                    </span>
+
                     <strong id="fashionResultScore">
                         +0
                     </strong>
+
                 </div>
 
+
                 <div>
-                    <span>MONEY</span>
+
+                    <span>
+                        MONEY
+                    </span>
+
                     <strong id="fashionResultMoney">
                         Rp 0
                     </strong>
+
                 </div>
 
+
                 <div>
-                    <span>POINTS</span>
+
+                    <span>
+                        POINTS
+                    </span>
+
                     <strong id="fashionResultPoints">
                         +0
                     </strong>
+
                 </div>
 
             </div>
 
+
             <button type="button"
                     id="fashionContinueButton"
                     class="fashion-button fashion-button-primary fashion-full-button">
+
                 CONTINUE
+
             </button>
 
         </div>
@@ -2277,38 +2636,54 @@
 
     <div id="fashionSaveModal"
          class="fashion-modal"
-         aria-hidden="true">
+         aria-hidden="true"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="fashionSaveTitle">
+
 
         <div class="fashion-modal-card fashion-save-card">
 
+
             <button type="button"
                     id="fashionCloseSave"
-                    class="fashion-modal-close">
+                    class="fashion-modal-close"
+                    aria-label="Close save dialog">
                 ×
             </button>
 
-            <div class="fashion-result-icon">
+
+            <div class="fashion-result-icon"
+                 aria-hidden="true">
                 💾
             </div>
+
 
             <span class="fashion-panel-kicker">
                 SAVE DESIGN
             </span>
 
-            <h2>
+
+            <h2 id="fashionSaveTitle">
                 Save Your Outfit
             </h2>
+
 
             <input type="text"
                    id="fashionOutfitNameInput"
                    maxlength="30"
                    autocomplete="off"
-                   placeholder="Outfit name...">
+                   spellcheck="false"
+                   placeholder="Outfit name..."
+                   aria-label="Outfit name">
+
 
             <button type="button"
                     id="fashionConfirmSave"
                     class="fashion-button fashion-button-primary fashion-full-button">
+
                 💾 SAVE OUTFIT
+
             </button>
 
         </div>
@@ -2321,105 +2696,108 @@
          ===================================================== -->
 
     <div id="fashionToast"
-         class="fashion-toast">
+         class="fashion-toast"
+         role="status"
+         aria-live="polite"
+         aria-atomic="true">
 
-        <span id="fashionToastIcon">
+
+        <span id="fashionToastIcon"
+              aria-hidden="true">
             ✦
         </span>
+
 
         <span id="fashionToastText">
             Style updated
         </span>
 
     </div>
+<!-- =====================================================
+     CHALLENGE START MODAL
+     ===================================================== -->
 
+<div id="fashionChallengeModal"
+     class="fashion-modal"
+     aria-hidden="true">
+
+    <div class="fashion-modal-card fashion-challenge-start-card">
+
+        <div class="fashion-result-icon">
+            🎯
+        </div>
+
+        <span class="fashion-panel-kicker">
+            FASHION CHALLENGE
+        </span>
+
+        <h2 id="challengeModalTitle">
+            Ready To Compete?
+        </h2>
+
+        <p id="challengeModalDescription">
+            Complete the fashion challenge before time runs out.
+            Match all required outfit categories and earn bonus points.
+        </p>
+
+        <div id="challengePreview"
+             class="challenge-preview">
+        </div>
+
+        <div class="challenge-modal-actions">
+
+            <button type="button"
+                    id="challengeCancelButton"
+                    class="fashion-button fashion-button-secondary">
+
+                Cancel
+
+            </button>
+
+            <button type="button"
+                    id="challengeStartButton"
+                    class="fashion-button fashion-button-primary">
+
+                🚀 Start Challenge
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 </section>
 
 
 <!-- =========================================================
      THREE.JS IMPORT MAP
-
-     WAJIB ADA sebelum <script type="module"> yang mengimpor
-     "three" dan "three/addons/...". Tanpa ini browser akan
-     gagal resolve module specifier "three" dan 3D Studio
-     akan selalu menampilkan "3D Studio unavailable".
-
-     Kalau project ini SUDAH punya importmap global di base
-     layout (base.html / index.html), HAPUS blok ini supaya
-     tidak terjadi duplikat importmap (dokumen HTML hanya
-     boleh punya satu <script type="importmap">), dan pastikan
-     versi three di importmap global >= 0.142 (dibutuhkan
-     untuk THREE.CapsuleGeometry yang dipakai di
-     fashion-designer.js).
+     
+     IMPORTANT:
+     - Harus berada sebelum script type="module".
+     - Jangan membuat importmap kedua dari JavaScript.
+     - Jika base.html SUDAH memiliki importmap Three.js,
+       bagian ini harus dihapus dari halaman ini.
      ========================================================= -->
 
-<script>
-(function () {
-    "use strict";
-
-    var THREE_VERSION = "0.160.0";
-
-    var existingImportMap =
-        document.querySelector('script[type="importmap"]');
-
-    if (!existingImportMap) {
-
-        var importMap = document.createElement("script");
-        importMap.type = "importmap";
-        importMap.textContent = JSON.stringify({
-            imports: {
-                "three":
-                    "https://cdn.jsdelivr.net/npm/three@" + THREE_VERSION + "/build/three.module.js",
-                "three/addons/":
-                    "https://cdn.jsdelivr.net/npm/three@" + THREE_VERSION + "/examples/jsm/"
-            }
-        });
-        document.head.appendChild(importMap);
-
-    } else {
-
-        console.info(
-            "[Fashion Designer] Importmap global sudah ada, dipakai itu. " +
-            "Pastikan versi three >= 0.142 (butuh THREE.CapsuleGeometry)."
-        );
-
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
     }
-
-    var moduleScript = document.createElement("script");
-    moduleScript.type = "module";
-    moduleScript.src = "{{ url_for('static', filename='js/fashion-designer.js') }}";
-
-    moduleScript.onerror = function () {
-        console.error("[Fashion Designer] Gagal memuat fashion-designer.js");
-
-        var loading = document.getElementById("fashion3DLoading");
-        var errorBox = document.getElementById("fashion3DError");
-        var errorText = document.getElementById("fashion3DErrorText");
-
-        if (loading) loading.style.display = "none";
-        if (errorBox) errorBox.hidden = false;
-        if (errorText) {
-            errorText.textContent =
-                "File fashion-designer.js gagal dimuat (cek path static / 404).";
-        }
-    };
-
-    document.currentScript.after(moduleScript);
-}());
+}
 </script>
 
 
 <!-- =========================================================
-     THREE.JS
-
-     HANYA SATU THREE.JS (via importmap di atas).
-     OrbitControls di-import dari three/addons/ di dalam
-     fashion-designer.js.
+     FASHION DESIGNER JAVASCRIPT
      ========================================================= -->
 
 <script type="module"
         src="{{ url_for('static', filename='js/fashion-designer.js') }}">
 </script>
+
 <!-- =========================================================
      GLOBAL GAMES ENGINE
      =========================================================

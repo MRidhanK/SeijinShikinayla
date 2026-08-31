@@ -1,0 +1,1012 @@
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/fashion-designer.css') }}">
+
+<section id="fashionDesignerGame"
+         class="fashion-designer-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="fashion-header">
+
+        <div class="fashion-header-copy">
+
+            <span class="fashion-eyebrow"
+                  data-fashion-i18n="header.eyebrow">
+                NAYLA ATELIER · 3D FASHION STUDIO
+            </span>
+
+            <h1 data-fashion-i18n="header.title">
+                ✦ Nayla Fashion Designer
+            </h1>
+
+            <p data-fashion-i18n="header.description">
+                Rancang outfit, putar character 360°, padukan fashion item,
+                dan ciptakan style terbaikmu.
+            </p>
+
+        </div>
+
+        <div class="fashion-header-actions">
+
+            <button type="button"
+                    id="fashionRandomButton"
+                    class="fashion-button fashion-button-secondary">
+
+                <span>✨</span>
+
+                <span data-fashion-i18n="buttons.random">
+                    RANDOM STYLE
+                </span>
+
+            </button>
+
+            <button type="button"
+                    id="fashionChallengeButton"
+                    class="fashion-button fashion-button-primary">
+
+                <span>🎯</span>
+
+                <span data-fashion-i18n="buttons.challenge">
+                    FASHION CHALLENGE
+                </span>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         STATS
+         ===================================================== -->
+
+    <section class="fashion-stats">
+
+        <div class="fashion-stat-card">
+            <span>LEVEL</span>
+            <strong id="fashionLevel">1</strong>
+        </div>
+
+        <div class="fashion-stat-card">
+            <span>FASHION POINTS</span>
+            <strong id="fashionPoints">0</strong>
+        </div>
+
+        <div class="fashion-stat-card">
+            <span>MONEY</span>
+            <strong id="fashionMoney">Rp 0</strong>
+        </div>
+
+        <div class="fashion-stat-card">
+            <span>COMBO</span>
+            <strong id="fashionCombo">x0</strong>
+        </div>
+
+        <div class="fashion-stat-card fashion-timer-card">
+            <span>TIME</span>
+            <strong id="fashionTimer">90</strong>
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         WORKSPACE
+         ===================================================== -->
+
+    <main class="fashion-workspace">
+
+
+        <!-- =================================================
+             WARDROBE
+             ================================================= -->
+
+        <aside class="fashion-sidebar fashion-wardrobe-panel">
+
+            <div class="fashion-panel-heading">
+
+                <div>
+                    <span class="fashion-panel-kicker">
+                        WARDROBE
+                    </span>
+
+                    <h2>
+                        Fashion Items
+                    </h2>
+                </div>
+
+                <span id="fashionWardrobeCount"
+                      class="fashion-item-count">
+                    0 / 0
+                </span>
+
+            </div>
+
+
+            <!-- CATEGORY -->
+
+            <div id="fashionCategories"
+                 class="fashion-categories">
+
+                <button type="button"
+                        class="fashion-category-button active"
+                        data-fashion-category="all">
+                    <span>✦</span>
+                    ALL
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="hair">
+                    <span>💇</span>
+                    HAIR
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="top">
+                    <span>👚</span>
+                    TOPS
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="dress">
+                    <span>👗</span>
+                    DRESSES
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="jacket">
+                    <span>🧥</span>
+                    JACKETS
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="bottom">
+                    <span>👖</span>
+                    BOTTOMS
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="shoes">
+                    <span>👠</span>
+                    SHOES
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="hat">
+                    <span>🎩</span>
+                    HATS
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="glasses">
+                    <span>🕶</span>
+                    GLASSES
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="bag">
+                    <span>👜</span>
+                    BAGS
+                </button>
+
+                <button type="button"
+                        class="fashion-category-button"
+                        data-fashion-category="accessory">
+                    <span>💎</span>
+                    ACCESSORIES
+                </button>
+
+            </div>
+
+
+            <!-- SEARCH -->
+
+            <div class="fashion-search">
+
+                <span>⌕</span>
+
+                <input type="text"
+                       id="fashionSearchInput"
+                       autocomplete="off"
+                       placeholder="Search fashion item...">
+
+            </div>
+
+
+            <!-- ITEMS -->
+
+            <div id="fashionItemsGrid"
+                 class="fashion-items-grid">
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             3D STUDIO
+             ================================================= -->
+
+        <section class="fashion-stage-panel">
+
+            <div class="fashion-stage-toolbar">
+
+                <div class="fashion-stage-title">
+
+                    <span class="fashion-panel-kicker">
+                        DESIGN STUDIO
+                    </span>
+
+                    <strong>
+                        3D FEMALE FASHION AVATAR
+                    </strong>
+
+                </div>
+
+                <div class="fashion-stage-tools">
+
+                    <button type="button"
+                            id="fashionRotateLeft"
+                            class="fashion-round-button"
+                            aria-label="Rotate left">
+                        ↶
+                    </button>
+
+                    <button type="button"
+                            id="fashionRotateRight"
+                            class="fashion-round-button"
+                            aria-label="Rotate right">
+                        ↷
+                    </button>
+
+                    <button type="button"
+                            id="fashionResetView"
+                            class="fashion-round-button"
+                            aria-label="Reset camera">
+                        ⟳
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STAGE
+                 ================================================= -->
+
+            <div id="fashionStage"
+                 class="fashion-stage">
+
+                <div class="fashion-stage-background">
+
+                    <div class="fashion-stage-glow glow-one"></div>
+                    <div class="fashion-stage-glow glow-two"></div>
+
+                    <div class="fashion-stage-grid"></div>
+
+                    <div class="fashion-stage-ring ring-one"></div>
+                    <div class="fashion-stage-ring ring-two"></div>
+                    <div class="fashion-stage-ring ring-three"></div>
+
+                </div>
+
+
+                <!-- THREE -->
+
+                <div id="fashionThreeContainer"
+                     class="fashion-three-container">
+                </div>
+
+
+                <!-- LOADING -->
+
+                <div id="fashion3DLoading"
+                     class="fashion-3d-loading">
+
+                    <div class="fashion-loader-orbit">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <strong>
+                        Loading 3D Studio
+                    </strong>
+
+                    <small>
+                        Preparing fashion avatar...
+                    </small>
+
+                </div>
+
+
+                <!-- ERROR -->
+
+                <div id="fashion3DError"
+                     class="fashion-3d-error"
+                     hidden>
+
+                    <div class="fashion-error-icon">
+                        !
+                    </div>
+
+                    <strong>
+                        3D Studio unavailable
+                    </strong>
+
+                    <span id="fashion3DErrorText">
+                        Three.js gagal dimuat.
+                    </span>
+
+                    <button type="button"
+                            id="fashionRetry3D"
+                            class="fashion-button fashion-button-primary">
+                        Reload 3D
+                    </button>
+
+                </div>
+
+
+                <!-- FLOOR -->
+
+                <div class="fashion-floor">
+                    <div class="fashion-floor-circle"></div>
+                </div>
+
+
+                <!-- DRAG HINT -->
+
+                <div id="fashionRotationHint"
+                     class="fashion-rotation-hint">
+
+                    <span>↔</span>
+
+                    <span>
+                        DRAG TO ROTATE
+                    </span>
+
+                </div>
+
+
+                <!-- ZOOM -->
+
+                <div class="fashion-zoom-controls">
+
+                    <button type="button"
+                            id="fashionZoomOut"
+                            class="fashion-zoom-button">
+                        −
+                    </button>
+
+                    <div class="fashion-zoom-track">
+                        <div id="fashionZoomFill"
+                             class="fashion-zoom-fill">
+                        </div>
+                    </div>
+
+                    <button type="button"
+                            id="fashionZoomIn"
+                            class="fashion-zoom-button">
+                        +
+                    </button>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="fashion-camera-status">
+
+                    <span class="camera-status-dot"></span>
+
+                    <span>3D</span>
+
+                </div>
+
+
+                <!-- STYLE -->
+
+                <div class="fashion-current-style">
+
+                    <span>
+                        CURRENT STYLE
+                    </span>
+
+                    <strong id="fashionStyleName">
+                        Classic Atelier
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 COLOR BAR
+                 ================================================= -->
+
+            <div class="fashion-stage-bottom">
+
+                <div class="fashion-color-control">
+
+                    <span>COLOR</span>
+
+                    <div id="fashionColorOptions"
+                         class="fashion-color-options">
+
+                        <button type="button"
+                                class="fashion-color-option active"
+                                data-color="rose"
+                                style="--swatch:#d99aaa;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="black"
+                                style="--swatch:#29262d;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="white"
+                                style="--swatch:#f5f0e8;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="lavender"
+                                style="--swatch:#a999d6;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="blue"
+                                style="--swatch:#709bc9;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="mint"
+                                style="--swatch:#83c5ae;">
+                        </button>
+
+                        <button type="button"
+                                class="fashion-color-option"
+                                data-color="gold"
+                                style="--swatch:#cba65b;">
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button type="button"
+                        id="fashionDeselectButton"
+                        class="fashion-text-button">
+
+                    × Remove selected
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             OUTFIT
+             ================================================= -->
+
+        <aside class="fashion-sidebar fashion-outfit-panel">
+
+            <div class="fashion-panel-heading">
+
+                <div>
+
+                    <span class="fashion-panel-kicker">
+                        OUTFIT
+                    </span>
+
+                    <h2>
+                        My Design
+                    </h2>
+
+                </div>
+
+                <span id="fashionRarity"
+                      class="fashion-rarity rarity-common">
+                    COMMON
+                </span>
+
+            </div>
+
+
+            <!-- SCORE -->
+
+            <div class="fashion-score-card">
+
+                <div class="fashion-score-header">
+
+                    <span>
+                        STYLE SCORE
+                    </span>
+
+                    <strong id="fashionScore">
+                        0
+                    </strong>
+
+                </div>
+
+                <div class="fashion-score-bar">
+
+                    <div id="fashionScoreFill"
+                         class="fashion-score-fill">
+                    </div>
+
+                </div>
+
+                <div class="fashion-score-rank">
+
+                    <span>RANK</span>
+
+                    <strong id="fashionRank">
+                        C
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- EQUIPMENT -->
+
+            <div class="fashion-equipment-summary">
+
+                <span class="fashion-panel-kicker">
+                    EQUIPMENT
+                </span>
+
+                <div id="fashionEquipmentSummary"
+                     class="fashion-equipment-summary-grid">
+
+                    <div class="equipment-slot" data-slot="hair">
+                        <span>HAIR</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="top">
+                        <span>TOP</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="dress">
+                        <span>DRESS</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="jacket">
+                        <span>JACKET</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="bottom">
+                        <span>BOTTOM</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="shoes">
+                        <span>SHOES</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="hat">
+                        <span>HAT</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="glasses">
+                        <span>GLASSES</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="bag">
+                        <span>BAG</span>
+                        <strong>—</strong>
+                    </div>
+
+                    <div class="equipment-slot" data-slot="accessory">
+                        <span>ACCESSORY</span>
+                        <strong>—</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SELECTED -->
+
+            <div class="fashion-selected-title">
+
+                <span>
+                    SELECTED ITEMS
+                </span>
+
+                <span id="fashionSelectedCount">
+                    0
+                </span>
+
+            </div>
+
+            <div id="fashionSelectedItems"
+                 class="fashion-selected-items">
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="fashion-design-actions">
+
+                <button type="button"
+                        id="fashionSaveButton"
+                        class="fashion-button fashion-button-primary fashion-full-button">
+                    💾 SAVE OUTFIT
+                </button>
+
+                <button type="button"
+                        id="fashionSubmitButton"
+                        class="fashion-button fashion-button-gold fashion-full-button">
+                    ✦ SUBMIT DESIGN
+                </button>
+
+                <button type="button"
+                        id="fashionSaveImageButton"
+                        data-fashion-save-image
+                        class="fashion-button fashion-button-secondary fashion-full-button">
+                    🖼 SAVE AS PNG
+                </button>
+
+                <button type="button"
+                        id="fashionClearButton"
+                        class="fashion-button fashion-button-danger fashion-full-button">
+                    ↺ CLEAR OUTFIT
+                </button>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- =====================================================
+         CHALLENGE
+         ===================================================== -->
+
+    <section id="fashionChallengePanel"
+             class="fashion-challenge-panel">
+
+        <div class="fashion-challenge-inner">
+
+            <div class="fashion-challenge-heading">
+
+                <div>
+
+                    <span class="fashion-panel-kicker">
+                        FASHION CHALLENGE
+                    </span>
+
+                    <h2 id="fashionChallengeTitle">
+                        Tokyo Evening
+                    </h2>
+
+                </div>
+
+                <div class="fashion-challenge-timer">
+                    ⏱
+                    <strong id="fashionChallengeTimer">
+                        90
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="fashion-challenge-content">
+
+                <div class="fashion-challenge-brief">
+
+                    <span>
+                        CREATE THIS STYLE
+                    </span>
+
+                    <p id="fashionChallengeDescription">
+                        Elegant evening look with a modern Japanese touch.
+                    </p>
+
+                </div>
+
+                <div id="fashionChallengeRequirements"
+                     class="fashion-challenge-requirements">
+                </div>
+
+                <div class="fashion-challenge-progress">
+
+                    <div>
+                        <span>MATCH</span>
+
+                        <strong id="fashionChallengeMatch">
+                            0%
+                        </strong>
+                    </div>
+
+                    <div class="fashion-challenge-progress-bar">
+
+                        <div id="fashionChallengeFill"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SAVED OUTFITS
+         ===================================================== -->
+
+    <section class="fashion-saved-section">
+
+        <div class="fashion-saved-heading">
+
+            <div>
+
+                <span class="fashion-panel-kicker">
+                    COLLECTION
+                </span>
+
+                <h2>
+                    Saved Outfits
+                </h2>
+
+            </div>
+
+            <span id="fashionSavedCount">
+                0 / 6
+            </span>
+
+        </div>
+
+        <div id="fashionSavedOutfits"
+             class="fashion-saved-grid">
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         RESULT MODAL
+         ===================================================== -->
+
+    <div id="fashionResultModal"
+         class="fashion-modal"
+         aria-hidden="true">
+
+        <div class="fashion-modal-card">
+
+            <button type="button"
+                    id="fashionCloseResult"
+                    class="fashion-modal-close">
+                ×
+            </button>
+
+            <div class="fashion-result-icon">
+                ✦
+            </div>
+
+            <span class="fashion-panel-kicker">
+                DESIGN COMPLETE
+            </span>
+
+            <h2 id="fashionResultTitle">
+                Amazing Design!
+            </h2>
+
+            <div id="fashionResultRank"
+                 class="fashion-result-rank">
+                A
+            </div>
+
+            <p id="fashionResultDescription">
+                Your outfit has great balance and personality.
+            </p>
+
+            <div class="fashion-result-stats">
+
+                <div>
+                    <span>SCORE</span>
+                    <strong id="fashionResultScore">
+                        +0
+                    </strong>
+                </div>
+
+                <div>
+                    <span>MONEY</span>
+                    <strong id="fashionResultMoney">
+                        Rp 0
+                    </strong>
+                </div>
+
+                <div>
+                    <span>POINTS</span>
+                    <strong id="fashionResultPoints">
+                        +0
+                    </strong>
+                </div>
+
+            </div>
+
+            <button type="button"
+                    id="fashionContinueButton"
+                    class="fashion-button fashion-button-primary fashion-full-button">
+                CONTINUE
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SAVE MODAL
+         ===================================================== -->
+
+    <div id="fashionSaveModal"
+         class="fashion-modal"
+         aria-hidden="true">
+
+        <div class="fashion-modal-card fashion-save-card">
+
+            <button type="button"
+                    id="fashionCloseSave"
+                    class="fashion-modal-close">
+                ×
+            </button>
+
+            <div class="fashion-result-icon">
+                💾
+            </div>
+
+            <span class="fashion-panel-kicker">
+                SAVE DESIGN
+            </span>
+
+            <h2>
+                Save Your Outfit
+            </h2>
+
+            <input type="text"
+                   id="fashionOutfitNameInput"
+                   maxlength="30"
+                   autocomplete="off"
+                   placeholder="Outfit name...">
+
+            <button type="button"
+                    id="fashionConfirmSave"
+                    class="fashion-button fashion-button-primary fashion-full-button">
+                💾 SAVE OUTFIT
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOAST
+         ===================================================== -->
+
+    <div id="fashionToast"
+         class="fashion-toast">
+
+        <span id="fashionToastIcon">
+            ✦
+        </span>
+
+        <span id="fashionToastText">
+            Style updated
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     THREE.JS IMPORT MAP
+
+     WAJIB ADA sebelum <script type="module"> yang mengimpor
+     "three" dan "three/addons/...". Tanpa ini browser akan
+     gagal resolve module specifier "three" dan 3D Studio
+     akan selalu menampilkan "3D Studio unavailable".
+
+     Kalau project ini SUDAH punya importmap global di base
+     layout (base.html / index.html), HAPUS blok ini supaya
+     tidak terjadi duplikat importmap (dokumen HTML hanya
+     boleh punya satu <script type="importmap">), dan pastikan
+     versi three di importmap global >= 0.142 (dibutuhkan
+     untuk THREE.CapsuleGeometry yang dipakai di
+     fashion-designer.js).
+     ========================================================= -->
+
+<script>
+(function () {
+    "use strict";
+
+    var THREE_VERSION = "0.160.0";
+
+    var existingImportMap =
+        document.querySelector('script[type="importmap"]');
+
+    if (!existingImportMap) {
+
+        var importMap = document.createElement("script");
+        importMap.type = "importmap";
+        importMap.textContent = JSON.stringify({
+            imports: {
+                "three":
+                    "https://cdn.jsdelivr.net/npm/three@" + THREE_VERSION + "/build/three.module.js",
+                "three/addons/":
+                    "https://cdn.jsdelivr.net/npm/three@" + THREE_VERSION + "/examples/jsm/"
+            }
+        });
+        document.head.appendChild(importMap);
+
+    } else {
+
+        console.info(
+            "[Fashion Designer] Importmap global sudah ada, dipakai itu. " +
+            "Pastikan versi three >= 0.142 (butuh THREE.CapsuleGeometry)."
+        );
+
+    }
+
+    var moduleScript = document.createElement("script");
+    moduleScript.type = "module";
+    moduleScript.src = "{{ url_for('static', filename='js/fashion-designer.js') }}";
+
+    moduleScript.onerror = function () {
+        console.error("[Fashion Designer] Gagal memuat fashion-designer.js");
+
+        var loading = document.getElementById("fashion3DLoading");
+        var errorBox = document.getElementById("fashion3DError");
+        var errorText = document.getElementById("fashion3DErrorText");
+
+        if (loading) loading.style.display = "none";
+        if (errorBox) errorBox.hidden = false;
+        if (errorText) {
+            errorText.textContent =
+                "File fashion-designer.js gagal dimuat (cek path static / 404).";
+        }
+    };
+
+    document.currentScript.after(moduleScript);
+}());
+</script>

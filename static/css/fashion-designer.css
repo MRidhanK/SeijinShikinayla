@@ -2736,53 +2736,43 @@
    ========================================================= */
 
 .fashion-toast {
+
     position: fixed;
 
-    z-index: 2000;
+    right: 24px;
 
-    left: 50%;
-    bottom: 25px;
+    bottom: 24px;
 
-    transform:
-        translate(-50%, 20px);
+    z-index: 99999;
 
     display: flex;
+
     align-items: center;
-    gap: 8px;
 
-    max-width: min(360px, calc(100vw - 30px));
+    gap: 10px;
 
-    padding: 10px 14px;
+    padding: 14px 18px;
 
-    border:
-        1px solid
-        rgba(75, 157, 237, .4);
+    border-radius: 14px;
 
-    border-radius: 9px;
+    background: rgba(15,15,25,.95);
 
-    color: #d8edff;
-
-    background:
-        rgba(5, 23, 39, .94);
-
-    box-shadow:
-        0 16px 50px rgba(0,0,0,.35);
+    color: white;
 
     opacity: 0;
+
+    transform: translateY(20px);
+
     pointer-events: none;
 
-    transition:
-        opacity .2s ease,
-        transform .2s ease;
-
-    font-size: 9px;
+    transition: .3s;
 }
 
 .fashion-toast.show {
+
     opacity: 1;
 
-    transform:
-        translate(-50%, 0);
+    transform: translateY(0);
 }
 
 #fashionToastIcon {
@@ -3245,20 +3235,21 @@
    --------------------------------------------------------- */
 
 .fashion-challenge-heading h2 {
-    font-size: 1.45rem;
+    font-size: 1.9rem;
 }
 
 .fashion-challenge-brief span {
-    font-size: .65rem;
+    font-size: .78rem;
+    letter-spacing: .12em;
 }
 
 .fashion-challenge-brief p {
-    font-size: .82rem;
+    font-size: 1.05rem;
     line-height: 1.6;
 }
 
 .fashion-challenge-progress {
-    font-size: .72rem;
+    font-size: .88rem;
 }
 
 
@@ -3272,6 +3263,47 @@
 
 .fashion-saved-heading > span {
     font-size: .7rem;
+}
+
+.fashion-saved-delete {
+    position: absolute;
+    z-index: 3;
+
+    right: 5px;
+    top: 5px;
+
+    width: 22px;
+    height: 22px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    color: #ff9cba;
+
+    background: rgba(28, 8, 18, .85);
+    border: 1px solid rgba(214, 93, 134, .5);
+
+    cursor: pointer;
+
+    font-size: 13px;
+    line-height: 1;
+
+    /* FIX: dulu opacity:0 dan cuma muncul saat :hover kartu —
+       di HP/tablet tidak ada hover, jadi tombol ini tidak pernah
+       kelihatan. Sekarang selalu terlihat. */
+    opacity: .82;
+    transition: opacity .16s ease, background .16s ease, transform .16s ease;
+}
+
+.fashion-saved-card:hover .fashion-saved-delete,
+.fashion-saved-delete:focus-visible {
+    opacity: 1;
+}
+
+.fashion-saved-delete:active {
+    transform: scale(.92);
 }
 
 
@@ -3652,5 +3684,522 @@
     .fashion-gender-badge {
         left:7px;
         top:45px;
+    }
+}
+/* =========================================================
+   MOBILE POLISH PATCH
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+    #fashionDesignerGame {
+        padding: 8px;
+    }
+
+    .fashion-header {
+        gap: 10px;
+        padding: 4px 0 16px;
+    }
+
+    .fashion-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .fashion-header p {
+        font-size: .82rem;
+        line-height: 1.5;
+    }
+
+    .fashion-header-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+        width: 100%;
+    }
+
+    .fashion-button {
+        min-height: 44px;
+        font-size: 9px;
+        padding: 0 8px;
+    }
+
+    /* Stats jadi 2 kolom rapi, timer full width di bawah */
+    .fashion-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 7px;
+    }
+
+    .fashion-timer-card {
+        grid-column: 1 / -1;
+    }
+
+    /* Wardrobe panel dijadikan accordion sederhana: batasi tinggi */
+    .fashion-wardrobe-panel {
+        max-height: 380px;
+        order: 2;
+    }
+
+    .fashion-items-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        max-height: 260px;
+    }
+
+    .fashion-item-card {
+        min-height: 108px;
+    }
+
+    /* Stage/3D studio ditaruh paling atas biar langsung kelihatan */
+    .fashion-stage-panel {
+        order: 1;
+    }
+
+    .fashion-outfit-panel {
+        order: 3;
+    }
+
+    .fashion-stage {
+        min-height: 60vh;
+    }
+
+    /* Toolbar atas stage dirapikan supaya tidak wrap berantakan */
+    .fashion-stage-toolbar {
+        padding: 6px 8px;
+    }
+
+    .fashion-round-button {
+        width: 26px;
+        height: 26px;
+        font-size: 13px;
+    }
+
+    /* Kontrol zoom & info style jangan menutupi avatar terlalu banyak */
+    .fashion-zoom-controls {
+        right: 6px;
+        gap: 5px;
+    }
+
+    .fashion-zoom-button {
+        width: 26px;
+        height: 26px;
+        font-size: 14px;
+    }
+
+    .fashion-zoom-track {
+        height: 70px;
+    }
+
+    .fashion-current-style {
+        right: 6px;
+        bottom: 6px;
+        min-width: 100px;
+        padding: 6px 8px;
+    }
+
+    .fashion-camera-status {
+        left: 6px;
+        top: 6px;
+    }
+
+    .fashion-rotation-hint {
+        left: 6px;
+        bottom: 6px;
+        font-size: 6px;
+    }
+
+    /* Warna & tombol bawah stage jangan berdesakan */
+    .fashion-stage-bottom {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .fashion-color-options {
+        flex-wrap: wrap;
+    }
+
+    /* Outfit panel: 1 kolom penuh, ringkas */
+    .fashion-equipment-summary-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+
+    .fashion-design-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+
+    .fashion-design-actions .fashion-full-button {
+        min-height: 42px;
+        font-size: .74rem;
+    }
+
+    /* Challenge & saved section dipadatkan */
+    .fashion-challenge-content {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .fashion-saved-grid {
+        grid-template-columns: repeat(3, minmax(0,1fr));
+        gap: 6px;
+    }
+
+    /* Modal jangan kebesaran di layar kecil */
+    .fashion-modal-card {
+        padding: 18px;
+        width: min(360px, 94%);
+    }
+
+    .fashion-modal-card h2 {
+        font-size: 1.25rem;
+    }
+
+    .fashion-result-rank {
+        font-size: 34px;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .fashion-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .fashion-stat-card strong {
+        font-size: .95rem;
+    }
+
+    .fashion-items-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .fashion-saved-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+
+    .fashion-design-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Matikan efek berat (glow/ring/grid) di layar kecil supaya rendering
+   lebih ringan & tidak mengganggu avatar */
+@media (max-width: 640px) {
+
+    .fashion-stage-glow,
+    .fashion-stage-ring.ring-two,
+    .fashion-stage-ring.ring-three,
+    .fashion-stage-grid {
+        display: none;
+    }
+}
+/* =========================================================
+   MOBILE POLISH PATCH 2 — wardrobe & buttons
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+    /* Kategori: grid rapi 3 kolom, bukan wrap berantakan */
+    .fashion-categories {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .fashion-category-button {
+        justify-content: center;
+        min-height: 34px;
+        font-size: 8.5px;
+        padding: 0 4px;
+        white-space: nowrap;
+    }
+
+    .fashion-category-button span:first-child {
+        display: none; /* sembunyikan emoji kecil biar teks muat */
+    }
+
+    /* Item wardrobe: 2 kolom tapi kartu lebih pendek & rapi */
+    .fashion-items-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+        max-height: 300px;
+    }
+
+    .fashion-item-card {
+        min-height: 118px;
+        padding: 5px;
+    }
+
+    .fashion-item-preview {
+        height: 58px;
+    }
+
+    .fashion-item-name {
+        font-size: 9px !important;
+    }
+
+    .fashion-item-meta {
+        font-size: 6.5px;
+    }
+
+    /* Semua tombol aksi desain (Save/Submit/PNG/Clear) seragam ukuran */
+    .fashion-design-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+
+    .fashion-design-actions .fashion-button {
+        min-height: 44px;
+        font-size: 9px;
+        white-space: normal;
+        line-height: 1.2;
+    }
+
+    /* Search bar full width & tidak sempit */
+    .fashion-search {
+        height: 38px;
+    }
+
+    /* Equipment grid rapi 2 kolom konsisten tinggi */
+    .fashion-equipment-summary-grid .equipment-slot {
+        min-height: 42px;
+    }
+
+    /* Selected items list: kartu tidak terlalu tipis */
+    .fashion-selected-item {
+        min-height: 46px;
+        grid-template-columns: 30px minmax(0, 1fr) 24px;
+    }
+
+    .fashion-remove-item,
+    [data-fashion-remove] {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        background: rgba(214, 93, 134, .15);
+        color: #ff9cba;
+        font-size: 13px;
+    }
+
+    /* Modal hasil penilaian jangan kebesaran/kepotong di HP kecil */
+    #fashionResultModal .fashion-modal-card,
+    #fashionSaveModal .fashion-modal-card {
+        width: min(340px, 92%);
+        padding: 20px 16px;
+        max-height: 88vh;
+        overflow-y: auto;
+    }
+
+    .fashion-result-stats {
+        gap: 5px;
+    }
+
+    .fashion-result-stats > div {
+        padding: 7px;
+    }
+}
+
+/* =========================================================
+   FASHION CHALLENGE MODAL
+========================================================= */
+
+.fashion-challenge-panel{
+    max-height:0;
+    opacity:0;
+    overflow:hidden;
+    transition:max-height .4s ease, opacity .4s ease;
+}
+
+.fashion-challenge-panel.active{
+    max-height:500px;
+    opacity:1;
+}
+
+.fashion-timer-card strong{
+    color:var(--fashion-blue-light);
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+#fashionChallengeModal{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:24px;
+
+    background:rgba(2,10,20,.75);
+    backdrop-filter:blur(8px);
+
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+}
+
+#fashionChallengeModal.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.fashion-challenge-start-card{
+    width:min(620px,100%);
+    max-width:620px;
+
+    padding:32px;
+
+    border-radius:24px;
+    text-align:center;
+
+    border:1px solid rgba(120,190,255,.2);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10,30,55,.98),
+            rgba(5,15,28,.98)
+        );
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.45);
+
+    transform:translateY(20px) scale(.96);
+
+    transition:
+        transform .25s ease;
+}
+
+#fashionChallengeModal.show .fashion-challenge-start-card{
+    transform:none;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.fashion-challenge-start-card h2{
+    margin:12px 0;
+    color:#ffffff;
+    font-size:2rem;
+}
+
+.fashion-challenge-start-card p{
+    color:#b8d3eb;
+    line-height:1.7;
+}
+
+/* =========================================================
+   PREVIEW BOX
+========================================================= */
+
+.challenge-preview{
+    margin-top:24px;
+    padding:22px;
+
+    border-radius:18px;
+
+    border:1px solid rgba(120,190,255,.25);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10,30,55,.95),
+            rgba(6,18,35,.98)
+        );
+}
+
+.challenge-preview h3{
+    margin:0 0 10px;
+    color:#7cc7ff;
+    font-size:1.4rem;
+}
+
+.challenge-preview p{
+    margin:0;
+    color:#d6e9ff;
+    line-height:1.6;
+}
+
+/* =========================================================
+   REQUIREMENTS
+========================================================= */
+
+.challenge-required-list{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+
+    margin-top:18px;
+}
+
+.challenge-required-item{
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    border:1px solid rgba(70,160,255,.25);
+
+    background:
+        rgba(70,160,255,.12);
+
+    color:#a9d7ff;
+
+    font-size:.85rem;
+    font-weight:700;
+}
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.challenge-modal-actions{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+
+    margin-top:26px;
+}
+
+.challenge-modal-actions button{
+    min-width:180px;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width:600px){
+
+    .fashion-challenge-start-card{
+        padding:24px;
+    }
+
+    .fashion-challenge-start-card h2{
+        font-size:1.5rem;
+    }
+
+    .challenge-modal-actions{
+        flex-direction:column;
+    }
+
+    .challenge-modal-actions button{
+        width:100%;
     }
 }

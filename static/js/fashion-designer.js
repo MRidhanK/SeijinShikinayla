@@ -102,9 +102,9 @@ const CONFIG = {
          * Semakin besar = semakin jauh.
          */
 
-        maxDistance: 14,
+        maxDistance: 26,
 
-        defaultDistance: 5.15
+        defaultDistance: 14
     },
 
     avatar: {
@@ -315,6 +315,7 @@ const state = {
 
     challengeActive: false,
 
+    challengeMedal: null,
 
     /* ========================================================
        SCORE
@@ -7423,29 +7424,24 @@ function setupStageControls() {
      */
 
     container.addEventListener(
-        "wheel",
-        event => {
+    "wheel",
+    event => {
 
-            event.preventDefault();
+        event.preventDefault();
 
+        // FIX: dipercepat dari .0038 -> .006 karena rentang zoom sekarang lebih panjang
+        state.targetCameraDistance +=
+            event.deltaY * .006;
 
-            state.targetCameraDistance +=
-                event.deltaY * .0038;
-
-
-            state.targetCameraDistance =
-                THREE.MathUtils.clamp(
-                    state.targetCameraDistance,
-
-                    CONFIG.camera.minDistance,
-
-                    CONFIG.camera.maxDistance
-                );
-        },
-        {
-            passive: false
-        }
-    );
+        state.targetCameraDistance =
+            THREE.MathUtils.clamp(
+                state.targetCameraDistance,
+                CONFIG.camera.minDistance,
+                CONFIG.camera.maxDistance
+            );
+    },
+    { passive: false }
+);
 
 
     /*
@@ -7493,7 +7489,7 @@ function setupZoomButtons() {
             ) {
 
                 state.targetCameraDistance -=
-                    .55;
+                    .9;
             }
 
 
@@ -7502,7 +7498,7 @@ function setupZoomButtons() {
             ) {
 
                 state.targetCameraDistance +=
-                    .55;
+                    .9;
             }
 
 
@@ -8381,28 +8377,21 @@ function updateStats() {
    atau sebagai Sketch (tersimpan di galeri dengan thumbnail).
    ============================================================ */
 
-function submitDesign() {
+   function submitDesign() {
 
     const score =
         calculateScore();
 
-
-    state.points +=
-        score;
-
+    state.points += score;
 
     state.money +=
         Math.round(
             score * .5
         );
 
-
     state.combo += 1;
 
-
-    if (
-        score >= 75
-    ) {
+    if(score >= 75){
 
         state.level =
             Math.max(
@@ -8411,6 +8400,12 @@ function submitDesign() {
             );
     }
 
+    if(
+        state.challengeActive
+    ){
+
+        finishChallenge();
+    }
 
     updateAllUI();
 
@@ -8418,10 +8413,9 @@ function submitDesign() {
 
     showToast(
         "✨",
-        "Design dikirim! Simpan sebagai PNG atau Sketch di bawah."
+        "Design submitted!"
     );
 }
-
 
 /* ============================================================
    48. SAVE
@@ -8501,6 +8495,107 @@ function saveOutfit() {
 
 function startChallenge() {
 
+    const challenges = [
+
+        {
+            name:
+                "Elegant Evening",
+
+            description:
+                "Create a luxury evening outfit.",
+
+            required:
+                [
+                    "dress",
+                    "shoes",
+                    "accessory"
+                ]
+        },
+
+        {
+            name:
+                "Atelier Street",
+
+            description:
+                "Modern street fashion with layered styling.",
+
+            required:
+                [
+                    "top",
+                    "bottom",
+                    "jacket",
+                    "shoes"
+                ]
+        },
+
+        {
+            name:
+                "Runway Muse",
+
+            description:
+                "High-fashion runway inspired look.",
+
+            required:
+                [
+                    "dress",
+                    "hat",
+                    "bag",
+                    "shoes"
+                ]
+        },
+
+        {
+            name:
+                "Classic Designer",
+
+            description:
+                "Classic designer outfit with balanced styling.",
+
+            required:
+                [
+                    "top",
+                    "bottom",
+                    "jacket",
+                    "accessory"
+                ]
+        }
+    ];
+
+    state.pendingChallenge =
+        challenges[
+            Math.floor(
+                Math.random() *
+                challenges.length
+            )
+        ];
+
+    openChallengeModal(
+        state.pendingChallenge
+    );
+}
+
+function beginChallenge() {
+
+    closeChallengeModal();
+
+    state.challenge =
+        state.pendingChallenge;
+
+    state.challengeTime = 90;
+
+    document.getElementById(
+        "fashionChallengePanel"
+    ).hidden = false;
+
+    updateChallengeUI();
+
+    updateTimerUI();
+
+    showToast(
+        "🎯",
+        `${state.challenge.name} Started!`
+    );
+
     if (
         state.challengeTimer
     ) {
@@ -8510,119 +8605,30 @@ function startChallenge() {
         );
     }
 
-
-    const challenges = [
-
-        {
-            name:
-                "Elegant Evening",
-
-            required:
-                ["dress", "shoes", "accessory"]
-        },
-
-        {
-            name:
-                "Atelier Street",
-
-            required:
-                ["top", "bottom", "jacket", "shoes"]
-        },
-
-        {
-            name:
-                "Runway Muse",
-
-            required:
-                ["dress", "hat", "bag", "shoes"]
-        },
-
-        {
-            name:
-                "Classic Designer",
-
-            required:
-                ["top", "bottom", "jacket", "accessory"]
-        }
-    ];
-
-
-    state.challenge =
-        challenges[
-            Math.floor(
-                Math.random() *
-                challenges.length
-            )
-        ];
-
-
-    state.challengeTime =
-        90;
-
-
-    const timerElement =
-        firstExisting([
-            "#fashionChallengeTimer",
-            "#studioTimerValue",
-            "[data-fashion-challenge-time]"
-        ]);
-
-
-    if (timerElement) {
-
-        timerElement.textContent =
-            state.challengeTime;
-    }
-
-
     state.challengeTimer =
-        setInterval(
-            () => {
+        setInterval(() => {
 
-                state.challengeTime -= 1;
+            state.challengeTime--;
 
+            updateTimerUI();
 
-                if (
-                    timerElement
-                ) {
+            if (
+                state.challengeTime <= 0
+            ) {
 
-                    timerElement.textContent =
-                        state.challengeTime;
-                }
+                clearInterval(
+                    state.challengeTimer
+                );
 
+                showToast(
+                    "⌛",
+                    "Challenge Finished"
+                );
+            }
 
-                if (
-                    state.challengeTime <= 0
-                ) {
+        }, 1000);
 
-                    clearInterval(
-                        state.challengeTimer
-                    );
-
-                    state.challengeTimer =
-                        null;
-
-
-                    showToast(
-                        "⌛",
-                        "Challenge selesai"
-                    );
-                }
-
-            },
-            1000
-        );
-
-
-    showToast(
-        "🎯",
-        `Challenge: ${state.challenge.name}`
-    );
-
-
-    updateChallengeUI();
 }
-
 
 function updateChallengeUI() {
 
@@ -8630,22 +8636,122 @@ function updateChallengeUI() {
         return;
     }
 
+    const title =
+        document.getElementById(
+            "fashionChallengeTitle"
+        );
 
-    $all(
-        "#fashionChallengeTitle, " +
-        "[data-fashion-challenge-title]"
-    ).forEach(
-        element => {
+    const desc =
+        document.getElementById(
+            "fashionChallengeDescription"
+        );
 
-            element.textContent =
-                state.challenge.name;
-        }
-    );
+    const reqBox =
+        document.getElementById(
+            "fashionChallengeRequirements"
+        );
 
+    if (title) {
+
+        title.textContent =
+            state.challenge.name;
+    }
+
+    if (desc) {
+
+        desc.textContent =
+            state.challenge.description;
+    }
+
+    if (reqBox) {
+
+        reqBox.innerHTML = "";
+
+        state.challenge.required.forEach(
+            item => {
+
+                reqBox.innerHTML += `
+                    <div class="challenge-tag">
+                        ${item.toUpperCase()}
+                    </div>
+                `;
+            }
+        );
+    }
+
+    const matched =
+        state.challenge.required.filter(
+            category =>
+                state.selected &&
+                state.selected[category]
+        ).length;
+
+    const percent =
+        Math.round(
+            (
+                matched /
+                state.challenge.required.length
+            ) * 100
+        );
+
+    const match =
+        document.getElementById(
+            "fashionChallengeMatch"
+        );
+
+    const fill =
+        document.getElementById(
+            "fashionChallengeFill"
+        );
+
+    if (match) {
+
+        match.textContent =
+            percent + "%";
+    }
+
+    if (fill) {
+
+        fill.style.width =
+            percent + "%";
+    }
+}
+
+function updateTimerUI() {
+
+    const timer =
+        document.getElementById(
+            "fashionChallengeTimer"
+        );
+
+    if (timer) {
+
+        timer.textContent =
+            state.challengeTime;
+    }
+
+    const topTimer =
+        document.getElementById(
+            "fashionTimer"
+        );
+
+    if (topTimer) {
+
+        topTimer.textContent =
+            state.challengeTime;
+    }
+}
+
+function getChallengeMatchPercent(){
+
+    if(
+        !state.challenge
+    ){
+        return 0;
+    }
 
     const required =
         state.challenge.required;
-
 
     const matched =
         required.filter(
@@ -8655,19 +8761,87 @@ function updateChallengeUI() {
                 ]
         ).length;
 
-
-    $all(
-        "#fashionChallengeMatch, " +
-        "[data-fashion-challenge-match]"
-    ).forEach(
-        element => {
-
-            element.textContent =
-                `${matched}/${required.length}`;
-        }
+    return Math.round(
+        (matched / required.length) * 100
     );
 }
 
+function finishChallenge() {
+
+    if (!state.challenge) {
+        return;
+    }
+
+    const matched =
+        state.challenge.required.filter(
+            category =>
+                state.selected &&
+                state.selected[category]
+        ).length;
+
+    const percent =
+        Math.round(
+            (
+                matched /
+                state.challenge.required.length
+            ) * 100
+        );
+
+    let medal = "🥉 Bronze";
+
+    if (percent >= 70) {
+
+        medal = "🥈 Silver";
+    }
+
+    if (percent >= 100) {
+
+        medal = "🥇 Gold";
+    }
+
+    showToast(
+        "🏆",
+        `Challenge Complete! ${medal}`
+    );
+
+    const resultModal =
+        document.getElementById(
+            "fashionResultModal"
+        );
+
+    if (resultModal) {
+
+        resultModal.style.display =
+            "flex";
+
+        resultModal.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+    }
+
+    const title =
+        document.getElementById(
+            "fashionResultTitle"
+        );
+
+    if (title) {
+
+        title.textContent =
+            medal;
+    }
+
+    const desc =
+        document.getElementById(
+            "fashionResultDescription"
+        );
+
+    if (desc) {
+
+        desc.textContent =
+            `Challenge Score ${percent}%`;
+    }
+}
 
 /* ============================================================
    50. SAVE TEMPORARY STATE
@@ -8826,52 +9000,36 @@ function updateAllUI() {
 
 function resizeThree() {
 
-    if (
-        !renderer ||
-        !camera
-    ) {
-        return;
-    }
+    if (!renderer || !camera) return;
 
+    const container = firstExisting([
+        "#fashionThreeContainer",
+        "#fashion3D",
+        "#fashionCanvas",
+        ".fashion-three-container"
+    ]);
 
-    const container =
-        firstExisting([
-            "#fashionThreeContainer",
-            "#fashion3D",
-            "#fashionCanvas",
-            ".fashion-three-container"
-        ]);
+    if (!container) return;
 
+    const width = container.clientWidth || 800;
+    const height = container.clientHeight || 700;
 
-    if (!container) {
-        return;
-    }
-
-
-    const width =
-        container.clientWidth ||
-        800;
-
-
-    const height =
-        container.clientHeight ||
-        700;
-
-
-    camera.aspect =
-        width / height;
-
-
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
 
+    // NEW: di layar sempit (HP), mundurkan kamera default sedikit
+    // supaya avatar full-body tidak terpotong.
+    if (width < 640) {
 
-    renderer.setSize(
-        width,
-        height,
-        false
-    );
+        const mobileDefault = 7.4;
+
+        if (state.targetCameraDistance === CONFIG.camera.defaultDistance) {
+            state.targetCameraDistance = mobileDefault;
+        }
+    }
+
+    renderer.setSize(width, height, false);
 }
-
 
 /* ============================================================
    54. ANIMATION
@@ -8959,69 +9117,60 @@ function animate() {
 
 function showToast(
     icon,
-    message
+    text
 ) {
 
     const toast =
-        firstExisting([
-            "#fashionToast"
-        ]);
+        document.getElementById(
+            "fashionToast"
+        );
 
+    const toastIcon =
+        document.getElementById(
+            "fashionToastIcon"
+        );
 
-    const iconElement =
-        firstExisting([
-            "#fashionToastIcon"
-        ]);
+    const toastText =
+        document.getElementById(
+            "fashionToastText"
+        );
 
+    if (
+        !toast ||
+        !toastIcon ||
+        !toastText
+    ) {
 
-    const textElement =
-        firstExisting([
-            "#fashionToastText"
-        ]);
+        console.warn(
+            "Toast element not found"
+        );
 
-
-    if (!toast) {
         return;
     }
 
+    toastIcon.textContent =
+        icon;
 
-    if (iconElement) {
-
-        iconElement.textContent =
-            icon;
-    }
-
-
-    if (textElement) {
-
-        textElement.textContent =
-            message;
-    }
-
+    toastText.textContent =
+        text;
 
     toast.classList.add(
         "show"
     );
 
-
     clearTimeout(
-        showToast.timer
+        toast._hideTimeout
     );
 
+    toast._hideTimeout =
+        setTimeout(() => {
 
-    showToast.timer =
-        setTimeout(
-            () => {
+            toast.classList.remove(
+                "show"
+            );
 
-                toast.classList.remove(
-                    "show"
-                );
-
-            },
-            2200
-        );
+        }, 3000);
 }
-
 
 /* ============================================================
    56. FORMAT
@@ -9144,20 +9293,113 @@ function setupKeyboard() {
 
 function setupChallengeButton() {
 
-    $all(
-        "#fashionChallengeButton, " +
-        "[data-fashion-challenge]"
-    ).forEach(
-        button => {
+    const button =
+        document.getElementById(
+            "fashionChallengeButton"
+        );
 
-            button.addEventListener(
-                "click",
-                startChallenge
-            );
-        }
+    if (!button) {
+        return;
+    }
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                console.log(
+                    "CHALLENGE BUTTON CLICKED"
+                );
+
+                startChallenge();
+
+            }
+        );
+}
+
+function openChallengeModal(challenge) {
+
+    console.log("OPEN MODAL");
+    console.log(challenge);
+
+    const modal =
+        document.getElementById(
+            "fashionChallengeModal"
+        );
+
+    console.log("MODAL =", modal);
+
+    const preview =
+        document.getElementById(
+            "challengePreview"
+        );
+
+    console.log("PREVIEW =", preview);
+
+    if (!modal || !preview) {
+        console.error(
+            "Challenge modal element not found"
+        );
+        return;
+    }
+
+    preview.innerHTML = `
+        <h3>${challenge.name}</h3>
+        <p>${challenge.description}</p>
+    `;
+
+    modal.classList.add("show");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
     );
 }
 
+function closeChallengeModal() {
+
+    const modal =
+        document.getElementById(
+            "fashionChallengeModal"
+        );
+
+    modal.classList.remove(
+        "show"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+}
+
+function setupChallengeModal() {
+
+    const startBtn =
+        document.getElementById(
+            "challengeStartButton"
+        );
+
+    const cancelBtn =
+        document.getElementById(
+            "challengeCancelButton"
+        );
+
+    if (startBtn) {
+
+        startBtn.addEventListener(
+            "click",
+            beginChallenge
+        );
+    }
+
+    if (cancelBtn) {
+
+        cancelBtn.addEventListener(
+            "click",
+            closeChallengeModal
+        );
+    }
+}
 
 /* ============================================================
    59. AUTO ZOOM UI
@@ -10331,6 +10573,8 @@ function init() {
     /*
      * createThree membuat event UI juga.
      */
+
+    setupChallengeModal(); 
 
     initThree();
 
