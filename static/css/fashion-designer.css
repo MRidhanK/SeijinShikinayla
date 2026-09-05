@@ -1,4205 +1,5554 @@
-/* =========================================================
-   NAYLA FASHION DESIGNER
-   fashion-designer.css
-
-   3D FASHION STUDIO
-   Standalone stylesheet.
-   Tidak bergantung pada games.css.
-   ========================================================= */
-
-
-/* =========================================================
-   01. ROOT
-   ========================================================= */
-
-#fashionDesignerGame {
-    --fashion-bg: #061321;
-    --fashion-bg-2: #081a2d;
-    --fashion-panel: rgba(7, 23, 40, .92);
-    --fashion-panel-2: rgba(10, 30, 51, .94);
-    --fashion-panel-soft: rgba(13, 37, 61, .72);
-
-    --fashion-border: rgba(76, 159, 236, .25);
-    --fashion-border-strong: rgba(77, 166, 255, .55);
-
-    --fashion-blue: #2f91ff;
-    --fashion-blue-light: #63b0ff;
-    --fashion-blue-dark: #0b63c9;
-
-    --fashion-gold: #d7ad57;
-    --fashion-gold-light: #f1d28a;
-
-    --fashion-pink: #df91ae;
-    --fashion-purple: #a990d6;
-
-    --fashion-text: #edf6ff;
-    --fashion-text-soft: #8eabc6;
-    --fashion-text-muted: #55718d;
-
-    --fashion-danger: #d65d86;
-
-    --fashion-radius: 14px;
-    --fashion-radius-small: 9px;
-
-    --fashion-shadow:
-        0 18px 55px rgba(0, 0, 0, .30);
-
-    --fashion-font:
-        Inter,
-        ui-sans-serif,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
-    color: var(--fashion-text);
-    font-family: var(--fashion-font);
-
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-
-    padding: 28px;
-
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(37, 114, 190, .14),
-            transparent 34%
-        ),
-        radial-gradient(
-            circle at 100% 30%,
-            rgba(99, 55, 164, .08),
-            transparent 30%
-        ),
-        linear-gradient(
-            180deg,
-            #04111e 0%,
-            #061321 48%,
-            #04101b 100%
-        );
-
-    box-sizing: border-box;
-}
-
-
-/* =========================================================
-   02. RESET
-   ========================================================= */
-
-#fashionDesignerGame *,
-#fashionDesignerGame *::before,
-#fashionDesignerGame *::after {
-    box-sizing: border-box;
-}
-
-#fashionDesignerGame button,
-#fashionDesignerGame input {
-    font: inherit;
-}
-
-#fashionDesignerGame button {
-    border: 0;
-}
-
-#fashionDesignerGame button:focus-visible,
-#fashionDesignerGame input:focus-visible {
-    outline: 2px solid var(--fashion-blue-light);
-    outline-offset: 2px;
-}
-
-
-/* =========================================================
-   03. MAIN CONTAINER
-   ========================================================= */
-
-#fashionDesignerGame > .fashion-header,
-#fashionDesignerGame > .fashion-stats,
-#fashionDesignerGame > .fashion-workspace,
-#fashionDesignerGame > .fashion-challenge-panel,
-#fashionDesignerGame > .fashion-saved-section {
-    width: min(1500px, 100%);
-    margin-left: auto;
-    margin-right: auto;
-}
-
-
-/* =========================================================
-   04. HEADER
-   ========================================================= */
-
-.fashion-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 30px;
-
-    padding: 8px 2px 24px;
-
-    border-bottom: 1px solid var(--fashion-border);
-}
-
-.fashion-header-copy {
-    min-width: 0;
-}
-
-.fashion-eyebrow {
-    display: block;
-
-    margin-bottom: 7px;
-
-    color: var(--fashion-blue-light);
-
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: .19em;
-    text-transform: uppercase;
-}
-
-.fashion-header h1 {
-    margin: 0;
-
-    color: #f7fbff;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: clamp(34px, 4vw, 54px);
-    font-weight: 700;
-    line-height: .98;
-    letter-spacing: -.035em;
-
-    text-shadow:
-        0 8px 30px rgba(0, 0, 0, .25);
-}
-
-.fashion-header h1::first-letter {
-    color: var(--fashion-blue-light);
-}
-
-.fashion-header p {
-    max-width: 720px;
-
-    margin: 13px 0 0;
-
-    color: var(--fashion-text-soft);
-
-    font-size: 13px;
-    line-height: 1.65;
-}
-
-.fashion-header-actions {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    flex-shrink: 0;
-}
-
-
-/* =========================================================
-   05. BUTTONS
-   ========================================================= */
-
-.fashion-button {
-    min-height: 42px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    padding: 0 16px;
-
-    border: 1px solid transparent;
-    border-radius: 9px;
-
-    color: white;
-
-    cursor: pointer;
-
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-
-    transition:
-        transform .18s ease,
-        border-color .18s ease,
-        background .18s ease,
-        box-shadow .18s ease,
-        opacity .18s ease;
-}
-
-.fashion-button:hover {
-    transform: translateY(-1px);
-}
-
-.fashion-button:active {
-    transform: translateY(0);
-}
-
-.fashion-button-primary {
-    background:
-        linear-gradient(
-            135deg,
-            #2585f1,
-            #2e8df6
-        );
-
-    border-color: rgba(107, 184, 255, .55);
-
-    box-shadow:
-        0 9px 24px rgba(19, 108, 216, .23);
-}
-
-.fashion-button-primary:hover {
-    box-shadow:
-        0 12px 30px rgba(19, 108, 216, .34);
-}
-
-.fashion-button-secondary {
-    color: #a8d4ff;
-
-    background: rgba(8, 30, 51, .9);
-
-    border-color: rgba(66, 145, 222, .34);
-}
-
-.fashion-button-secondary:hover {
-    background: rgba(13, 43, 72, .95);
-    border-color: rgba(76, 159, 236, .6);
-}
-
-.fashion-button-gold {
-    color: #ffe9ad;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(93, 72, 27, .95),
-            rgba(53, 43, 22, .98)
-        );
-
-    border-color: rgba(215, 173, 87, .55);
-}
-
-.fashion-button-danger {
-    color: #ff9cba;
-
-    background: rgba(65, 18, 40, .65);
-
-    border-color: rgba(214, 93, 134, .4);
-}
-
-.fashion-button-icon {
-    font-size: 12px;
-}
-
-.fashion-full-button {
-    width: 100%;
-}
-
-
-/* =========================================================
-   06. STATS
-   ========================================================= */
-
-.fashion-stats {
-    display: grid;
-    grid-template-columns:
-        repeat(5, minmax(0, 1fr));
-
-    gap: 9px;
-
-    margin-top: 10px;
-}
-
-.fashion-stat-card {
-    min-height: 67px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    padding: 10px 13px;
-
-    border: 1px solid var(--fashion-border);
-    border-radius: 10px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(9, 31, 51, .92),
-            rgba(5, 21, 36, .95)
-        );
-
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, .025);
-}
-
-.fashion-stat-card span {
-    margin-bottom: 5px;
-
-    color: var(--fashion-text-muted);
-
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-}
-
-.fashion-stat-card strong {
-    color: #f3f8ff;
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 18px;
-    line-height: 1;
-}
-
-.fashion-timer-card strong {
-    color: var(--fashion-blue-light);
-}
-
-
-/* =========================================================
-   07. WORKSPACE
-   ========================================================= */
-
-.fashion-workspace {
-    display: grid;
-
-    grid-template-columns:
-        268px
-        minmax(0, 1fr)
-        268px;
-
-    gap: 9px;
-
-    margin-top: 9px;
-
-    min-height: 680px;
-}
-
-
-/* =========================================================
-   08. SIDEBARS
-   ========================================================= */
-
-.fashion-sidebar,
-.fashion-stage-panel,
-.fashion-challenge-panel,
-.fashion-saved-section {
-    border: 1px solid var(--fashion-border);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(7, 25, 42, .96),
-            rgba(4, 18, 31, .97)
-        );
-
-    box-shadow:
-        var(--fashion-shadow);
-
-    border-radius: var(--fashion-radius);
-}
-
-.fashion-sidebar {
-    min-width: 0;
-
-    padding: 11px;
-
-    overflow: hidden;
-}
-
-
-/* =========================================================
-   09. PANEL HEADING
-   ========================================================= */
-
-.fashion-panel-heading {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    gap: 10px;
-
-    margin-bottom: 10px;
-}
-
-.fashion-panel-kicker {
-    display: block;
-
-    color: var(--fashion-blue-light);
-
-    font-size: 8px;
-    font-weight: 900;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-}
-
-.fashion-panel-heading h2,
-.fashion-saved-heading h2,
-.fashion-challenge-heading h2 {
-    margin: 3px 0 0;
-
-    color: #f4f8fd;
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 17px;
-    line-height: 1.1;
-}
-
-.fashion-item-count {
-    padding-top: 2px;
-
-    color: var(--fashion-blue-light);
-
-    font-size: 9px;
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   10. CATEGORY
-   ========================================================= */
-
-.fashion-categories {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 5px;
-
-    margin-bottom: 9px;
-}
-
-.fashion-category-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-
-    min-height: 24px;
-
-    padding: 0 8px;
-
-    border: 1px solid rgba(61, 128, 190, .18);
-    border-radius: 6px;
-
-    color: #7997b3;
-
-    background: rgba(9, 30, 50, .8);
-
-    cursor: pointer;
-
-    font-size: 7px;
-    font-weight: 800;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-
-    transition:
-        .16s ease;
-}
-
-.fashion-category-button:hover {
-    color: #c5e4ff;
-    border-color: rgba(68, 153, 229, .45);
-}
-
-.fashion-category-button.active {
-    color: #dff0ff;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(22, 103, 181, .55),
-            rgba(10, 57, 103, .75)
-        );
-
-    border-color: rgba(76, 159, 236, .62);
-
-    box-shadow:
-        inset 0 0 15px rgba(40, 140, 240, .09);
-}
-
-.category-icon {
-    font-size: 8px;
-}
-
-
-/* =========================================================
-   11. SEARCH
-   ========================================================= */
-
-.fashion-search {
-    height: 35px;
-
-    display: flex;
-    align-items: center;
-    gap: 7px;
-
-    padding: 0 10px;
-
-    margin-bottom: 9px;
-
-    border: 1px solid rgba(68, 136, 196, .24);
-    border-radius: 8px;
-
-    background: rgba(3, 16, 28, .72);
-}
-
-.fashion-search-icon {
-    color: var(--fashion-blue-light);
-    font-size: 15px;
-}
-
-.fashion-search input {
-    min-width: 0;
-    width: 100%;
-
-    border: 0;
-    outline: 0;
-
-    color: #dcecff;
-    background: transparent;
-
-    font-size: 10px;
-}
-
-.fashion-search input::placeholder {
-    color: #49667f;
-}
-
-
-/* =========================================================
-   12. ITEMS GRID
-   ========================================================= */
-
-.fashion-items-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 6px;
-
-    max-height: 555px;
-
-    padding-right: 3px;
-
-    overflow-y: auto;
-
-    scrollbar-width: thin;
-    scrollbar-color:
-        rgba(66, 143, 214, .65)
-        transparent;
-}
-
-.fashion-items-grid::-webkit-scrollbar,
-.fashion-selected-items::-webkit-scrollbar {
-    width: 5px;
-}
-
-.fashion-items-grid::-webkit-scrollbar-track,
-.fashion-selected-items::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.fashion-items-grid::-webkit-scrollbar-thumb,
-.fashion-selected-items::-webkit-scrollbar-thumb {
-    border-radius: 99px;
-    background: rgba(67, 142, 211, .55);
-}
-
-
-/* =========================================================
-   13. ITEM CARD
-   ========================================================= */
-
-.fashion-item-card {
-    position: relative;
-
-    min-width: 0;
-
-    padding: 6px;
-
-    border: 1px solid rgba(56, 123, 186, .2);
-    border-radius: 9px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(10, 34, 57, .96),
-            rgba(5, 22, 37, .98)
-        );
-
-    cursor: pointer;
-
-    transition:
-        transform .18s ease,
-        border-color .18s ease,
-        box-shadow .18s ease,
-        background .18s ease;
-}
-
-.fashion-item-card:hover {
-    transform: translateY(-2px);
-
-    border-color:
-        rgba(76, 159, 236, .55);
-
-    box-shadow:
-        0 8px 22px rgba(0, 0, 0, .2);
-}
-
-.fashion-item-card.equipped {
-    border-color:
-        rgba(71, 161, 248, .85);
-
-    box-shadow:
-        0 0 0 1px rgba(56, 143, 230, .2),
-        0 8px 25px rgba(17, 106, 190, .18);
-}
-
-.fashion-item-preview {
-    position: relative;
-
-    height: 64px;
-
-    display: grid;
-    place-items: center;
-
-    overflow: hidden;
-
-    border-radius: 6px;
-
-    background:
-        radial-gradient(
-            circle at 50% 40%,
-            rgba(47, 137, 220, .12),
-            transparent 63%
-        ),
-        #071b2d;
-}
-
-.fashion-item-preview::after {
-    content: "";
-
-    position: absolute;
-    inset: auto 8px 4px;
-
-    height: 5px;
-
-    border-radius: 50%;
-
-    background: rgba(0, 0, 0, .3);
-
-    filter: blur(3px);
-}
-
-.fashion-item-visual {
-    position: relative;
-
-    width: 42px;
-    height: 48px;
-
-    transform:
-        perspective(90px)
-        rotateX(3deg);
-
-    filter:
-        drop-shadow(
-            0 8px 7px rgba(0, 0, 0, .3)
-        );
-}
-
-.fashion-item-visual::before,
-.fashion-item-visual::after {
-    content: "";
-    position: absolute;
-}
-
-.item-hair::before {
-    width: 34px;
-    height: 38px;
-
-    left: 4px;
-    top: 3px;
-
-    border-radius:
-        50%
-        50%
-        43%
-        43%;
-
-    background:
-        linear-gradient(
-            110deg,
-            #321f36,
-            #8d4d68 50%,
-            #271c35
-        );
-}
-
-.item-hair::after {
-    width: 32px;
-    height: 8px;
-
-    left: 5px;
-    top: 25px;
-
-    border-radius: 0 0 50% 50%;
-
-    background: rgba(45, 27, 46, .75);
-}
-
-.item-top::before {
-    left: 7px;
-    top: 12px;
-
-    width: 28px;
-    height: 29px;
-
-    border-radius: 7px 7px 4px 4px;
-
-    background:
-        linear-gradient(
-            110deg,
-            var(--item-color),
-            color-mix(
-                in srgb,
-                var(--item-color) 65%,
-                white
-            )
-        );
-
-    box-shadow:
-        inset 3px 0 rgba(255, 255, 255, .15),
-        inset -4px 0 rgba(0, 0, 0, .12);
-}
-
-.item-top::after {
-    left: 14px;
-    top: 7px;
-
-    width: 14px;
-    height: 10px;
-
-    border-radius: 50% 50% 4px 4px;
-
-    background:
-        color-mix(
-            in srgb,
-            var(--item-color) 75%,
-            white
-        );
-}
-
-.item-dress::before {
-    left: 5px;
-    top: 5px;
-
-    width: 32px;
-    height: 40px;
-
-    clip-path:
-        polygon(
-            32% 0,
-            68% 0,
-            78% 18%,
-            100% 100%,
-            0 100%,
-            22% 18%
-        );
-
-    border-radius: 4px;
-
-    background:
-        linear-gradient(
-            90deg,
-            color-mix(
-                in srgb,
-                var(--item-color) 65%,
-                black
+    /* =========================================================
+    NAYLA FASHION DESIGNER
+    fashion-designer.css
+
+    3D FASHION STUDIO
+    Standalone stylesheet.
+    Tidak bergantung pada games.css.
+    ========================================================= */
+
+
+    /* =========================================================
+    01. ROOT
+    ========================================================= */
+
+    #fashionDesignerGame {
+        --fashion-bg: #061321;
+        --fashion-bg-2: #081a2d;
+        --fashion-panel: rgba(7, 23, 40, .92);
+        --fashion-panel-2: rgba(10, 30, 51, .94);
+        --fashion-panel-soft: rgba(13, 37, 61, .72);
+
+        --fashion-border: rgba(76, 159, 236, .25);
+        --fashion-border-strong: rgba(77, 166, 255, .55);
+
+        --fashion-blue: #2f91ff;
+        --fashion-blue-light: #63b0ff;
+        --fashion-blue-dark: #0b63c9;
+
+        --fashion-gold: #d7ad57;
+        --fashion-gold-light: #f1d28a;
+
+        --fashion-pink: #df91ae;
+        --fashion-purple: #a990d6;
+
+        --fashion-text: #edf6ff;
+        --fashion-text-soft: #8eabc6;
+        --fashion-text-muted: #55718d;
+
+        --fashion-danger: #d65d86;
+
+        --fashion-radius: 14px;
+        --fashion-radius-small: 9px;
+
+        --fashion-shadow:
+            0 18px 55px rgba(0, 0, 0, .30);
+
+        --fashion-font:
+            Inter,
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+        color: var(--fashion-text);
+        font-family: var(--fashion-font);
+
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+
+        padding: 28px;
+
+        background:
+            radial-gradient(
+                circle at 50% 0%,
+                rgba(37, 114, 190, .14),
+                transparent 34%
             ),
-            var(--item-color),
+            radial-gradient(
+                circle at 100% 30%,
+                rgba(99, 55, 164, .08),
+                transparent 30%
+            ),
+            linear-gradient(
+                180deg,
+                #04111e 0%,
+                #061321 48%,
+                #04101b 100%
+            );
+
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+    02. RESET
+    ========================================================= */
+
+    #fashionDesignerGame,
+    #fashionDesignerGame *,
+    #fashionDesignerGame *::before,
+    #fashionDesignerGame *::after {
+        box-sizing: border-box;
+    }   
+
+    #fashionDesignerGame button,
+    #fashionDesignerGame input {
+        font: inherit;
+    }
+
+    #fashionDesignerGame button {
+        border: 0;
+    }
+
+    #fashionDesignerGame button:focus-visible,
+    #fashionDesignerGame input:focus-visible {
+        outline: 2px solid var(--fashion-blue-light);
+        outline-offset: 2px;
+    }
+
+
+    /* =========================================================
+    03. MAIN CONTAINER
+    ========================================================= */
+
+    #fashionDesignerGame > .fashion-header,
+    #fashionDesignerGame > .fashion-stats,
+    #fashionDesignerGame > .fashion-workspace,
+    #fashionDesignerGame > .fashion-challenge-panel,
+    #fashionDesignerGame > .fashion-saved-section {
+        width: min(1500px, 100%);
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+    /* =========================================================
+    04. HEADER
+    ========================================================= */
+
+    .fashion-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 30px;
+
+        padding: 8px 2px 24px;
+
+        border-bottom: 1px solid var(--fashion-border);
+    }
+
+    .fashion-header-copy {
+        min-width: 0;
+    }
+
+    .fashion-eyebrow {
+        display: block;
+
+        margin-bottom: 7px;
+
+        color: var(--fashion-blue-light);
+
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .19em;
+        text-transform: uppercase;
+    }
+
+    .fashion-header h1 {
+        margin: 0;
+
+        color: #f7fbff;
+
+        font-family:
+            Georgia,
+            "Times New Roman",
+            serif;
+
+        font-size: clamp(34px, 4vw, 54px);
+        font-weight: 700;
+        line-height: .98;
+        letter-spacing: -.035em;
+
+        text-shadow:
+            0 8px 30px rgba(0, 0, 0, .25);
+    }
+
+    .fashion-header h1::first-letter {
+        color: var(--fashion-blue-light);
+    }
+
+    .fashion-header p {
+        max-width: 720px;
+
+        margin: 13px 0 0;
+
+        color: var(--fashion-text-soft);
+
+        font-size: 13px;
+        line-height: 1.65;
+    }
+
+    .fashion-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        flex-shrink: 0;
+    }
+
+
+    /* =========================================================
+    05. BUTTONS
+    ========================================================= */
+
+    .fashion-button {
+        min-height: 42px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        padding: 0 16px;
+
+        border: 1px solid transparent;
+        border-radius: 9px;
+
+        color: white;
+
+        cursor: pointer;
+
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+
+        transition:
+            transform .18s ease,
+            border-color .18s ease,
+            background .18s ease,
+            box-shadow .18s ease,
+            opacity .18s ease;
+    }
+
+    .fashion-button:hover {
+        transform: translateY(-1px);
+    }
+
+    .fashion-button:active {
+        transform: translateY(0);
+    }
+
+    .fashion-button-primary {
+        background:
+            linear-gradient(
+                135deg,
+                #2585f1,
+                #2e8df6
+            );
+
+        border-color: rgba(107, 184, 255, .55);
+
+        box-shadow:
+            0 9px 24px rgba(19, 108, 216, .23);
+    }
+
+    .fashion-button-primary:hover {
+        box-shadow:
+            0 12px 30px rgba(19, 108, 216, .34);
+    }
+
+    .fashion-button-secondary {
+        color: #a8d4ff;
+
+        background: rgba(8, 30, 51, .9);
+
+        border-color: rgba(66, 145, 222, .34);
+    }
+
+    .fashion-button-secondary:hover {
+        background: rgba(13, 43, 72, .95);
+        border-color: rgba(76, 159, 236, .6);
+    }
+
+    .fashion-button-gold {
+        color: #ffe9ad;
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(93, 72, 27, .95),
+                rgba(53, 43, 22, .98)
+            );
+
+        border-color: rgba(215, 173, 87, .55);
+    }
+
+    .fashion-button-danger {
+        color: #ff9cba;
+
+        background: rgba(65, 18, 40, .65);
+
+        border-color: rgba(214, 93, 134, .4);
+    }
+
+    .fashion-button-icon {
+        font-size: 12px;
+    }
+
+    .fashion-full-button {
+        width: 100%;
+    }
+
+
+    /* =========================================================
+    06. STATS
+    ========================================================= */
+
+    .fashion-stats {
+        display: grid;
+        grid-template-columns:
+            repeat(5, minmax(0, 1fr));
+
+        gap: 9px;
+
+        margin-top: 10px;
+    }
+
+    .fashion-stat-card {
+        min-height: 67px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        padding: 10px 13px;
+
+        border: 1px solid var(--fashion-border);
+        border-radius: 10px;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(9, 31, 51, .92),
+                rgba(5, 21, 36, .95)
+            );
+
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, .025);
+    }
+
+    .fashion-stat-card span {
+        margin-bottom: 5px;
+
+        color: var(--fashion-text-muted);
+
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+    }
+
+    .fashion-stat-card strong {
+        color: #f3f8ff;
+
+        font-family:
+            Georgia,
+            serif;
+
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    .fashion-timer-card strong {
+        color: var(--fashion-blue-light);
+    }
+
+
+    /* =========================================================
+    07. WORKSPACE
+    ========================================================= */
+
+    .fashion-workspace {
+        display: grid;
+
+        grid-template-columns:
+            268px
+            minmax(0, 1fr)
+            268px;
+
+        gap: 9px;
+
+        margin-top: 9px;
+
+        min-height: 680px;
+    }
+
+
+    /* =========================================================
+    08. SIDEBARS
+    ========================================================= */
+
+    .fashion-sidebar,
+    .fashion-stage-panel,
+    .fashion-challenge-panel,
+    .fashion-saved-section {
+        border: 1px solid var(--fashion-border);
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(7, 25, 42, .96),
+                rgba(4, 18, 31, .97)
+            );
+
+        box-shadow:
+            var(--fashion-shadow);
+
+        border-radius: var(--fashion-radius);
+    }
+
+    .fashion-sidebar {
+        min-width: 0;
+
+        padding: 11px;
+
+        overflow: hidden;
+    }
+
+
+    /* =========================================================
+    09. PANEL HEADING
+    ========================================================= */
+
+    .fashion-panel-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+
+        gap: 10px;
+
+        margin-bottom: 10px;
+    }
+
+    .fashion-panel-kicker {
+        display: block;
+
+        color: var(--fashion-blue-light);
+
+        font-size: 8px;
+        font-weight: 900;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+    }
+
+    .fashion-panel-heading h2,
+    .fashion-saved-heading h2,
+    .fashion-challenge-heading h2 {
+        margin: 3px 0 0;
+
+        color: #f4f8fd;
+
+        font-family:
+            Georgia,
+            serif;
+
+        font-size: 17px;
+        line-height: 1.1;
+    }
+
+    .fashion-item-count {
+        padding-top: 2px;
+
+        color: var(--fashion-blue-light);
+
+        font-size: 9px;
+        font-weight: 800;
+    }
+
+
+    /* =========================================================
+    10. CATEGORY
+    ========================================================= */
+
+    .fashion-categories {
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 5px;
+
+        margin-bottom: 9px;
+    }
+
+    .fashion-category-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        min-height: 24px;
+
+        padding: 0 8px;
+
+        border: 1px solid rgba(61, 128, 190, .18);
+        border-radius: 6px;
+
+        color: #7997b3;
+
+        background: rgba(9, 30, 50, .8);
+
+        cursor: pointer;
+
+        font-size: 7px;
+        font-weight: 800;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+
+        transition:
+            .16s ease;
+    }
+
+    .fashion-category-button:hover {
+        color: #c5e4ff;
+        border-color: rgba(68, 153, 229, .45);
+    }
+
+    .fashion-category-button.active {
+        color: #dff0ff;
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(22, 103, 181, .55),
+                rgba(10, 57, 103, .75)
+            );
+
+        border-color: rgba(76, 159, 236, .62);
+
+        box-shadow:
+            inset 0 0 15px rgba(40, 140, 240, .09);
+    }
+
+    .category-icon {
+        font-size: 8px;
+    }
+
+
+    /* =========================================================
+    11. SEARCH
+    ========================================================= */
+
+    .fashion-search {
+        height: 35px;
+
+        display: flex;
+        align-items: center;
+        gap: 7px;
+
+        padding: 0 10px;
+
+        margin-bottom: 9px;
+
+        border: 1px solid rgba(68, 136, 196, .24);
+        border-radius: 8px;
+
+        background: rgba(3, 16, 28, .72);
+    }
+
+    .fashion-search-icon {
+        color: var(--fashion-blue-light);
+        font-size: 15px;
+    }
+
+    .fashion-search input {
+        min-width: 0;
+        width: 100%;
+
+        border: 0;
+        outline: 0;
+
+        color: #dcecff;
+        background: transparent;
+
+        font-size: 10px;
+    }
+
+    .fashion-search input::placeholder {
+        color: #49667f;
+    }
+
+
+    /* =========================================================
+    12. ITEMS GRID
+    ========================================================= */
+
+    .fashion-items-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 6px;
+
+        max-height: 555px;
+
+        padding-right: 3px;
+
+        overflow-y: auto;
+
+        scrollbar-width: thin;
+        scrollbar-color:
+            rgba(66, 143, 214, .65)
+            transparent;
+    }
+
+    .fashion-items-grid::-webkit-scrollbar,
+    .fashion-selected-items::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .fashion-items-grid::-webkit-scrollbar-track,
+    .fashion-selected-items::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .fashion-items-grid::-webkit-scrollbar-thumb,
+    .fashion-selected-items::-webkit-scrollbar-thumb {
+        border-radius: 99px;
+        background: rgba(67, 142, 211, .55);
+    }
+
+
+    /* =========================================================
+    13. ITEM CARD
+    ========================================================= */
+
+    .fashion-item-card {
+        position: relative;
+
+        min-width: 0;
+
+        padding: 6px;
+
+        border: 1px solid rgba(56, 123, 186, .2);
+        border-radius: 9px;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(10, 34, 57, .96),
+                rgba(5, 22, 37, .98)
+            );
+
+        cursor: pointer;
+
+        transition:
+            transform .18s ease,
+            border-color .18s ease,
+            box-shadow .18s ease,
+            background .18s ease;
+    }
+
+    .fashion-item-card:hover {
+        transform: translateY(-2px);
+
+        border-color:
+            rgba(76, 159, 236, .55);
+
+        box-shadow:
+            0 8px 22px rgba(0, 0, 0, .2);
+    }
+
+    .fashion-item-card.equipped {
+        border-color:
+            rgba(71, 161, 248, .85);
+
+        box-shadow:
+            0 0 0 1px rgba(56, 143, 230, .2),
+            0 8px 25px rgba(17, 106, 190, .18);
+    }
+
+    .fashion-item-preview {
+        position: relative;
+
+        height: 64px;
+
+        display: grid;
+        place-items: center;
+
+        overflow: hidden;
+
+        border-radius: 6px;
+
+        background:
+            radial-gradient(
+                circle at 50% 40%,
+                rgba(47, 137, 220, .12),
+                transparent 63%
+            ),
+            #071b2d;
+    }
+
+    .fashion-item-preview::after {
+        content: "";
+
+        position: absolute;
+        inset: auto 8px 4px;
+
+        height: 5px;
+
+        border-radius: 50%;
+
+        background: rgba(0, 0, 0, .3);
+
+        filter: blur(3px);
+    }
+
+    .fashion-item-visual {
+        position: relative;
+
+        width: 42px;
+        height: 48px;
+
+        transform:
+            perspective(90px)
+            rotateX(3deg);
+
+        filter:
+            drop-shadow(
+                0 8px 7px rgba(0, 0, 0, .3)
+            );
+    }
+
+    .fashion-item-visual::before,
+    .fashion-item-visual::after {
+        content: "";
+        position: absolute;
+    }
+
+    .item-hair::before {
+        width: 34px;
+        height: 38px;
+
+        left: 4px;
+        top: 3px;
+
+        border-radius:
+            50%
+            50%
+            43%
+            43%;
+
+        background:
+            linear-gradient(
+                110deg,
+                #321f36,
+                #8d4d68 50%,
+                #271c35
+            );
+    }
+
+    .item-hair::after {
+        width: 32px;
+        height: 8px;
+
+        left: 5px;
+        top: 25px;
+
+        border-radius: 0 0 50% 50%;
+
+        background: rgba(45, 27, 46, .75);
+    }
+
+    .item-top::before {
+        left: 7px;
+        top: 12px;
+
+        width: 28px;
+        height: 29px;
+
+        border-radius: 7px 7px 4px 4px;
+
+        background:
+            linear-gradient(
+                110deg,
+                var(--item-color),
+                color-mix(
+                    in srgb,
+                    var(--item-color) 65%,
+                    white
+                )
+            );
+
+        box-shadow:
+            inset 3px 0 rgba(255, 255, 255, .15),
+            inset -4px 0 rgba(0, 0, 0, .12);
+    }
+
+    .item-top::after {
+        left: 14px;
+        top: 7px;
+
+        width: 14px;
+        height: 10px;
+
+        border-radius: 50% 50% 4px 4px;
+
+        background:
             color-mix(
                 in srgb,
                 var(--item-color) 75%,
                 white
-            )
-        );
-}
+            );
+    }
 
-.item-dress::after {
-    left: 13px;
-    top: 7px;
+    .item-dress::before {
+        left: 5px;
+        top: 5px;
 
-    width: 16px;
-    height: 3px;
+        width: 32px;
+        height: 40px;
 
-    border-radius: 50%;
+        clip-path:
+            polygon(
+                32% 0,
+                68% 0,
+                78% 18%,
+                100% 100%,
+                0 100%,
+                22% 18%
+            );
 
-    background: rgba(255,255,255,.28);
-}
+        border-radius: 4px;
 
-.item-jacket::before {
-    left: 4px;
-    top: 10px;
+        background:
+            linear-gradient(
+                90deg,
+                color-mix(
+                    in srgb,
+                    var(--item-color) 65%,
+                    black
+                ),
+                var(--item-color),
+                color-mix(
+                    in srgb,
+                    var(--item-color) 75%,
+                    white
+                )
+            );
+    }
 
-    width: 34px;
-    height: 32px;
+    .item-dress::after {
+        left: 13px;
+        top: 7px;
 
-    border-radius: 6px;
+        width: 16px;
+        height: 3px;
 
-    background:
-        linear-gradient(
-            90deg,
-            color-mix(
-                in srgb,
-                var(--item-color) 65%,
-                black
-            ),
-            var(--item-color),
-            color-mix(
-                in srgb,
-                var(--item-color) 75%,
-                white
-            )
-        );
-}
+        border-radius: 50%;
 
-.item-jacket::after {
-    left: 19px;
-    top: 12px;
+        background: rgba(255,255,255,.28);
+    }
 
-    width: 4px;
-    height: 26px;
+    .item-jacket::before {
+        left: 4px;
+        top: 10px;
 
-    background: rgba(255,255,255,.16);
-}
+        width: 34px;
+        height: 32px;
 
-.item-bottom::before {
-    left: 7px;
-    top: 8px;
+        border-radius: 6px;
 
-    width: 28px;
-    height: 34px;
+        background:
+            linear-gradient(
+                90deg,
+                color-mix(
+                    in srgb,
+                    var(--item-color) 65%,
+                    black
+                ),
+                var(--item-color),
+                color-mix(
+                    in srgb,
+                    var(--item-color) 75%,
+                    white
+                )
+            );
+    }
 
-    clip-path:
-        polygon(
-            5% 0,
-            95% 0,
-            83% 100%,
-            53% 100%,
-            50% 42%,
-            47% 100%,
-            17% 100%
-        );
+    .item-jacket::after {
+        left: 19px;
+        top: 12px;
 
-    background:
-        linear-gradient(
-            90deg,
-            color-mix(
-                in srgb,
-                var(--item-color) 55%,
-                black
-            ),
-            var(--item-color),
-            color-mix(
-                in srgb,
-                var(--item-color) 70%,
-                white
-            )
-        );
-}
+        width: 4px;
+        height: 26px;
 
-.item-shoes::before {
-    left: 4px;
-    top: 29px;
+        background: rgba(255,255,255,.16);
+    }
 
-    width: 16px;
-    height: 9px;
+    .item-bottom::before {
+        left: 7px;
+        top: 8px;
 
-    border-radius: 8px 8px 4px 4px;
+        width: 28px;
+        height: 34px;
 
-    background: var(--item-color);
+        clip-path:
+            polygon(
+                5% 0,
+                95% 0,
+                83% 100%,
+                53% 100%,
+                50% 42%,
+                47% 100%,
+                17% 100%
+            );
 
-    box-shadow:
-        19px 0 0 var(--item-color);
-}
+        background:
+            linear-gradient(
+                90deg,
+                color-mix(
+                    in srgb,
+                    var(--item-color) 55%,
+                    black
+                ),
+                var(--item-color),
+                color-mix(
+                    in srgb,
+                    var(--item-color) 70%,
+                    white
+                )
+            );
+    }
 
-.item-shoes::after {
-    left: 10px;
-    top: 37px;
+    .item-shoes::before {
+        left: 4px;
+        top: 29px;
 
-    width: 5px;
-    height: 7px;
+        width: 16px;
+        height: 9px;
 
-    background: color-mix(
-        in srgb,
-        var(--item-color) 70%,
-        black
-    );
+        border-radius: 8px 8px 4px 4px;
 
-    box-shadow:
-        19px 0 0 color-mix(
+        background: var(--item-color);
+
+        box-shadow:
+            19px 0 0 var(--item-color);
+    }
+
+    .item-shoes::after {
+        left: 10px;
+        top: 37px;
+
+        width: 5px;
+        height: 7px;
+
+        background: color-mix(
             in srgb,
             var(--item-color) 70%,
             black
         );
-}
 
-.item-hat::before {
-    left: 3px;
-    top: 13px;
-
-    width: 36px;
-    height: 13px;
-
-    border-radius: 50%;
-
-    background: var(--item-color);
-}
-
-.item-hat::after {
-    left: 10px;
-    top: 5px;
-
-    width: 22px;
-    height: 17px;
-
-    border-radius: 6px 6px 2px 2px;
-
-    background:
-        linear-gradient(
-            100deg,
-            color-mix(
+        box-shadow:
+            19px 0 0 color-mix(
                 in srgb,
                 var(--item-color) 70%,
                 black
-            ),
-            var(--item-color)
-        );
-}
-
-.item-glasses::before {
-    left: 2px;
-    top: 18px;
-
-    width: 14px;
-    height: 14px;
-
-    border: 3px solid var(--item-color);
-    border-radius: 50%;
-
-    box-shadow:
-        24px 0 0 -3px var(--item-color),
-        24px 0 0 0 var(--item-color);
-}
-
-.item-glasses::after {
-    left: 15px;
-    top: 24px;
-
-    width: 13px;
-    height: 3px;
-
-    background: var(--item-color);
-}
-
-.item-bag::before {
-    left: 9px;
-    top: 14px;
-
-    width: 25px;
-    height: 25px;
-
-    border-radius: 6px;
-
-    background:
-        linear-gradient(
-            120deg,
-            color-mix(
-                in srgb,
-                var(--item-color) 65%,
-                black
-            ),
-            var(--item-color)
-        );
-}
-
-.item-bag::after {
-    left: 14px;
-    top: 6px;
-
-    width: 15px;
-    height: 17px;
-
-    border: 3px solid var(--item-color);
-    border-bottom: 0;
-
-    border-radius: 12px 12px 0 0;
-}
-
-.item-accessory::before {
-    left: 9px;
-    top: 14px;
-
-    width: 24px;
-    height: 24px;
-
-    border: 3px solid var(--item-color);
-
-    border-radius: 50%;
-}
-
-.item-accessory::after {
-    left: 18px;
-    top: 23px;
-
-    width: 7px;
-    height: 7px;
-
-    border-radius: 50%;
-
-    background: var(--item-color);
-}
-
-.fashion-item-info {
-    min-width: 0;
-
-    padding: 6px 2px 2px;
-}
-
-.fashion-item-name {
-    display: block;
-
-    overflow: hidden;
-
-    color: #dbeaff;
-
-    font-size: 8px;
-    font-weight: 800;
-
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.fashion-item-meta {
-    display: flex;
-    justify-content: space-between;
-    gap: 3px;
-
-    margin-top: 4px;
-
-    color: #55738e;
-
-    font-size: 6px;
-    font-weight: 800;
-    text-transform: uppercase;
-}
-
-.fashion-item-price {
-    color: var(--fashion-blue-light);
-}
-
-.fashion-rarity-dot {
-    position: absolute;
-
-    top: 5px;
-    right: 5px;
-
-    width: 5px;
-    height: 5px;
-
-    border-radius: 50%;
-
-    background: var(--fashion-blue-light);
-}
-
-.fashion-rarity-dot.rare {
-    background: #72a7ff;
-}
-
-.fashion-rarity-dot.epic {
-    background: #c19cff;
-}
-
-.fashion-rarity-dot.legendary {
-    background: var(--fashion-gold-light);
-}
-
-
-/* =========================================================
-   14. STAGE
-   ========================================================= */
-
-.fashion-stage-panel {
-    min-width: 0;
-
-    display: flex;
-    flex-direction: column;
-
-    overflow: hidden;
-}
-
-.fashion-stage-toolbar {
-    min-height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 7px 10px;
-
-    border-bottom: 1px solid rgba(68, 136, 196, .19);
-}
-
-.fashion-stage-title {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.fashion-stage-title strong {
-    color: #e8f4ff;
-
-    font-size: 10px;
-    letter-spacing: .03em;
-}
-
-.fashion-stage-tools {
-    display: flex;
-    gap: 5px;
-}
-
-.fashion-round-button {
-    width: 30px;
-    height: 30px;
-
-    display: grid;
-    place-items: center;
-
-    border: 1px solid rgba(69, 143, 211, .35);
-    border-radius: 50%;
-
-    color: #83bdf0;
-
-    background: rgba(6, 26, 44, .85);
-
-    cursor: pointer;
-
-    font-size: 15px;
-
-    transition: .18s ease;
-}
-
-.fashion-round-button:hover {
-    color: white;
-
-    border-color:
-        rgba(77, 166, 255, .75);
-
-    background:
-        rgba(17, 67, 108, .8);
-
-    transform: rotate(-5deg);
-}
-
-
-/* =========================================================
-   15. THREE STAGE
-   ========================================================= */
-
-.fashion-stage {
-    position: relative;
-
-    flex: 1;
-
-    min-height: 530px;
-
-    overflow: hidden;
-
-    background:
-        radial-gradient(
-            circle at 50% 43%,
-            rgba(28, 93, 156, .17),
-            transparent 37%
-        ),
-        linear-gradient(
-            180deg,
-            #06192c,
-            #041426
-        );
-}
-
-.fashion-stage-background {
-    position: absolute;
-    inset: 0;
-
-    pointer-events: none;
-
-    overflow: hidden;
-}
-
-.fashion-stage-glow {
-    position: absolute;
-
-    width: 440px;
-    height: 440px;
-
-    border-radius: 50%;
-
-    filter: blur(50px);
-
-    opacity: .12;
-}
-
-.glow-one {
-    left: -150px;
-    top: 0;
-
-    background: #2585f1;
-}
-
-.glow-two {
-    right: -160px;
-    bottom: -90px;
-
-    background: #8e54c7;
-}
-
-.fashion-stage-grid {
-    position: absolute;
-    inset: 0;
-
-    opacity: .08;
-
-    background-image:
-        linear-gradient(
-            rgba(89, 161, 219, .3) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(89, 161, 219, .3) 1px,
-            transparent 1px
-        );
-
-    background-size: 45px 45px;
-
-    mask-image:
-        linear-gradient(
-            to bottom,
-            transparent,
-            black 35%,
-            black 70%,
-            transparent
-        );
-}
-
-.fashion-stage-ring {
-    position: absolute;
-
-    left: 50%;
-    top: 48%;
-
-    transform: translate(-50%, -50%);
-
-    border: 1px solid rgba(82, 161, 227, .13);
-
-    border-radius: 50%;
-
-    pointer-events: none;
-}
-
-.ring-one {
-    width: 300px;
-    height: 300px;
-}
-
-.ring-two {
-    width: 450px;
-    height: 450px;
-}
-
-.ring-three {
-    width: 610px;
-    height: 610px;
-}
-
-.fashion-three-container {
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 4;
-
-    cursor:
-        grab;
-}
-
-.fashion-three-container:active {
-    cursor:
-        grabbing;
-}
-
-.fashion-three-container canvas {
-    display: block;
-
-    width: 100% !important;
-    height: 100% !important;
-
-    outline: none;
-}
-
-
-/* =========================================================
-   16. LOADING
-   ========================================================= */
-
-.fashion-3d-loading {
-    position: absolute;
-
-    z-index: 15;
-
-    left: 50%;
-    top: 50%;
-
-    transform: translate(-50%, -50%);
-
-    min-width: 180px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    padding: 16px 20px;
-
-    border:
-        1px solid
-        rgba(77, 166, 255, .28);
-
-    border-radius: 13px;
-
-    background:
-        rgba(3, 16, 28, .84);
-
-    backdrop-filter:
-        blur(15px);
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.3);
-
-    text-align: center;
-}
-
-.fashion-3d-loading strong {
-    margin-top: 9px;
-
-    color: #e7f4ff;
-
-    font-size: 11px;
-}
-
-.fashion-3d-loading small {
-    margin-top: 4px;
-
-    color: #6686a2;
-
-    font-size: 8px;
-}
-
-.fashion-loader-orbit {
-    position: relative;
-
-    width: 38px;
-    height: 38px;
-}
-
-.fashion-loader-orbit span {
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    width: 8px;
-    height: 8px;
-
-    margin: -4px;
-
-    border-radius: 50%;
-
-    background: var(--fashion-blue-light);
-
-    animation:
-        fashionOrbit 1.1s linear infinite;
-}
-
-.fashion-loader-orbit span:nth-child(2) {
-    animation-delay: -.36s;
-}
-
-.fashion-loader-orbit span:nth-child(3) {
-    animation-delay: -.72s;
-}
-
-@keyframes fashionOrbit {
-    from {
-        transform:
-            rotate(0deg)
-            translateX(16px)
-            scale(.65);
-    }
-
-    50% {
-        transform:
-            rotate(180deg)
-            translateX(16px)
-            scale(1);
-    }
-
-    to {
-        transform:
-            rotate(360deg)
-            translateX(16px)
-            scale(.65);
-    }
-}
-
-
-/* =========================================================
-   17. ERROR
-   ========================================================= */
-
-.fashion-3d-error {
-    position: absolute;
-
-    z-index: 20;
-
-    left: 50%;
-    top: 50%;
-
-    transform: translate(-50%, -50%);
-
-    width: min(300px, 80%);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    padding: 24px;
-
-    border: 1px solid rgba(214, 93, 134, .35);
-    border-radius: 14px;
-
-    background:
-        rgba(28, 8, 18, .92);
-
-    text-align: center;
-}
-
-.fashion-error-icon {
-    width: 40px;
-    height: 40px;
-
-    display: grid;
-    place-items: center;
-
-    margin-bottom: 10px;
-
-    border: 1px solid rgba(214, 93, 134, .45);
-    border-radius: 50%;
-
-    color: #ff9bbb;
-
-    font-weight: 900;
-}
-
-.fashion-3d-error strong {
-    color: #ffdce7;
-    font-size: 13px;
-}
-
-.fashion-3d-error span {
-    margin: 7px 0 14px;
-
-    color: #a77c8b;
-
-    font-size: 9px;
-    line-height: 1.5;
-}
-
-
-/* =========================================================
-   18. FLOOR
-   ========================================================= */
-
-.fashion-floor {
-    position: absolute;
-
-    z-index: 2;
-
-    left: 50%;
-    bottom: 3%;
-
-    transform: translateX(-50%);
-
-    width: min(70%, 540px);
-    height: 70px;
-
-    pointer-events: none;
-}
-
-.fashion-floor-circle {
-    position: absolute;
-    inset: 0;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            ellipse,
-            rgba(0, 0, 0, .55) 0%,
-            rgba(0, 0, 0, .3) 42%,
-            transparent 70%
-        );
-
-    box-shadow:
-        0 0 0 2px rgba(50, 149, 239, .55),
-        inset 0 0 50px rgba(24, 119, 206, .15);
-
-    transform:
-        perspective(400px)
-        rotateX(62deg);
-}
-
-
-/* =========================================================
-   19. HINT
-   ========================================================= */
-
-.fashion-rotation-hint {
-    position: absolute;
-
-    z-index: 10;
-
-    left: 14px;
-    bottom: 12px;
-
-    display: flex;
-    align-items: center;
-    gap: 7px;
-
-    color: #6184a1;
-
-    font-size: 7px;
-    font-weight: 800;
-    letter-spacing: .13em;
-}
-
-.rotation-icon {
-    color: var(--fashion-blue-light);
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   20. CAMERA STATUS
-   ========================================================= */
-
-.fashion-camera-status {
-    position: absolute;
-
-    z-index: 10;
-
-    left: 14px;
-    top: 12px;
-
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    padding: 5px 8px;
-
-    border: 1px solid rgba(66, 143, 214, .2);
-    border-radius: 99px;
-
-    color: #6f94b1;
-
-    background: rgba(3, 16, 28, .55);
-
-    font-size: 7px;
-    font-weight: 900;
-    letter-spacing: .12em;
-}
-
-.camera-status-dot {
-    width: 5px;
-    height: 5px;
-
-    border-radius: 50%;
-
-    background: #4bb3ff;
-
-    box-shadow:
-        0 0 8px rgba(75, 179, 255, .8);
-}
-
-
-/* =========================================================
-   21. CURRENT STYLE
-   ========================================================= */
-
-.fashion-current-style {
-    position: absolute;
-
-    z-index: 10;
-
-    right: 12px;
-    bottom: 11px;
-
-    display: flex;
-    flex-direction: column;
-
-    min-width: 125px;
-
-    padding: 8px 10px;
-
-    border: 1px solid rgba(70, 143, 211, .25);
-    border-radius: 8px;
-
-    background: rgba(3, 16, 28, .65);
-
-    backdrop-filter: blur(10px);
-}
-
-.fashion-current-style span {
-    color: #52738f;
-
-    font-size: 6px;
-    font-weight: 900;
-    letter-spacing: .13em;
-}
-
-.fashion-current-style strong {
-    margin-top: 2px;
-
-    color: #e2f0ff;
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 10px;
-}
-
-
-/* =========================================================
-   22. ZOOM
-   ========================================================= */
-
-.fashion-zoom-controls {
-    position: absolute;
-
-    z-index: 12;
-
-    right: 12px;
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 7px;
-}
-
-.fashion-zoom-button {
-    width: 28px;
-    height: 28px;
-
-    display: grid;
-    place-items: center;
-
-    border: 1px solid rgba(72, 147, 216, .4);
-    border-radius: 8px;
-
-    color: #8bc4f6;
-
-    background: rgba(5, 24, 41, .82);
-
-    cursor: pointer;
-
-    font-size: 17px;
-
-    transition: .16s ease;
-}
-
-.fashion-zoom-button:hover {
-    color: white;
-    border-color: rgba(83, 173, 255, .75);
-    background: rgba(17, 65, 104, .85);
-}
-
-.fashion-zoom-track {
-    width: 4px;
-    height: 78px;
-
-    display: flex;
-    align-items: flex-end;
-
-    overflow: hidden;
-
-    border-radius: 99px;
-
-    background: rgba(81, 133, 171, .16);
-}
-
-.fashion-zoom-fill {
-    width: 100%;
-    height: 55%;
-
-    border-radius: inherit;
-
-    background:
-        linear-gradient(
-            180deg,
-            #72c0ff,
-            #2183df
-        );
-
-    box-shadow:
-        0 0 10px rgba(45, 148, 239, .45);
-}
-
-
-/* =========================================================
-   23. STAGE BOTTOM
-   ========================================================= */
-
-.fashion-stage-bottom {
-    min-height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 12px;
-
-    padding: 6px 10px;
-
-    border-top: 1px solid rgba(68, 136, 196, .19);
-}
-
-.fashion-color-control {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.fashion-color-control > span {
-    color: #52728e;
-
-    font-size: 7px;
-    font-weight: 900;
-    letter-spacing: .15em;
-}
-
-.fashion-color-options {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-
-.fashion-color-option {
-    width: 18px;
-    height: 18px;
-
-    padding: 0;
-
-    border:
-        2px solid
-        transparent;
-
-    border-radius: 50%;
-
-    background: var(--swatch);
-
-    cursor: pointer;
-
-    box-shadow:
-        inset 0 1px 2px rgba(255,255,255,.28),
-        0 2px 6px rgba(0,0,0,.3);
-
-    transition: .16s ease;
-}
-
-.fashion-color-option:hover {
-    transform: scale(1.13);
-}
-
-.fashion-color-option.active {
-    border-color: #64b5ff;
-
-    box-shadow:
-        0 0 0 2px rgba(66, 156, 239, .18),
-        0 0 12px rgba(66, 156, 239, .3);
-}
-
-.fashion-text-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-
-    padding: 4px;
-
-    color: #6f8fa9;
-
-    background: transparent;
-
-    cursor: pointer;
-
-    font-size: 9px;
-
-    transition: .16s ease;
-}
-
-.fashion-text-button:hover {
-    color: #c3e2ff;
-}
-
-
-/* =========================================================
-   24. OUTFIT SCORE
-   ========================================================= */
-
-.fashion-score-card {
-    padding: 10px;
-
-    margin-bottom: 11px;
-
-    border:
-        1px solid
-        rgba(67, 142, 211, .22);
-
-    border-radius: 10px;
-
-    background:
-        rgba(7, 27, 46, .72);
-}
-
-.fashion-score-header,
-.fashion-score-rank {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.fashion-score-header span,
-.fashion-score-rank span {
-    color: #54728c;
-
-    font-size: 7px;
-    font-weight: 900;
-    letter-spacing: .13em;
-}
-
-.fashion-score-header strong {
-    color: var(--fashion-blue-light);
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 22px;
-}
-
-.fashion-score-bar,
-.fashion-challenge-progress-bar {
-    height: 4px;
-
-    overflow: hidden;
-
-    margin: 8px 0;
-
-    border-radius: 99px;
-
-    background: rgba(69, 132, 177, .14);
-}
-
-.fashion-score-fill {
-    width: 0;
-    height: 100%;
-
-    border-radius: inherit;
-
-    background:
-        linear-gradient(
-            90deg,
-            #1d78d4,
-            #63b4ff
-        );
-
-    transition:
-        width .35s ease;
-}
-
-.fashion-score-rank strong {
-    color: #d8eaff;
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   25. EQUIPMENT
-   ========================================================= */
-
-.fashion-equipment-summary {
-    margin-bottom: 11px;
-}
-
-.fashion-equipment-summary > .fashion-panel-kicker {
-    margin-bottom: 6px;
-}
-
-.fashion-equipment-summary-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 4px;
-}
-
-.equipment-slot {
-    min-width: 0;
-
-    padding: 5px 6px;
-
-    border:
-        1px solid
-        rgba(56, 122, 184, .15);
-
-    border-radius: 6px;
-
-    background:
-        rgba(4, 18, 31, .68);
-}
-
-.equipment-slot span {
-    display: block;
-
-    color: #55738e;
-
-    font-size: 6px;
-    font-weight: 900;
-    letter-spacing: .09em;
-}
-
-.equipment-slot strong {
-    display: block;
-
-    overflow: hidden;
-
-    margin-top: 2px;
-
-    color: #bdd8ee;
-
-    font-size: 7px;
-    font-weight: 700;
-
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-
-/* =========================================================
-   26. SELECTED ITEMS
-   ========================================================= */
-
-.fashion-selected-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 6px;
-
-    color: #5f7e99;
-
-    font-size: 7px;
-    font-weight: 900;
-    letter-spacing: .13em;
-}
-
-.fashion-selected-title > span:last-child {
-    color: var(--fashion-blue-light);
-}
-
-.fashion-selected-items {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    max-height: 225px;
-
-    overflow-y: auto;
-
-    scrollbar-width: thin;
-}
-
-.fashion-selected-empty {
-    padding: 16px 7px;
-
-    border: 1px dashed rgba(70, 139, 195, .18);
-    border-radius: 8px;
-
-    color: #4d6981;
-
-    text-align: center;
-
-    font-size: 8px;
-}
-
-.fashion-selected-item {
-    min-height: 38px;
-
-    display: grid;
-
-    grid-template-columns:
-        32px
-        minmax(0, 1fr)
-        20px;
-
-    align-items: center;
-
-    gap: 7px;
-
-    padding: 4px;
-
-    border:
-        1px solid
-        rgba(62, 130, 192, .19);
-
-    border-radius: 7px;
-
-    background:
-        rgba(5, 21, 35, .8);
-}
-
-.fashion-selected-item-preview {
-    width: 32px;
-    height: 30px;
-
-    display: grid;
-    place-items: center;
-
-    border-radius: 5px;
-
-    background: #071b2d;
-}
-
-.fashion-selected-item-preview .fashion-item-visual {
-    transform: scale(.55);
-}
-
-.fashion-selected-item-name {
-    min-width: 0;
-}
-
-.fashion-selected-item-name strong {
-    display: block;
-
-    overflow: hidden;
-
-    color: #cfe5f7;
-
-    font-size: 7px;
-
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.fashion-selected-item-name span {
-    display: block;
-
-    margin-top: 2px;
-
-    color: #4f6c84;
-
-    font-size: 6px;
-    text-transform: uppercase;
-}
-
-.fashion-remove-item {
-    width: 20px;
-    height: 20px;
-
-    display: grid;
-    place-items: center;
-
-    border-radius: 5px;
-
-    color: #7090a9;
-
-    background: transparent;
-
-    cursor: pointer;
-}
-
-.fashion-remove-item:hover {
-    color: #ff9cba;
-    background: rgba(214, 93, 134, .12);
-}
-
-
-/* =========================================================
-   27. DESIGN ACTIONS
-   ========================================================= */
-
-.fashion-design-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-    margin-top: auto;
-    padding-top: 9px;
-}
-
-
-/* =========================================================
-   28. RARITY
-   ========================================================= */
-
-.fashion-rarity {
-    align-self: flex-start;
-
-    padding: 4px 6px;
-
-    border-radius: 5px;
-
-    font-size: 6px;
-    font-weight: 900;
-    letter-spacing: .08em;
-}
-
-.rarity-common {
-    color: #a9c3d9;
-
-    background: rgba(103, 137, 163, .13);
-}
-
-.rarity-rare {
-    color: #83b8ff;
-
-    background: rgba(64, 128, 214, .15);
-}
-
-.rarity-epic {
-    color: #c7a7ff;
-
-    background: rgba(144, 86, 220, .15);
-}
-
-.rarity-legendary {
-    color: var(--fashion-gold-light);
-
-    background: rgba(211, 161, 58, .13);
-}
-
-
-/* =========================================================
-   29. CHALLENGE
-   ========================================================= */
-
-.fashion-challenge-panel {
-    margin-top: 9px;
-
-    padding: 13px;
-
-    overflow: hidden;
-}
-
-.fashion-challenge-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 15px;
-}
-
-.fashion-challenge-timer {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    color: var(--fashion-blue-light);
-}
-
-.fashion-challenge-timer strong {
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 18px;
-}
-
-.fashion-challenge-content {
-    display: grid;
-
-    grid-template-columns:
-        1.4fr
-        1fr
-        1fr;
-
-    align-items: center;
-
-    gap: 20px;
-
-    margin-top: 12px;
-}
-
-.fashion-challenge-brief span {
-    color: #52718b;
-
-    font-size: 7px;
-    font-weight: 900;
-    letter-spacing: .14em;
-}
-
-.fashion-challenge-brief p {
-    max-width: 600px;
-
-    margin: 5px 0 0;
-
-    color: #88a5bd;
-
-    font-size: 9px;
-    line-height: 1.5;
-}
-
-.fashion-challenge-requirements {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-}
-
-.challenge-requirement {
-    padding: 5px 7px;
-
-    border: 1px solid rgba(65, 137, 203, .23);
-    border-radius: 5px;
-
-    color: #6689a7;
-
-    background: rgba(8, 29, 49, .65);
-
-    font-size: 6px;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.challenge-requirement.complete {
-    color: #a8d8ff;
-
-    border-color:
-        rgba(74, 166, 246, .55);
-
-    background:
-        rgba(31, 112, 187, .18);
-}
-
-.fashion-challenge-progress > div:first-child {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    color: #55748e;
-
-    font-size: 7px;
-    font-weight: 900;
-}
-
-.fashion-challenge-progress > div:first-child strong {
-    color: #b8dcfb;
-}
-
-.fashion-challenge-progress-bar {
-    margin-top: 6px;
-    margin-bottom: 0;
-}
-
-.fashion-challenge-progress-bar > div {
-    width: 0;
-    height: 100%;
-
-    border-radius: inherit;
-
-    background:
-        linear-gradient(
-            90deg,
-            #237ed7,
-            #62b6ff
-        );
-
-    transition:
-        width .35s ease;
-}
-
-
-/* =========================================================
-   30. SAVED
-   ========================================================= */
-
-.fashion-saved-section {
-    margin-top: 9px;
-
-    padding: 13px;
-}
-
-.fashion-saved-heading {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-}
-
-.fashion-saved-heading > span {
-    color: var(--fashion-blue-light);
-
-    font-size: 8px;
-    font-weight: 900;
-}
-
-.fashion-saved-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(6, minmax(0, 1fr));
-
-    gap: 7px;
-
-    margin-top: 10px;
-}
-
-.fashion-saved-empty {
-    grid-column: 1 / -1;
-
-    padding: 20px;
-
-    border: 1px dashed rgba(70, 139, 195, .18);
-    border-radius: 9px;
-
-    color: #506d85;
-
-    text-align: center;
-
-    font-size: 9px;
-}
-
-.fashion-saved-card {
-    min-width: 0;
-
-    padding: 7px;
-
-    border: 1px solid rgba(61, 127, 189, .18);
-    border-radius: 9px;
-
-    background:
-        rgba(7, 26, 43, .75);
-
-    cursor: pointer;
-
-    transition: .18s ease;
-}
-
-.fashion-saved-card:hover {
-    border-color: rgba(77, 166, 255, .5);
-    transform: translateY(-2px);
-}
-
-.fashion-saved-preview {
-    height: 80px;
-
-    display: grid;
-    place-items: center;
-
-    overflow: hidden;
-
-    border-radius: 6px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(43, 126, 204, .14),
-            transparent 65%
-        ),
-        #06192a;
-}
-
-.fashion-saved-mini {
-    position: relative;
-
-    width: 45px;
-    height: 66px;
-}
-
-.fashion-saved-mini::before {
-    content: "";
-
-    position: absolute;
-
-    left: 11px;
-    top: 2px;
-
-    width: 23px;
-    height: 23px;
-
-    border-radius: 50%;
-
-    background: #e9b4a5;
-
-    box-shadow:
-        0 20px 0 3px #202d48,
-        0 39px 0 2px #31577d;
-}
-
-.fashion-saved-card strong {
-    display: block;
-
-    overflow: hidden;
-
-    margin-top: 6px;
-
-    color: #cfe3f3;
-
-    font-size: 8px;
-
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.fashion-saved-card span {
-    display: block;
-
-    margin-top: 2px;
-
-    color: #57758e;
-
-    font-size: 6px;
-}
-
-
-/* =========================================================
-   31. MODAL
-   ========================================================= */
-
-.fashion-modal {
-    position: fixed;
-
-    z-index: 1000;
-
-    inset: 0;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background:
-        rgba(1, 8, 15, .74);
-
-    backdrop-filter:
-        blur(9px);
-}
-
-.fashion-modal.open {
-    display: flex;
-
-    animation:
-        fashionModalIn .18s ease;
-}
-
-@keyframes fashionModalIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-.fashion-modal-card {
-    position: relative;
-
-    width: min(420px, 100%);
-
-    padding: 28px;
-
-    border:
-        1px solid
-        rgba(76, 159, 236, .34);
-
-    border-radius: 17px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #09233b,
-            #051523
-        );
-
-    box-shadow:
-        0 30px 100px rgba(0,0,0,.55);
-
-    text-align: center;
-}
-
-.fashion-modal-close {
-    position: absolute;
-
-    top: 9px;
-    right: 9px;
-
-    width: 29px;
-    height: 29px;
-
-    display: grid;
-    place-items: center;
-
-    border-radius: 50%;
-
-    color: #7594ad;
-
-    background: rgba(255,255,255,.035);
-
-    cursor: pointer;
-
-    font-size: 18px;
-}
-
-.fashion-modal-close:hover {
-    color: white;
-    background: rgba(255,255,255,.08);
-}
-
-.fashion-result-icon {
-    width: 55px;
-    height: 55px;
-
-    display: grid;
-    place-items: center;
-
-    margin: 0 auto 12px;
-
-    border:
-        1px solid
-        rgba(86, 169, 245, .35);
-
-    border-radius: 50%;
-
-    color: #82c4ff;
-
-    background:
-        rgba(37, 131, 224, .1);
-
-    font-size: 25px;
-
-    box-shadow:
-        0 0 35px rgba(44, 145, 238, .15);
-}
-
-.fashion-modal-card h2 {
-    margin: 5px 0 8px;
-
-    color: white;
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 25px;
-}
-
-.fashion-modal-card p {
-    margin: 0 auto 18px;
-
-    color: #7895ac;
-
-    font-size: 10px;
-    line-height: 1.6;
-}
-
-.fashion-result-rank {
-    color: var(--fashion-gold-light);
-
-    font-family:
-        Georgia,
-        serif;
-
-    font-size: 45px;
-    font-weight: 700;
-
-    text-shadow:
-        0 0 30px rgba(215, 173, 87, .3);
-}
-
-.fashion-result-stats {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 6px;
-
-    margin-bottom: 15px;
-}
-
-.fashion-result-stats > div {
-    padding: 9px;
-
-    border: 1px solid rgba(65, 136, 202, .18);
-    border-radius: 8px;
-
-    background: rgba(5, 21, 35, .7);
-}
-
-.fashion-result-stats span {
-    display: block;
-
-    color: #57758d;
-
-    font-size: 6px;
-    font-weight: 900;
-    letter-spacing: .12em;
-}
-
-.fashion-result-stats strong {
-    display: block;
-
-    margin-top: 4px;
-
-    color: #cde8ff;
-
-    font-size: 12px;
-}
-
-.fashion-save-card input {
-    width: 100%;
-    height: 43px;
-
-    margin: 8px 0 12px;
-
-    padding: 0 12px;
-
-    border:
-        1px solid
-        rgba(67, 142, 211, .28);
-
-    border-radius: 8px;
-
-    outline: none;
-
-    color: #e6f3ff;
-
-    background:
-        rgba(3, 15, 27, .8);
-}
-
-.fashion-save-card input:focus {
-    border-color:
-        rgba(76, 166, 255, .7);
-
-    box-shadow:
-        0 0 0 3px rgba(47, 145, 255, .08);
-}
-
-
-/* =========================================================
-   32. TOAST
-   ========================================================= */
-
-.fashion-toast {
-
-    position: fixed;
-
-    right: 24px;
-
-    bottom: 24px;
-
-    z-index: 99999;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 14px 18px;
-
-    border-radius: 14px;
-
-    background: rgba(15,15,25,.95);
-
-    color: white;
-
-    opacity: 0;
-
-    transform: translateY(20px);
-
-    pointer-events: none;
-
-    transition: .3s;
-}
-
-.fashion-toast.show {
-
-    opacity: 1;
-
-    transform: translateY(0);
-}
-
-#fashionToastIcon {
-    color: var(--fashion-blue-light);
-}
-
-
-/* =========================================================
-   33. RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 1250px) {
-
-    #fashionDesignerGame {
-        padding: 18px;
-    }
-
-    .fashion-workspace {
-        grid-template-columns:
-            235px
-            minmax(0, 1fr)
-            235px;
-    }
-
-    .fashion-saved-grid {
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-    }
-}
-
-
-@media (max-width: 1050px) {
-
-    .fashion-workspace {
-        grid-template-columns:
-            220px
-            minmax(0, 1fr);
-    }
-
-    .fashion-outfit-panel {
-        grid-column: 1 / -1;
-
-        display: grid;
-
-        grid-template-columns:
-            1fr 1fr;
-
-        gap: 10px;
-    }
-
-    .fashion-outfit-panel .fashion-panel-heading,
-    .fashion-outfit-panel .fashion-score-card,
-    .fashion-outfit-panel .fashion-equipment-summary,
-    .fashion-outfit-panel .fashion-selected-title,
-    .fashion-outfit-panel .fashion-selected-items,
-    .fashion-outfit-panel .fashion-design-actions {
-        min-width: 0;
-    }
-
-    .fashion-outfit-panel .fashion-panel-heading {
-        grid-column: 1;
-    }
-
-    .fashion-outfit-panel .fashion-score-card {
-        grid-column: 2;
-    }
-
-    .fashion-outfit-panel .fashion-equipment-summary {
-        grid-column: 1;
-    }
-
-    .fashion-outfit-panel .fashion-selected-title,
-    .fashion-outfit-panel .fashion-selected-items {
-        grid-column: 2;
-    }
-
-    .fashion-outfit-panel .fashion-design-actions {
-        grid-column: 1 / -1;
-
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-
-@media (max-width: 780px) {
-
-    #fashionDesignerGame {
-        padding: 10px;
-    }
-
-    .fashion-header {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .fashion-header-actions {
-        width: 100%;
-    }
-
-    .fashion-header-actions .fashion-button {
-        flex: 1;
-    }
-
-    .fashion-stats {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .fashion-workspace {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .fashion-wardrobe-panel {
-        max-height: 420px;
-    }
-
-    .fashion-items-grid {
-        max-height: 320px;
-    }
-
-    .fashion-stage {
-        min-height: 560px;
-    }
-
-    .fashion-outfit-panel {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .fashion-outfit-panel .fashion-design-actions {
-        display: flex;
-    }
-
-    .fashion-challenge-content {
-        grid-template-columns: 1fr;
-    }
-
-    .fashion-saved-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-}
-
-
-@media (max-width: 480px) {
-
-    .fashion-header h1 {
-        font-size: 31px;
-    }
-
-    .fashion-stats {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .fashion-stat-card {
-        min-height: 58px;
-    }
-
-    .fashion-stat-card strong {
-        font-size: 16px;
-    }
-
-    .fashion-stage {
-        min-height: 480px;
-    }
-
-    .fashion-zoom-controls {
-        right: 7px;
-    }
-
-    .fashion-current-style {
-        right: 7px;
-    }
-
-    .fashion-stage-bottom {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .fashion-color-control {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .fashion-saved-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-}
-/* =========================================================
-   NAYLA FASHION DESIGNER
-   TYPOGRAPHY OVERRIDE
-   Membesarkan UI agar lebih mudah dibaca
-   ========================================================= */
-
-/* ---------------------------------------------------------
-   GENERAL
-   --------------------------------------------------------- */
-
-.fashion-designer-page {
-    font-size: 14px;
-}
-
-
-/* ---------------------------------------------------------
-   HEADER
-   --------------------------------------------------------- */
-
-.fashion-header h1 {
-    font-size: clamp(2.6rem, 4vw, 4rem);
-    line-height: 1.05;
-}
-
-.fashion-header p {
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-.fashion-eyebrow {
-    font-size: .72rem;
-    letter-spacing: .18em;
-}
-
-
-/* ---------------------------------------------------------
-   STAT CARDS
-   --------------------------------------------------------- */
-
-.fashion-stat-card {
-    min-height: 72px;
-}
-
-.fashion-stat-card > span {
-    font-size: .68rem;
-    letter-spacing: .14em;
-}
-
-.fashion-stat-card > strong {
-    font-size: 1.15rem;
-}
-
-
-/* ---------------------------------------------------------
-   PANEL TITLE
-   --------------------------------------------------------- */
-
-.fashion-panel-kicker {
-    font-size: .67rem;
-    letter-spacing: .16em;
-}
-
-.fashion-panel-heading h2 {
-    font-size: 1.2rem;
-}
-
-
-/* ---------------------------------------------------------
-   CATEGORY BUTTON
-   --------------------------------------------------------- */
-
-.fashion-category-button {
-    font-size: .78rem;
-    min-height: 32px;
-}
-
-.fashion-category-button .category-icon {
-    font-size: .8rem;
-}
-
-
-/* ---------------------------------------------------------
-   SEARCH
-   --------------------------------------------------------- */
-
-.fashion-search input {
-    font-size: .86rem;
-}
-
-.fashion-search-icon {
-    font-size: 1rem;
-}
-
-
-/* ---------------------------------------------------------
-   WARDROBE ITEM
-   --------------------------------------------------------- */
-
-.fashion-item-card {
-    min-height: 126px;
-}
-
-.fashion-item-card .fashion-item-name,
-.fashion-item-name {
-    font-size: .78rem !important;
-    font-weight: 700;
-}
-
-.fashion-item-card .fashion-item-rarity,
-.fashion-item-rarity {
-    font-size: .58rem !important;
-}
-
-.fashion-item-card .fashion-item-price,
-.fashion-item-price {
-    font-size: .65rem !important;
-}
-
-
-/* ---------------------------------------------------------
-   3D STUDIO
-   --------------------------------------------------------- */
-
-.fashion-stage-title strong {
-    font-size: .82rem;
-}
-
-.fashion-rotation-hint {
-    font-size: .67rem;
-    letter-spacing: .1em;
-}
-
-.fashion-current-style span {
-    font-size: .56rem;
-}
-
-.fashion-current-style strong {
-    font-size: .72rem;
-}
-
-
-/* ---------------------------------------------------------
-   RIGHT OUTFIT PANEL
-   Ini bagian utama yang terlihat terlalu kecil
-   di screenshot kedua.
-   --------------------------------------------------------- */
-
-.fashion-outfit-panel {
-    font-size: 14px;
-}
-
-
-/* My Design */
-
-.fashion-outfit-panel .fashion-panel-heading h2 {
-    font-size: 1.35rem;
-    line-height: 1.1;
-}
-
-
-/* COMMON / RARITY */
-
-.fashion-outfit-panel .fashion-rarity {
-    font-size: .62rem;
-    padding: 5px 9px;
-}
-
-
-/* Style score */
-
-.fashion-score-card {
-    padding: 14px;
-}
-
-.fashion-score-header span {
-    font-size: .65rem;
-    letter-spacing: .13em;
-}
-
-.fashion-score-header strong {
-    font-size: 1.65rem;
-}
-
-.fashion-score-rank span {
-    font-size: .62rem;
-}
-
-.fashion-score-rank strong {
-    font-size: 1rem;
-}
-
-
-/* ---------------------------------------------------------
-   EQUIPMENT
-   --------------------------------------------------------- */
-
-.fashion-equipment-summary > .fashion-panel-kicker {
-    font-size: .68rem;
-    margin-bottom: 8px;
-}
-
-.fashion-equipment-summary-grid {
-    gap: 7px;
-}
-
-.equipment-slot {
-    min-height: 48px;
-    padding: 8px 9px;
-}
-
-.equipment-slot span {
-    font-size: .55rem;
-    letter-spacing: .1em;
-}
-
-.equipment-slot strong {
-    font-size: .76rem;
-    margin-top: 4px;
-}
-
-
-/* ---------------------------------------------------------
-   SELECTED ITEMS
-   --------------------------------------------------------- */
-
-.fashion-selected-title {
-    font-size: .68rem;
-    letter-spacing: .1em;
-}
-
-.fashion-selected-title > span:last-child {
-    font-size: .7rem;
-}
-
-.fashion-selected-item {
-    min-height: 52px;
-}
-
-.fashion-selected-item .selected-item-name,
-.fashion-selected-item-name {
-    font-size: .75rem !important;
-    font-weight: 700;
-}
-
-.fashion-selected-item .selected-item-category,
-.fashion-selected-item-category {
-    font-size: .57rem !important;
-}
-
-
-/* ---------------------------------------------------------
-   BUTTONS
-   --------------------------------------------------------- */
-
-.fashion-outfit-panel .fashion-full-button {
-    min-height: 46px;
-    font-size: .82rem;
-    letter-spacing: .05em;
-}
-
-.fashion-button {
-    font-weight: 700;
-}
-
-
-/* ---------------------------------------------------------
-   CHALLENGE
-   --------------------------------------------------------- */
-
-.fashion-challenge-heading h2 {
-    font-size: 1.9rem;
-}
-
-.fashion-challenge-brief span {
-    font-size: .78rem;
-    letter-spacing: .12em;
-}
-
-.fashion-challenge-brief p {
-    font-size: 1.05rem;
-    line-height: 1.6;
-}
-
-.fashion-challenge-progress {
-    font-size: .88rem;
-}
-
-
-/* ---------------------------------------------------------
-   SAVED OUTFITS
-   --------------------------------------------------------- */
-
-.fashion-saved-heading h2 {
-    font-size: 1.35rem;
-}
-
-.fashion-saved-heading > span {
-    font-size: .7rem;
-}
-
-.fashion-saved-delete {
-    position: absolute;
-    z-index: 3;
-
-    right: 5px;
-    top: 5px;
-
-    width: 22px;
-    height: 22px;
-
-    display: grid;
-    place-items: center;
-
-    border-radius: 50%;
-
-    color: #ff9cba;
-
-    background: rgba(28, 8, 18, .85);
-    border: 1px solid rgba(214, 93, 134, .5);
-
-    cursor: pointer;
-
-    font-size: 13px;
-    line-height: 1;
-
-    /* FIX: dulu opacity:0 dan cuma muncul saat :hover kartu —
-       di HP/tablet tidak ada hover, jadi tombol ini tidak pernah
-       kelihatan. Sekarang selalu terlihat. */
-    opacity: .82;
-    transition: opacity .16s ease, background .16s ease, transform .16s ease;
-}
-
-.fashion-saved-card:hover .fashion-saved-delete,
-.fashion-saved-delete:focus-visible {
-    opacity: 1;
-}
-
-.fashion-saved-delete:active {
-    transform: scale(.92);
-}
-
-
-/* ---------------------------------------------------------
-   MODAL
-   --------------------------------------------------------- */
-
-.fashion-modal-card h2 {
-    font-size: 1.6rem;
-}
-
-.fashion-modal-card p {
-    font-size: .9rem;
-    line-height: 1.6;
-}
-
-
-/* ---------------------------------------------------------
-   MOBILE / SMALL SCREEN
-   --------------------------------------------------------- */
-
-@media (max-width: 900px) {
-
-    .fashion-header h1 {
-        font-size: 2.2rem;
-    }
-
-    .fashion-panel-heading h2 {
-        font-size: 1.1rem;
-    }
-
-    .fashion-outfit-panel .fashion-panel-heading h2 {
-        font-size: 1.25rem;
+            );
     }
 
-    .fashion-outfit-panel {
-        font-size: 13px;
-    }
-
-    .equipment-slot strong {
-        font-size: .72rem;
-    }
-
-}
-/* FIX: pastikan atribut [hidden] selalu dihormati,
-   walau ada rule display lain untuk .fashion-3d-error / .fashion-3d-loading */
-.fashion-3d-error[hidden],
-.fashion-3d-loading[hidden] {
-    display: none !important;
-}
-
-/* =========================================================
-   NAYLA FASHION DESIGNER — PHASE 2 / COUTURE LAB
-   Enhanced wardrobe, gender switch, open-face hair,
-   deeper 3D zoom and additional fashion layers.
-   ========================================================= */
-
-/* ---------- Advanced control panel ---------- */
-.fashion-advanced-controls {
-    margin: 8px 0 10px;
-    padding: 10px;
-    border: 1px solid rgba(76,159,236,.22);
-    border-radius: 12px;
-    background:
-        linear-gradient(145deg, rgba(10,34,57,.82), rgba(4,18,31,.92));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
-}
-
-.fashion-advanced-title {
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-    margin-bottom:8px;
-    color:#dff0ff;
-    font-size:10px;
-    font-weight:900;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-}
-
-.fashion-advanced-title small {
-    padding:3px 6px;
-    border:1px solid rgba(215,173,87,.4);
-    border-radius:5px;
-    color:#f1d28a;
-    background:rgba(80,61,23,.3);
-    font-size:7px;
-    letter-spacing:.1em;
-}
-
-.fashion-gender-label {
-    margin:7px 0 5px;
-    color:#577894;
-    font-size:7px;
-    font-weight:900;
-    letter-spacing:.13em;
-    text-transform:uppercase;
-}
-
-.fashion-gender-switch {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:5px;
-}
-
-.fashion-gender-btn {
-    min-height:31px;
-    padding:0 7px;
-    border:1px solid rgba(68,136,196,.25);
-    border-radius:8px;
-    color:#7ea4c3;
-    background:rgba(4,21,36,.8);
-    cursor:pointer;
-    font-size:8px;
-    font-weight:900;
-    letter-spacing:.05em;
-    transition:.16s ease;
-}
-
-.fashion-gender-btn:hover {
-    border-color:rgba(76,159,236,.6);
-    color:#dceeff;
-    transform:translateY(-1px);
-}
-
-.fashion-gender-btn.active {
-    color:#fff;
-    border-color:rgba(99,176,255,.8);
-    background:linear-gradient(135deg,rgba(28,121,211,.75),rgba(10,59,104,.85));
-    box-shadow:0 6px 18px rgba(19,108,216,.2);
-}
-
-.fashion-advanced-divider {
-    height:1px;
-    margin:9px 0;
-    background:rgba(76,159,236,.12);
-}
-
-.fashion-extra-categories {
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:5px;
-}
-
-.fashion-extra-category {
-    min-height:28px;
-}
-
-.fashion-extra-category.active {
-    color:#fff;
-    border-color:rgba(76,159,236,.75);
-    background:linear-gradient(135deg,rgba(20,96,167,.7),rgba(7,46,82,.9));
-}
-
-/* ---------- Gender badge on 3D stage ---------- */
-.fashion-gender-badge {
-    position:absolute;
-    z-index:15;
-    left:12px;
-    top:50px;
-    min-width:62px;
-    padding:6px 9px;
-    border:1px solid rgba(99,176,255,.25);
-    border-radius:999px;
-    color:#b9dcfa;
-    background:rgba(3,18,31,.72);
-    backdrop-filter:blur(10px);
-    box-shadow:0 8px 24px rgba(0,0,0,.2);
-    font-size:7px;
-    font-weight:900;
-    letter-spacing:.12em;
-    text-align:center;
-}
-
-/* ---------- More powerful zoom controls ---------- */
-.fashion-zoom-controls {
-    right:10px;
-    gap:8px;
-}
-
-.fashion-zoom-button {
-    width:32px;
-    height:32px;
-    border-radius:9px;
-    box-shadow:0 8px 20px rgba(0,0,0,.18);
-}
-
-.fashion-zoom-track {
-    height:112px;
-    width:5px;
-}
-
-.fashion-stage-panel canvas {
-    cursor:grab;
-}
-
-.fashion-stage-panel canvas:active {
-    cursor:grabbing;
-}
-
-/* ---------- Larger wardrobe collection ---------- */
-.fashion-items-grid {
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:7px;
-    max-height:590px;
-    overscroll-behavior:contain;
-}
-
-.fashion-item-card {
-    min-height:132px;
-}
-
-.fashion-item-preview {
-    height:70px;
-}
-
-.fashion-item-card.equipped::before {
-    content:"✓";
-    position:absolute;
-    z-index:3;
-    left:5px;
-    top:5px;
-    width:17px;
-    height:17px;
-    display:grid;
-    place-items:center;
-    border-radius:50%;
-    color:#fff;
-    background:#2183df;
-    box-shadow:0 4px 12px rgba(33,131,223,.35);
-    font-size:9px;
-    font-weight:900;
-}
-
-.fashion-item-card:hover .fashion-item-visual {
-    transform:translateY(-2px) scale(1.06);
-}
-
-.fashion-item-visual {
-    transition:transform .18s ease;
-}
-
-/* ---------- Preview art for new categories ---------- */
-.item-scarf::before {
-    content:"";
-    position:absolute;
-    left:7px;
-    top:9px;
-    width:28px;
-    height:18px;
-    border:5px solid var(--item-color);
-    border-bottom-color:transparent;
-    border-radius:50%;
-    transform:rotate(-8deg);
-}
-.item-scarf::after {
-    content:"";
-    position:absolute;
-    left:22px;
-    top:22px;
-    width:8px;
-    height:25px;
-    border-radius:4px;
-    background:var(--item-color);
-    transform:rotate(12deg);
-}
-
-.item-belt::before {
-    content:"";
-    position:absolute;
-    left:4px;
-    top:16px;
-    width:34px;
-    height:15px;
-    border:4px solid var(--item-color);
-    border-radius:7px;
-}
-.item-belt::after {
-    content:"";
-    position:absolute;
-    left:18px;
-    top:20px;
-    width:7px;
-    height:7px;
-    border:2px solid #f1d28a;
-    border-radius:2px;
-}
-
-.item-gloves::before,
-.item-gloves::after {
-    content:"";
-    position:absolute;
-    top:15px;
-    width:12px;
-    height:26px;
-    border-radius:8px;
-    background:var(--item-color);
-}
-.item-gloves::before { left:7px; transform:rotate(10deg); }
-.item-gloves::after { right:7px; transform:rotate(-10deg); }
+    .item-hat::before {
+        left: 3px;
+        top: 13px;
 
-.item-earrings::before,
-.item-earrings::after {
-    content:"";
-    position:absolute;
-    top:18px;
-    width:13px;
-    height:13px;
-    border:3px solid var(--item-color);
-    border-radius:50%;
-}
-.item-earrings::before { left:7px; }
-.item-earrings::after { right:7px; }
+        width: 36px;
+        height: 13px;
 
-.item-socks::before,
-.item-socks::after {
-    content:"";
-    position:absolute;
-    top:15px;
-    width:12px;
-    height:29px;
-    border-radius:7px;
-    background:linear-gradient(90deg,var(--item-color),rgba(255,255,255,.25));
-}
-.item-socks::before { left:7px; }
-.item-socks::after { right:7px; }
+        border-radius: 50%;
 
-.item-wristwear::before,
-.item-wristwear::after {
-    content:"";
-    position:absolute;
-    top:20px;
-    width:14px;
-    height:14px;
-    border:3px solid var(--item-color);
-    border-radius:50%;
-}
-.item-wristwear::before { left:5px; }
-.item-wristwear::after { right:5px; }
-
-/* ---------- Better stage depth ---------- */
-.fashion-stage {
-    position:relative;
-}
-
-.fashion-stage::after {
-    content:"";
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    background:
-        radial-gradient(circle at 50% 46%,rgba(54,145,232,.07),transparent 34%),
-        linear-gradient(180deg,rgba(255,255,255,.015),transparent 26%);
-    mix-blend-mode:screen;
-}
-
-/* ---------- Responsive ---------- */
-@media (max-width:900px) {
-    .fashion-extra-categories {
-        grid-template-columns:repeat(3,minmax(0,1fr));
-    }
-
-    .fashion-items-grid {
-        max-height:420px;
-    }
-
-    .fashion-gender-badge {
-        top:48px;
-    }
-}
-
-@media (max-width:480px) {
-    .fashion-extra-categories {
-        grid-template-columns:repeat(2,minmax(0,1fr));
-    }
-
-    .fashion-gender-badge {
-        left:7px;
-        top:45px;
-    }
-}
-/* =========================================================
-   MOBILE POLISH PATCH
-   ========================================================= */
-
-@media (max-width: 640px) {
-
-    #fashionDesignerGame {
-        padding: 8px;
-    }
-
-    .fashion-header {
-        gap: 10px;
-        padding: 4px 0 16px;
+        background: var(--item-color);
     }
 
-    .fashion-header h1 {
-        font-size: 1.9rem;
-    }
-
-    .fashion-header p {
-        font-size: .82rem;
-        line-height: 1.5;
-    }
-
-    .fashion-header-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 7px;
-        width: 100%;
-    }
-
-    .fashion-button {
-        min-height: 44px;
-        font-size: 9px;
-        padding: 0 8px;
-    }
+    .item-hat::after {
+        left: 10px;
+        top: 5px;
 
-    /* Stats jadi 2 kolom rapi, timer full width di bawah */
-    .fashion-stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 7px;
-    }
+        width: 22px;
+        height: 17px;
 
-    .fashion-timer-card {
-        grid-column: 1 / -1;
-    }
+        border-radius: 6px 6px 2px 2px;
 
-    /* Wardrobe panel dijadikan accordion sederhana: batasi tinggi */
-    .fashion-wardrobe-panel {
-        max-height: 380px;
-        order: 2;
+        background:
+            linear-gradient(
+                100deg,
+                color-mix(
+                    in srgb,
+                    var(--item-color) 70%,
+                    black
+                ),
+                var(--item-color)
+            );
     }
 
-    .fashion-items-grid {
-        grid-template-columns: repeat(2, minmax(0,1fr));
-        max-height: 260px;
-    }
+    .item-glasses::before {
+        left: 2px;
+        top: 18px;
 
-    .fashion-item-card {
-        min-height: 108px;
-    }
+        width: 14px;
+        height: 14px;
 
-    /* Stage/3D studio ditaruh paling atas biar langsung kelihatan */
-    .fashion-stage-panel {
-        order: 1;
-    }
+        border: 3px solid var(--item-color);
+        border-radius: 50%;
 
-    .fashion-outfit-panel {
-        order: 3;
+        box-shadow:
+            24px 0 0 -3px var(--item-color),
+            24px 0 0 0 var(--item-color);
     }
 
-    .fashion-stage {
-        min-height: 60vh;
-    }
+    .item-glasses::after {
+        left: 15px;
+        top: 24px;
 
-    /* Toolbar atas stage dirapikan supaya tidak wrap berantakan */
-    .fashion-stage-toolbar {
-        padding: 6px 8px;
-    }
+        width: 13px;
+        height: 3px;
 
-    .fashion-round-button {
-        width: 26px;
-        height: 26px;
-        font-size: 13px;
+        background: var(--item-color);
     }
 
-    /* Kontrol zoom & info style jangan menutupi avatar terlalu banyak */
-    .fashion-zoom-controls {
-        right: 6px;
-        gap: 5px;
-    }
+    .item-bag::before {
+        left: 9px;
+        top: 14px;
 
-    .fashion-zoom-button {
-        width: 26px;
-        height: 26px;
-        font-size: 14px;
-    }
+        width: 25px;
+        height: 25px;
 
-    .fashion-zoom-track {
-        height: 70px;
-    }
+        border-radius: 6px;
 
-    .fashion-current-style {
-        right: 6px;
-        bottom: 6px;
-        min-width: 100px;
-        padding: 6px 8px;
+        background:
+            linear-gradient(
+                120deg,
+                color-mix(
+                    in srgb,
+                    var(--item-color) 65%,
+                    black
+                ),
+                var(--item-color)
+            );
     }
 
-    .fashion-camera-status {
-        left: 6px;
+    .item-bag::after {
+        left: 14px;
         top: 6px;
+
+        width: 15px;
+        height: 17px;
+
+        border: 3px solid var(--item-color);
+        border-bottom: 0;
+
+        border-radius: 12px 12px 0 0;
     }
 
-    .fashion-rotation-hint {
-        left: 6px;
-        bottom: 6px;
-        font-size: 6px;
+    .item-accessory::before {
+        left: 9px;
+        top: 14px;
+
+        width: 24px;
+        height: 24px;
+
+        border: 3px solid var(--item-color);
+
+        border-radius: 50%;
     }
 
-    /* Warna & tombol bawah stage jangan berdesakan */
-    .fashion-stage-bottom {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-        padding: 8px;
+    .item-accessory::after {
+        left: 18px;
+        top: 23px;
+
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: var(--item-color);
     }
 
-    .fashion-color-options {
-        flex-wrap: wrap;
-    }
+    .fashion-item-info {
+        min-width: 0;
 
-    /* Outfit panel: 1 kolom penuh, ringkas */
-    .fashion-equipment-summary-grid {
-        grid-template-columns: repeat(2, minmax(0,1fr));
-    }
-
-    .fashion-design-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
-    }
-
-    .fashion-design-actions .fashion-full-button {
-        min-height: 42px;
-        font-size: .74rem;
-    }
-
-    /* Challenge & saved section dipadatkan */
-    .fashion-challenge-content {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-    .fashion-saved-grid {
-        grid-template-columns: repeat(3, minmax(0,1fr));
-        gap: 6px;
-    }
-
-    /* Modal jangan kebesaran di layar kecil */
-    .fashion-modal-card {
-        padding: 18px;
-        width: min(360px, 94%);
-    }
-
-    .fashion-modal-card h2 {
-        font-size: 1.25rem;
-    }
-
-    .fashion-result-rank {
-        font-size: 34px;
-    }
-}
-
-@media (max-width: 380px) {
-
-    .fashion-header h1 {
-        font-size: 1.6rem;
-    }
-
-    .fashion-stat-card strong {
-        font-size: .95rem;
-    }
-
-    .fashion-items-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .fashion-saved-grid {
-        grid-template-columns: repeat(2, minmax(0,1fr));
-    }
-
-    .fashion-design-actions {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Matikan efek berat (glow/ring/grid) di layar kecil supaya rendering
-   lebih ringan & tidak mengganggu avatar */
-@media (max-width: 640px) {
-
-    .fashion-stage-glow,
-    .fashion-stage-ring.ring-two,
-    .fashion-stage-ring.ring-three,
-    .fashion-stage-grid {
-        display: none;
-    }
-}
-/* =========================================================
-   MOBILE POLISH PATCH 2 — wardrobe & buttons
-   ========================================================= */
-
-@media (max-width: 640px) {
-
-    /* Kategori: grid rapi 3 kolom, bukan wrap berantakan */
-    .fashion-categories {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 6px;
-    }
-
-    .fashion-category-button {
-        justify-content: center;
-        min-height: 34px;
-        font-size: 8.5px;
-        padding: 0 4px;
-        white-space: nowrap;
-    }
-
-    .fashion-category-button span:first-child {
-        display: none; /* sembunyikan emoji kecil biar teks muat */
-    }
-
-    /* Item wardrobe: 2 kolom tapi kartu lebih pendek & rapi */
-    .fashion-items-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 7px;
-        max-height: 300px;
-    }
-
-    .fashion-item-card {
-        min-height: 118px;
-        padding: 5px;
-    }
-
-    .fashion-item-preview {
-        height: 58px;
+        padding: 6px 2px 2px;
     }
 
     .fashion-item-name {
-        font-size: 9px !important;
+        display: block;
+
+        overflow: hidden;
+
+        color: #dbeaff;
+
+        font-size: 8px;
+        font-weight: 800;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .fashion-item-meta {
-        font-size: 6.5px;
+        display: flex;
+        justify-content: space-between;
+        gap: 3px;
+
+        margin-top: 4px;
+
+        color: #55738e;
+
+        font-size: 6px;
+        font-weight: 800;
+        text-transform: uppercase;
     }
 
-    /* Semua tombol aksi desain (Save/Submit/PNG/Clear) seragam ukuran */
-    .fashion-design-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
+    .fashion-item-price {
+        color: var(--fashion-blue-light);
     }
 
-    .fashion-design-actions .fashion-button {
-        min-height: 44px;
-        font-size: 9px;
-        white-space: normal;
-        line-height: 1.2;
+    .fashion-rarity-dot {
+        position: absolute;
+
+        top: 5px;
+        right: 5px;
+
+        width: 5px;
+        height: 5px;
+
+        border-radius: 50%;
+
+        background: var(--fashion-blue-light);
     }
 
-    /* Search bar full width & tidak sempit */
-    .fashion-search {
-        height: 38px;
+    .fashion-rarity-dot.rare {
+        background: #72a7ff;
     }
 
-    /* Equipment grid rapi 2 kolom konsisten tinggi */
-    .fashion-equipment-summary-grid .equipment-slot {
+    .fashion-rarity-dot.epic {
+        background: #c19cff;
+    }
+
+    .fashion-rarity-dot.legendary {
+        background: var(--fashion-gold-light);
+    }
+
+
+    /* =========================================================
+    14. STAGE
+    ========================================================= */
+
+    .fashion-stage-panel {
+        min-width: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        overflow: hidden;
+    }
+
+    .fashion-stage-toolbar {
         min-height: 42px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 7px 10px;
+
+        border-bottom: 1px solid rgba(68, 136, 196, .19);
     }
 
-    /* Selected items list: kartu tidak terlalu tipis */
-    .fashion-selected-item {
-        min-height: 46px;
-        grid-template-columns: 30px minmax(0, 1fr) 24px;
+    .fashion-stage-title {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
     }
 
-    .fashion-remove-item,
-    [data-fashion-remove] {
-        width: 24px;
-        height: 24px;
-        border-radius: 6px;
-        background: rgba(214, 93, 134, .15);
-        color: #ff9cba;
-        font-size: 13px;
+    .fashion-stage-title strong {
+        color: #e8f4ff;
+
+        font-size: 10px;
+        letter-spacing: .03em;
     }
 
-    /* Modal hasil penilaian jangan kebesaran/kepotong di HP kecil */
-    #fashionResultModal .fashion-modal-card,
-    #fashionSaveModal .fashion-modal-card {
-        width: min(340px, 92%);
-        padding: 20px 16px;
-        max-height: 88vh;
-        overflow-y: auto;
-    }
-
-    .fashion-result-stats {
+    .fashion-stage-tools {
+        display: flex;
         gap: 5px;
     }
 
-    .fashion-result-stats > div {
-        padding: 7px;
+    .fashion-round-button {
+        width: 30px;
+        height: 30px;
+
+        display: grid;
+        place-items: center;
+
+        border: 1px solid rgba(69, 143, 211, .35);
+        border-radius: 50%;
+
+        color: #83bdf0;
+
+        background: rgba(6, 26, 44, .85);
+
+        cursor: pointer;
+
+        font-size: 15px;
+
+        transition: .18s ease;
     }
-}
 
-/* =========================================================
-   FASHION CHALLENGE MODAL
-========================================================= */
+    .fashion-round-button:hover {
+        color: white;
 
-.fashion-challenge-panel{
-    max-height:0;
-    opacity:0;
-    overflow:hidden;
-    transition:max-height .4s ease, opacity .4s ease;
-}
+        border-color:
+            rgba(77, 166, 255, .75);
 
-.fashion-challenge-panel.active{
-    max-height:500px;
-    opacity:1;
-}
+        background:
+            rgba(17, 67, 108, .8);
 
-.fashion-timer-card strong{
-    color:var(--fashion-blue-light);
-}
+        transform: rotate(-5deg);
+    }
 
-/* =========================================================
-   MODAL
-========================================================= */
 
-#fashionChallengeModal{
-    position:fixed;
-    inset:0;
-    z-index:10000;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    /* =========================================================
+    15. THREE STAGE
+    ========================================================= */
 
-    padding:24px;
+    .fashion-stage {
+        position: relative;
 
-    background:rgba(2,10,20,.75);
-    backdrop-filter:blur(8px);
+        flex: 1;
 
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
+        min-height: 530px;
 
-    transition:
-        opacity .25s ease,
-        visibility .25s ease;
-}
+        overflow: hidden;
 
-#fashionChallengeModal.show{
-    opacity:1;
-    visibility:visible;
-    pointer-events:auto;
-}
+        background:
+            radial-gradient(
+                circle at 50% 43%,
+                rgba(28, 93, 156, .17),
+                transparent 37%
+            ),
+            linear-gradient(
+                180deg,
+                #06192c,
+                #041426
+            );
+    }
 
-/* =========================================================
-   CARD
-========================================================= */
+    .fashion-stage-background {
+        position: absolute;
+        inset: 0;
 
-.fashion-challenge-start-card{
-    width:min(620px,100%);
-    max-width:620px;
+        pointer-events: none;
 
-    padding:32px;
+        overflow: hidden;
+    }
 
-    border-radius:24px;
-    text-align:center;
+    .fashion-stage-glow {
+        position: absolute;
 
-    border:1px solid rgba(120,190,255,.2);
+        width: 440px;
+        height: 440px;
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(10,30,55,.98),
-            rgba(5,15,28,.98)
-        );
+        border-radius: 50%;
 
-    box-shadow:
-        0 25px 80px rgba(0,0,0,.45);
+        filter: blur(50px);
 
-    transform:translateY(20px) scale(.96);
+        opacity: .12;
+    }
 
-    transition:
-        transform .25s ease;
-}
+    .glow-one {
+        left: -150px;
+        top: 0;
 
-#fashionChallengeModal.show .fashion-challenge-start-card{
-    transform:none;
-}
+        background: #2585f1;
+    }
 
-/* =========================================================
-   HEADER
-========================================================= */
+    .glow-two {
+        right: -160px;
+        bottom: -90px;
 
-.fashion-challenge-start-card h2{
-    margin:12px 0;
-    color:#ffffff;
-    font-size:2rem;
-}
+        background: #8e54c7;
+    }
 
-.fashion-challenge-start-card p{
-    color:#b8d3eb;
-    line-height:1.7;
-}
+    .fashion-stage-grid {
+        position: absolute;
+        inset: 0;
 
-/* =========================================================
-   PREVIEW BOX
-========================================================= */
+        opacity: .08;
 
-.challenge-preview{
-    margin-top:24px;
-    padding:22px;
+        background-image:
+            linear-gradient(
+                rgba(89, 161, 219, .3) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                90deg,
+                rgba(89, 161, 219, .3) 1px,
+                transparent 1px
+            );
 
-    border-radius:18px;
+        background-size: 45px 45px;
 
-    border:1px solid rgba(120,190,255,.25);
+        mask-image:
+            linear-gradient(
+                to bottom,
+                transparent,
+                black 35%,
+                black 70%,
+                transparent
+            );
+    }
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(10,30,55,.95),
-            rgba(6,18,35,.98)
-        );
-}
+    .fashion-stage-ring {
+        position: absolute;
 
-.challenge-preview h3{
-    margin:0 0 10px;
-    color:#7cc7ff;
-    font-size:1.4rem;
-}
+        left: 50%;
+        top: 48%;
 
-.challenge-preview p{
-    margin:0;
-    color:#d6e9ff;
-    line-height:1.6;
-}
+        transform: translate(-50%, -50%);
 
-/* =========================================================
-   REQUIREMENTS
-========================================================= */
+        border: 1px solid rgba(82, 161, 227, .13);
 
-.challenge-required-list{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px;
+        border-radius: 50%;
 
-    margin-top:18px;
-}
+        pointer-events: none;
+    }
 
-.challenge-required-item{
-    padding:8px 14px;
+    .ring-one {
+        width: 300px;
+        height: 300px;
+    }
 
-    border-radius:999px;
+    .ring-two {
+        width: 450px;
+        height: 450px;
+    }
 
-    border:1px solid rgba(70,160,255,.25);
+    .ring-three {
+        width: 610px;
+        height: 610px;
+    }
 
-    background:
-        rgba(70,160,255,.12);
+    .fashion-three-container {
+        position: absolute;
 
-    color:#a9d7ff;
+        inset: 0;
 
-    font-size:.85rem;
-    font-weight:700;
-}
+        z-index: 4;
 
-/* =========================================================
-   ACTIONS
-========================================================= */
+        cursor:
+            grab;
+    }
 
-.challenge-modal-actions{
-    display:flex;
-    justify-content:center;
-    gap:14px;
+    .fashion-three-container:active {
+        cursor:
+            grabbing;
+    }
 
-    margin-top:26px;
-}
+    .fashion-three-container canvas {
+        display: block;
 
-.challenge-modal-actions button{
-    min-width:180px;
-}
+        width: 100% !important;
+        height: 100% !important;
 
-/* =========================================================
-   MOBILE
-========================================================= */
+        outline: none;
+    }
+    .fashion-three-container {
+        position: relative;
 
-@media (max-width:600px){
+        inset: 0;
+
+        z-index: 4;
+
+        cursor:
+            grab;
+
+        /* FIX: tanpa ini, browser HP menganggap gerakan jari di
+        area ini sebagai gestur scroll/zoom bawaan, sehingga
+        rotasi avatar terasa patah-patah atau "berebut" dengan
+        scroll halaman saat digeser. touch-action: none
+        menyerahkan sepenuhnya kontrol gestur sentuh di area ini
+        ke JavaScript (pointer events di setupStageControls()). */
+        touch-action: none;
+
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        user-select: none;
+    }
+
+    .fashion-three-container:active {
+        cursor:
+            grabbing;
+    }
+
+    .fashion-three-container canvas {
+        display: block;
+
+        width: 100% !important;
+        height: 100% !important;
+
+        outline: none;
+
+        touch-action: none;
+    }
+
+    /* =========================================================
+    16. LOADING
+    ========================================================= */
+
+    .fashion-3d-loading {
+        position: absolute;
+
+        z-index: 15;
+
+        left: 50%;
+        top: 50%;
+
+        transform: translate(-50%, -50%);
+
+        min-width: 180px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        padding: 16px 20px;
+
+        border:
+            1px solid
+            rgba(77, 166, 255, .28);
+
+        border-radius: 13px;
+
+        background:
+            rgba(3, 16, 28, .84);
+
+        backdrop-filter:
+            blur(15px);
+
+        box-shadow:
+            0 20px 60px rgba(0,0,0,.3);
+
+        text-align: center;
+    }
+
+    .fashion-3d-loading strong {
+        margin-top: 9px;
+
+        color: #e7f4ff;
+
+        font-size: 11px;
+    }
+
+    .fashion-3d-loading small {
+        margin-top: 4px;
+
+        color: #6686a2;
+
+        font-size: 8px;
+    }
+
+    .fashion-loader-orbit {
+        position: relative;
+
+        width: 38px;
+        height: 38px;
+    }
+
+    .fashion-loader-orbit span {
+        position: absolute;
+
+        left: 50%;
+        top: 50%;
+
+        width: 8px;
+        height: 8px;
+
+        margin: -4px;
+
+        border-radius: 50%;
+
+        background: var(--fashion-blue-light);
+
+        animation:
+            fashionOrbit 1.1s linear infinite;
+    }
+
+    .fashion-loader-orbit span:nth-child(2) {
+        animation-delay: -.36s;
+    }
+
+    .fashion-loader-orbit span:nth-child(3) {
+        animation-delay: -.72s;
+    }
+
+    @keyframes fashionOrbit {
+        from {
+            transform:
+                rotate(0deg)
+                translateX(16px)
+                scale(.65);
+        }
+
+        50% {
+            transform:
+                rotate(180deg)
+                translateX(16px)
+                scale(1);
+        }
+
+        to {
+            transform:
+                rotate(360deg)
+                translateX(16px)
+                scale(.65);
+        }
+    }
+
+
+    /* =========================================================
+    17. ERROR
+    ========================================================= */
+
+    .fashion-3d-error {
+        position: absolute;
+
+        z-index: 20;
+
+        left: 50%;
+        top: 50%;
+
+        transform: translate(-50%, -50%);
+
+        width: min(300px, 80%);
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        padding: 24px;
+
+        border: 1px solid rgba(214, 93, 134, .35);
+        border-radius: 14px;
+
+        background:
+            rgba(28, 8, 18, .92);
+
+        text-align: center;
+    }
+
+    .fashion-error-icon {
+        width: 40px;
+        height: 40px;
+
+        display: grid;
+        place-items: center;
+
+        margin-bottom: 10px;
+
+        border: 1px solid rgba(214, 93, 134, .45);
+        border-radius: 50%;
+
+        color: #ff9bbb;
+
+        font-weight: 900;
+    }
+
+    .fashion-3d-error strong {
+        color: #ffdce7;
+        font-size: 13px;
+    }
+
+    .fashion-3d-error span {
+        margin: 7px 0 14px;
+
+        color: #a77c8b;
+
+        font-size: 9px;
+        line-height: 1.5;
+    }
+
+
+    /* =========================================================
+    18. FLOOR
+    ========================================================= */
+
+    .fashion-floor {
+        position: absolute;
+
+        z-index: 2;
+
+        left: 50%;
+        bottom: 3%;
+
+        transform: translateX(-50%);
+
+        width: min(70%, 540px);
+        height: 70px;
+
+        pointer-events: none;
+    }
+
+    .fashion-floor-circle {
+        position: absolute;
+        inset: 0;
+
+        border-radius: 50%;
+
+        background:
+            radial-gradient(
+                ellipse,
+                rgba(0, 0, 0, .55) 0%,
+                rgba(0, 0, 0, .3) 42%,
+                transparent 70%
+            );
+
+        box-shadow:
+            0 0 0 2px rgba(50, 149, 239, .55),
+            inset 0 0 50px rgba(24, 119, 206, .15);
+
+        transform:
+            perspective(400px)
+            rotateX(62deg);
+    }
+
+
+    /* =========================================================
+    19. HINT
+    ========================================================= */
+
+    .fashion-rotation-hint {
+        position: absolute;
+
+        z-index: 10;
+
+        left: 14px;
+        bottom: 12px;
+
+        display: flex;
+        align-items: center;
+        gap: 7px;
+
+        color: #6184a1;
+
+        font-size: 7px;
+        font-weight: 800;
+        letter-spacing: .13em;
+    }
+
+    .rotation-icon {
+        color: var(--fashion-blue-light);
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+    20. CAMERA STATUS
+    ========================================================= */
+
+    .fashion-camera-status {
+        position: absolute;
+
+        z-index: 10;
+
+        left: 14px;
+        top: 12px;
+
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 5px 8px;
+
+        border: 1px solid rgba(66, 143, 214, .2);
+        border-radius: 99px;
+
+        color: #6f94b1;
+
+        background: rgba(3, 16, 28, .55);
+
+        font-size: 7px;
+        font-weight: 900;
+        letter-spacing: .12em;
+    }
+
+    .camera-status-dot {
+        width: 5px;
+        height: 5px;
+
+        border-radius: 50%;
+
+        background: #4bb3ff;
+
+        box-shadow:
+            0 0 8px rgba(75, 179, 255, .8);
+    }
+
+
+    /* =========================================================
+    21. CURRENT STYLE
+    ========================================================= */
+
+    .fashion-current-style {
+        position: absolute;
+
+        z-index: 10;
+
+        right: 12px;
+        bottom: 11px;
+
+        display: flex;
+        flex-direction: column;
+
+        min-width: 125px;
+
+        padding: 8px 10px;
+
+        border: 1px solid rgba(70, 143, 211, .25);
+        border-radius: 8px;
+
+        background: rgba(3, 16, 28, .65);
+
+        backdrop-filter: blur(10px);
+    }
+
+    .fashion-current-style span {
+        color: #52738f;
+
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .13em;
+    }
+
+    .fashion-current-style strong {
+        margin-top: 2px;
+
+        color: #e2f0ff;
+
+        font-family:
+            Georgia,
+            serif;
+
+        font-size: 10px;
+    }
+
+
+    /* =========================================================
+    22. ZOOM
+    ========================================================= */
+
+    .fashion-zoom-controls {
+        position: absolute;
+
+        z-index: 12;
+
+        right: 12px;
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .fashion-zoom-button {
+        width: 28px;
+        height: 28px;
+
+        display: grid;
+        place-items: center;
+
+        border: 1px solid rgba(72, 147, 216, .4);
+        border-radius: 8px;
+
+        color: #8bc4f6;
+
+        background: rgba(5, 24, 41, .82);
+
+        cursor: pointer;
+
+        font-size: 17px;
+
+        transition: .16s ease;
+    }
+
+    .fashion-zoom-button:hover {
+        color: white;
+        border-color: rgba(83, 173, 255, .75);
+        background: rgba(17, 65, 104, .85);
+    }
+
+    .fashion-zoom-track {
+        width: 4px;
+        height: 78px;
+
+        display: flex;
+        align-items: flex-end;
+
+        overflow: hidden;
+
+        border-radius: 99px;
+
+        background: rgba(81, 133, 171, .16);
+    }
+
+    .fashion-zoom-fill {
+        width: 100%;
+        height: 55%;
+
+        border-radius: inherit;
+
+        background:
+            linear-gradient(
+                180deg,
+                #72c0ff,
+                #2183df
+            );
+
+        box-shadow:
+            0 0 10px rgba(45, 148, 239, .45);
+    }
+
+
+    /* =========================================================
+    23. STAGE BOTTOM
+    ========================================================= */
+
+    .fashion-stage-bottom {
+        min-height: 40px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 12px;
+
+        padding: 6px 10px;
+
+        border-top: 1px solid rgba(68, 136, 196, .19);
+    }
+
+    .fashion-color-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .fashion-color-control > span {
+        color: #52728e;
+
+        font-size: 7px;
+        font-weight: 900;
+        letter-spacing: .15em;
+    }
+
+    .fashion-color-options {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .fashion-color-option {
+        width: 18px;
+        height: 18px;
+
+        padding: 0;
+
+        border:
+            2px solid
+            transparent;
+
+        border-radius: 50%;
+
+        background: var(--swatch);
+
+        cursor: pointer;
+
+        box-shadow:
+            inset 0 1px 2px rgba(255,255,255,.28),
+            0 2px 6px rgba(0,0,0,.3);
+
+        transition: .16s ease;
+    }
+
+    .fashion-color-option:hover {
+        transform: scale(1.13);
+    }
+
+    .fashion-color-option.active {
+        border-color: #64b5ff;
+
+        box-shadow:
+            0 0 0 2px rgba(66, 156, 239, .18),
+            0 0 12px rgba(66, 156, 239, .3);
+    }
+
+    .fashion-text-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        padding: 4px;
+
+        color: #6f8fa9;
+
+        background: transparent;
+
+        cursor: pointer;
+
+        font-size: 9px;
+
+        transition: .16s ease;
+    }
+
+    .fashion-text-button:hover {
+        color: #c3e2ff;
+    }
+
+
+    /* =========================================================
+    24. OUTFIT SCORE
+    ========================================================= */
+
+    .fashion-score-card {
+        padding: 10px;
+
+        margin-bottom: 11px;
+
+        border:
+            1px solid
+            rgba(67, 142, 211, .22);
+
+        border-radius: 10px;
+
+        background:
+            rgba(7, 27, 46, .72);
+    }
+
+    .fashion-score-header,
+    .fashion-score-rank {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .fashion-score-header span,
+    .fashion-score-rank span {
+        color: #54728c;
+
+        font-size: 7px;
+        font-weight: 900;
+        letter-spacing: .13em;
+    }
+
+    .fashion-score-header strong {
+        color: var(--fashion-blue-light);
+
+        font-family:
+            Georgia,
+            serif;
+
+        font-size: 22px;
+    }
+
+    .fashion-score-bar,
+    .fashion-challenge-progress-bar {
+        height: 4px;
+
+        overflow: hidden;
+
+        margin: 8px 0;
+
+        border-radius: 99px;
+
+        background: rgba(69, 132, 177, .14);
+    }
+
+    .fashion-score-fill {
+        width: 0;
+        height: 100%;
+
+        border-radius: inherit;
+
+        background:
+            linear-gradient(
+                90deg,
+                #1d78d4,
+                #63b4ff
+            );
+
+        transition:
+            width .35s ease;
+    }
+
+    .fashion-score-rank strong {
+        color: #d8eaff;
+
+        font-family:
+            Georgia,
+            serif;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+    25. EQUIPMENT
+    ========================================================= */
+
+    .fashion-equipment-summary {
+        margin-bottom: 11px;
+    }
+
+    .fashion-equipment-summary > .fashion-panel-kicker {
+        margin-bottom: 6px;
+    }
+
+    .fashion-equipment-summary-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 4px;
+    }
+
+    .equipment-slot {
+        min-width: 0;
+
+        padding: 5px 6px;
+
+        border:
+            1px solid
+            rgba(56, 122, 184, .15);
+
+        border-radius: 6px;
+
+        background:
+            rgba(4, 18, 31, .68);
+    }
+
+    .equipment-slot span {
+        display: block;
+
+        color: #55738e;
+
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .09em;
+    }
+
+    .equipment-slot strong {
+        display: block;
+
+        overflow: hidden;
+
+        margin-top: 2px;
+
+        color: #bdd8ee;
+
+        font-size: 7px;
+        font-weight: 700;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+
+    /* =========================================================
+    26. SELECTED ITEMS
+    ========================================================= */
+
+    .fashion-selected-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin-bottom: 6px;
+
+        color: #5f7e99;
+
+        font-size: 7px;
+        font-weight: 900;
+        letter-spacing: .13em;
+    }
+
+    .fashion-selected-title > span:last-child {
+        color: var(--fashion-blue-light);
+    }
+
+    .fashion-selected-items {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        max-height: 225px;
+
+        overflow-y: auto;
+
+        scrollbar-width: thin;
+    }
+
+    .fashion-selected-empty {
+        padding: 16px 7px;
+
+        border: 1px dashed rgba(70, 139, 195, .18);
+        border-radius: 8px;
+
+        color: #4d6981;
+
+        text-align: center;
+
+        font-size: 8px;
+    }
+
+    .fashion-selected-item {
+        min-height: 38px;
+
+        display: grid;
+
+        grid-template-columns:
+            32px
+            minmax(0, 1fr)
+            20px;
+
+        align-items: center;
+
+        gap: 7px;
+
+        padding: 4px;
+
+        border:
+            1px solid
+            rgba(62, 130, 192, .19);
+
+        border-radius: 7px;
+
+        background:
+            rgba(5, 21, 35, .8);
+    }
+
+    .fashion-selected-item-preview {
+        width: 32px;
+        height: 30px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 5px;
+
+        background: #071b2d;
+    }
+
+    .fashion-selected-item-preview .fashion-item-visual {
+        transform: scale(.55);
+    }
+
+    .fashion-selected-item-name {
+        min-width: 0;
+    }
+
+    .fashion-selected-item-name strong {
+        display: block;
+
+        overflow: hidden;
+
+        color: #cfe5f7;
+
+        font-size: 7px;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .fashion-selected-item-name span {
+        display: block;
+
+        margin-top: 2px;
+
+        color: #4f6c84;
+
+        font-size: 6px;
+        text-transform: uppercase;
+    }
+
+    .fashion-remove-item {
+        width: 20px;
+        height: 20px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 5px;
+
+        color: #7090a9;
+
+        background: transparent;
+
+        cursor: pointer;
+    }
+
+    .fashion-remove-item:hover {
+        color: #ff9cba;
+        background: rgba(214, 93, 134, .12);
+    }
+
+
+    /* =========================================================
+    27. DESIGN ACTIONS
+    ========================================================= */
+
+    .fashion-design-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        margin-top: auto;
+        padding-top: 9px;
+    }
+
+
+    /* =========================================================
+    28. RARITY
+    ========================================================= */
+
+    .fashion-rarity {
+        align-self: flex-start;
+
+        padding: 4px 6px;
+
+        border-radius: 5px;
+
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .08em;
+    }
+
+    .rarity-common {
+        color: #a9c3d9;
+
+        background: rgba(103, 137, 163, .13);
+    }
+
+    .rarity-rare {
+        color: #83b8ff;
+
+        background: rgba(64, 128, 214, .15);
+    }
+
+    .rarity-epic {
+        color: #c7a7ff;
+
+        background: rgba(144, 86, 220, .15);
+    }
+
+    .rarity-legendary {
+        color: var(--fashion-gold-light);
+
+        background: rgba(211, 161, 58, .13);
+    }
+
+
+    /* =========================================================
+    29. CHALLENGE
+    ========================================================= */
+
+    .fashion-challenge-panel {
+        margin-top: 9px;
+
+        padding: 13px;
+
+        overflow: hidden;
+    }
+
+    .fashion-challenge-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 15px;
+    }
+
+    .fashion-challenge-timer {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        color: var(--fashion-blue-light);
+    }
+
+    .fashion-challenge-timer strong {
+        font-family:
+            Georgia,
+            serif;
+
+        font-size: 18px;
+    }
+
+    .fashion-challenge-content {
+        display: grid;
+
+        grid-template-columns:
+            1.4fr
+            1fr
+            1fr;
+
+        align-items: center;
+
+        gap: 20px;
+
+        margin-top: 12px;
+    }
+
+    .fashion-challenge-brief span {
+        color: #52718b;
+
+        font-size: 7px;
+        font-weight: 900;
+        letter-spacing: .14em;
+    }
+
+    .fashion-challenge-brief p {
+        max-width: 600px;
+
+        margin: 5px 0 0;
+
+        color: #88a5bd;
+
+        font-size: 9px;
+        line-height: 1.5;
+    }
+
+    .fashion-challenge-requirements {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .challenge-requirement {
+        padding: 5px 7px;
+
+        border: 1px solid rgba(65, 137, 203, .23);
+        border-radius: 5px;
+
+        color: #6689a7;
+
+        background: rgba(8, 29, 49, .65);
+
+        font-size: 6px;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+    .challenge-requirement.complete {
+        color: #a8d8ff;
+
+        border-color:
+            rgba(74, 166, 246, .55);
+
+        background:
+            rgba(31, 112, 187, .18);
+    }
+
+    .fashion-challenge-progress > div:first-child {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        color: #55748e;
+
+        font-size: 7px;
+        font-weight: 900;
+    }
+
+    .fashion-challenge-progress > div:first-child strong {
+        color: #b8dcfb;
+    }
+
+    .fashion-challenge-progress-bar {
+        margin-top: 6px;
+        margin-bottom: 0;
+    }
+
+    .fashion-challenge-progress-bar > div {
+        width: 0;
+        height: 100%;
+
+        border-radius: inherit;
+
+        background:
+            linear-gradient(
+                90deg,
+                #237ed7,
+                #62b6ff
+            );
+
+        transition:
+            width .35s ease;
+    }
+
+
+    /* =========================================================
+    30. SAVED
+    ========================================================= */
+
+    .fashion-saved-section {
+        margin-top: 9px;
+
+        padding: 13px;
+    }
+
+    .fashion-saved-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .fashion-saved-heading > span {
+        color: var(--fashion-blue-light);
+
+        font-size: 8px;
+        font-weight: 900;
+    }
+
+    .fashion-saved-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(6, minmax(0, 1fr));
+
+        gap: 7px;
+
+        margin-top: 10px;
+    }
+
+    .fashion-saved-empty {
+        grid-column: 1 / -1;
+
+        padding: 20px;
+
+        border: 1px dashed rgba(70, 139, 195, .18);
+        border-radius: 9px;
+
+        color: #506d85;
+
+        text-align: center;
+
+        font-size: 9px;
+    }
+
+    .fashion-saved-card {
+        min-width: 0;
+
+        padding: 7px;
+
+        border: 1px solid rgba(61, 127, 189, .18);
+        border-radius: 9px;
+
+        background:
+            rgba(7, 26, 43, .75);
+
+        cursor: pointer;
+
+        transition: .18s ease;
+    }
+
+    .fashion-saved-card:hover {
+        border-color: rgba(77, 166, 255, .5);
+        transform: translateY(-2px);
+    }
+
+    .fashion-saved-preview {
+        height: 80px;
+
+        display: grid;
+        place-items: center;
+
+        overflow: hidden;
+
+        border-radius: 6px;
+
+        background:
+            radial-gradient(
+                circle,
+                rgba(43, 126, 204, .14),
+                transparent 65%
+            ),
+            #06192a;
+    }
+
+    .fashion-saved-mini {
+        position: relative;
+
+        width: 45px;
+        height: 66px;
+    }
+
+    .fashion-saved-mini::before {
+        content: "";
+
+        position: absolute;
+
+        left: 11px;
+        top: 2px;
+
+        width: 23px;
+        height: 23px;
+
+        border-radius: 50%;
+
+        background: #e9b4a5;
+
+        box-shadow:
+            0 20px 0 3px #202d48,
+            0 39px 0 2px #31577d;
+    }
+
+    .fashion-saved-card strong {
+        display: block;
+
+        overflow: hidden;
+
+        margin-top: 6px;
+
+        color: #cfe3f3;
+
+        font-size: 8px;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .fashion-saved-card span {
+        display: block;
+
+        margin-top: 2px;
+
+        color: #57758e;
+
+        font-size: 6px;
+    }
+
+
+    /* =========================================================
+    31. MODAL
+    ========================================================= */
+
+    .fashion-modal {
+        position: fixed;
+
+        z-index: 1000;
+
+        inset: 0;
+
+        display: none;
+
+        align-items: center;
+        justify-content: center;
+
+        padding: 20px;
+
+        background:
+            rgba(1, 8, 15, .74);
+
+        backdrop-filter:
+            blur(9px);
+    }
+
+    .fashion-modal.open {
+        display: flex;
+
+        animation:
+            fashionModalIn .18s ease;
+    }
+
+    @keyframes fashionModalIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .fashion-modal-card {
+        position: relative;
+
+        width: min(420px, 100%);
+
+        padding: 28px;
+
+        border:
+            1px solid
+            rgba(76, 159, 236, .34);
+
+        border-radius: 17px;
+
+        background:
+            linear-gradient(
+                145deg,
+                #09233b,
+                #051523
+            );
+
+        box-shadow:
+            0 30px 100px rgba(0,0,0,.55);
+
+        text-align: center;
+    }
+
+    .fashion-modal-close {
+        position: absolute;
+
+        top: 9px;
+        right: 9px;
+
+        width: 29px;
+        height: 29px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 50%;
+
+        color: #7594ad;
+
+        background: rgba(255,255,255,.035);
+
+        cursor: pointer;
+
+        font-size: 18px;
+    }
+
+    .fashion-modal-close:hover {
+        color: white;
+        background: rgba(255,255,255,.08);
+    }
+
+    .fashion-result-icon {
+        width: 55px;
+        height: 55px;
+
+        display: grid;
+        place-items: center;
+
+        margin: 0 auto 12px;
+
+        border:
+            1px solid
+            rgba(86, 169, 245, .35);
+
+        border-radius: 50%;
+
+        color: #82c4ff;
+
+        background:
+            rgba(37, 131, 224, .1);
+
+        font-size: 25px;
+
+        box-shadow:
+            0 0 35px rgba(44, 145, 238, .15);
+    }
+
+    .fashion-modal-card h2 {
+        margin: 5px 0 8px;
+
+        color: white;
+
+        font-family:
+            Georgia,
+            serif;
+
+        font-size: 25px;
+    }
+
+    .fashion-modal-card p {
+        margin: 0 auto 18px;
+
+        color: #7895ac;
+
+        font-size: 10px;
+        line-height: 1.6;
+    }
+
+    .fashion-result-rank {
+        color: var(--fashion-gold-light);
+
+        font-family:
+            Georgia,
+            serif;
+
+        font-size: 45px;
+        font-weight: 700;
+
+        text-shadow:
+            0 0 30px rgba(215, 173, 87, .3);
+    }
+
+    .fashion-result-stats {
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 6px;
+
+        margin-bottom: 15px;
+    }
+
+    .fashion-result-stats > div {
+        padding: 9px;
+
+        border: 1px solid rgba(65, 136, 202, .18);
+        border-radius: 8px;
+
+        background: rgba(5, 21, 35, .7);
+    }
+
+    .fashion-result-stats span {
+        display: block;
+
+        color: #57758d;
+
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .12em;
+    }
+
+    .fashion-result-stats strong {
+        display: block;
+
+        margin-top: 4px;
+
+        color: #cde8ff;
+
+        font-size: 12px;
+    }
+
+    .fashion-save-card input {
+        width: 100%;
+        height: 43px;
+
+        margin: 8px 0 12px;
+
+        padding: 0 12px;
+
+        border:
+            1px solid
+            rgba(67, 142, 211, .28);
+
+        border-radius: 8px;
+
+        outline: none;
+
+        color: #e6f3ff;
+
+        background:
+            rgba(3, 15, 27, .8);
+    }
+
+    .fashion-save-card input:focus {
+        border-color:
+            rgba(76, 166, 255, .7);
+
+        box-shadow:
+            0 0 0 3px rgba(47, 145, 255, .08);
+    }
+
+
+    /* =========================================================
+    32. TOAST
+    ========================================================= */
+
+    .fashion-toast {
+
+        position: fixed;
+
+        right: 24px;
+
+        bottom: 24px;
+
+        z-index: 99999;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+        padding: 14px 18px;
+
+        border-radius: 14px;
+
+        background: rgba(15,15,25,.95);
+
+        color: white;
+
+        opacity: 0;
+
+        transform: translateY(20px);
+
+        pointer-events: none;
+
+        transition: .3s;
+    }
+
+    .fashion-toast.show {
+
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+
+    #fashionToastIcon {
+        color: var(--fashion-blue-light);
+    }
+
+
+    /* =========================================================
+    33. RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 1250px) {
+
+        #fashionDesignerGame {
+            padding: 18px;
+        }
+
+        .fashion-workspace {
+            grid-template-columns:
+                235px
+                minmax(0, 1fr)
+                235px;
+        }
+
+        .fashion-saved-grid {
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+        }
+    }
+
+
+    @media (max-width: 1050px) {
+
+        .fashion-workspace {
+            grid-template-columns:
+                220px
+                minmax(0, 1fr);
+        }
+
+        .fashion-outfit-panel {
+            grid-column: 1 / -1;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 10px;
+        }
+
+        .fashion-outfit-panel .fashion-panel-heading,
+        .fashion-outfit-panel .fashion-score-card,
+        .fashion-outfit-panel .fashion-equipment-summary,
+        .fashion-outfit-panel .fashion-selected-title,
+        .fashion-outfit-panel .fashion-selected-items,
+        .fashion-outfit-panel .fashion-design-actions {
+            min-width: 0;
+        }
+
+        .fashion-outfit-panel .fashion-panel-heading {
+            grid-column: 1;
+        }
+
+        .fashion-outfit-panel .fashion-score-card {
+            grid-column: 2;
+        }
+
+        .fashion-outfit-panel .fashion-equipment-summary {
+            grid-column: 1;
+        }
+
+        .fashion-outfit-panel .fashion-selected-title,
+        .fashion-outfit-panel .fashion-selected-items {
+            grid-column: 2;
+        }
+
+        .fashion-outfit-panel .fashion-design-actions {
+            grid-column: 1 / -1;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+
+    @media (max-width: 780px) {
+
+        #fashionDesignerGame {
+            padding: 10px;
+        }
+
+        .fashion-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .fashion-header-actions {
+            width: 100%;
+        }
+
+        .fashion-header-actions .fashion-button {
+            flex: 1;
+        }
+
+        .fashion-stats {
+            grid-template-columns:
+                repeat(2, 1fr);
+        }
+
+        .fashion-workspace {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fashion-wardrobe-panel {
+            max-height: 420px;
+        }
+
+        .fashion-items-grid {
+            max-height: 320px;
+        }
+
+        .fashion-stage {
+            min-height: 560px;
+        }
+
+        .fashion-outfit-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fashion-outfit-panel .fashion-design-actions {
+            display: flex;
+        }
+
+        .fashion-challenge-content {
+            grid-template-columns: 1fr;
+        }
+
+        .fashion-saved-grid {
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+        }
+    }
+
+
+    @media (max-width: 480px) {
+
+        .fashion-header h1 {
+            font-size: 31px;
+        }
+
+        .fashion-stats {
+            grid-template-columns:
+                repeat(2, 1fr);
+        }
+
+        .fashion-stat-card {
+            min-height: 58px;
+        }
+
+        .fashion-stat-card strong {
+            font-size: 16px;
+        }
+
+        .fashion-stage {
+            min-height: 480px;
+        }
+
+        .fashion-zoom-controls {
+            right: 7px;
+        }
+
+        .fashion-current-style {
+            right: 7px;
+        }
+
+        .fashion-stage-bottom {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .fashion-color-control {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .fashion-saved-grid {
+            grid-template-columns:
+                repeat(2, 1fr);
+        }
+    }
+    /* =========================================================
+    NAYLA FASHION DESIGNER
+    TYPOGRAPHY OVERRIDE
+    Membesarkan UI agar lebih mudah dibaca
+    ========================================================= */
+
+    /* ---------------------------------------------------------
+    GENERAL
+    --------------------------------------------------------- */
+
+    .fashion-designer-page {
+        font-size: 14px;
+    }
+
+
+    /* ---------------------------------------------------------
+    HEADER
+    --------------------------------------------------------- */
+
+    .fashion-header h1 {
+        font-size: clamp(2.6rem, 4vw, 4rem);
+        line-height: 1.05;
+    }
+
+    .fashion-header p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .fashion-eyebrow {
+        font-size: .72rem;
+        letter-spacing: .18em;
+    }
+
+
+    /* ---------------------------------------------------------
+    STAT CARDS
+    --------------------------------------------------------- */
+
+    .fashion-stat-card {
+        min-height: 72px;
+    }
+
+    .fashion-stat-card > span {
+        font-size: .68rem;
+        letter-spacing: .14em;
+    }
+
+    .fashion-stat-card > strong {
+        font-size: 1.15rem;
+    }
+
+
+    /* ---------------------------------------------------------
+    PANEL TITLE
+    --------------------------------------------------------- */
+
+    .fashion-panel-kicker {
+        font-size: .67rem;
+        letter-spacing: .16em;
+    }
+
+    .fashion-panel-heading h2 {
+        font-size: 1.2rem;
+    }
+
+
+    /* ---------------------------------------------------------
+    CATEGORY BUTTON
+    --------------------------------------------------------- */
+
+    .fashion-category-button {
+        font-size: .78rem;
+        min-height: 32px;
+    }
+
+    .fashion-category-button .category-icon {
+        font-size: .8rem;
+    }
+
+
+    /* ---------------------------------------------------------
+    SEARCH
+    --------------------------------------------------------- */
+
+    .fashion-search input {
+        font-size: .86rem;
+    }
+
+    .fashion-search-icon {
+        font-size: 1rem;
+    }
+
+
+    /* ---------------------------------------------------------
+    WARDROBE ITEM
+    --------------------------------------------------------- */
+
+    .fashion-item-card {
+        min-height: 126px;
+    }
+
+    .fashion-item-card .fashion-item-name,
+    .fashion-item-name {
+        font-size: .78rem !important;
+        font-weight: 700;
+    }
+
+    .fashion-item-card .fashion-item-rarity,
+    .fashion-item-rarity {
+        font-size: .58rem !important;
+    }
+
+    .fashion-item-card .fashion-item-price,
+    .fashion-item-price {
+        font-size: .65rem !important;
+    }
+
+
+    /* ---------------------------------------------------------
+    3D STUDIO
+    --------------------------------------------------------- */
+
+    .fashion-stage-title strong {
+        font-size: .82rem;
+    }
+
+    .fashion-rotation-hint {
+        font-size: .67rem;
+        letter-spacing: .1em;
+    }
+
+    .fashion-current-style span {
+        font-size: .56rem;
+    }
+
+    .fashion-current-style strong {
+        font-size: .72rem;
+    }
+
+
+    /* ---------------------------------------------------------
+    RIGHT OUTFIT PANEL
+    Ini bagian utama yang terlihat terlalu kecil
+    di screenshot kedua.
+    --------------------------------------------------------- */
+
+    .fashion-outfit-panel {
+        font-size: 14px;
+    }
+
+
+    /* My Design */
+
+    .fashion-outfit-panel .fashion-panel-heading h2 {
+        font-size: 1.35rem;
+        line-height: 1.1;
+    }
+
+
+    /* COMMON / RARITY */
+
+    .fashion-outfit-panel .fashion-rarity {
+        font-size: .62rem;
+        padding: 5px 9px;
+    }
+
+
+    /* Style score */
+
+    .fashion-score-card {
+        padding: 14px;
+    }
+
+    .fashion-score-header span {
+        font-size: .65rem;
+        letter-spacing: .13em;
+    }
+
+    .fashion-score-header strong {
+        font-size: 1.65rem;
+    }
+
+    .fashion-score-rank span {
+        font-size: .62rem;
+    }
+
+    .fashion-score-rank strong {
+        font-size: 1rem;
+    }
+
+
+    /* ---------------------------------------------------------
+    EQUIPMENT
+    --------------------------------------------------------- */
+
+    .fashion-equipment-summary > .fashion-panel-kicker {
+        font-size: .68rem;
+        margin-bottom: 8px;
+    }
+
+    .fashion-equipment-summary-grid {
+        gap: 7px;
+    }
+
+    .equipment-slot {
+        min-height: 48px;
+        padding: 8px 9px;
+    }
+
+    .equipment-slot span {
+        font-size: .55rem;
+        letter-spacing: .1em;
+    }
+
+    .equipment-slot strong {
+        font-size: .76rem;
+        margin-top: 4px;
+    }
+
+
+    /* ---------------------------------------------------------
+    SELECTED ITEMS
+    --------------------------------------------------------- */
+
+    .fashion-selected-title {
+        font-size: .68rem;
+        letter-spacing: .1em;
+    }
+
+    .fashion-selected-title > span:last-child {
+        font-size: .7rem;
+    }
+
+    .fashion-selected-item {
+        min-height: 52px;
+    }
+
+    .fashion-selected-item .selected-item-name,
+    .fashion-selected-item-name {
+        font-size: .75rem !important;
+        font-weight: 700;
+    }
+
+    .fashion-selected-item .selected-item-category,
+    .fashion-selected-item-category {
+        font-size: .57rem !important;
+    }
+
+
+    /* ---------------------------------------------------------
+    BUTTONS
+    --------------------------------------------------------- */
+
+    .fashion-outfit-panel .fashion-full-button {
+        min-height: 46px;
+        font-size: .82rem;
+        letter-spacing: .05em;
+    }
+
+    .fashion-button {
+        font-weight: 700;
+    }
+
+
+    /* ---------------------------------------------------------
+    CHALLENGE
+    --------------------------------------------------------- */
+
+    .fashion-challenge-heading h2 {
+        font-size: 1.9rem;
+    }
+
+    .fashion-challenge-brief span {
+        font-size: .78rem;
+        letter-spacing: .12em;
+    }
+
+    .fashion-challenge-brief p {
+        font-size: 1.05rem;
+        line-height: 1.6;
+    }
+
+    .fashion-challenge-progress {
+        font-size: .88rem;
+    }
+
+
+    /* ---------------------------------------------------------
+    SAVED OUTFITS
+    --------------------------------------------------------- */
+
+    .fashion-saved-heading h2 {
+        font-size: 1.35rem;
+    }
+
+    .fashion-saved-heading > span {
+        font-size: .7rem;
+    }
+
+    .fashion-saved-delete {
+        position: absolute;
+        z-index: 3;
+
+        right: 5px;
+        top: 5px;
+
+        width: 22px;
+        height: 22px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 50%;
+
+        color: #ff9cba;
+
+        background: rgba(28, 8, 18, .85);
+        border: 1px solid rgba(214, 93, 134, .5);
+
+        cursor: pointer;
+
+        font-size: 13px;
+        line-height: 1;
+
+        /* FIX: dulu opacity:0 dan cuma muncul saat :hover kartu —
+        di HP/tablet tidak ada hover, jadi tombol ini tidak pernah
+        kelihatan. Sekarang selalu terlihat. */
+        opacity: .82;
+        transition: opacity .16s ease, background .16s ease, transform .16s ease;
+    }
+
+    .fashion-saved-card:hover .fashion-saved-delete,
+    .fashion-saved-delete:focus-visible {
+        opacity: 1;
+    }
+
+    .fashion-saved-delete:active {
+        transform: scale(.92);
+    }
+
+
+    /* ---------------------------------------------------------
+    MODAL
+    --------------------------------------------------------- */
+
+    .fashion-modal-card h2 {
+        font-size: 1.6rem;
+    }
+
+    .fashion-modal-card p {
+        font-size: .9rem;
+        line-height: 1.6;
+    }
+
+
+    /* ---------------------------------------------------------
+    MOBILE / SMALL SCREEN
+    --------------------------------------------------------- */
+
+    @media (max-width: 900px) {
+
+        .fashion-header h1 {
+            font-size: 2.2rem;
+        }
+
+        .fashion-panel-heading h2 {
+            font-size: 1.1rem;
+        }
+
+        .fashion-outfit-panel .fashion-panel-heading h2 {
+            font-size: 1.25rem;
+        }
+
+        .fashion-outfit-panel {
+            font-size: 13px;
+        }
+
+        .equipment-slot strong {
+            font-size: .72rem;
+        }
+
+    }
+    /* FIX: pastikan atribut [hidden] selalu dihormati,
+    walau ada rule display lain untuk .fashion-3d-error / .fashion-3d-loading */
+    .fashion-3d-error[hidden],
+    .fashion-3d-loading[hidden] {
+        display: none !important;
+    }
+
+    /* =========================================================
+    NAYLA FASHION DESIGNER — PHASE 2 / COUTURE LAB
+    Enhanced wardrobe, gender switch, open-face hair,
+    deeper 3D zoom and additional fashion layers.
+    ========================================================= */
+
+    /* ---------- Advanced control panel ---------- */
+    .fashion-advanced-controls {
+        margin: 8px 0 10px;
+        padding: 10px;
+        border: 1px solid rgba(76,159,236,.22);
+        border-radius: 12px;
+        background:
+            linear-gradient(145deg, rgba(10,34,57,.82), rgba(4,18,31,.92));
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+    }
+
+    .fashion-advanced-title {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:8px;
+        margin-bottom:8px;
+        color:#dff0ff;
+        font-size:10px;
+        font-weight:900;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+    }
+
+    .fashion-advanced-title small {
+        padding:3px 6px;
+        border:1px solid rgba(215,173,87,.4);
+        border-radius:5px;
+        color:#f1d28a;
+        background:rgba(80,61,23,.3);
+        font-size:7px;
+        letter-spacing:.1em;
+    }
+
+    .fashion-gender-label {
+        margin:7px 0 5px;
+        color:#577894;
+        font-size:7px;
+        font-weight:900;
+        letter-spacing:.13em;
+        text-transform:uppercase;
+    }
+
+    .fashion-gender-switch {
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:5px;
+    }
+
+    .fashion-gender-btn {
+        min-height:31px;
+        padding:0 7px;
+        border:1px solid rgba(68,136,196,.25);
+        border-radius:8px;
+        color:#7ea4c3;
+        background:rgba(4,21,36,.8);
+        cursor:pointer;
+        font-size:8px;
+        font-weight:900;
+        letter-spacing:.05em;
+        transition:.16s ease;
+    }
+
+    .fashion-gender-btn:hover {
+        border-color:rgba(76,159,236,.6);
+        color:#dceeff;
+        transform:translateY(-1px);
+    }
+
+    .fashion-gender-btn.active {
+        color:#fff;
+        border-color:rgba(99,176,255,.8);
+        background:linear-gradient(135deg,rgba(28,121,211,.75),rgba(10,59,104,.85));
+        box-shadow:0 6px 18px rgba(19,108,216,.2);
+    }
+
+    .fashion-advanced-divider {
+        height:1px;
+        margin:9px 0;
+        background:rgba(76,159,236,.12);
+    }
+
+    .fashion-extra-categories {
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:5px;
+    }
+
+    .fashion-extra-category {
+        min-height:28px;
+    }
+
+    .fashion-extra-category.active {
+        color:#fff;
+        border-color:rgba(76,159,236,.75);
+        background:linear-gradient(135deg,rgba(20,96,167,.7),rgba(7,46,82,.9));
+    }
+
+    /* ---------- Gender badge on 3D stage ---------- */
+    .fashion-gender-badge {
+        position:absolute;
+        z-index:15;
+        left:12px;
+        top:50px;
+        min-width:62px;
+        padding:6px 9px;
+        border:1px solid rgba(99,176,255,.25);
+        border-radius:999px;
+        color:#b9dcfa;
+        background:rgba(3,18,31,.72);
+        backdrop-filter:blur(10px);
+        box-shadow:0 8px 24px rgba(0,0,0,.2);
+        font-size:7px;
+        font-weight:900;
+        letter-spacing:.12em;
+        text-align:center;
+    }
+
+    /* ---------- More powerful zoom controls ---------- */
+    .fashion-zoom-controls {
+        right:10px;
+        gap:8px;
+    }
+
+    .fashion-zoom-button {
+        width:32px;
+        height:32px;
+        border-radius:9px;
+        box-shadow:0 8px 20px rgba(0,0,0,.18);
+    }
+
+    .fashion-zoom-track {
+        height:112px;
+        width:5px;
+    }
+
+    .fashion-stage-panel canvas {
+        cursor:grab;
+    }
+
+    .fashion-stage-panel canvas:active {
+        cursor:grabbing;
+    }
+
+    /* ---------- Larger wardrobe collection ---------- */
+    .fashion-items-grid {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:7px;
+        max-height:590px;
+        overscroll-behavior:contain;
+    }
+
+    .fashion-item-card {
+        min-height:132px;
+    }
+
+    .fashion-item-preview {
+        height:70px;
+    }
+
+    .fashion-item-card.equipped::before {
+        content:"✓";
+        position:absolute;
+        z-index:3;
+        left:5px;
+        top:5px;
+        width:17px;
+        height:17px;
+        display:grid;
+        place-items:center;
+        border-radius:50%;
+        color:#fff;
+        background:#2183df;
+        box-shadow:0 4px 12px rgba(33,131,223,.35);
+        font-size:9px;
+        font-weight:900;
+    }
+
+    .fashion-item-card:hover .fashion-item-visual {
+        transform:translateY(-2px) scale(1.06);
+    }
+
+    .fashion-item-visual {
+        transition:transform .18s ease;
+    }
+
+    /* ---------- Preview art for new categories ---------- */
+    .item-scarf::before {
+        content:"";
+        position:absolute;
+        left:7px;
+        top:9px;
+        width:28px;
+        height:18px;
+        border:5px solid var(--item-color);
+        border-bottom-color:transparent;
+        border-radius:50%;
+        transform:rotate(-8deg);
+    }
+    .item-scarf::after {
+        content:"";
+        position:absolute;
+        left:22px;
+        top:22px;
+        width:8px;
+        height:25px;
+        border-radius:4px;
+        background:var(--item-color);
+        transform:rotate(12deg);
+    }
+
+    .item-belt::before {
+        content:"";
+        position:absolute;
+        left:4px;
+        top:16px;
+        width:34px;
+        height:15px;
+        border:4px solid var(--item-color);
+        border-radius:7px;
+    }
+    .item-belt::after {
+        content:"";
+        position:absolute;
+        left:18px;
+        top:20px;
+        width:7px;
+        height:7px;
+        border:2px solid #f1d28a;
+        border-radius:2px;
+    }
+
+    .item-gloves::before,
+    .item-gloves::after {
+        content:"";
+        position:absolute;
+        top:15px;
+        width:12px;
+        height:26px;
+        border-radius:8px;
+        background:var(--item-color);
+    }
+    .item-gloves::before { left:7px; transform:rotate(10deg); }
+    .item-gloves::after { right:7px; transform:rotate(-10deg); }
+
+    .item-earrings::before,
+    .item-earrings::after {
+        content:"";
+        position:absolute;
+        top:18px;
+        width:13px;
+        height:13px;
+        border:3px solid var(--item-color);
+        border-radius:50%;
+    }
+    .item-earrings::before { left:7px; }
+    .item-earrings::after { right:7px; }
+
+    .item-socks::before,
+    .item-socks::after {
+        content:"";
+        position:absolute;
+        top:15px;
+        width:12px;
+        height:29px;
+        border-radius:7px;
+        background:linear-gradient(90deg,var(--item-color),rgba(255,255,255,.25));
+    }
+    .item-socks::before { left:7px; }
+    .item-socks::after { right:7px; }
+
+    .item-wristwear::before,
+    .item-wristwear::after {
+        content:"";
+        position:absolute;
+        top:20px;
+        width:14px;
+        height:14px;
+        border:3px solid var(--item-color);
+        border-radius:50%;
+    }
+    .item-wristwear::before { left:5px; }
+    .item-wristwear::after { right:5px; }
+
+    /* ---------- Better stage depth ---------- */
+    .fashion-stage {
+        position:relative;
+    }
+
+    .fashion-stage::after {
+        content:"";
+        position:absolute;
+        inset:0;
+        pointer-events:none;
+        background:
+            radial-gradient(circle at 50% 46%,rgba(54,145,232,.07),transparent 34%),
+            linear-gradient(180deg,rgba(255,255,255,.015),transparent 26%);
+        mix-blend-mode:screen;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:900px) {
+        .fashion-extra-categories {
+            grid-template-columns:repeat(3,minmax(0,1fr));
+        }
+
+        .fashion-items-grid {
+            max-height:420px;
+        }
+
+        .fashion-gender-badge {
+            top:48px;
+        }
+    }
+
+    @media (max-width:480px) {
+        .fashion-extra-categories {
+            grid-template-columns:repeat(2,minmax(0,1fr));
+        }
+
+        .fashion-gender-badge {
+            left:7px;
+            top:45px;
+        }
+    }
+    /* =========================================================
+    MOBILE POLISH PATCH
+    ========================================================= */
+
+    @media (max-width: 640px) {
+
+        #fashionDesignerGame {
+            padding: 8px;
+        }
+
+        .fashion-header {
+            gap: 10px;
+            padding: 4px 0 16px;
+        }
+
+        .fashion-header h1 {
+            font-size: 1.9rem;
+        }
+
+        .fashion-header p {
+            font-size: .82rem;
+            line-height: 1.5;
+        }
+
+        .fashion-header-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+            width: 100%;
+        }
+
+        .fashion-button {
+            min-height: 44px;
+            font-size: 9px;
+            padding: 0 8px;
+        }
+
+        /* Stats jadi 2 kolom rapi, timer full width di bawah */
+        .fashion-stats {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 7px;
+        }
+
+        .fashion-timer-card {
+            grid-column: 1 / -1;
+        }
+
+        /* Wardrobe panel dijadikan accordion sederhana: batasi tinggi */
+        .fashion-wardrobe-panel {
+            max-height: 380px;
+            order: 2;
+        }
+
+        .fashion-items-grid {
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            max-height: 260px;
+        }
+
+        .fashion-item-card {
+            min-height: 108px;
+        }
+
+        /* Stage/3D studio ditaruh paling atas biar langsung kelihatan */
+        .fashion-stage-panel {
+            order: 1;
+        }
+
+        .fashion-outfit-panel {
+            order: 3;
+        }
+
+        .fashion-stage {
+            min-height: 60vh;
+        }
+
+        /* Toolbar atas stage dirapikan supaya tidak wrap berantakan */
+        .fashion-stage-toolbar {
+            padding: 6px 8px;
+        }
+
+        .fashion-round-button {
+            width: 26px;
+            height: 26px;
+            font-size: 13px;
+        }
+
+        /* Kontrol zoom & info style jangan menutupi avatar terlalu banyak */
+        .fashion-zoom-controls {
+            right: 6px;
+            gap: 5px;
+        }
+
+        .fashion-zoom-button {
+            width: 26px;
+            height: 26px;
+            font-size: 14px;
+        }
+
+        .fashion-zoom-track {
+            height: 70px;
+        }
+
+        .fashion-current-style {
+            right: 6px;
+            bottom: 6px;
+            min-width: 100px;
+            padding: 6px 8px;
+        }
+
+        .fashion-camera-status {
+            left: 6px;
+            top: 6px;
+        }
+
+        .fashion-rotation-hint {
+            left: 6px;
+            bottom: 6px;
+            font-size: 6px;
+        }
+
+        /* Warna & tombol bawah stage jangan berdesakan */
+        .fashion-stage-bottom {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+            padding: 8px;
+        }
+
+        .fashion-color-options {
+            flex-wrap: wrap;
+        }
+
+        /* Outfit panel: 1 kolom penuh, ringkas */
+        .fashion-equipment-summary-grid {
+            grid-template-columns: repeat(2, minmax(0,1fr));
+        }
+
+        .fashion-design-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .fashion-design-actions .fashion-full-button {
+            min-height: 42px;
+            font-size: .74rem;
+        }
+
+        /* Challenge & saved section dipadatkan */
+        .fashion-challenge-content {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .fashion-saved-grid {
+            grid-template-columns: repeat(3, minmax(0,1fr));
+            gap: 6px;
+        }
+
+        /* Modal jangan kebesaran di layar kecil */
+        .fashion-modal-card {
+            padding: 18px;
+            width: min(360px, 94%);
+        }
+
+        .fashion-modal-card h2 {
+            font-size: 1.25rem;
+        }
+
+        .fashion-result-rank {
+            font-size: 34px;
+        }
+    }
+
+    @media (max-width: 380px) {
+
+        .fashion-header h1 {
+            font-size: 1.6rem;
+        }
+
+        .fashion-stat-card strong {
+            font-size: .95rem;
+        }
+
+        .fashion-items-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .fashion-saved-grid {
+            grid-template-columns: repeat(2, minmax(0,1fr));
+        }
+
+        .fashion-design-actions {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Matikan efek berat (glow/ring/grid) di layar kecil supaya rendering
+    lebih ringan & tidak mengganggu avatar */
+    @media (max-width: 640px) {
+
+        .fashion-stage-glow,
+        .fashion-stage-ring.ring-two,
+        .fashion-stage-ring.ring-three,
+        .fashion-stage-grid {
+            display: none;
+        }
+    }
+    /* =========================================================
+    MOBILE POLISH PATCH 2 — wardrobe & buttons
+    ========================================================= */
+
+    @media (max-width: 640px) {
+
+        /* Kategori: grid rapi 3 kolom, bukan wrap berantakan */
+        .fashion-categories {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 6px;
+        }
+
+        .fashion-category-button {
+            justify-content: center;
+            min-height: 34px;
+            font-size: 8.5px;
+            padding: 0 4px;
+            white-space: nowrap;
+        }
+
+        .fashion-category-button span:first-child {
+            display: none; /* sembunyikan emoji kecil biar teks muat */
+        }
+
+        /* Item wardrobe: 2 kolom tapi kartu lebih pendek & rapi */
+        .fashion-items-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+            max-height: 300px;
+        }
+
+        .fashion-item-card {
+            min-height: 118px;
+            padding: 5px;
+        }
+
+        .fashion-item-preview {
+            height: 58px;
+        }
+
+        .fashion-item-name {
+            font-size: 9px !important;
+        }
+
+        .fashion-item-meta {
+            font-size: 6.5px;
+        }
+
+        /* Semua tombol aksi desain (Save/Submit/PNG/Clear) seragam ukuran */
+        .fashion-design-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .fashion-design-actions .fashion-button {
+            min-height: 44px;
+            font-size: 9px;
+            white-space: normal;
+            line-height: 1.2;
+        }
+
+        /* Search bar full width & tidak sempit */
+        .fashion-search {
+            height: 38px;
+        }
+
+        /* Equipment grid rapi 2 kolom konsisten tinggi */
+        .fashion-equipment-summary-grid .equipment-slot {
+            min-height: 42px;
+        }
+
+        /* Selected items list: kartu tidak terlalu tipis */
+        .fashion-selected-item {
+            min-height: 46px;
+            grid-template-columns: 30px minmax(0, 1fr) 24px;
+        }
+
+        .fashion-remove-item,
+        [data-fashion-remove] {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: rgba(214, 93, 134, .15);
+            color: #ff9cba;
+            font-size: 13px;
+        }
+
+        /* Modal hasil penilaian jangan kebesaran/kepotong di HP kecil */
+        #fashionResultModal .fashion-modal-card,
+        #fashionSaveModal .fashion-modal-card {
+            width: min(340px, 92%);
+            padding: 20px 16px;
+            max-height: 88vh;
+            overflow-y: auto;
+        }
+
+        .fashion-result-stats {
+            gap: 5px;
+        }
+
+        .fashion-result-stats > div {
+            padding: 7px;
+        }
+    }
+
+    /* =========================================================
+    FASHION CHALLENGE MODAL
+    ========================================================= */
+
+    .fashion-challenge-panel{
+        max-height:0;
+        opacity:0;
+        overflow:hidden;
+        transition:max-height .4s ease, opacity .4s ease;
+    }
+
+    .fashion-challenge-panel.active{
+        max-height:500px;
+        opacity:1;
+    }
+
+    .fashion-timer-card strong{
+        color:var(--fashion-blue-light);
+    }
+
+    /* =========================================================
+    MODAL
+    ========================================================= */
+
+    #fashionChallengeModal{
+        position:fixed;
+        inset:0;
+        z-index:10000;
+
+        display:flex;
+        align-items:center;
+        justify-content:center;
+
+        padding:24px;
+
+        background:rgba(2,10,20,.75);
+        backdrop-filter:blur(8px);
+
+        opacity:0;
+        visibility:hidden;
+        pointer-events:none;
+
+        transition:
+            opacity .25s ease,
+            visibility .25s ease;
+    }
+
+    #fashionChallengeModal.show{
+        opacity:1;
+        visibility:visible;
+        pointer-events:auto;
+    }
+
+    /* =========================================================
+    CARD
+    ========================================================= */
 
     .fashion-challenge-start-card{
-        padding:24px;
+        width:min(620px,100%);
+        max-width:620px;
+
+        padding:32px;
+
+        border-radius:24px;
+        text-align:center;
+
+        border:1px solid rgba(120,190,255,.2);
+
+        background:
+            linear-gradient(
+                180deg,
+                rgba(10,30,55,.98),
+                rgba(5,15,28,.98)
+            );
+
+        box-shadow:
+            0 25px 80px rgba(0,0,0,.45);
+
+        transform:translateY(20px) scale(.96);
+
+        transition:
+            transform .25s ease;
     }
+
+    #fashionChallengeModal.show .fashion-challenge-start-card{
+        transform:none;
+    }
+
+    /* =========================================================
+    HEADER
+    ========================================================= */
 
     .fashion-challenge-start-card h2{
-        font-size:1.5rem;
+        margin:12px 0;
+        color:#ffffff;
+        font-size:2rem;
     }
 
+    .fashion-challenge-start-card p{
+        color:#b8d3eb;
+        line-height:1.7;
+    }
+
+    /* =========================================================
+    PREVIEW BOX
+    ========================================================= */
+
+    .challenge-preview{
+        margin-top:24px;
+        padding:22px;
+
+        border-radius:18px;
+
+        border:1px solid rgba(120,190,255,.25);
+
+        background:
+            linear-gradient(
+                180deg,
+                rgba(10,30,55,.95),
+                rgba(6,18,35,.98)
+            );
+    }
+
+    .challenge-preview h3{
+        margin:0 0 10px;
+        color:#7cc7ff;
+        font-size:1.4rem;
+    }
+
+    .challenge-preview p{
+        margin:0;
+        color:#d6e9ff;
+        line-height:1.6;
+    }
+
+    /* =========================================================
+    REQUIREMENTS
+    ========================================================= */
+
+    .challenge-required-list{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:10px;
+
+        margin-top:18px;
+    }
+
+    .challenge-required-item{
+        padding:8px 14px;
+
+        border-radius:999px;
+
+        border:1px solid rgba(70,160,255,.25);
+
+        background:
+            rgba(70,160,255,.12);
+
+        color:#a9d7ff;
+
+        font-size:.85rem;
+        font-weight:700;
+    }
+
+    /* =========================================================
+    ACTIONS
+    ========================================================= */
+
     .challenge-modal-actions{
-        flex-direction:column;
+        display:flex;
+        justify-content:center;
+        gap:14px;
+
+        margin-top:26px;
     }
 
     .challenge-modal-actions button{
-        width:100%;
+        min-width:180px;
     }
+
+    /* =========================================================
+    MOBILE
+    ========================================================= */
+
+    @media (max-width:600px){
+
+        .fashion-challenge-start-card{
+            padding:24px;
+        }
+
+        .fashion-challenge-start-card h2{
+            font-size:1.5rem;
+        }
+
+        .challenge-modal-actions{
+            flex-direction:column;
+        }
+
+        .challenge-modal-actions button{
+            width:100%;
+        }
+    }
+
+    /* ============================================================
+    CHALLENGE LABEL
+    ============================================================ */
+
+    .fashion-challenge-label {
+
+        display: block;
+
+        margin-bottom: 8px;
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        letter-spacing: .12em;
+
+        text-transform: uppercase;
+
+        opacity: .5;
+
+    }
+
+
+    /* ============================================================
+    TIMER
+    ============================================================ */
+
+    .fashion-challenge-timer {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+    }
+
+
+    .fashion-challenge-timer strong {
+
+        font-variant-numeric:
+            tabular-nums;
+
+    }
+
+
+    .fashion-challenge-timer small {
+
+        font-size: 9px;
+
+        letter-spacing: .08em;
+
+        opacity: .5;
+
+    }
+
+
+    /* ============================================================
+    MATCH HEADER
+    ============================================================ */
+
+    .fashion-challenge-progress-header {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-bottom: 8px;
+
+    }
+
+
+    .fashion-challenge-progress-header span {
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        letter-spacing: .12em;
+
+        opacity: .55;
+
+    }
+
+
+    .fashion-challenge-progress-header strong {
+
+        font-size: 14px;
+
+    }
+
+
+    /* ============================================================
+    SCORE HEADER
+    ============================================================ */
+
+    .challenge-score-header {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+    }
+
+
+    .challenge-score-header > div:first-child {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 3px;
+
+    }
+
+
+    .challenge-score-header span {
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        letter-spacing: .12em;
+
+    }
+
+
+    .challenge-score-header small {
+
+        font-size: 10px;
+
+        opacity: .45;
+
+    }
+
+
+    .challenge-score-total {
+
+        display: flex;
+
+        align-items: baseline;
+
+        gap: 4px;
+
+    }
+
+
+    .challenge-score-total strong {
+
+        font-size: 28px;
+
+        font-weight: 900;
+
+        line-height: 1;
+
+    }
+
+
+    .challenge-score-total > span {
+
+        font-size: 11px;
+
+        opacity: .4;
+
+        letter-spacing: 0;
+
+    }
+
+
+    /* ============================================================
+    SCORE BREAKDOWN
+    ============================================================ */
+
+    .challenge-score-breakdown {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 8px;
+
+        margin-top: 14px;
+
+    }
+
+
+    .challenge-score-item {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+
+        padding: 10px;
+
+        border-radius: 12px;
+
+        background:
+            rgba(255,255,255,.035);
+
+    }
+
+
+    .challenge-score-item-icon {
+
+        width: 28px;
+
+        height: 28px;
+
+        flex-shrink: 0;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 9px;
+
+        background:
+            rgba(255,255,255,.06);
+
+        font-size: 12px;
+
+    }
+
+
+    .challenge-score-item > div:last-child {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 3px;
+
+        min-width: 0;
+
+    }
+
+
+    .challenge-score-item span {
+
+        font-size: 9px;
+
+        letter-spacing: .07em;
+
+        text-transform: uppercase;
+
+        opacity: .45;
+
+    }
+
+
+    .challenge-score-item strong {
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+    }
+
+
+    /* ============================================================
+    MOBILE
+    ============================================================ */
+
+    @media (max-width: 600px) {
+
+        .challenge-score-breakdown {
+
+            grid-template-columns:
+                1fr;
+
+        }
+
+
+        .challenge-score-total strong {
+
+            font-size: 24px;
+
+        }
+
+    }
+
+    /* ============================================================
+    CHALLENGE SECTION HEADER
+    ============================================================ */
+
+    .fashion-challenge-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .fashion-challenge-section-header .fashion-challenge-label {
+        margin-bottom: 0;
+    }
+
+    .fashion-challenge-requirement-count {
+        font-size: 10px;
+        font-weight: 700;
+        opacity: .45;
+        font-variant-numeric: tabular-nums;
+    }
+
+
+    /* ============================================================
+    CHALLENGE TIMER
+    ============================================================ */
+
+    .fashion-challenge-timer {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .fashion-challenge-timer-icon {
+        font-size: 16px;
+    }
+
+    .fashion-challenge-timer-value {
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+    }
+
+    .fashion-challenge-timer-value strong {
+        font-size: 24px;
+        font-weight: 900;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .fashion-challenge-timer-value small {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: .1em;
+        opacity: .45;
+    }
+
+
+    /* ============================================================
+    CHALLENGE LABEL
+    ============================================================ */
+
+    .fashion-challenge-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        opacity: .5;
+    }
+
+
+    /* ============================================================
+    MATCH HEADER
+    ============================================================ */
+
+    .fashion-challenge-progress-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    .fashion-challenge-progress-header > div {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .fashion-challenge-progress-header span {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .12em;
+        opacity: .55;
+    }
+
+    .fashion-challenge-progress-header small {
+        font-size: 9px;
+        opacity: .35;
+    }
+
+    .fashion-challenge-progress-header strong {
+        font-size: 16px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+    }
+
+
+    /* ============================================================
+    SCORE HEADER
+    ============================================================ */
+
+    .challenge-score-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .challenge-score-title {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .challenge-score-title > span {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .12em;
+    }
+
+    .challenge-score-title small {
+        font-size: 10px;
+        opacity: .45;
+    }
+
+    .challenge-score-total {
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+        white-space: nowrap;
+    }
+
+    .challenge-score-total strong {
+        font-size: 30px;
+        font-weight: 900;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .challenge-score-total span {
+        font-size: 11px;
+        opacity: .4;
+    }
+
+
+    /* ============================================================
+    SCORE PROGRESS
+    ============================================================ */
+
+    .challenge-score-progress {
+        width: 100%;
+        height: 6px;
+        margin-top: 16px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .06);
+    }
+
+    .challenge-score-progress-fill {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        transition: width .35s ease;
+    }
+
+
+    /* ============================================================
+    SCORE BREAKDOWN
+    ============================================================ */
+
+    .challenge-score-breakdown {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 14px;
+    }
+
+    .challenge-score-item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-width: 0;
+        padding: 10px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, .035);
+    }
+
+    .challenge-score-item-icon {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 9px;
+        background: rgba(255, 255, 255, .06);
+
+        font-size: 12px;
+    }
+
+    .challenge-score-item-content {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        min-width: 0;
+    }
+
+    .challenge-score-item-content span {
+        overflow: hidden;
+
+        font-size: 9px;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        opacity: .45;
+    }
+
+    .challenge-score-item-content strong {
+        font-size: 12px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+    }
+
+
+    /* ============================================================
+    PERFECT SCORE ITEM
+    ============================================================ */
+
+    .challenge-perfect-score-item {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .challenge-perfect-score-item::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+
+        pointer-events: none;
+
+        background: linear-gradient(
+            120deg,
+            transparent,
+            rgba(255, 255, 255, .04),
+            transparent
+        );
+
+        transform: translateX(-100%);
+    }
+
+    .challenge-perfect-score-item.active::after {
+        animation: perfectScoreShine 1.8s ease;
+    }
+
+    @keyframes perfectScoreShine {
+
+        100% {
+            transform: translateX(100%);
+        }
+
+    }
+
+
+    /* ============================================================
+    PERFECT MATCH BOX
+    ============================================================ */
+
+    .challenge-perfect-match {
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        margin-top: 12px;
+        padding: 12px 14px;
+
+        border: 1px solid rgba(255, 255, 255, .06);
+        border-radius: 14px;
+
+        background: rgba(255, 255, 255, .025);
+
+        opacity: .6;
+
+        transition:
+            opacity .3s ease,
+            transform .3s ease,
+            background .3s ease,
+            border-color .3s ease;
+    }
+
+
+    /* ============================================================
+    PERFECT MATCH ACTIVE
+    ============================================================ */
+
+    .challenge-perfect-match.active {
+
+        opacity: 1;
+
+        transform: translateY(-1px);
+
+        background: rgba(255, 255, 255, .055);
+
+        border-color: rgba(255, 255, 255, .14);
+
+    }
+
+
+    /* ============================================================
+    PERFECT MATCH ICON
+    ============================================================ */
+
+    .challenge-perfect-match-icon {
+
+        width: 34px;
+        height: 34px;
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 10px;
+
+        background: rgba(255, 255, 255, .06);
+
+        font-size: 15px;
+
+        transition:
+            transform .3s ease,
+            background .3s ease;
+    }
+
+    .challenge-perfect-match.active
+    .challenge-perfect-match-icon {
+
+        transform: scale(1.08);
+    }
+
+
+    /* ============================================================
+    PERFECT MATCH CONTENT
+    ============================================================ */
+
+    .challenge-perfect-match-content {
+
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+
+        min-width: 0;
+        flex: 1;
+    }
+
+    .challenge-perfect-match-content strong {
+
+        font-size: 10px;
+        font-weight: 800;
+
+        letter-spacing: .1em;
+    }
+
+    .challenge-perfect-match-content small {
+
+        font-size: 9px;
+        line-height: 1.4;
+
+        opacity: .45;
+    }
+
+
+    /* ============================================================
+    PERFECT MATCH BONUS
+    ============================================================ */
+
+    .challenge-perfect-match-bonus {
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 2px;
+
+        flex-shrink: 0;
+    }
+
+    .challenge-perfect-match-bonus span {
+
+        font-size: 8px;
+        font-weight: 700;
+
+        letter-spacing: .1em;
+
+        opacity: .4;
+    }
+
+    .challenge-perfect-match-bonus strong {
+
+        font-size: 16px;
+        font-weight: 900;
+
+        font-variant-numeric: tabular-nums;
+    }
+
+
+    /* ============================================================
+    MOBILE
+    ============================================================ */
+
+    @media (max-width: 600px) {
+
+        .challenge-score-breakdown {
+            grid-template-columns: 1fr;
+        }
+
+        .challenge-score-total strong {
+            font-size: 25px;
+        }
+
+        .challenge-perfect-match {
+            padding: 11px;
+        }
+
+    }
+    /* ============================
+    DESIGN RESULT POPUP
+    ============================= */
+
+    .design-result-overlay {
+
+        position: fixed;
+
+        inset: 0;
+
+        z-index: 99999;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding: 24px;
+
+        background: rgba(2, 8, 18, 0.78);
+
+        backdrop-filter: blur(12px);
+
+        opacity: 0;
+
+        visibility: hidden;
+
+        pointer-events: none;
+
+        transition:
+            opacity .3s ease,
+            visibility .3s ease;
+
+    }
+
+
+    /* ACTIVE */
+
+    .design-result-overlay.show {
+
+        opacity: 1;
+
+        visibility: visible;
+
+        pointer-events: auto;
+
+    }
+
+
+    /* ============================
+    CARD
+    ============================= */
+
+    .design-result-card {
+
+        position: relative;
+
+        width: min(430px, 100%);
+
+        padding: 38px 32px 32px;
+
+        text-align: center;
+
+        overflow: hidden;
+
+        border: 1px solid rgba(255,255,255,.12);
+
+        border-radius: 28px;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(18, 25, 42, .98),
+                rgba(8, 13, 25, .98)
+            );
+
+        box-shadow:
+            0 30px 80px rgba(0,0,0,.55),
+            0 0 60px rgba(255,255,255,.04);
+
+        transform:
+            translateY(25px)
+            scale(.94);
+
+        transition:
+            transform .4s cubic-bezier(.2,.8,.2,1);
+
+    }
+
+
+    /* CARD ACTIVE */
+
+    .design-result-overlay.show
+    .design-result-card {
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+
+    /* ============================
+    GLOW
+    ============================= */
+
+    .design-result-glow {
+
+        position: absolute;
+
+        top: -120px;
+
+        left: 50%;
+
+        width: 260px;
+
+        height: 260px;
+
+        transform: translateX(-50%);
+
+        background:
+            radial-gradient(
+                circle,
+                rgba(255, 210, 120, .16),
+                transparent 70%
+            );
+
+        pointer-events: none;
+
+    }
+
+
+    /* ============================
+    ICON
+    ============================= */
+
+    .design-result-icon {
+
+        position: relative;
+
+        width: 76px;
+
+        height: 76px;
+
+        margin: 0 auto 18px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 50%;
+
+        font-size: 32px;
+
+        background:
+            rgba(255,255,255,.06);
+
+        border:
+            1px solid rgba(255,255,255,.12);
+
+        box-shadow:
+            0 0 35px rgba(255,210,120,.12);
+
+        animation:
+            designResultIconPop .6s
+            cubic-bezier(.2,.8,.2,1);
+
+    }
+
+
+    @keyframes designResultIconPop {
+
+        0% {
+
+            opacity: 0;
+
+            transform:
+                scale(.4)
+                rotate(-15deg);
+
+        }
+
+        70% {
+
+            transform:
+                scale(1.12)
+                rotate(5deg);
+
+        }
+
+        100% {
+
+            opacity: 1;
+
+            transform:
+                scale(1)
+                rotate(0);
+
+        }
+
+    }
+
+
+    /* ============================
+    TEXT
+    ============================= */
+
+    .design-result-kicker {
+
+        display: block;
+
+        margin-bottom: 8px;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        letter-spacing: .22em;
+
+        opacity: .55;
+
+    }
+
+
+    .design-result-card h2 {
+
+        margin: 0;
+
+        font-size: 30px;
+
+        font-weight: 700;
+
+        letter-spacing: -.02em;
+
+    }
+
+
+    .design-result-message {
+
+        max-width: 320px;
+
+        margin: 10px auto 25px;
+
+        line-height: 1.6;
+
+        font-size: 14px;
+
+        opacity: .58;
+
+    }
+
+
+    /* ============================
+    SCORE
+    ============================= */
+
+    .design-result-score-box {
+
+        position: relative;
+
+        padding: 20px;
+
+        margin-bottom: 14px;
+
+        border-radius: 18px;
+
+        background:
+            rgba(255,255,255,.045);
+
+        border:
+            1px solid rgba(255,255,255,.08);
+
+    }
+
+
+    .design-result-score-label {
+
+        display: block;
+
+        margin-bottom: 4px;
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        letter-spacing: .18em;
+
+        opacity: .45;
+
+    }
+
+
+    .design-result-score-box strong {
+
+        font-size: 58px;
+
+        line-height: 1;
+
+        letter-spacing: -.05em;
+
+    }
+
+
+    .design-result-score-max {
+
+        margin-left: 4px;
+
+        font-size: 14px;
+
+        opacity: .4;
+
+    }
+
+
+    /* ============================
+    INFO
+    ============================= */
+
+    .design-result-info {
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+
+        margin-bottom: 22px;
+
+    }
+
+
+    .design-result-info > div {
+
+        padding: 13px;
+
+        border-radius: 14px;
+
+        background:
+            rgba(255,255,255,.035);
+
+        border:
+            1px solid rgba(255,255,255,.06);
+
+    }
+
+
+    .design-result-info span {
+
+        display: block;
+
+        margin-bottom: 4px;
+
+        font-size: 9px;
+
+        letter-spacing: .14em;
+
+        opacity: .4;
+
+    }
+
+
+    .design-result-info strong {
+
+        font-size: 16px;
+
+    }
+
+
+    /* ============================
+    BUTTON
+    ============================= */
+
+    .design-result-card
+    .fashion-button {
+
+        width: 100%;
+
+        min-height: 48px;
+
+    }
+
+
+    /* ============================
+    MOBILE
+    ============================= */
+
+    @media (max-width: 480px) {
+
+        .design-result-card {
+
+            padding: 30px 22px 24px;
+
+            border-radius: 22px;
+
+        }
+
+        .design-result-card h2 {
+
+            font-size: 26px;
+
+        }
+
+        .design-result-score-box strong {
+
+            font-size: 50px;
+
+        }
+
+    }
+    .design-result-overlay {
+        position: fixed;
+        inset: 0;
+
+        z-index: 999999;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        pointer-events: none;
+    }
+
+    .design-result-overlay.show {
+        pointer-events: auto;
+    }
+
+
+    .design-result-card {
+
+        position: relative;
+
+        z-index: 2;
+
+        pointer-events: auto;
+
+    }
+
+
+    /* BUTTON HARUS BISA DIKLIK */
+
+    #designResultContinue {
+
+        position: relative;
+
+        z-index: 10;
+
+        pointer-events: auto;
+
+        cursor: pointer;
+
+    }
+    /* =========================================================
+    MOBILE TAB SYSTEM (AVATAR / WARDROBE / DESIGN)
+    ========================================================= */
+
+    .fashion-mobile-tabs {
+        display: none;
+    }
+
+    @media (max-width: 780px) {
+
+        .fashion-mobile-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 6px;
+
+            position: sticky;
+            top: 0;
+            z-index: 50;
+
+            padding: 5px;
+            margin: 10px 0;
+
+            border: 1px solid var(--fashion-border);
+            border-radius: 13px;
+
+            background: rgba(4, 16, 28, .92);
+            backdrop-filter: blur(10px);
+
+            box-shadow: 0 10px 26px rgba(0,0,0,.28);
+        }
+
+        .fashion-mobile-tab {
+            min-height: 42px;
+
+            border: 0;
+            border-radius: 9px;
+
+            color: #7ea4c3;
+            background: transparent;
+
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            white-space: nowrap;
+
+            cursor: pointer;
+            transition: .18s ease;
+        }
+
+        .fashion-mobile-tab.active {
+            color: #fff;
+
+            background:
+                linear-gradient(135deg, #2585f1, #2e8df6);
+
+            box-shadow:
+                0 8px 20px rgba(19,108,216,.32);
+        }
+
+        /* Sembunyikan panel yang tidak aktif */
+        .fashion-workspace.tab-stage .fashion-wardrobe-panel,
+        .fashion-workspace.tab-stage .fashion-outfit-panel,
+        .fashion-workspace.tab-wardrobe .fashion-stage-panel,
+        .fashion-workspace.tab-wardrobe .fashion-outfit-panel,
+        .fashion-workspace.tab-outfit .fashion-stage-panel,
+        .fashion-workspace.tab-outfit .fashion-wardrobe-panel {
+            display: none !important;
+        }
+
+        /* Tampilkan hanya panel yang aktif, beri ruang lebih lega */
+        .fashion-workspace.tab-stage .fashion-stage-panel {
+            display: flex;
+        }
+
+        .fashion-workspace.tab-stage .fashion-stage {
+            min-height: 68vh;
+        }
+
+        .fashion-workspace.tab-wardrobe .fashion-wardrobe-panel {
+            display: flex;
+            flex-direction: column;
+            max-height: none;
+        }
+
+        .fashion-workspace.tab-wardrobe .fashion-items-grid {
+            max-height: 62vh;
+        }
+
+        .fashion-workspace.tab-outfit .fashion-outfit-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fashion-workspace.tab-outfit .fashion-selected-items {
+            max-height: 40vh;
+        }
+
+        /* order lama tidak diperlukan lagi karena panel disembunyikan via display:none */
+        .fashion-wardrobe-panel,
+        .fashion-stage-panel,
+        .fashion-outfit-panel {
+            order: initial !important;
+        }
+    }
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+.fashion-stage-background,
+.fashion-stage-glow,
+.fashion-stage-grid,
+.fashion-stage-ring,
+.fashion-floor {
+    display: none !important;
+}
+.fashion-stage {
+    background: transparent; /* dulu: linear-gradient(180deg, #06192c, #041426) */
+}
+
+.fashion-three-container,
+.fashion-three-container canvas {
+    height: 100% !important;
 }

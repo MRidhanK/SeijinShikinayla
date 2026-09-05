@@ -1505,6 +1505,12 @@
     </section>
 
 
+    <div class="fashion-mobile-tabs">
+    <button type="button" class="fashion-mobile-tab active" data-mobile-tab="stage">👗 AVATAR</button>
+    <button type="button" class="fashion-mobile-tab" data-mobile-tab="wardrobe">🧥 WARDROBE</button>
+    <button type="button" class="fashion-mobile-tab" data-mobile-tab="outfit">✦ DESIGN</button>
+</div>
+
     <!-- =====================================================
          WORKSPACE
          ===================================================== -->
@@ -2390,92 +2396,55 @@
     </main>
 
 
-    <!-- =====================================================
-         CHALLENGE PANEL
-         
-         PHASE 3 LOGIC BELUM DIAKTIFKAN.
-         MARKUP DISIAPKAN UNTUK INTEGRASI BERIKUTNYA.
-         ===================================================== -->
+   <!-- =====================================================
+     CHALLENGE PANEL
+     ===================================================== -->
 
-    <section id="fashionChallengePanel"
-             class="fashion-challenge-panel"
-             hidden>
+<section id="fashionChallengePanel"
+         class="fashion-challenge-panel">
 
-        <div class="fashion-challenge-inner">
+    <div class="fashion-challenge-inner">
+
+        <!-- =================================================
+             CHALLENGE HEADER
+             ================================================= -->
+
+        <div class="fashion-challenge-heading">
+
+            <div class="fashion-challenge-heading-info">
+
+                <span class="fashion-panel-kicker">
+                    FASHION CHALLENGE
+                </span>
+
+                <h2 id="fashionChallengeTitle">
+                    Tokyo Evening
+                </h2>
+
+            </div>
 
 
-            <div class="fashion-challenge-heading">
+            <!-- =================================================
+                 TIMER
+                 ================================================= -->
 
-                <div>
+            <div class="fashion-challenge-timer"
+                 id="fashionChallengeTimerBox">
 
-                    <span class="fashion-panel-kicker">
-                        FASHION CHALLENGE
-                    </span>
+                <span class="fashion-challenge-timer-icon"
+                      aria-hidden="true">
+                    ⏱
+                </span>
 
-                    <h2 id="fashionChallengeTitle">
-                        Tokyo Evening
-                    </h2>
-
-                </div>
-
-
-                <div class="fashion-challenge-timer">
-
-                    <span aria-hidden="true">
-                        ⏱
-                    </span>
+                <div class="fashion-challenge-timer-value">
 
                     <strong id="fashionChallengeTimer">
                         90
                     </strong>
 
-                </div>
-
-            </div>
-
-
-            <div class="fashion-challenge-content">
-
-
-                <div class="fashion-challenge-brief">
-
-                    <span>
-                        CREATE THIS STYLE
-                    </span>
-
-                    <p id="fashionChallengeDescription">
-                        Elegant evening look with a modern Japanese touch.
-                    </p>
-
-                </div>
-
-
-                <div id="fashionChallengeRequirements"
-                     class="fashion-challenge-requirements">
-                </div>
-
-
-                <div class="fashion-challenge-progress">
-
-                    <div>
-
-                        <span>
-                            MATCH
-                        </span>
-
-                        <strong id="fashionChallengeMatch">
-                            0%
-                        </strong>
-
-                    </div>
-
-
-                    <div class="fashion-challenge-progress-bar">
-
-                        <div id="fashionChallengeFill">
-                        </div>
-
-                    </div>
+                    <small>
+                        SEC
+                    </small>
 
                 </div>
 
@@ -2483,8 +2452,335 @@
 
         </div>
 
-    </section>
 
+        <!-- =================================================
+             CHALLENGE CONTENT
+             ================================================= -->
+
+        <div class="fashion-challenge-content">
+
+
+            <!-- =================================================
+                 CHALLENGE BRIEF
+                 ================================================= -->
+
+            <div class="fashion-challenge-brief">
+
+                <span class="fashion-challenge-label">
+                    CREATE THIS STYLE
+                </span>
+
+                <p id="fashionChallengeDescription">
+                    Elegant evening look with a modern Japanese touch.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 REQUIRED ITEMS
+                 ================================================= -->
+
+            <div class="fashion-challenge-requirements-wrapper">
+
+                <div class="fashion-challenge-section-header">
+
+                    <span class="fashion-challenge-label">
+                        REQUIRED ITEMS
+                    </span>
+
+                    <span id="fashionChallengeRequirementCount"
+                          class="fashion-challenge-requirement-count">
+                        0 / 0
+                    </span>
+
+                </div>
+
+
+                <div id="fashionChallengeRequirements"
+                     class="fashion-challenge-requirements">
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 MATCH PROGRESS
+                 ================================================= -->
+
+            <div class="fashion-challenge-progress">
+
+                <div class="fashion-challenge-progress-header">
+
+                    <div>
+
+                        <span>
+                            MATCH
+                        </span>
+
+                        <small>
+                            Challenge requirement
+                        </small>
+
+                    </div>
+
+                    <strong id="fashionChallengeMatch">
+                        0%
+                    </strong>
+
+                </div>
+
+
+                <div class="fashion-challenge-progress-bar">
+
+                    <div id="fashionChallengeFill">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CHALLENGE SCORE
+                 ================================================= -->
+
+            <div class="challenge-score-box">
+
+
+                <!-- =================================================
+                     SCORE HEADER
+                     ================================================= -->
+
+                <div class="challenge-score-header">
+
+                    <div class="challenge-score-title">
+
+                        <span>
+                            CHALLENGE SCORE
+                        </span>
+
+                        <small>
+                            Outfit performance
+                        </small>
+
+                    </div>
+
+
+                    <div class="challenge-score-total">
+
+                        <strong id="fashionChallengeScore">
+                            0
+                        </strong>
+
+                        <span>
+                            / 1000
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SCORE PROGRESS
+                     ================================================= -->
+
+                <div class="challenge-score-progress"
+                     aria-hidden="true">
+
+                    <div id="fashionChallengeScoreFill"
+                         class="challenge-score-progress-fill">
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SCORE BREAKDOWN
+                     ================================================= -->
+
+                <div class="challenge-score-breakdown">
+
+
+                    <!-- =================================================
+                         REQUIREMENT SCORE
+                         ================================================= -->
+
+                    <div class="challenge-score-item">
+
+                        <div class="challenge-score-item-icon">
+                            ✓
+                        </div>
+
+                        <div class="challenge-score-item-content">
+
+                            <span>
+                                Requirement
+                            </span>
+
+                            <strong id="challengeRequirementScore">
+                                0 / 500
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         FASHION SCORE
+                         ================================================= -->
+
+                    <div class="challenge-score-item">
+
+                        <div class="challenge-score-item-icon">
+                            ✦
+                        </div>
+
+                        <div class="challenge-score-item-content">
+
+                            <span>
+                                Fashion Score
+                            </span>
+
+                            <strong id="challengeFashionScore">
+                                0 / 300
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         RARITY BONUS
+                         ================================================= -->
+
+                    <div class="challenge-score-item">
+
+                        <div class="challenge-score-item-icon">
+                            ◆
+                        </div>
+
+                        <div class="challenge-score-item-content">
+
+                            <span>
+                                Rarity Bonus
+                            </span>
+
+                            <strong id="challengeRarityScore">
+                                0 / 100
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         TIME BONUS
+                         ================================================= -->
+
+                    <div class="challenge-score-item">
+
+                        <div class="challenge-score-item-icon">
+                            ⏱
+                        </div>
+
+                        <div class="challenge-score-item-content">
+
+                            <span>
+                                Time Bonus
+                            </span>
+
+                            <strong id="challengeTimeScore">
+                                0 / 100
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         PERFECT MATCH BONUS
+                         ================================================= -->
+
+                    <div class="challenge-score-item challenge-perfect-score-item">
+
+                        <div class="challenge-score-item-icon">
+                            ★
+                        </div>
+
+                        <div class="challenge-score-item-content">
+
+                            <span>
+                                Perfect Bonus
+                            </span>
+
+                            <strong id="challengePerfectScore">
+                                +0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     PERFECT MATCH STATUS
+                     ================================================= -->
+
+                <div id="fashionPerfectMatchBox"
+                     class="challenge-perfect-match">
+
+                    <div class="challenge-perfect-match-icon"
+                         aria-hidden="true">
+                        ★
+                    </div>
+
+
+                    <div class="challenge-perfect-match-content">
+
+                        <strong id="fashionPerfectMatch">
+                            PERFECT MATCH
+                        </strong>
+
+                        <small id="fashionPerfectMatchDescription">
+                            Complete all required items
+                        </small>
+
+                    </div>
+
+
+                    <div class="challenge-perfect-match-bonus">
+
+                        <span>
+                            BONUS
+                        </span>
+
+                        <strong id="fashionPerfectBonus">
+                            +0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
 
     <!-- =====================================================
          SAVED OUTFITS
@@ -2768,7 +3064,77 @@
 
 </div>
 </section>
+<!-- ============================
+     DESIGN SUBMISSION RESULT
+============================= -->
 
+<div id="designResultPopup"
+     class="design-result-overlay"
+     aria-hidden="true">
+
+    <div class="design-result-card">
+
+        <div class="design-result-glow"></div>
+
+        <div class="design-result-icon">
+            ✨
+        </div>
+
+        <span class="design-result-kicker">
+            DESIGN SUBMITTED
+        </span>
+
+        <h2>
+            Great Design!
+        </h2>
+
+        <p class="design-result-message">
+            Your fashion design has been successfully submitted.
+        </p>
+
+        <div class="design-result-score-box">
+
+            <span class="design-result-score-label">
+                YOUR SCORE
+            </span>
+
+            <strong id="designResultScore">
+                0
+            </strong>
+
+            <span class="design-result-score-max">
+                / 100
+            </span>
+
+        </div>
+
+        <div class="design-result-info">
+
+            <div>
+                <span>POINTS</span>
+                <strong id="designResultPoints">
+                    +0
+                </strong>
+            </div>
+
+            <div>
+                <span>REWARD</span>
+                <strong id="designResultMoney">
+                    +0
+                </strong>
+            </div>
+
+        </div>
+
+        <button type="button"
+                id="designResultContinue"
+                class="fashion-button fashion-button-primary">
+            Continue
+        </button>
+
+    </div>
+
+</div>
 
 <!-- =========================================================
      THREE.JS IMPORT MAP
@@ -2801,7 +3167,7 @@
 <!-- =========================================================
      GLOBAL GAMES ENGINE
      =========================================================
-
+ 
      Jika games.js memang dibutuhkan untuk sistem game umum,
      letakkan setelah fashion-designer.js.
 

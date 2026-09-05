@@ -317,6 +317,9 @@ const state = {
 
     challengeMedal: null,
 
+    challengeFinished: false,
+    challengeRewarded: false,
+
     /* ========================================================
        SCORE
        ======================================================== */
@@ -1879,6 +1882,40 @@ let animationFrame = null;
 
 
 /* ============================================================
+   07a. ENVIRONMENT / THEME (NEW)
+   ------------------------------------------------------------
+   Referensi terpisah (di luar materialCache) untuk elemen
+   panggung & lighting, supaya warnanya bisa diubah-ubah sesuai
+   tema outfit tanpa mengganggu material item lain yang mungkin
+   kebetulan memakai warna cache yang sama.
+   ============================================================ */
+
+let ambientLight = null;
+
+let keyLight = null;
+
+let fillLight = null;
+
+let rimLight = null;
+
+let floorMaterial = null;
+
+let platformMaterial = null;
+
+let ringMaterial = null;
+
+let ring2Material = null;
+
+let particleSystem = null;
+
+let particleTextureCache = null;
+
+const skyTextureCache = new Map();
+
+let clock = null;
+
+
+/* ============================================================
    08. MATERIALS
    ============================================================ */
 
@@ -2399,6 +2436,14 @@ function initThree() {
 
     scene.background = null;
 
+    /*
+     * NEW: clock dipakai untuk animasi partikel tema
+     * (sakura/salju/kilau/bokeh) di updateParticles().
+     */
+
+    clock =
+        new THREE.Clock();
+
 
     /* ========================================================
        CAMERA
@@ -2472,68 +2517,74 @@ function initThree() {
 
     /* ========================================================
        LIGHTING
+       ------------------------------------------------------
+       NEW: disimpan ke variabel module-level (ambientLight,
+       keyLight, fillLight, rimLight) alih-alih const lokal,
+       supaya warnanya bisa diubah nanti oleh
+       applyEnvironmentTheme() sesuai tema outfit yang sedang
+       dipakai (lihat bagian ENVIRONMENT / THEME).
        ======================================================== */
 
-    const ambient =
+    ambientLight =
         new THREE.HemisphereLight(
             0xdcecff,
             0x071321,
             2.6
         );
 
-    scene.add(ambient);
+    scene.add(ambientLight);
 
 
-    const key =
+    keyLight =
         new THREE.DirectionalLight(
             0xffffff,
             4.4
         );
 
-    key.position.set(
+    keyLight.position.set(
         -4,
         7,
         6
     );
 
-    key.castShadow = true;
+    keyLight.castShadow = true;
 
-    key.shadow.mapSize.width = 2048;
+    keyLight.shadow.mapSize.width = 2048;
 
-    key.shadow.mapSize.height = 2048;
+    keyLight.shadow.mapSize.height = 2048;
 
-    scene.add(key);
+    scene.add(keyLight);
 
 
-    const fill =
+    fillLight =
         new THREE.DirectionalLight(
             0x9ac9ff,
             2.4
         );
 
-    fill.position.set(
+    fillLight.position.set(
         4,
         4,
         -3
     );
 
-    scene.add(fill);
+    scene.add(fillLight);
 
 
-    const rim =
+    rimLight =
         new THREE.PointLight(
             0xb89aff,
             18,
             14
         );
 
-    rim.position.set(
+    rimLight.position.set(
         -3,
         4,
         -4
     );
 
-    scene.add(rim);
+    scene.add(rimLight);
 
 
     /* ========================================================
@@ -2569,19 +2620,29 @@ function initThree() {
     setupExistingButtons();
 
 
-    resizeThree();
+resizeThree();
 
-    if ("ResizeObserver" in window) {
+// FIX: paksa resize sekali lagi setelah layout benar-benar
+// selesai (rAF + timeout kecil), karena saat initThree() jalan
+// pertama kali, tinggi container kadang belum final (terutama
+// di layout mobile/flex) — akibatnya canvas ter-render lebih
+// pendek dari panel, dan background biru bawaan .fashion-stage
+// jadi kelihatan di bawah canvas.
+requestAnimationFrame(resizeThree);
 
-        resizeObserver =
-            new ResizeObserver(
-                resizeThree
-            );
+setTimeout(resizeThree, 300);
 
-        resizeObserver.observe(
-            container
+if ("ResizeObserver" in window) {
+
+    resizeObserver =
+        new ResizeObserver(
+            resizeThree
         );
-    }
+
+    resizeObserver.observe(
+        container
+    );
+}
 
     window.addEventListener(
         "resize",
@@ -2616,6 +2677,22 @@ function createStage() {
     scene.add(stageRoot);
 
 
+    /*
+     * NEW: material panggung dibuat langsung (bukan lewat
+     * getMaterial() cache) dan disimpan ke variabel
+     * module-level, supaya applyEnvironmentTheme() bisa
+     * mengganti warnanya sesuai tema outfit tanpa ikut
+     * mengubah warna objek lain yang kebetulan memakai kode
+     * warna yang sama di cache.
+     */
+
+    floorMaterial =
+        new THREE.MeshStandardMaterial({
+            color: new THREE.Color("#172f56"),
+            roughness: .8,
+            side: THREE.DoubleSide
+        });
+
     const floor =
         new THREE.Mesh(
 
@@ -2626,12 +2703,7 @@ function createStage() {
                 96
             ),
 
-            getMaterial(
-                "#172f56",
-                {
-                    roughness: .8
-                }
-            )
+            floorMaterial
         );
 
     floor.position.y = .05;
@@ -2640,6 +2712,14 @@ function createStage() {
 
     stageRoot.add(floor);
 
+
+    platformMaterial =
+        new THREE.MeshStandardMaterial({
+            color: new THREE.Color("#1f4b91"),
+            roughness: .62,
+            metalness: .08,
+            side: THREE.DoubleSide
+        });
 
     const platform =
         new THREE.Mesh(
@@ -2651,13 +2731,7 @@ function createStage() {
                 96
             ),
 
-            getMaterial(
-                "#1f4b91",
-                {
-                    roughness: .62,
-                    metalness: .08
-                }
-            )
+            platformMaterial
         );
 
     platform.position.y = .17;
@@ -2669,6 +2743,14 @@ function createStage() {
     stageRoot.add(platform);
 
 
+    ringMaterial =
+        new THREE.MeshStandardMaterial({
+            color: new THREE.Color("#2993ef"),
+            roughness: .3,
+            metalness: .4,
+            side: THREE.DoubleSide
+        });
+
     const ring =
         new THREE.Mesh(
 
@@ -2679,13 +2761,7 @@ function createStage() {
                 96
             ),
 
-            getMaterial(
-                "#2993ef",
-                {
-                    roughness: .3,
-                    metalness: .4
-                }
-            )
+            ringMaterial
         );
 
     ring.rotation.x =
@@ -2697,6 +2773,14 @@ function createStage() {
     stageRoot.add(ring);
 
 
+    ring2Material =
+        new THREE.MeshStandardMaterial({
+            color: new THREE.Color("#4c9df0"),
+            roughness: .3,
+            metalness: .4,
+            side: THREE.DoubleSide
+        });
+
     const ring2 =
         new THREE.Mesh(
 
@@ -2707,13 +2791,7 @@ function createStage() {
                 80
             ),
 
-            getMaterial(
-                "#4c9df0",
-                {
-                    roughness: .3,
-                    metalness: .4
-                }
-            )
+            ring2Material
         );
 
     ring2.rotation.x =
@@ -3022,39 +3100,14 @@ function createBaseBody() {
 
 
     /*
-     * Female:
-     * subtle bust silhouette.
-     *
-     * Tidak membuat anatomi terbuka.
-     * Bust langsung berada di bawah base garment.
-     *
-     * FIX: ukurannya dikecilkan & ditarik lebih ke dalam
-     * (z lebih kecil) supaya selalu tersembunyi di bawah
-     * baju/dress apapun, tidak nembus keluar kain lagi.
+     * NEW: bust silhouette DIHAPUS TOTAL — sebelumnya di sini
+     * ada 2 sphere kecil untuk siluet dada wanita, tapi mudah
+     * "nembus" atau kelihatan aneh terutama saat dikombinasi
+     * dengan jaket/dress berlapis. Perbedaan gender tetap cukup
+     * terwakili lewat: lebar torso/pinggul, bentuk kepala, ukuran
+     * hidung, radius kaki, default hair, dan sekarang blush di
+     * pipi (lihat bagian BLUSH di bawah).
      */
-
-    if (state.gender === "female") {
-
-        sphere(
-            bodyRoot,
-
-            [.26, .18, .12],
-
-            [-.30, 2.80, .32],
-
-            skin
-        );
-
-        sphere(
-            bodyRoot,
-
-            [.26, .18, .12],
-
-            [.30, 2.80, .32],
-
-            skin
-        );
-    }
 
 
     /* ========================================================
@@ -3108,8 +3161,6 @@ function createBaseBody() {
 
     /* ========================================================
        HEAD
-       (FIX: male head is now a different, broader/squarer
-       shape instead of reusing the exact female head)
        ======================================================== */
 
     const headScale =
@@ -3153,8 +3204,6 @@ function createBaseBody() {
 
     /* ========================================================
        NOSE
-       (FIX: male nose is now slightly bigger/different than
-       the female nose instead of sharing the same values)
        ======================================================== */
 
     const noseScale =
@@ -3275,6 +3324,48 @@ function createBaseBody() {
 
 
     /* ========================================================
+       BLUSH (NEW — khusus wanita)
+       ------------------------------------------------------
+       Menggantikan peran bust silhouette sebagai penanda
+       gender yang lebih aman (tidak berisiko clipping/nembus
+       di baju). Berupa dua bulatan pink transparan tipis di
+       pipi, di bawah mata dan sedikit ke arah luar wajah.
+       Tidak dirender untuk model pria.
+       ======================================================== */
+
+    if (
+        state.gender === "female"
+    ) {
+
+        const blushMaterial =
+            getMaterial(
+                "#e8879a",
+                {
+                    roughness: .9,
+                    transparent: true,
+                    opacity: .38
+                }
+            );
+
+        sphere(
+            bodyRoot,
+            [.085, .06, .02],
+            [-.34, 4.10, .50],
+            blushMaterial,
+            20
+        );
+
+        sphere(
+            bodyRoot,
+            [.085, .06, .02],
+            [.34, 4.10, .50],
+            blushMaterial,
+            20
+        );
+    }
+
+
+    /* ========================================================
        MOUTH
        ======================================================== */
 
@@ -3308,25 +3399,6 @@ function createBaseBody() {
 
     /* ========================================================
        ARMS
-       ------------------------------------------------------
-       FIX (engsel bahu ada di tengah badan, bukan di atas):
-
-       Sebelumnya kapsul lengan diposisikan di y=2.70 dengan
-       rotasi hanya 5°. Titik y=2.70 itu kira-kira TENGAH DADA
-       (torso center ada di y=2.67), jauh di bawah titik bahu
-       sebenarnya (CONFIG.avatar.shoulderY ≈ 3.02). Karena
-       rotasinya kecil, pangkal atas kapsul cuma sedikit miring
-       dan tetap nongkrong di area dada — bukan menempel di
-       puncak bahu — sehingga terlihat ada celah besar antara
-       torso dan lengan seperti di kotak merah screenshot user.
-
-       Fix: kapsul lengan sekarang dihitung supaya UJUNG ATASNYA
-       bertemu tepat di titik bahu (SHOULDER_X, SHOULDER_Y) —
-       dekat tepi atas torso — lalu turun ke posisi tangan
-       (HAND_X, HAND_Y) yang sama seperti sebelumnya. Posisi
-       tengah kapsul dan sudut rotasinya dihitung dari dua titik
-       ini, jadi lengan benar-benar "menggantung" dari puncak
-       bahu, bukan dari tengah badan.
        ======================================================== */
 
     const arm =
@@ -3394,11 +3466,7 @@ function createBaseBody() {
 
 
     /* ========================================================
-       SHOULDER FILL (FIX: dipindah ke titik bahu sebenarnya
-       [SHOULDER_X, SHOULDER_Y], bukan di y=2.76 yang masih
-       terlalu rendah / tengah dada. Sekarang bola ini duduk
-       tepat di puncak bahu, menyatukan torso dan pangkal
-       lengan tanpa celah — dari sudut manapun.)
+       SHOULDER FILL
        ======================================================== */
 
     sphere(
@@ -3485,7 +3553,6 @@ function createBaseBody() {
     createBaseCoverage();
 }
 
-
 /* ============================================================
    15. BASE COVERAGE
    ============================================================ */
@@ -3507,20 +3574,6 @@ function createBaseCoverage() {
         );
 
 
-    /*
-     * FIX: dulu bagian coverage ini SELALU dibuat,
-     * tanpa peduli apakah top/dress/bottom sudah
-     * dipakai. Karena bulatan dada di lapisan ini
-     * lebih menonjol ke depan daripada permukaan
-     * baju (top), hasilnya dada "nembus" baju.
-     *
-     * Sekarang coverage hanya dibuat kalau slot
-     * terkait memang masih kosong (belum ada top/
-     * dress untuk atas, belum ada bottom/dress
-     * untuk bawah) — begitu dipakaikan baju,
-     * coverage ini otomatis tidak dibuat lagi.
-     */
-
     const hasUpperClothing =
         !!(
             state.selected.top ||
@@ -3533,20 +3586,6 @@ function createBaseCoverage() {
             state.selected.dress
         );
 
-
-    /*
-     * FIX: kalau user cuma pakai JAKET saja (tanpa top/
-     * dress), lapisan coverage ini masih perlu dibuat
-     * karena kadang terlihat lewat celah kerah/lapel
-     * jaket yang terbuka. Sebelumnya warnanya selalu
-     * putih hardcode, jadi kelihatan ganjil kalau
-     * jaketnya warna lain (mis. hitam).
-     *
-     * Sekarang warnanya mengikuti warna jaket yang
-     * sedang dipakai, supaya menyatu/nge-blend —
-     * hanya default ke putih kalau memang tidak ada
-     * jaket sama sekali (badan benar-benar polos).
-     */
 
     const jacketItem =
         getSelected("jacket");
@@ -3569,20 +3608,6 @@ function createBaseCoverage() {
        ===================================================== */
 
     if (!hasUpperClothing) {
-
-        /*
-         * FIX: kalau bottom (celana/rok) SUDAH dipakai,
-         * bagian pinggul sudah ditangani oleh waistband
-         * celana itu sendiri. Kalau coverage atas ini tetap
-         * dibuat sebesar & seturun biasanya, bentuknya yang
-         * bulat penuh akan "nyembul" keluar dari waistband
-         * celana (kelihatan seperti jendolan/perut di atas
-         * celana). Jadi kalau bottom sudah ada, tingginya
-         * dipendekkan (posisi tetap sama) supaya ujung
-         * bawahnya meruncing pas menyentuh ujung atas
-         * waistband celana — tidak nyembul lebar, dan tidak
-         * ada celah kulit yang kelihatan di antara keduanya.
-         */
 
         const upperCoverageScale =
             hasLowerClothing
@@ -3617,17 +3642,8 @@ function createBaseCoverage() {
 
         /* ================================================
            MIDRIFF BRIDGE
-           (FIX: sphere upper coverage meruncing ke nol pas
-           ketemu pinggang celana, jadi ada celah kulit
-           kelihatan / step yang kentara di antara perut dan
-           waistband celana. Sekarang radiusnya disamakan
-           persis dengan radius waistband di createBottom()
-           [.63 / .69], tingginya ditambah dari .22 -> .30,
-           dan posisinya diturunkan sedikit [2.42 -> 2.38]
-           supaya overlap-nya lebih dalam ke waistband —
-           hasilnya sambungan perut-ke-celana jadi mulus,
-           tanpa celah maupun "tangga".)
            ================================================ */
+
         if (hasLowerClothing) {
 
             cylinder(
@@ -3641,50 +3657,13 @@ function createBaseCoverage() {
             );
         }
 
-        /* =================================================
-           FEMALE CHEST COVERAGE
-           ================================================= */
-
-        if (
-            state.gender === "female"
-        ) {
-
-            sphere(
-                underLayerRoot,
-
-                [
-                    .30,
-                    .23,
-                    .13
-                ],
-
-                [
-                    -.30,
-                    2.81,
-                    .51
-                ],
-
-                upperCoverage
-            );
-
-            sphere(
-                underLayerRoot,
-
-                [
-                    .30,
-                    .23,
-                    .13
-                ],
-
-                [
-                    .30,
-                    2.81,
-                    .51
-                ],
-
-                upperCoverage
-            );
-        }
+        /*
+         * NEW: FEMALE CHEST COVERAGE DIHAPUS TOTAL — dulu ada
+         * 2 sphere di sini mengikuti bentuk bust yang sekarang
+         * sudah tidak ada lagi (lihat createBaseBody()). Upper
+         * coverage sphere utama di atas sudah cukup menutupi
+         * torso tanpa perlu tambahan bentuk dada.
+         */
     }
 
     /* =====================================================
@@ -4326,6 +4305,88 @@ function createHair(item) {
 
 }
 
+const MALE_KIMONO_TYPES = [
+    "kimonoBlack", "kimonoNavy", "kimonoCharcoal", "kimonoCopper",
+    "haoriFormal", "haoriWhite", "haoriCrestBlack", "haoriCrestNavy"
+];
+
+function createMaleKimonoTop(item) {
+
+    const color = state.colors[item.id] || item.colors?.[0] || "#18191f";
+    const mat = satin(color);
+
+    const isHaori = item.type.startsWith("haori");
+    const hasCrest = item.type.includes("Crest");
+
+    const innerMat = satin(item.colors?.[1] || "#30354a");
+    const crestColor = item.colors?.[2] || "#c9a34d";
+
+    /*
+     * BADAN UTAMA — satu cylinder tirus TUNGGAL dari bahu sampai
+     * pinggul, melebar ke bawah seperti jubah asli. TIDAK dipecah
+     * jadi beberapa box terpisah supaya tidak muncul celah/panel
+     * pipih seperti sebelumnya.
+     */
+
+    const bodyMain = cylinder(topRoot, .58, .82, 1.75, [0, 2.25, 0], mat, 48);
+    bodyMain.scale.z = .68;
+
+    /*
+     * KERAH V — dua box tipis miring membentuk kerah silang khas
+     * kimono/haori, menempel rapat ke bahu (bukan mengambang).
+     */
+
+    const collarLeft = box(topRoot, [.11, .80, .05], [-.16, 3.05, .38], innerMat);
+    collarLeft.rotation.z = .55;
+
+    const collarRight = box(topRoot, [.11, .80, .05], [.16, 3.05, .38], innerMat);
+    collarRight.rotation.z = -.55;
+
+    /*
+     * LENGAN — cylinder tunggal per sisi, MENYATU ke badan lewat
+     * shoulderConnector radius besar (bukan capsule kecil terpisah
+     * jauh dari badan, yang tadi bikin kesan panel terpisah).
+     */
+
+    const leftSleeve = cylinder(topRoot, .30, .40, 1.20, [-.90, 2.45, 0], mat, 40);
+    leftSleeve.rotation.z = -.06;
+    leftSleeve.scale.z = .62;
+
+    const rightSleeve = cylinder(topRoot, .30, .40, 1.20, [.90, 2.45, 0], mat, 40);
+    rightSleeve.rotation.z = .06;
+    rightSleeve.scale.z = .62;
+
+    shoulderConnector(topRoot, -.72, 2.98, .04, mat, .34);
+    shoulderConnector(topRoot, .72, 2.98, .04, mat, .34);
+
+    const leftCuff = cylinder(topRoot, .34, .34, .08, [-.90, 1.87, 0], mat, 40);
+    leftCuff.scale.z = .62;
+
+    const rightCuff = cylinder(topRoot, .34, .34, .08, [.90, 1.87, 0], mat, 40);
+    rightCuff.scale.z = .62;
+
+    /*
+     * OBI / HIMO
+     */
+
+    if (isHaori) {
+
+        box(topRoot, [.48, .045, .035], [0, 2.85, .38], satin(crestColor));
+        sphere(topRoot, [.05, .05, .04], [0, 2.81, .41], metal(crestColor), 16);
+
+    } else {
+
+        const obi = cylinder(topRoot, .60, .64, .30, [0, 1.95, 0], satin(item.colors?.[2] || "#1b1c20"), 48);
+        obi.scale.z = .68;
+    }
+
+    if (hasCrest) {
+
+        sphere(topRoot, [.055, .055, .02], [0, 2.72, .44], metal(crestColor), 20);
+        sphere(topRoot, [.045, .045, .018], [-.58, 2.70, .08], metal(crestColor), 16);
+        sphere(topRoot, [.045, .045, .018], [.58, 2.70, .08], metal(crestColor), 16);
+    }
+}
 
 /* ============================================================
    17. TOP
@@ -4336,6 +4397,11 @@ function createTop(item) {
     clearGroup(topRoot);
 
     if (!item) {
+        return;
+    }
+
+    if (MALE_KIMONO_TYPES.includes(item.type)) {
+        createMaleKimonoTop(item);
         return;
     }
 
@@ -4381,34 +4447,12 @@ function createTop(item) {
         );
 
 
-    /* ========================================================
-       SUBTLE CHEST CONTOUR (FEMALE ONLY)
-       (NEW: sebelumnya dada "nembus" dari lapisan underwear
-       yang lebih menonjol daripada bajunya. Sekarang cukup
-       jendolan halus, memakai material yang sama persis
-       dengan bajunya, dan diposisikan jauh di dalam siluet
-       torso utama supaya tidak pernah nongol keluar dari
-       kain — jadi menyatu, bukan dua bola terpisah.)
-       ======================================================== */
-
-    if (
-        state.gender === "female"
-    ) {
-
-        sphere(
-            topRoot,
-            [.20, .15, .085],
-            [-.26, 2.78, .28],
-            mat
-        );
-
-        sphere(
-            topRoot,
-            [.20, .15, .085],
-            [.26, 2.78, .28],
-            mat
-        );
-    }
+    /*
+     * NEW: chest contour untuk wanita DIHAPUS TOTAL — perbedaan
+     * gender sekarang cukup terwakili lewat siluet torso/head/
+     * nose/leg dari createBaseBody() dan blush di pipi, tanpa
+     * risiko clipping di baju.
+     */
 
 
     /* ========================================================
@@ -4463,21 +4507,7 @@ function createTop(item) {
 
 
     /* ========================================================
-       SHOULDER CONNECTOR (FIX: bola bahu duduk di TENGAH lengan,
-       bukan di ATAS/puncak bahu)
-       ------------------------------------------------------
-       Sebelumnya connector ini ditaruh persis di y=2.77, sama
-       dengan titik TENGAH capsule lengan (yang membentang kira-
-       kira dari y≈2.24 sampai y≈3.30). Karena posisinya di
-       tengah, bola bahu ini kelihatan seperti benjolan di
-       pertengahan lengan/bisep, bukan di puncak bahu — persis
-       keluhan user ("bahunya itu diatas bukan ditengah").
-
-       Fix: naikkan connector ke SHOULDER_Y (dekat puncak
-       capsule lengan, selaras dengan CONFIG.avatar.shoulderY
-       ≈3.02) supaya bola ini menyatu di titik pertemuan
-       torso-bahu yang sebenarnya, bukan di tengah lengan.
-       Posisi X/Z dan radius tidak diubah — hanya Y yang naik.
+       SHOULDER CONNECTOR
        ======================================================== */
 
     const SHOULDER_Y = 3.05;
@@ -4623,7 +4653,7 @@ function createTop(item) {
    18. DRESS
    ============================================================ */
 
-function createDress(item) {
+function createDress(item, options = {}) {
 
     clearGroup(dressRoot);
 
@@ -4631,22 +4661,28 @@ function createDress(item) {
         return;
     }
 
-    const kimonoTypes = [
-    "furisodeSakura",
-    "furisodeCrimson",
-    "furisodeRoyal",
-    "furisodeGold",
-    "furisodeLavender",
-    "furisodeMidnight",
-    "modernKimono",
-    "femaleHakama",
-    "silkKimono"
-];
+    const hideBodice =
+        !!options.hideBodice;
 
-if (kimonoTypes.includes(item.type)) {
-    createKimonoDress(item);
-    return;
-}
+
+    const kimonoTypes = [
+        "furisodeSakura",
+        "furisodeCrimson",
+        "furisodeRoyal",
+        "furisodeGold",
+        "furisodeLavender",
+        "furisodeMidnight",
+        "modernKimono",
+        "femaleHakama",
+        "silkKimono"
+    ];
+
+    if (kimonoTypes.includes(item.type)) {
+
+        createKimonoDress(item);
+
+        return;
+    }
 
     const color =
         state.colors[item.id] ||
@@ -4660,64 +4696,47 @@ if (kimonoTypes.includes(item.type)) {
             : fabric(color);
 
 
-    /*
-     * BODICE
-     *
-     * Menutupi torso sepenuhnya.
-     */
-
-    sphere(
-        dressRoot,
-
-        [
-            state.gender === "female"
-                ? .80
-                : .82,
-
-            .80,
-
-            .61
-        ],
-
-        [
-            0,
-            2.69,
-            .02
-        ],
-
-        mat
-    );
-
-
     /* ========================================================
-       SUBTLE CHEST CONTOUR (FEMALE ONLY)
-       (NEW: sama seperti fix di baju/top — jendolan halus
-       memakai material dress itu sendiri, ditanam di dalam
-       siluet bodice supaya tidak pernah nembus ke luar kain.)
+       BODICE
+       ------------------------------------------------------
+       Menutupi torso sepenuhnya — SKIP kalau hideBodice true
+       (jaket sedang menutupi bagian ini).
        ======================================================== */
 
-    if (
-        state.gender === "female"
-    ) {
+    if (!hideBodice) {
 
         sphere(
             dressRoot,
-            [.21, .16, .09],
-            [-.27, 2.80, .30],
+
+            [
+                state.gender === "female"
+                    ? .80
+                    : .82,
+
+                .80,
+
+                .61
+            ],
+
+            [
+                0,
+                2.69,
+                .02
+            ],
+
             mat
         );
 
-        sphere(
-            dressRoot,
-            [.21, .16, .09],
-            [.27, 2.80, .30],
-            mat
-        );
+        /*
+         * NEW: chest contour untuk wanita DIHAPUS TOTAL —
+         * sama seperti di createTop(), untuk menghindari
+         * clipping/nembus di kain dress.
+         */
     }
 
 
     /*
-     * WAIST
+     * WAIST — tetap dirender di kedua mode.
      */
 
     cylinder(
@@ -4801,71 +4820,56 @@ if (kimonoTypes.includes(item.type)) {
 
 
     /* ========================================================
-       SLEEVES
-       (FIX: sleeve dulu terlalu pendek — cuma menutup bahu,
-       jadi lengan bawah kelihatan polos/telanjang. Sekarang
-       ukurannya disamakan dengan panjang lengan tubuh supaya
-       lengan tertutup penuh sampai pergelangan.)
+       SLEEVES — SKIP kalau hideBodice true
        ======================================================== */
 
-    const sleeveMat =
-        mat.clone();
+    if (!hideBodice) {
+
+        const sleeveMat =
+            mat.clone();
 
 
-    capsule(
-        dressRoot,
-        .225,
-        1.05,
-        [-.79, 2.70, 0],
-        sleeveMat
-    );
+        capsule(
+            dressRoot,
+            .225,
+            1.05,
+            [-.79, 2.70, 0],
+            sleeveMat
+        );
 
-    capsule(
-        dressRoot,
-        .225,
-        1.05,
-        [.79, 2.70, 0],
-        sleeveMat
-    );
+        capsule(
+            dressRoot,
+            .225,
+            1.05,
+            [.79, 2.70, 0],
+            sleeveMat
+        );
 
 
-    /* ========================================================
-       SHOULDER CONNECTOR (FIX: bola bahu duduk di TENGAH lengan,
-       bukan di ATAS/puncak bahu — sama seperti fix di createTop())
-       ------------------------------------------------------
-       Sebelumnya connector ini ditaruh di y=2.72, nyaris sama
-       dengan titik tengah capsule lengan panjang (yang
-       membentang kira-kira dari y≈1.95 sampai y≈3.45 karena
-       sleeve dress panjang sampai pergelangan). Karena posisinya
-       di tengah, bola bahu ini kelihatan seperti benjolan di
-       pertengahan lengan, bukan di puncak bahu.
+        /* ====================================================
+           SHOULDER CONNECTOR
+           ==================================================== */
 
-       Fix: naikkan connector ke SHOULDER_Y (dekat puncak
-       capsule lengan / titik pertemuan bodice-bahu yang
-       sebenarnya, selaras dengan CONFIG.avatar.shoulderY
-       ≈3.02), supaya menyatu di bahu, bukan di tengah lengan.
-       Posisi X/Z dan radius tidak diubah — hanya Y yang naik.
-       ======================================================== */
+        const SHOULDER_Y = 3.05;
 
-    const SHOULDER_Y = 3.05;
+        shoulderConnector(
+            dressRoot,
+            -.79,
+            SHOULDER_Y,
+            .04,
+            mat,
+            .275
+        );
 
-    shoulderConnector(
-        dressRoot,
-        -.79,
-        SHOULDER_Y,
-        .04,
-        mat,
-        .275
-    );
-
-    shoulderConnector(
-        dressRoot,
-        .79,
-        SHOULDER_Y,
-        .04,
-        mat,
-        .275
-    );
+        shoulderConnector(
+            dressRoot,
+            .79,
+            SHOULDER_Y,
+            .04,
+            mat,
+            .275
+        );
+    }
 
 
     /* ========================================================
@@ -4932,19 +4936,115 @@ if (kimonoTypes.includes(item.type)) {
 
 
     /* ========================================================
-       NECKLINE
+       NECKLINE — SKIP kalau hideBodice true
        ======================================================== */
 
-    torus(
-        dressRoot,
-        .25,
-        .045,
-        [0, 3.30, .27],
-        [Math.PI / 2, 0, 0],
-        mat
-    );
+    if (!hideBodice) {
+
+        torus(
+            dressRoot,
+            .25,
+            .045,
+            [0, 3.30, .27],
+            [Math.PI / 2, 0, 0],
+            mat
+        );
+    }
 }
 
+const suitFrontTextureCache = new Map();
+
+function buildSuitFrontTexture(shirtColor, lapelColor, tieColor, buttonColor, isDoubleBreasted) {
+
+    const key = [shirtColor, lapelColor, tieColor, buttonColor, isDoubleBreasted].join("|");
+
+    if (suitFrontTextureCache.has(key)) {
+        return suitFrontTextureCache.get(key);
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 384;
+
+    const ctx = canvas.getContext("2d");
+
+    // background transparan — cuma detail jas yang digambar
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const cx = canvas.width / 2;
+
+    // LAPEL — dua segitiga membuka dari bahu turun ke titik tengah
+    ctx.fillStyle = lapelColor;
+
+    ctx.beginPath();
+    ctx.moveTo(cx - 100, 10);
+    ctx.lineTo(cx - 15, 10);
+    ctx.lineTo(cx - 35, 190);
+    ctx.lineTo(cx - 90, 90);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(cx + 100, 10);
+    ctx.lineTo(cx + 15, 10);
+    ctx.lineTo(cx + 35, 190);
+    ctx.lineTo(cx + 90, 90);
+    ctx.closePath();
+    ctx.fill();
+
+    // KEMEJA — segitiga putih terbuka di tengah, di antara lapel
+    ctx.fillStyle = shirtColor;
+    ctx.beginPath();
+    ctx.moveTo(cx - 15, 10);
+    ctx.lineTo(cx + 15, 10);
+    ctx.lineTo(cx + 22, 210);
+    ctx.lineTo(cx - 22, 210);
+    ctx.closePath();
+    ctx.fill();
+
+    // DASI
+    ctx.fillStyle = tieColor;
+    ctx.beginPath();
+    ctx.moveTo(cx - 10, 20);
+    ctx.lineTo(cx + 10, 20);
+    ctx.lineTo(cx + 6, 55);
+    ctx.lineTo(cx, 45);
+    ctx.lineTo(cx - 6, 55);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillRect(cx - 9, 55, 18, 130);
+
+    // KANCING
+    ctx.fillStyle = buttonColor;
+
+    if (isDoubleBreasted) {
+
+        for (let i = 0; i < 3; i++) {
+            ctx.beginPath();
+            ctx.arc(cx - 30, 230 + i * 32, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(cx + 30, 230 + i * 32, 6, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+    } else {
+
+        for (let i = 0; i < 2; i++) {
+            ctx.beginPath();
+            ctx.arc(cx + 20, 225 + i * 35, 6, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.needsUpdate = true;
+
+    suitFrontTextureCache.set(key, texture);
+
+    return texture;
+}
 
 /* ============================================================
    19. JACKET
@@ -4952,233 +5052,130 @@ if (kimonoTypes.includes(item.type)) {
 
 function createJacket(item) {
 
-    clearGroup(
-        jacketRoot
-    );
+    clearGroup(jacketRoot);
 
-    if (!item) {
-        return;
+    if (!item) return;
+
+    const color = state.colors[item.id] || item.colors?.[0] || "#24252d";
+    const mat = item.type === "leather" ? leather(color) : fabric(color);
+
+    const isSuit = ["executiveSuit", "greySuit", "doubleBreasted"].includes(item.type);
+
+    // BADAN — tetap sphere, TIDAK diubah dari versi yang sudah benar
+    sphere(jacketRoot, [.83, .79, .64], [0, 2.70, .045], mat);
+
+    // LENGAN — tetap pakai sudut natural, TIDAK diubah
+    const arm = isSuit ? .23 : .245;
+
+    const SHOULDER_X = .60, SHOULDER_Y = 3.02;
+    const HAND_X = .82, HAND_Y = 2.05;
+
+    const armMidX = (SHOULDER_X + HAND_X) / 2;
+    const armMidY = (SHOULDER_Y + HAND_Y) / 2;
+    const armAngle = Math.atan2(HAND_X - SHOULDER_X, SHOULDER_Y - HAND_Y);
+
+    const leftSleeve = capsule(jacketRoot, arm, 1.15, [-armMidX, armMidY, 0], mat);
+    leftSleeve.rotation.z = armAngle;
+
+    const rightSleeve = capsule(jacketRoot, arm, 1.15, [armMidX, armMidY, 0], mat);
+    rightSleeve.rotation.z = -armAngle;
+
+    shoulderConnector(jacketRoot, -SHOULDER_X, SHOULDER_Y, .05, mat, .27);
+    shoulderConnector(jacketRoot, SHOULDER_X, SHOULDER_Y, .05, mat, .27);
+
+    cylinder(jacketRoot, .25, .25, .13, [-.85, 2.34, 0], mat);
+    cylinder(jacketRoot, .25, .25, .13, [.85, 2.34, 0], mat);
+
+    /*
+     * ===== DARI SINI DETAIL JAS DITAMBAHKAN =====
+     * Semua posisi Y disesuaikan ke pusat sphere badan (y=2.70)
+     * dan permukaan depannya (z≈.60-.66), bukan angka sembarangan.
+     */
+    if (isSuit) {
+
+        const shirtColor = "#f5f5f5";
+        const lapelColor = item.colors?.[1] || "#2d3544";
+        const tieColor = item.colors?.[2] || "#8a1f2b";
+        const buttonColor = item.colors?.[2] || "#c4cad3";
+        const isDoubleBreasted = item.type === "doubleBreasted";
+
+        const texture = buildSuitFrontTexture(shirtColor, lapelColor, tieColor, buttonColor, isDoubleBreasted);
+
+        const planeGeo = new THREE.PlaneGeometry(.85, 1.28);
+
+        const planeMat = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            side: THREE.DoubleSide
+        });
+
+        const plane = new THREE.Mesh(planeGeo, planeMat);
+        plane.position.set(0, 2.82, .70);
+
+        jacketRoot.add(plane);
+
+    } else if (item.type === "blazer" || item.type === "trench") {
+
+        const lapelMat = satin(color);
+
+        const leftLapel = box(jacketRoot, [.16, .68, .055], [-.24, 3.02, .60], lapelMat);
+        leftLapel.rotation.z = -.32;
+
+        const rightLapel = box(jacketRoot, [.16, .68, .055], [.24, 3.02, .60], lapelMat);
+        rightLapel.rotation.z = .32;
+
+        for (let i = 0; i < 3; i++) {
+            sphere(jacketRoot, [.045, .045, .035], [0, 2.98 - i * .22, .69],
+                metal(item.type === "blazer" ? "#d3aa58" : "#ece7df"), 16);
+        }
+
+    } else if (item.type === "bomber" || item.type === "leather" || item.type === "denim") {
+
+        box(jacketRoot, [.035, .66, .035], [0, 2.72, .69],
+            metal(item.type === "leather" ? "#c3a66a" : "#e7e2d9"));
     }
 
-    const color =
-        state.colors[item.id] ||
-        item.colors?.[0] ||
-        "#24252d";
-
-    const mat =
-        item.type === "leather"
-            ? leather(color)
-            : fabric(color);
-
-
-    /* ========================================================
-       JACKET BODY
-       ======================================================== */
-
-    sphere(
-        jacketRoot,
-
-        [
-            .83,
-            .79,
-            .64
-        ],
-
-        [
-            0,
-            2.70,
-            .045
-        ],
-
-        mat
-    );
-
-
-    /* ========================================================
-       JACKET SLEEVES
-       ======================================================== */
-
-    const left =
-        capsule(
-            jacketRoot,
-            .245,
-            .78,
-            [-.82, 2.72, 0],
-            mat
-        );
-
-    left.rotation.z =
-        THREE.MathUtils.degToRad(7);
-
-
-    const right =
-        capsule(
-            jacketRoot,
-            .245,
-            .78,
-            [.82, 2.72, 0],
-            mat
-        );
-
-    right.rotation.z =
-        THREE.MathUtils.degToRad(-7);
-
-
-    /* ========================================================
-       SHOULDER CONNECTOR (NEW — FIX utama kasus "melayang"
-       yang terlihat di screenshot: jaket terlihat seperti bola
-       terpisah dari lengan saat dilihat dari samping/belakang)
-       ------------------------------------------------------
-       Titik pertemuan body jaket [0,2.70,.045] dan sleeve
-       [-.82/.82, 2.72, 0] ditambal dengan sphere sedikit lebih
-       besar (radius .29) karena sleeve jaket (.245) lebih tebal
-       daripada sleeve top/dress, supaya overlap-nya tetap dalam
-       ke kedua sisi.
-       ======================================================== */
-
-    shoulderConnector(
-        jacketRoot,
-        -.82,
-        2.75,
-        .05,
-        mat,
-        .29
-    );
-
-    shoulderConnector(
-        jacketRoot,
-        .82,
-        2.75,
-        .05,
-        mat,
-        .29
-    );
-
-
-    /* ========================================================
-       LAPELS
-       ======================================================== */
-
-    if (
-        item.type === "blazer" ||
-        item.type === "trench"
-    ) {
-
-        const lapelMat =
-            satin(color);
-
-        const leftLapel =
-            box(
-                jacketRoot,
-                [.16, .68, .055],
-                [-.24, 3.02, .60],
-                lapelMat
-            );
-
-        leftLapel.rotation.z =
-            -.32;
-
-
-        const rightLapel =
-            box(
-                jacketRoot,
-                [.16, .68, .055],
-                [.24, 3.02, .60],
-                lapelMat
-            );
-
-        rightLapel.rotation.z =
-            .32;
-    }
-
-
-    /* ========================================================
-       CENTER ZIP / BUTTONS
-       ======================================================== */
-
-    if (
-        item.type === "bomber" ||
-        item.type === "leather" ||
-        item.type === "denim"
-    ) {
-
-        box(
-            jacketRoot,
-            [.035, .66, .035],
-            [0, 2.72, .69],
-            metal(
-                item.type === "leather"
-                    ? "#c3a66a"
-                    : "#e7e2d9"
-            )
-        );
-    }
-
-
-    for (
-        let i = 0;
-        i < 3;
-        i++
-    ) {
-
-        sphere(
-            jacketRoot,
-            [.045, .045, .035],
-            [
-                0,
-                2.98 - i * .22,
-                .69
-            ],
-            metal(
-                item.type === "blazer"
-                    ? "#d3aa58"
-                    : "#ece7df"
-            ),
-            16
-        );
-    }
-
-
-    /* ========================================================
-       CUFFS
-       ======================================================== */
-
-    cylinder(
-        jacketRoot,
-        .25,
-        .25,
-        .13,
-        [-.85, 2.34, 0],
-        mat
-    );
-
-    cylinder(
-        jacketRoot,
-        .25,
-        .25,
-        .13,
-        [.85, 2.34, 0],
-        mat
-    );
-
-
-    /* ========================================================
-       TRENCH BELT
-       ======================================================== */
-
-    if (
-        item.type === "trench"
-    ) {
-
-        box(
-            jacketRoot,
-            [1.15, .09, .68],
-            [0, 2.35, .02],
-            mat
-        );
+    if (item.type === "trench") {
+        box(jacketRoot, [1.15, .09, .68], [0, 2.35, .02], mat);
     }
 }
 
+const HAKAMA_TYPES = ["hakama", "hakamaModern", "hakamaCharcoal", "hakamaCrest"];
+
+function createHakamaBottom(item) {
+
+    const color = state.colors[item.id] || item.colors?.[0] || "#101115";
+    const mat = fabric(color);
+
+    // tali pinggang (himo)
+    box(bottomRoot, [.66, .10, .50], [0, 2.10, 0], satin(item.colors?.[1] || "#3a3a45"));
+
+    // panel lebar depan — ciri khas hakama, bukan dua kaki terpisah
+    box(bottomRoot, [1.05, 1.55, .30], [0, 1.35, .22], mat);
+
+    // panel belakang sedikit lebih sempit
+    box(bottomRoot, [.95, 1.50, .26], [0, 1.32, -.18], mat);
+
+    // lipatan vertikal (pleats)
+    for (let i = -3; i <= 3; i++) {
+        box(
+            bottomRoot,
+            [.025, 1.45, .02],
+            [i * .15, 1.35, .38],
+            getMaterial("#000000", { transparent: true, opacity: .12 })
+        );
+    }
+
+    // kaki tetap ada di dalam supaya tidak floating
+    capsule(bottomRoot, .30, 1.30, [-.24, 1.10, 0], mat);
+    capsule(bottomRoot, .30, 1.30, [.24, 1.10, 0], mat);
+
+    if (item.type === "hakamaCrest") {
+        sphere(bottomRoot, [.05, .05, .02], [0, 1.85, .38], metal(item.colors?.[2] || "#c9a34d"), 16);
+    }
+
+    cylinder(bottomRoot, .58, .58, .08, [0, .30, 0], mat, 40);
+}
 
 /* ============================================================
    20. BOTTOM
@@ -5191,6 +5188,11 @@ function createBottom(item) {
     );
 
     if (!item) {
+        return;
+    }
+
+    if (HAKAMA_TYPES.includes(item.type)) {
+        createHakamaBottom(item);
         return;
     }
 
@@ -6298,6 +6300,778 @@ function createAccessory(item) {
 
 
 /* ============================================================
+   25a. ENVIRONMENT / THEME SYSTEM (NEW)
+   ------------------------------------------------------------
+   Mengganti suasana panggung 3D (langit/background, warna
+   lantai & ring, warna lighting, dan partikel ambient) supaya
+   terasa seperti "berada di tempatnya" sesuai tema outfit yang
+   sedang dipakai — misalnya nuansa sakura untuk outfit Seijin
+   Shiki, kota neon untuk streetwear, gala mewah untuk evening
+   wear, dst.
+
+   Tidak memakai foto/tekstur eksternal (supaya tidak bergantung
+   pada aset gambar yang tidak tersedia) — semuanya dibuat
+   procedural lewat canvas (gradient langit) dan partikel
+   THREE.Points sederhana (sakura/salju/kilau/bokeh).
+   ============================================================ */
+
+const THEME_ENVIRONMENTS = {
+
+    studio: {
+
+        label: "Classic Atelier",
+
+        skyTop: "#0b1626",
+        skyBottom: "#1c3559",
+
+        floor: "#172f56",
+        platform: "#1f4b91",
+        ring: "#2993ef",
+        ring2: "#4c9df0",
+
+        ambientSky: "#dcecff",
+        ambientGround: "#071321",
+
+        key: "#ffffff",
+        fill: "#9ac9ff",
+        rim: "#b89aff",
+
+        particles: null
+    },
+
+    seijin: {
+
+        label: "Sakura Garden",
+
+        skyTop: "#3a1830",
+        skyBottom: "#7c3350",
+
+        floor: "#3a2233",
+        platform: "#6e2c4c",
+        ring: "#e58fb0",
+        ring2: "#f6c8d9",
+
+        ambientSky: "#ffd9e8",
+        ambientGround: "#2a1220",
+
+        key: "#fff1e0",
+        fill: "#f7b8cf",
+        rim: "#ffd28a",
+
+        particles: {
+            count: 70,
+            color: "#f6b9d1",
+            size: .11,
+            speed: .32,
+            opacity: .85,
+            motion: "fall",
+            topY: 5.6
+        }
+    },
+
+    gala: {
+
+        label: "Grand Runway",
+
+        skyTop: "#05030a",
+        skyBottom: "#221336",
+
+        floor: "#0d0912",
+        platform: "#1c1226",
+        ring: "#d4af37",
+        ring2: "#f4e2b8",
+
+        ambientSky: "#e8d3ff",
+        ambientGround: "#0a0410",
+
+        key: "#ffe6b0",
+        fill: "#8fa8ff",
+        rim: "#c98bff",
+
+        particles: {
+            count: 60,
+            color: "#f0d38a",
+            size: .05,
+            speed: .12,
+            opacity: .8,
+            motion: "twinkle",
+            topY: 5.2
+        }
+    },
+
+    winter: {
+
+        label: "Winter Wonderland",
+
+        skyTop: "#0e1c28",
+        skyBottom: "#3c6485",
+
+        floor: "#16222e",
+        platform: "#22384a",
+        ring: "#8fd9ff",
+        ring2: "#e8f6ff",
+
+        ambientSky: "#dff2ff",
+        ambientGround: "#0b1720",
+
+        key: "#eaf6ff",
+        fill: "#a9d8ff",
+        rim: "#c9e9ff",
+
+        particles: {
+            count: 80,
+            color: "#ffffff",
+            size: .085,
+            speed: .38,
+            opacity: .9,
+            motion: "fall",
+            topY: 5.8
+        }
+    },
+
+    business: {
+
+        label: "Modern Office",
+
+        skyTop: "#0a1420",
+        skyBottom: "#33475e",
+
+        floor: "#101820",
+        platform: "#1c2733",
+        ring: "#3fa9f5",
+        ring2: "#88c4ff",
+
+        ambientSky: "#cfe6ff",
+        ambientGround: "#050c14",
+
+        key: "#f3f7ff",
+        fill: "#7fb3ff",
+        rim: "#9fc4ff",
+
+        particles: {
+            count: 45,
+            color: "#bcdcff",
+            size: .07,
+            speed: .1,
+            opacity: .55,
+            motion: "float",
+            topY: 5.2
+        }
+    },
+
+    streetwear: {
+
+        label: "Neon City",
+
+        skyTop: "#0a0416",
+        skyBottom: "#2c1450",
+
+        floor: "#120a24",
+        platform: "#241236",
+        ring: "#ff2e88",
+        ring2: "#33e1ff",
+
+        ambientSky: "#ffb3e6",
+        ambientGround: "#0a0416",
+
+        key: "#ff9ad6",
+        fill: "#33e1ff",
+        rim: "#a259ff",
+
+        particles: {
+            count: 65,
+            color: "#4be8ff",
+            size: .07,
+            speed: .14,
+            opacity: .7,
+            motion: "float",
+            topY: 5.4
+        }
+    },
+
+    minimalist: {
+
+        label: "Minimalist Muse",
+
+        skyTop: "#141a22",
+        skyBottom: "#2c3844",
+
+        floor: "#181f27",
+        platform: "#232c36",
+        ring: "#cfd8e0",
+        ring2: "#eef2f5",
+
+        ambientSky: "#eef2f5",
+        ambientGround: "#0c1116",
+
+        key: "#ffffff",
+        fill: "#c7d3dc",
+        rim: "#dfe6ec",
+
+        particles: null
+    }
+
+};
+
+
+/*
+ * Tag (dari getItemTags()) yang dipetakan ke tiap tema.
+ * Urutan array di bawah menentukan prioritas kalau ada
+ * beberapa tema yang skornya sama (yang dicek lebih dulu
+ * menang).
+ */
+
+const THEME_TAG_MAP = {
+
+    seijin: [
+        "seijin",
+        "traditional",
+        "ceremony"
+    ],
+
+    gala: [
+        "evening",
+        "luxury",
+        "designer",
+        "runway"
+    ],
+
+    winter: [
+        "winter"
+    ],
+
+    business: [
+        "business",
+        "professional",
+        "executive"
+    ],
+
+    streetwear: [
+        "streetwear",
+        "urban"
+    ],
+
+    minimalist: [
+        "minimalist",
+        "clean"
+    ]
+};
+
+const THEME_PRIORITY = [
+    "seijin",
+    "gala",
+    "winter",
+    "business",
+    "streetwear",
+    "minimalist"
+];
+
+
+function detectOutfitTheme() {
+
+    const tally = {};
+
+
+    Object.values(
+        state.selected || {}
+    ).forEach(
+        itemId => {
+
+            const item =
+                getItem(itemId);
+
+            if (!item) {
+                return;
+            }
+
+            const tags =
+                getItemTags(item);
+
+
+            Object.entries(
+                THEME_TAG_MAP
+            ).forEach(
+                ([themeKey, themeTags]) => {
+
+                    const matches =
+                        tags.filter(
+                            tag =>
+                                themeTags.includes(tag)
+                        ).length;
+
+                    if (matches > 0) {
+
+                        tally[themeKey] =
+                            (tally[themeKey] || 0) +
+                            matches;
+                    }
+                }
+            );
+        }
+    );
+
+
+    let bestKey = "studio";
+
+    let bestScore = 0;
+
+
+    THEME_PRIORITY.forEach(
+        key => {
+
+            const score =
+                tally[key] || 0;
+
+            if (score > bestScore) {
+
+                bestScore = score;
+
+                bestKey = key;
+            }
+        }
+    );
+
+
+    return bestKey;
+}
+
+
+function createSkyTexture(
+    topColor,
+    bottomColor
+) {
+
+    const key =
+        `${topColor}|${bottomColor}`;
+
+    if (
+        skyTextureCache.has(key)
+    ) {
+
+        return skyTextureCache.get(key);
+    }
+
+
+    const canvas =
+        document.createElement("canvas");
+
+    canvas.width = 2;
+
+    canvas.height = 256;
+
+    const ctx =
+        canvas.getContext("2d");
+
+    const gradient =
+        ctx.createLinearGradient(
+            0, 0, 0, canvas.height
+        );
+
+    gradient.addColorStop(0, topColor);
+
+    gradient.addColorStop(1, bottomColor);
+
+    ctx.fillStyle = gradient;
+
+    ctx.fillRect(
+        0, 0, canvas.width, canvas.height
+    );
+
+    const texture =
+        new THREE.CanvasTexture(canvas);
+
+    texture.needsUpdate = true;
+
+    skyTextureCache.set(
+        key,
+        texture
+    );
+
+    return texture;
+}
+
+
+function createParticleTexture() {
+
+    if (particleTextureCache) {
+
+        return particleTextureCache;
+    }
+
+    const size = 64;
+
+    const canvas =
+        document.createElement("canvas");
+
+    canvas.width = size;
+
+    canvas.height = size;
+
+    const ctx =
+        canvas.getContext("2d");
+
+    const gradient =
+        ctx.createRadialGradient(
+            size / 2, size / 2, 0,
+            size / 2, size / 2, size / 2
+        );
+
+    gradient.addColorStop(0, "rgba(255,255,255,1)");
+
+    gradient.addColorStop(.4, "rgba(255,255,255,.7)");
+
+    gradient.addColorStop(1, "rgba(255,255,255,0)");
+
+    ctx.fillStyle = gradient;
+
+    ctx.fillRect(0, 0, size, size);
+
+    particleTextureCache =
+        new THREE.CanvasTexture(canvas);
+
+    return particleTextureCache;
+}
+
+
+function buildParticleSystem(theme) {
+
+    if (!theme.particles) {
+        return null;
+    }
+
+    const config =
+        theme.particles;
+
+    const count =
+        config.count || 60;
+
+    const topY =
+        config.topY ?? 6;
+
+    const positions =
+        new Float32Array(count * 3);
+
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        positions[i * 3 + 0] =
+            (Math.random() - .5) * 5.6;
+
+        positions[i * 3 + 1] =
+            Math.random() * topY;
+
+        positions[i * 3 + 2] =
+            (Math.random() - .5) * 5.6;
+    }
+
+
+    const geometry =
+        new THREE.BufferGeometry();
+
+    geometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(
+            positions,
+            3
+        )
+    );
+
+
+    const material =
+        new THREE.PointsMaterial({
+
+            size:
+                config.size || .08,
+
+            map:
+                createParticleTexture(),
+
+            color:
+                new THREE.Color(
+                    config.color || "#ffffff"
+                ),
+
+            transparent: true,
+
+            opacity:
+                config.opacity ?? .8,
+
+            depthWrite: false,
+
+            sizeAttenuation: true
+        });
+
+
+    const points =
+        new THREE.Points(
+            geometry,
+            material
+        );
+
+    points.userData = {
+
+        motion:
+            config.motion || "fall",
+
+        speed:
+            config.speed || .35,
+
+        topY:
+            topY,
+
+        elapsed: 0
+    };
+
+    return points;
+}
+
+
+function updateParticles(delta) {
+
+    if (!particleSystem) {
+        return;
+    }
+
+    const positionAttribute =
+        particleSystem.geometry
+            .attributes.position;
+
+    const config =
+        particleSystem.userData;
+
+    config.elapsed =
+        (config.elapsed || 0) + delta;
+
+
+    for (
+        let i = 0;
+        i < positionAttribute.count;
+        i++
+    ) {
+
+        let x =
+            positionAttribute.getX(i);
+
+        let y =
+            positionAttribute.getY(i);
+
+        const z =
+            positionAttribute.getZ(i);
+
+
+        if (config.motion === "fall") {
+
+            y -= config.speed * delta;
+
+            x +=
+                Math.sin(
+                    config.elapsed * .6 + i
+                ) * .0025;
+
+            if (y < .1) {
+
+                y = config.topY;
+            }
+
+        } else if (config.motion === "float") {
+
+            y += config.speed * delta;
+
+            x +=
+                Math.sin(
+                    config.elapsed * .4 + i
+                ) * .003;
+
+            if (y > config.topY) {
+
+                y = .2;
+            }
+
+        } else if (config.motion === "twinkle") {
+
+            x +=
+                Math.sin(
+                    config.elapsed * .2 + i
+                ) * .0012;
+        }
+
+
+        positionAttribute.setXYZ(
+            i, x, y, z
+        );
+    }
+
+
+    positionAttribute.needsUpdate = true;
+
+
+    if (
+        config.motion === "twinkle" &&
+        particleSystem.material
+    ) {
+
+        particleSystem.material.opacity =
+            .35 +
+            Math.sin(config.elapsed * 1.4) * .25;
+    }
+}
+
+
+function applyEnvironmentTheme(
+    themeKey,
+    force = false
+) {
+
+    if (!scene) {
+        return;
+    }
+
+    if (
+        !force &&
+        state.currentEnvironment === themeKey
+    ) {
+        return;
+    }
+
+    const theme =
+        THEME_ENVIRONMENTS[themeKey] ||
+        THEME_ENVIRONMENTS.studio;
+
+
+    /*
+     * SKY
+     */
+
+    scene.background =
+        createSkyTexture(
+            theme.skyTop,
+            theme.skyBottom
+        );
+
+
+    /*
+     * STAGE COLORS
+     */
+
+    if (floorMaterial) {
+
+        floorMaterial.color.set(
+            theme.floor
+        );
+    }
+
+    if (platformMaterial) {
+
+        platformMaterial.color.set(
+            theme.platform
+        );
+    }
+
+    if (ringMaterial) {
+
+        ringMaterial.color.set(
+            theme.ring
+        );
+    }
+
+    if (ring2Material) {
+
+        ring2Material.color.set(
+            theme.ring2
+        );
+    }
+
+
+    /*
+     * LIGHTS
+     */
+
+    if (ambientLight) {
+
+        ambientLight.color.set(
+            theme.ambientSky || "#dcecff"
+        );
+
+        ambientLight.groundColor.set(
+            theme.ambientGround || "#071321"
+        );
+    }
+
+    if (keyLight) {
+
+        keyLight.color.set(
+            theme.key || "#ffffff"
+        );
+    }
+
+    if (fillLight) {
+
+        fillLight.color.set(
+            theme.fill || "#9ac9ff"
+        );
+    }
+
+    if (rimLight) {
+
+        rimLight.color.set(
+            theme.rim || "#b89aff"
+        );
+    }
+
+
+    /*
+     * PARTICLES
+     */
+
+    if (particleSystem) {
+
+        scene.remove(particleSystem);
+
+        particleSystem.geometry.dispose();
+
+        particleSystem.material.dispose();
+
+        particleSystem = null;
+    }
+
+    const newParticles =
+        buildParticleSystem(theme);
+
+    if (newParticles) {
+
+        scene.add(newParticles);
+
+        particleSystem = newParticles;
+    }
+
+
+    state.currentEnvironment =
+        themeKey;
+
+
+    /*
+     * "CURRENT STYLE" LABEL
+     */
+
+    const styleLabel =
+        document.getElementById(
+            "fashionStyleName"
+        );
+
+    if (styleLabel) {
+
+        styleLabel.textContent =
+            theme.label ||
+            "Classic Atelier";
+    }
+}
+
+
+/* ============================================================
    26. UPDATE AVATAR
    ============================================================ */
 
@@ -6358,7 +7132,21 @@ function updateAvatar() {
 
         clearGroup(topRoot);
 
-        createDress(dress);
+        /*
+         * NEW: kalau jaket JUGA sedang dipakai, render dress
+         * dalam mode "rok saja" (hideBodice: true) — bodice,
+         * lengan, dan neckline dress disembunyikan supaya tidak
+         * bentrok/tembus dengan torso & lengan jaket. Kalau
+         * jaket tidak dipakai, dress dirender penuh seperti
+         * biasa (hideBodice: false).
+         */
+
+        createDress(
+            dress,
+            {
+                hideBodice: !!jacket
+            }
+        );
 
     } else {
 
@@ -6429,6 +7217,18 @@ function updateAvatar() {
     accessoryRoot.renderOrder = 24;
 
     bagRoot.renderOrder = 25;
+
+
+    /*
+     * NEW: deteksi & terapkan tema environment (background,
+     * lighting, partikel) sesuai outfit yang sekarang dipakai.
+     * applyEnvironmentTheme() sendiri sudah skip kalau temanya
+     * tidak berubah, jadi aman dipanggil di setiap update.
+     */
+
+    applyEnvironmentTheme(
+        detectOutfitTheme()
+    );
 }
 
 
@@ -6458,6 +7258,52 @@ function getSelected(category) {
 
 
 /* ============================================================
+   27a. GENDER RESTRICTION (NEW)
+   ------------------------------------------------------------
+   FIX: sebelumnya item HANYA dianggap gender-locked kalau
+   field "gender" diisi manual di data ITEMS. Semua item
+   kategori "dress" (termasuk furisode/kimono/hakama wanita)
+   TIDAK PERNAH diberi field "gender" secara eksplisit — jadi
+   selectItem()/randomItem()/switchGender() menganggapnya
+   unisex, padahal desainnya (bust silhouette, nama item
+   seperti "Ceremony Hakama" dress, dst.) memang khusus untuk
+   model wanita. Akibatnya avatar pria bisa pakai dress lewat
+   klik manual maupun Random Outfit, dan tetap memakainya kalau
+   gender di-switch ke pria.
+
+   getItemGenderRestriction() jadi SATU sumber kebenaran soal
+   gender item: pakai field eksplisit kalau ada, kalau tidak
+   ada tapi kategorinya "dress", anggap perempuan (avatar pria
+   memakai kombinasi top+bottom untuk baju tradisional, bukan
+   "dress"). Kategori lain tetap unisex seperti sebelumnya.
+   ============================================================ */
+
+function getItemGenderRestriction(item) {
+
+    if (!item) {
+        return null;
+    }
+
+    if (item.gender) {
+        return item.gender;
+    }
+
+    // NEW: bag & accessory umum (tas, kalung, ribbon, brooch, scarf)
+    // defaultnya feminin kecuali ditag "male" secara eksplisit —
+    // sama seperti aturan dress.
+    if (
+        item.category === "dress" ||
+        item.category === "bag" ||
+        item.category === "accessory"
+    ) {
+        return "female";
+    }
+
+    return null;
+}
+
+
+/* ============================================================
    28. ITEM SELECTION
    ============================================================ */
 
@@ -6471,9 +7317,12 @@ function selectItem(id) {
     }
 
 
+    const itemGenderRestriction =
+        getItemGenderRestriction(item);
+
     if (
-        item.gender &&
-        item.gender !== state.gender
+        itemGenderRestriction &&
+        itemGenderRestriction !== state.gender
     ) {
 
         showToast(
@@ -6514,30 +7363,17 @@ function selectItem(id) {
 
 
     /* ========================================================
-       NEW — JACKET & DRESS SALING MELEPAS
+       NEW — JACKET & DRESS SEKARANG BOLEH DIPAKAI BERSAMAAN
        ------------------------------------------------------
-       Kalau user memakai jaket, dress yang sedang dipakai
-       otomatis dilepas — dan sebaliknya, kalau user memakai
-       dress, jaket yang sedang dipakai otomatis dilepas.
-       Ini mencegah kombinasi jaket+dress yang tidak diinginkan
-       (tumpang tindih siluet di area bahu/dada).
+       FIX: sebelumnya jaket & dress saling melepas satu sama
+       lain (mutual exclusive) untuk menghindari bodice dress
+       "tembus" keluar dari torso jaket. Sekarang keduanya boleh
+       dipakai bersamaan — masalah tembus/clipping ditangani di
+       createDress() (parameter hideBodice, disembunyikan otomatis
+       saat jaket aktif — lihat updateAvatar()) dan createJacket()
+       (torso sedikit dibesarkan saat dress aktif). Jadi baris
+       saling-hapus yang dulu ada di sini SUDAH DIHAPUS.
        ======================================================== */
-
-    if (
-        item.category === "jacket" &&
-        state.selected.dress
-    ) {
-
-        delete state.selected.dress;
-    }
-
-    if (
-        item.category === "dress" &&
-        state.selected.jacket
-    ) {
-
-        delete state.selected.jacket;
-    }
 
 
     state.selected[
@@ -6557,6 +7393,10 @@ function selectItem(id) {
     updateAllUI();
 
     saveTemporaryState();
+
+    updateChallengeScoreUI();
+
+    updateChallengeUI();
 
     showToast(
         "✦",
@@ -6600,12 +7440,19 @@ function removeCategory(category) {
 
 function switchGender(gender) {
 
-    if (
-        gender !== "female" &&
-        gender !== "male"
-    ) {
+    // NEW: gender terkunci selama challenge berlangsung
+    if (state.challengeActive) {
+
+        showToast("🔒", "Gender terkunci selama challenge berlangsung.");
+
         return;
     }
+
+    if (gender !== "female" && gender !== "male") {
+        return;
+    }
+
+    // ...sisa fungsi tetap sama seperti sebelumnya
 
 
     state.gender =
@@ -6615,6 +7462,14 @@ function switchGender(gender) {
     /*
      * Hapus item khusus gender
      * jika tidak cocok.
+     *
+     * FIX: sebelumnya hanya cek "item.gender" eksplisit, jadi
+     * dress yang sedang dipakai (tidak punya field "gender",
+     * lihat getItemGenderRestriction()) TIDAK ikut terlepas
+     * saat gender di-switch ke pria — avatar pria bisa tetap
+     * memakai dress wanita. Sekarang pakai
+     * getItemGenderRestriction() supaya konsisten dengan
+     * selectItem() dan randomItem().
      */
 
     Object.keys(
@@ -6625,10 +7480,13 @@ function switchGender(gender) {
             const item =
                 getSelected(category);
 
+            const restriction =
+                getItemGenderRestriction(item);
+
             if (
                 item &&
-                item.gender &&
-                item.gender !== gender
+                restriction &&
+                restriction !== gender
             ) {
 
                 delete state.selected[
@@ -6714,9 +7572,12 @@ function randomItem(category) {
                     return false;
                 }
 
+                const restriction =
+                    getItemGenderRestriction(item);
+
                 if (
-                    item.gender &&
-                    item.gender !==
+                    restriction &&
+                    restriction !==
                     state.gender
                 ) {
                     return false;
@@ -6759,7 +7620,18 @@ function randomOutfit() {
     state.selected = {};
 
 
+    /*
+     * FIX: dress kategori sekarang female-only (lihat
+     * getItemGenderRestriction()). Kalau avatar pria dan
+     * useDress kebetulan true, randomItem("dress") akan
+     * selalu null (semua dress difilter keluar) — hasilnya
+     * avatar pria bisa berakhir TANPA top maupun bottom sama
+     * sekali (badan polos). Jadi jalur "dress" cuma dicoba
+     * kalau gender-nya memang perempuan.
+     */
+
     const useDress =
+        state.gender === "female" &&
         Math.random() > .45;
 
 
@@ -6797,7 +7669,7 @@ function randomOutfit() {
 
 
     const jacket =
-        Math.random() > .55
+        (!useDress && Math.random() > .55)
             ? randomItem("jacket")
             : null;
 
@@ -6854,63 +7726,68 @@ function calculateScore() {
     let score = 0;
 
 
-    Object.values(
-        state.selected
-    ).forEach(
-        id => {
+    // Ambil hanya item yang benar-benar dipilih
+    const selectedEntries =
+        Object.entries(state.selected)
+            .filter(([category, id]) => id);
+
+
+    selectedEntries.forEach(
+        ([category, id]) => {
 
             const item =
                 getItem(id);
 
+
             if (item) {
 
                 score +=
-                    item.score;
+                    Number(item.score) || 0;
+
             }
+
         }
     );
 
 
     /*
-     * Bonus outfit lengkap.
+     * Ambil kategori yang benar-benar memiliki item.
      */
 
     const categories =
         new Set(
-            Object.keys(
-                state.selected
+            selectedEntries.map(
+                ([category]) => category
             )
         );
 
 
-    if (
-        categories.has("hair")
-    ) {
+    /* ========================================================
+       BONUS EQUIPMENT
+    ======================================================== */
+
+    if (categories.has("hair")) {
         score += 5;
     }
 
-    if (
-        categories.has("shoes")
-    ) {
+
+    if (categories.has("shoes")) {
         score += 5;
     }
 
-    if (
-        categories.has("bag")
-    ) {
+
+    if (categories.has("bag")) {
         score += 5;
     }
 
-    if (
-        categories.has("accessory")
-    ) {
+
+    if (categories.has("accessory")) {
         score += 5;
     }
 
 
     /*
-     * Outfit dengan dress + jacket
-     * mendapat bonus styling.
+     * Dress + Jacket bonus
      */
 
     if (
@@ -6919,13 +7796,130 @@ function calculateScore() {
     ) {
 
         score += 10;
+
     }
 
 
+    /*
+     * Maksimal Style Score = 100
+     */
+
     return Math.min(
         100,
-        score
+        Math.round(score)
     );
+
+}
+
+
+/* ============================================================
+   32a. PROGRESSION SYSTEM (LEVEL & COMBO) — NEW
+   ------------------------------------------------------------
+   FIX: sebelumnya sistem level & combo setengah jadi.
+
+   - Level: dulu cuma di-set "Math.max(state.level, 2)" — jadi
+     level SATU-SATUNYA yang bisa dicapai selamanya cuma 1 atau
+     2, tidak peduli berapa pun total poin yang dikumpulkan.
+     Sekarang level dihitung dari total "state.points" yang
+     terkumpul (naik terus setiap LEVEL_POINTS_STEP poin),
+     jadi progres pemain benar-benar terasa berkembang.
+
+   - Combo: dulu "state.combo += 1" di setiap submit, apa pun
+     skornya — jadi bukan combo/streak sungguhan, cuma
+     penghitung total submit. Sekarang combo naik hanya kalau
+     skor submit itu bagus (>= COMBO_SCORE_THRESHOLD), dan reset
+     ke 0 kalau skornya jelek — combo betulan jadi reward untuk
+     konsistensi outfit bagus. Combo juga memberi bonus uang
+     kecil (persentase) supaya combo terasa berguna, bukan cuma
+     angka kosmetik.
+
+   Dipakai bersama oleh submitDesign() (mode normal) dan
+   finishChallenge() (mode challenge) supaya progresnya
+   konsisten di kedua jalur.
+   ============================================================ */
+
+const LEVEL_POINTS_STEP =
+    400;
+
+const COMBO_SCORE_THRESHOLD =
+    60;
+
+const COMBO_MAX_BONUS_PERCENT =
+    50;
+
+
+function applyProgressReward(
+    score,
+    baseMoneyReward
+) {
+
+    /*
+     * COMBO
+     */
+
+    if (score >= COMBO_SCORE_THRESHOLD) {
+
+        state.combo += 1;
+
+    } else {
+
+        state.combo = 0;
+    }
+
+
+    const comboBonusPercent =
+        Math.min(
+            COMBO_MAX_BONUS_PERCENT,
+            state.combo * 5
+        );
+
+    const moneyReward =
+        Math.round(
+            baseMoneyReward *
+            (1 + comboBonusPercent / 100)
+        );
+
+
+    /*
+     * POINTS & MONEY
+     */
+
+    state.points +=
+        score;
+
+    state.money +=
+        moneyReward;
+
+
+    /*
+     * LEVEL — terus naik mengikuti total poin, tidak lagi
+     * mentok di level 2.
+     */
+
+    const newLevel =
+        1 +
+        Math.floor(
+            state.points / LEVEL_POINTS_STEP
+        );
+
+    const leveledUp =
+        newLevel > state.level;
+
+    state.level =
+        newLevel;
+
+
+    return {
+
+        moneyReward:
+            moneyReward,
+
+        comboBonusPercent:
+            comboBonusPercent,
+
+        leveledUp:
+            leveledUp
+    };
 }
 
 
@@ -7023,12 +8017,13 @@ function renderWardrobe() {
                  * Gender filtering.
                  */
 
-                if (
-                    item.gender &&
-                    item.gender !==
-                    state.gender
-                ) {
+                const genderRestriction =
+                    getItemGenderRestriction(item);
 
+                if (
+                    genderRestriction &&
+                    genderRestriction !== state.gender
+                ) {
                     return false;
                 }
 
@@ -7318,6 +8313,10 @@ function setupSearch() {
    36. STAGE CONTROLS
    ============================================================ */
 
+/* ============================================================
+   36. STAGE CONTROLS
+   ============================================================ */
+
 function setupStageControls() {
 
     const container =
@@ -7366,6 +8365,14 @@ function setupStageControls() {
             startRotation =
                 state.targetRotation;
 
+            /*
+             * NEW: tandai interaksi supaya auto-rotate idle
+             * (lihat animate()) berhenti selama user drag.
+             */
+
+            state.lastInteraction =
+                Date.now();
+
 
             try {
 
@@ -7387,14 +8394,29 @@ function setupStageControls() {
             }
 
 
+            state.lastInteraction =
+                Date.now();
+
+
             const delta =
                 event.clientX -
                 startX;
 
 
+            /*
+             * FIX: drag jari di HP cenderung lebih pendek
+             * jaraknya dibanding drag mouse untuk hasil putaran
+             * yang sama, jadi terasa "berat"/kurang responsif
+             * kalau sensitivitasnya disamakan dengan mouse.
+             * Naikkan sedikit khusus untuk pointerType "touch".
+             */
+
+            const isTouch =
+                event.pointerType === "touch";
+
             state.targetRotation =
                 startRotation +
-                delta * .012;
+                delta * (isTouch ? .018 : .012);
         }
     );
 
@@ -7429,6 +8451,9 @@ function setupStageControls() {
 
         event.preventDefault();
 
+        state.lastInteraction =
+            Date.now();
+
         // FIX: dipercepat dari .0038 -> .006 karena rentang zoom sekarang lebih panjang
         state.targetCameraDistance +=
             event.deltaY * .006;
@@ -7456,7 +8481,6 @@ function setupStageControls() {
         }
     );
 }
-
 
 /* ============================================================
    37. ZOOM BUTTONS
@@ -8265,30 +9289,119 @@ function updateEquipment() {
 }
 
 /* ============================================================
+   NEW — STAGE AVATAR TITLE
+   ------------------------------------------------------------
+   Update teks judul "3D FEMALE FASHION AVATAR" / "3D MALE
+   FASHION AVATAR" di atas panel Design Studio, mengikuti
+   state.gender yang sedang aktif.
+
+   Karena teks ini kemungkinan hardcoded di HTML, function ini
+   mencari elemennya lewat beberapa cara:
+   1) Selector data-attribute / id spesifik (paling akurat kalau
+      HTML sudah dikasih attribute yang sesuai).
+   2) Fallback: cari elemen mana pun yang teksnya mengandung
+      "FASHION AVATAR" (case-insensitive) — supaya tetap jalan
+      walau HTML memakai teks statis tanpa attribute apapun.
+   ============================================================ */
+
+function updateStageAvatarTitle() {
+
+    const label =
+        state.gender === "male"
+            ? "3D MALE FASHION AVATAR"
+            : "3D FEMALE FASHION AVATAR";
+
+
+    /* =====================================================
+       LANGKAH 1: selector attribute
+       ===================================================== */
+
+    let element =
+        firstExisting([
+
+            "[data-fashion-avatar-title]",
+
+            "#fashionAvatarTitle",
+
+            "#fashionStageAvatarTitle",
+
+            ".fashion-avatar-title"
+        ]);
+
+
+    /* =====================================================
+       LANGKAH 2: fallback berbasis teks
+       ------------------------------------------------------
+       Cari elemen kecil (h1-h6/span/div/p/strong) yang teksnya
+       mengandung "FASHION AVATAR", lalu pakai elemen itu.
+       ===================================================== */
+
+    if (!element) {
+
+        const candidates =
+            ROOT.querySelectorAll(
+                "h1, h2, h3, h4, h5, h6, span, div, p, strong"
+            );
+
+        for (const candidate of candidates) {
+
+            const text =
+                (candidate.textContent || "")
+                    .trim()
+                    .toUpperCase();
+
+            if (
+                text.includes("FASHION AVATAR") &&
+                candidate.children.length === 0
+            ) {
+
+                element =
+                    candidate;
+
+                break;
+            }
+        }
+    }
+
+
+    /* =====================================================
+       HASIL
+       ===================================================== */
+
+    if (!element) {
+
+        console.warn(
+            "[Fashion Designer] Elemen judul avatar (\"3D FEMALE/MALE FASHION AVATAR\") tidak ditemukan. " +
+            "Tambahkan attribute data-fashion-avatar-title pada elemen judulnya di HTML."
+        );
+
+        return;
+    }
+
+    element.textContent =
+        label;
+}
+
+/* ============================================================
    45. GENDER UI
    ============================================================ */
 
 function updateGenderUI() {
 
-    $all(
-        "[data-fashion-gender], [data-gender]"
-    ).forEach(
-        button => {
+    $all("[data-fashion-gender], [data-gender]").forEach(button => {
 
-            const gender =
-                button.dataset
-                    .fashionGender ||
-                button.dataset
-                    .gender;
+        const gender = button.dataset.fashionGender || button.dataset.gender;
 
+        button.classList.toggle("active", gender === state.gender);
 
-            button.classList.toggle(
-                "active",
-                gender ===
-                state.gender
-            );
-        }
-    );
+        button.disabled = !!state.challengeActive;
+
+        button.style.opacity = state.challengeActive ? ".4" : "";
+        button.style.cursor = state.challengeActive ? "not-allowed" : "pointer";
+        button.title = state.challengeActive
+            ? "Gender terkunci selama challenge berlangsung"
+            : "";
+    });
 }
 
 
@@ -8370,62 +9483,195 @@ function updateStats() {
 
 
 /* ============================================================
-   47. SUBMIT
+   SUBMIT DESIGN
    ------------------------------------------------------------
-   Setelah submit berhasil, user diberi tahu bahwa dia juga
-   bisa menyimpan hasil desainnya sebagai PNG (download langsung)
-   atau sebagai Sketch (tersimpan di galeri dengan thumbnail).
+   - Submit normal  → gunakan calculateScore()
+   - Challenge aktif → gunakan Challenge Score
+   - Perfect Match  → otomatis mendapat bonus
+   - Reward diberikan setelah submit
    ============================================================ */
 
-   function submitDesign() {
+/* ============================================================
+   SUBMIT DESIGN
+   ------------------------------------------------------------
+   Normal Mode:
+   - Calculate normal fashion score
+   - Give points + money
+   - Show result popup
+
+   Challenge Mode:
+   - Calculate Challenge Score /1000
+   - Include Perfect Match Bonus
+   - Give challenge reward
+   - Finish challenge
+   - Show challenge result popup
+============================================================ */
+
+function submitDesign() {
+
+    const selectedCategories =
+        Object.keys(state.selected || {})
+            .filter(category =>
+                state.selected[category]
+            );
+
+
+    if (selectedCategories.length === 0) {
+
+        showToast(
+            "⚠️",
+            "Please select at least one item."
+        );
+
+        return;
+    }
+
+
+    /* ========================================================
+       CHALLENGE MODE
+    ======================================================== */
+
+if (
+    state.challengeActive &&
+    state.challenge
+) {
+
+    const challengeResult =
+        calculateChallengeScore();
+
+
+    state.challengeActive = false;
+
+
+    if (state.challengeTimer) {
+
+        clearInterval(
+            state.challengeTimer
+        );
+
+        state.challengeTimer = null;
+
+    }
+
+
+    finishChallenge(
+        challengeResult,
+        false
+    );
+
+
+    return;
+}
+
+
+    /* ========================================================
+       NORMAL MODE
+    ======================================================== */
 
     const score =
         calculateScore();
 
-    state.points += score;
 
-    state.money +=
+    const baseMoneyReward =
         Math.round(
-            score * .5
+            score * 0.5
         );
 
-    state.combo += 1;
 
-    if(score >= 75){
+    state.score = score;
 
-        state.level =
-            Math.max(
-                state.level,
-                2
-            );
-    }
 
-    if(
-        state.challengeActive
-    ){
+    /*
+     * FIX: level & combo sekarang dihitung lewat
+     * applyProgressReward() — level naik sesuai total poin
+     * (tidak lagi mentok di 2), dan combo jadi streak
+     * sungguhan (naik kalau skor bagus, reset kalau jelek),
+     * dengan bonus uang kecil mengikuti besar combo.
+     */
 
-        finishChallenge();
-    }
+    const reward =
+        applyProgressReward(
+            score,
+            baseMoneyReward
+        );
+
 
     updateAllUI();
 
+    /*
+     * FIX: sebelumnya progres (outfit terpilih, warna, dsb)
+     * tidak disimpan ke localStorage setelah submit normal,
+     * beda dengan jalur challenge yang selalu memanggil ini.
+     */
+
     saveTemporaryState();
 
-    showToast(
-        "✨",
-        "Design submitted!"
+
+    showDesignResultPopup(
+        score,
+        score,
+        reward.moneyReward,
+        false
     );
 }
+
 
 /* ============================================================
    48. SAVE
    ============================================================ */
 
-function saveOutfit() {
+/* ============================================================
+   OUTFIT SNAPSHOT HELPERS
+   ------------------------------------------------------------
+   Dipakai bersama oleh saveOutfit() (tombol Save manual) dan
+   resetDesignAfterSubmit() (auto-save saat Submit), supaya
+   logikanya konsisten dan tidak duplikat.
 
-    const outfit = {
+   FIX (NEW): sebelumnya data outfit tersimpan di localStorage
+   ("naylaFashionSaved"), tapi TIDAK ADA kode sama sekali yang
+   membaca ulang dan menampilkannya ke panel HTML
+   #fashionSavedOutfits / #fashionSavedCount ("COLLECTION —
+   Saved Outfits — 0 / 6") — jadi panel itu selalu kosong
+   walaupun outfit sudah tersimpan. Sekarang ditambahkan:
+   - SAVED_OUTFITS_MAX = 6, disamakan dengan label "/ 6" di HTML
+     (sebelumnya cap-nya 12, tidak nyambung dengan UI).
+   - getSavedOutfits() — baca + backfill id untuk data lama.
+   - renderSavedOutfits() — render grid + hitungan "x / 6".
+   - loadSavedOutfit()/deleteSavedOutfit() — supaya user bisa
+     memakai ulang atau menghapus outfit tersimpan.
+   ============================================================ */
+
+const SAVED_OUTFITS_KEY =
+    "naylaFashionSaved";
+
+const SAVED_OUTFITS_MAX =
+    6;
+
+
+function buildOutfitSnapshot(
+    nameOverride,
+    scoreOverride
+) {
+
+    return {
+
+        /*
+         * NEW: id unik per outfit, dipakai tombol
+         * Pakai/Hapus di panel Saved Outfits.
+         */
+
+        id:
+            (
+                typeof crypto !== "undefined" &&
+                typeof crypto.randomUUID === "function"
+            )
+                ? crypto.randomUUID()
+                : `${Date.now()}-${Math.random()
+                    .toString(36)
+                    .slice(2, 8)}`,
 
         name:
+            nameOverride ||
             `Outfit ${new Date()
                 .toLocaleDateString(
                     "id-ID"
@@ -8445,20 +9691,93 @@ function saveOutfit() {
             },
 
         score:
-            calculateScore(),
+            typeof scoreOverride === "number"
+                ? scoreOverride
+                : calculateScore(),
 
         createdAt:
             Date.now()
     };
+}
 
+
+function getSavedOutfits() {
+
+    let parsed;
+
+    try {
+
+        const raw =
+            localStorage.getItem(
+                SAVED_OUTFITS_KEY
+            );
+
+        parsed =
+            raw
+                ? JSON.parse(raw)
+                : [];
+
+    } catch (error) {
+
+        console.warn(
+            "[Fashion Designer] Gagal membaca Saved Outfits.",
+            error
+        );
+
+        return [];
+    }
+
+    if (!Array.isArray(parsed)) {
+        return [];
+    }
+
+
+    /*
+     * Backfill id untuk outfit lama yang tersimpan
+     * sebelum field "id" ditambahkan.
+     */
+
+    let mutated =
+        false;
+
+    parsed.forEach(
+        outfit => {
+
+            if (
+                outfit &&
+                !outfit.id
+            ) {
+
+                outfit.id =
+                    `${outfit.createdAt || Date.now()}-${Math.random()
+                        .toString(36)
+                        .slice(2, 8)}`;
+
+                mutated = true;
+            }
+        }
+    );
+
+    if (mutated) {
+
+        try {
+
+            localStorage.setItem(
+                SAVED_OUTFITS_KEY,
+                JSON.stringify(parsed)
+            );
+
+        } catch (_) {}
+    }
+
+    return parsed;
+}
+
+
+function persistOutfitSnapshot(outfit) {
 
     const saved =
-        JSON.parse(
-            localStorage.getItem(
-                "naylaFashionSaved"
-            ) ||
-            "[]"
-        );
+        getSavedOutfits();
 
 
     saved.push(
@@ -8467,7 +9786,7 @@ function saveOutfit() {
 
 
     while (
-        saved.length > 12
+        saved.length > SAVED_OUTFITS_MAX
     ) {
 
         saved.shift();
@@ -8475,16 +9794,430 @@ function saveOutfit() {
 
 
     localStorage.setItem(
-        "naylaFashionSaved",
+        SAVED_OUTFITS_KEY,
         JSON.stringify(
             saved
         )
     );
 
 
+    renderSavedOutfits();
+}
+
+
+function saveOutfit() {
+
+    const outfit =
+        buildOutfitSnapshot();
+
+
+    persistOutfitSnapshot(
+        outfit
+    );
+
+
     showToast(
         "💾",
         "Outfit berhasil disimpan"
+    );
+}
+
+
+/* ============================================================
+   RENDER SAVED OUTFITS PANEL
+   ============================================================ */
+
+function renderSavedOutfits() {
+
+    const countElement =
+        document.getElementById(
+            "fashionSavedCount"
+        );
+
+    const grid =
+        document.getElementById(
+            "fashionSavedOutfits"
+        );
+
+    const saved =
+        getSavedOutfits();
+
+
+    if (countElement) {
+
+        countElement.textContent =
+            `${saved.length} / ${SAVED_OUTFITS_MAX}`;
+    }
+
+
+    if (!grid) {
+        return;
+    }
+
+
+    grid.innerHTML =
+        "";
+
+
+    if (!saved.length) {
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+        empty.className =
+            "fashion-saved-empty";
+
+        Object.assign(
+            empty.style,
+            {
+
+                gridColumn:
+                    "1 / -1",
+
+                padding:
+                    "18px 8px",
+
+                textAlign:
+                    "center",
+
+                color:
+                    "rgba(180,205,235,.55)",
+
+                fontSize:
+                    "13px"
+            }
+        );
+
+        empty.textContent =
+            "Belum ada outfit tersimpan. Submit atau Save outfit untuk mulai koleksi.";
+
+        grid.appendChild(
+            empty
+        );
+
+        return;
+    }
+
+
+    /*
+     * Tampilkan yang terbaru dulu.
+     */
+
+    [...saved]
+        .reverse()
+        .forEach(
+            outfit => {
+
+                grid.appendChild(
+                    createSavedOutfitCard(
+                        outfit
+                    )
+                );
+            }
+        );
+}
+
+
+function createSavedOutfitCard(outfit) {
+
+    const items =
+        Object.values(
+            outfit.selected || {}
+        )
+            .map(getItem)
+            .filter(Boolean);
+
+
+    const previewColors =
+        items
+            .slice(0, 5)
+            .map(
+                item =>
+                    (
+                        outfit.colors &&
+                        outfit.colors[item.id]
+                    ) ||
+                    item.colors?.[0] ||
+                    "#888"
+            );
+
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+    card.className =
+        "fashion-saved-card";
+
+    card.dataset.savedId =
+        outfit.id;
+
+    Object.assign(
+        card.style,
+        {
+
+            display:
+                "flex",
+
+            flexDirection:
+                "column",
+
+            gap:
+                "8px",
+
+            padding:
+                "12px",
+
+            borderRadius:
+                "14px",
+
+            border:
+                "1px solid rgba(100,180,255,.16)",
+
+            background:
+                "rgba(4,17,31,.72)"
+        }
+    );
+
+
+    const swatches =
+        previewColors.length
+            ? previewColors
+                .map(
+                    color =>
+                        `<span style="` +
+                        `display:inline-block;` +
+                        `width:15px;height:15px;` +
+                        `border-radius:50%;` +
+                        `background:${escapeHTML(color)};` +
+                        `border:1px solid rgba(255,255,255,.25);` +
+                        `margin-right:4px;` +
+                        `"></span>`
+                )
+                .join("")
+            : `<span style="opacity:.4;font-size:12px;">Kosong</span>`;
+
+
+    card.innerHTML = `
+
+        <div>
+            ${swatches}
+        </div>
+
+        <strong
+            style="
+                color:#eaf3ff;
+                font-size:14px;
+                line-height:1.25;
+                word-break:break-word;
+            "
+        >
+            ${escapeHTML(outfit.name)}
+        </strong>
+
+        <span
+            style="
+                color:#7fa3c9;
+                font-size:12px;
+            "
+        >
+            ${outfit.gender === "male" ? "♂" : "♀"}
+            ·
+            ${items.length} item
+            ·
+            Score ${escapeHTML(outfit.score ?? 0)}
+        </span>
+
+        <div
+            style="
+                display:flex;
+                gap:6px;
+                margin-top:2px;
+            "
+        >
+
+            <button
+                type="button"
+                data-saved-load="${escapeHTML(outfit.id)}"
+                style="
+                    flex:1;
+                    padding:6px 8px;
+                    border-radius:8px;
+                    border:1px solid rgba(100,180,255,.28);
+                    background:rgba(41,147,239,.18);
+                    color:#9bd0ff;
+                    cursor:pointer;
+                    font-size:12px;
+                "
+            >
+                Pakai
+            </button>
+
+            <button
+                type="button"
+                data-saved-delete="${escapeHTML(outfit.id)}"
+                style="
+                    padding:6px 9px;
+                    border-radius:8px;
+                    border:1px solid rgba(255,120,120,.28);
+                    background:rgba(60,10,10,.32);
+                    color:#ff9a9a;
+                    cursor:pointer;
+                    font-size:12px;
+                "
+            >
+                ×
+            </button>
+
+        </div>
+    `;
+
+
+    return card;
+}
+
+
+/* ============================================================
+   SAVED OUTFITS — EVENTS (LOAD / DELETE)
+   ============================================================ */
+
+function setupSavedOutfitsEvents() {
+
+    const grid =
+        document.getElementById(
+            "fashionSavedOutfits"
+        );
+
+    if (!grid) {
+        return;
+    }
+
+    if (
+        grid.dataset.savedEventsBound
+    ) {
+        return;
+    }
+
+    grid.dataset.savedEventsBound =
+        "1";
+
+
+    grid.addEventListener(
+        "click",
+        event => {
+
+            const loadButton =
+                event.target.closest(
+                    "[data-saved-load]"
+                );
+
+            if (loadButton) {
+
+                loadSavedOutfit(
+                    loadButton.dataset
+                        .savedLoad
+                );
+
+                return;
+            }
+
+
+            const deleteButton =
+                event.target.closest(
+                    "[data-saved-delete]"
+                );
+
+            if (deleteButton) {
+
+                deleteSavedOutfit(
+                    deleteButton.dataset
+                        .savedDelete
+                );
+            }
+        }
+    );
+}
+
+
+function loadSavedOutfit(id) {
+
+    const outfit =
+        getSavedOutfits().find(
+            item =>
+                item.id === id
+        );
+
+    if (!outfit) {
+
+        showToast(
+            "⚠",
+            "Outfit tidak ditemukan."
+        );
+
+        return;
+    }
+
+
+    if (
+        outfit.gender === "male" ||
+        outfit.gender === "female"
+    ) {
+
+        state.gender =
+            outfit.gender;
+    }
+
+
+    state.selected =
+        {
+            ...(outfit.selected || {})
+        };
+
+    state.colors =
+        {
+            ...(outfit.colors || {})
+        };
+
+
+    createBaseBody();
+
+    updateAvatar();
+
+    updateAllUI();
+
+    saveTemporaryState();
+
+
+    showToast(
+        "✦",
+        `${outfit.name} dipakai`
+    );
+}
+
+
+function deleteSavedOutfit(id) {
+
+    const remaining =
+        getSavedOutfits().filter(
+            outfit =>
+                outfit.id !== id
+        );
+
+    localStorage.setItem(
+        SAVED_OUTFITS_KEY,
+        JSON.stringify(
+            remaining
+        )
+    );
+
+    renderSavedOutfits();
+
+    showToast(
+        "×",
+        "Outfit dihapus dari koleksi"
     );
 }
 
@@ -8497,69 +10230,341 @@ function startChallenge() {
 
     const challenges = [
 
-        {
-            name:
-                "Elegant Evening",
+    {
+        name: "Elegant Evening",
 
-            description:
-                "Create a luxury evening outfit.",
+        description:
+            "Create a luxury evening outfit.",
 
-            required:
-                [
-                    "dress",
-                    "shoes",
-                    "accessory"
-                ]
-        },
+        difficulty: "Easy",
 
-        {
-            name:
-                "Atelier Street",
+        required: [
+            "dress",
+            "shoes",
+            "accessory"
+        ],
 
-            description:
-                "Modern street fashion with layered styling.",
+        themeTags: [
+            "elegant",
+            "formal",
+            "luxury",
+            "evening"
+        ],
 
-            required:
-                [
-                    "top",
-                    "bottom",
-                    "jacket",
-                    "shoes"
-                ]
-        },
-
-        {
-            name:
-                "Runway Muse",
-
-            description:
-                "High-fashion runway inspired look.",
-
-            required:
-                [
-                    "dress",
-                    "hat",
-                    "bag",
-                    "shoes"
-                ]
-        },
-
-        {
-            name:
-                "Classic Designer",
-
-            description:
-                "Classic designer outfit with balanced styling.",
-
-            required:
-                [
-                    "top",
-                    "bottom",
-                    "jacket",
-                    "accessory"
-                ]
+        reward: {
+            points: 150,
+            money: 75
         }
-    ];
+    },
+
+    {
+        name: "Atelier Street",
+
+        description:
+            "Modern street fashion with layered styling.",
+
+        difficulty: "Easy",
+
+        required: [
+            "top",
+            "bottom",
+            "jacket",
+            "shoes"
+        ],
+
+        themeTags: [
+            "streetwear",
+            "urban",
+            "casual",
+            "layered"
+        ],
+
+        reward: {
+            points: 180,
+            money: 90
+        }
+    },
+
+    {
+        name: "Runway Muse",
+
+        description:
+            "High-fashion runway inspired look.",
+
+        difficulty: "Medium",
+
+        required: [
+            "dress",
+            "hat",
+            "bag",
+            "shoes"
+        ],
+
+        themeTags: [
+            "runway",
+            "fashion",
+            "luxury",
+            "designer"
+        ],
+
+        reward: {
+            points: 250,
+            money: 120
+        }
+    },
+
+    {
+        name: "Classic Designer",
+
+        description:
+            "Classic designer outfit with balanced styling.",
+
+        difficulty: "Medium",
+
+        required: [
+            "top",
+            "bottom",
+            "jacket",
+            "accessory"
+        ],
+
+        themeTags: [
+            "classic",
+            "designer",
+            "elegant",
+            "formal"
+        ],
+
+        reward: {
+            points: 220,
+            money: 110
+        }
+    },
+
+    {
+        name: "Business Power",
+
+        description:
+            "Confident, office-ready executive look.",
+
+        difficulty: "Medium",
+
+        required: [
+            "top",
+            "jacket",
+            "bottom",
+            "shoes"
+        ],
+
+        themeTags: [
+            "business",
+            "formal",
+            "executive",
+            "professional"
+        ],
+
+        reward: {
+            points: 300,
+            money: 150
+        }
+    },
+
+    {
+        name: "Boho Weekend",
+
+        description:
+            "Relaxed, breezy outfit for a weekend out.",
+
+        difficulty: "Easy",
+
+        required: [
+            "dress",
+            "bag",
+            "glasses"
+        ],
+
+        themeTags: [
+            "boho",
+            "casual",
+            "weekend",
+            "relaxed"
+        ],
+
+        reward: {
+            points: 170,
+            money: 85
+        }
+    },
+
+    {
+        name: "Winter Luxe",
+
+        description:
+            "Cozy, layered high-fashion winter styling.",
+
+        difficulty: "Hard",
+
+        required: [
+            "dress",
+            "jacket",
+            "hat",
+            "bag"
+        ],
+
+        themeTags: [
+            "winter",
+            "luxury",
+            "layered",
+            "elegant"
+        ],
+
+        reward: {
+            points: 350,
+            money: 180
+        }
+    },
+
+    {
+        name: "Seijin Ceremony",
+
+        description:
+            "Traditional formal ceremony-inspired look.",
+
+        difficulty: "Hard",
+
+        required: [
+            "dress",
+            "hat",
+            "accessory"
+        ],
+
+        themeTags: [
+            "seijin",
+            "traditional",
+            "ceremony",
+            "formal"
+        ],
+
+        reward: {
+            points: 400,
+            money: 220
+        }
+    },
+
+    {
+        name: "Streetwear Icon",
+
+        description:
+            "Bold, layered street style with statement accessories.",
+
+        difficulty: "Hard",
+
+        required: [
+            "top",
+            "bottom",
+            "jacket",
+            "hat",
+            "accessory"
+        ],
+
+        themeTags: [
+            "streetwear",
+            "urban",
+            "bold",
+            "modern"
+        ],
+
+        reward: {
+            points: 320,
+            money: 170
+        }
+    },
+
+    {
+        name: "Minimalist Muse",
+
+        description:
+            "Clean, refined outfit with minimal styling.",
+
+        difficulty: "Easy",
+
+        required: [
+            "top",
+            "bottom",
+            "shoes"
+        ],
+
+        themeTags: [
+            "minimalist",
+            "clean",
+            "simple",
+            "elegant"
+        ],
+
+        reward: {
+            points: 160,
+            money: 80
+        }
+    },
+
+    {
+        name: "Royal Seijin",
+
+        description:
+            "The ultimate Seijin Shiki ceremonial outfit.",
+
+        difficulty: "Legendary",
+
+        required: [
+            "dress",
+            "hat",
+            "bag",
+            "accessory",
+            "shoes"
+        ],
+
+        themeTags: [
+            "seijin",
+            "traditional",
+            "luxury",
+            "ceremony"
+        ],
+
+        reward: {
+            points: 600,
+            money: 350
+        }
+    },
+
+    {
+        name: "Global Fashion Week",
+
+        description:
+            "Create a world-class fashion week runway look.",
+
+        difficulty: "Legendary",
+
+        required: [
+            "dress",
+            "hat",
+            "bag",
+            "shoes"
+        ],
+
+        themeTags: [
+            "runway",
+            "designer",
+            "fashion",
+            "luxury"
+        ],
+
+        reward: {
+            points: 700,
+            money: 400
+        }
+    }
+
+];
 
     state.pendingChallenge =
         challenges[
@@ -8574,60 +10579,321 @@ function startChallenge() {
     );
 }
 
+function getItemTags(item) {
+
+    const tags = [];
+
+    if (!item) {
+        return tags;
+    }
+
+    /* ==========================
+       CATEGORY TAGS
+    ========================== */
+
+    switch (item.category) {
+
+        case "dress":
+            tags.push(
+                "fashion",
+                "elegant"
+            );
+            break;
+
+        case "top":
+            tags.push(
+                "fashion"
+            );
+            break;
+
+        case "bottom":
+            tags.push(
+                "fashion"
+            );
+            break;
+
+        case "jacket":
+            tags.push(
+                "layered",
+                "designer"
+            );
+            break;
+
+        case "shoes":
+            tags.push(
+                "style"
+            );
+            break;
+
+        case "bag":
+            tags.push(
+                "luxury"
+            );
+            break;
+
+        case "hat":
+            tags.push(
+                "fashion"
+            );
+            break;
+
+        case "accessory":
+            tags.push(
+                "detail"
+            );
+            break;
+    }
+
+    /* ==========================
+       TYPE TAGS
+    ========================== */
+
+    const type =
+        (item.type || "")
+            .toLowerCase();
+
+    const name =
+        (item.name || "")
+            .toLowerCase();
+
+    /* Business */
+
+    if (
+        type.includes("blazer") ||
+        type.includes("tailored") ||
+        type.includes("executive") ||
+        type.includes("oxford") ||
+        name.includes("business")
+    ) {
+
+        tags.push(
+            "business",
+            "professional",
+            "executive",
+            "formal"
+        );
+
+    }
+
+    /* Streetwear */
+
+    if (
+        type.includes("hoodie") ||
+        type.includes("cargo") ||
+        type.includes("street") ||
+        type.includes("cap") ||
+        type.includes("techwear") ||
+        type.includes("sneaker") ||
+        type.includes("jogger")
+    ) {
+
+        tags.push(
+            "streetwear",
+            "urban",
+            "modern",
+            "casual"
+        );
+
+    }
+
+    /* Luxury */
+
+    if (
+        name.includes("luxe") ||
+        name.includes("luxury") ||
+        name.includes("atelier") ||
+        name.includes("couture") ||
+        name.includes("princess") ||
+        name.includes("runway")
+    ) {
+
+        tags.push(
+            "luxury",
+            "designer",
+            "fashion"
+        );
+
+    }
+
+    /* Evening */
+
+    if (
+        type.includes("gown") ||
+        type.includes("satin") ||
+        name.includes("evening") ||
+        name.includes("midnight")
+    ) {
+
+        tags.push(
+            "evening",
+            "formal",
+            "elegant"
+        );
+
+    }
+
+    /* Winter */
+
+    if (
+        type.includes("trench") ||
+        type.includes("turtleneck") ||
+        type.includes("boots")
+    ) {
+
+        tags.push(
+            "winter",
+            "layered"
+        );
+
+    }
+
+    /* Seijin */
+
+    if (
+
+        type.includes("kimono") ||
+        type.includes("hakama") ||
+        type.includes("haori") ||
+        type.includes("furisode") ||
+        type.includes("zori") ||
+        type.includes("geta") ||
+        type.includes("kanzashi") ||
+        type.includes("obi") ||
+
+        name.includes("seijin") ||
+        name.includes("kimono") ||
+        name.includes("hakama") ||
+        name.includes("furisode") ||
+        name.includes("ceremony")
+
+    ) {
+
+        tags.push(
+            "seijin",
+            "traditional",
+            "ceremony",
+            "formal"
+        );
+
+    }
+
+    /* Minimalist */
+
+    if (
+        name.includes("classic") ||
+        name.includes("white") ||
+        name.includes("simple")
+    ) {
+
+        tags.push(
+            "minimalist",
+            "clean"
+        );
+
+    }
+
+    return [...new Set(tags)];
+}
 function beginChallenge() {
+
+    if (!state.pendingChallengeGender) {
+
+        showToast("⚠", "Pilih model Female atau Male dulu.");
+
+        return;
+    }
+
+    if (state.challengeTimer) {
+        clearInterval(state.challengeTimer);
+        state.challengeTimer = null;
+    }
 
     closeChallengeModal();
 
-    state.challenge =
-        state.pendingChallenge;
+    // Terapkan gender pilihan (tanpa lewat switchGender, supaya tidak kena guard baru)
+    if (state.gender !== state.pendingChallengeGender) {
 
-    state.challengeTime = 90;
+        state.gender = state.pendingChallengeGender;
 
-    document.getElementById(
-        "fashionChallengePanel"
-    ).hidden = false;
+        Object.keys(state.selected).forEach(category => {
 
-    updateChallengeUI();
+            const item = getSelected(category);
+            const restriction = getItemGenderRestriction(item);
 
-    updateTimerUI();
+            if (item && restriction && restriction !== state.gender) {
+                delete state.selected[category];
+            }
+        });
 
-    showToast(
-        "🎯",
-        `${state.challenge.name} Started!`
-    );
+        if (state.gender === "male") {
 
-    if (
-        state.challengeTimer
-    ) {
+            const hair = getSelected("hair");
 
-        clearInterval(
-            state.challengeTimer
-        );
-    }
-
-    state.challengeTimer =
-        setInterval(() => {
-
-            state.challengeTime--;
-
-            updateTimerUI();
-
-            if (
-                state.challengeTime <= 0
-            ) {
-
-                clearInterval(
-                    state.challengeTimer
-                );
-
-                showToast(
-                    "⌛",
-                    "Challenge Finished"
-                );
+            if (!hair || (hair.gender && hair.gender !== "male")) {
+                state.selected.hair = "hair-male-short";
             }
 
-        }, 1000);
+        } else {
 
+            const hair = getSelected("hair");
+
+            if (!hair || hair.gender === "male") {
+                state.selected.hair = "hair-soft-bob";
+            }
+        }
+
+        createBaseBody();
+        updateAvatar();
+    }
+
+    state.challengeActive = true;
+    state.challenge = state.pendingChallenge;
+    state.challengeTime = 90;
+    state.challengeFinished = false;
+    state.challengeRewarded = false;
+    state.challengeScore = 0;
+
+    const panel = document.getElementById("fashionChallengePanel");
+
+    if (panel) {
+        panel.hidden = false;
+        panel.classList.add("show");
+    }
+
+    updateAllUI();
+    updateTimerUI();
+
+    showToast("🎯", `${state.challenge.name} Started!`);
+
+    state.challengeTimer = setInterval(() => {
+
+        if (!state.challengeActive) {
+            clearInterval(state.challengeTimer);
+            state.challengeTimer = null;
+            return;
+        }
+
+        state.challengeTime--;
+
+        if (state.challengeTime < 0) {
+            state.challengeTime = 0;
+        }
+
+        updateTimerUI();
+
+        if (state.challengeTime <= 0) {
+
+            clearInterval(state.challengeTimer);
+            state.challengeTimer = null;
+            state.challengeActive = false;
+
+            updateTimerUI();
+            updateGenderUI();
+
+            finishChallenge(null, true);
+        }
+
+    }, 1000);
 }
 
 function updateChallengeUI() {
@@ -8704,6 +10970,23 @@ function updateChallengeUI() {
             "fashionChallengeFill"
         );
 
+    /*
+     * NEW: "REQUIRED ITEMS x / y" — elemen ini sudah ada di
+     * HTML (#fashionChallengeRequirementCount) tapi sebelumnya
+     * tidak pernah diisi sama sekali.
+     */
+
+    const requirementCount =
+        document.getElementById(
+            "fashionChallengeRequirementCount"
+        );
+
+    if (requirementCount) {
+
+        requirementCount.textContent =
+            `${matched} / ${state.challenge.required.length}`;
+    }
+
     if (match) {
 
         match.textContent =
@@ -8715,6 +10998,9 @@ function updateChallengeUI() {
         fill.style.width =
             percent + "%";
     }
+       updateChallengeScoreUI();
+
+       updatePerfectMatchUI();
 }
 
 function updateTimerUI() {
@@ -8740,6 +11026,7 @@ function updateTimerUI() {
         topTimer.textContent =
             state.challengeTime;
     }
+    updateChallengeScoreUI();
 }
 
 function getChallengeMatchPercent(){
@@ -8766,81 +11053,894 @@ function getChallengeMatchPercent(){
     );
 }
 
-function finishChallenge() {
+/* ============================================================
+   CHECK PERFECT MATCH
+   ============================================================ */
+
+function isPerfectChallengeMatch() {
+
+    const challenge = state.challenge;
+
+    if (!challenge || !challenge.required) {
+        return false;
+    }
+
+    const required = challenge.required;
+
+    if (required.length === 0) {
+        return false;
+    }
+
+    return required.every(category => {
+        return !!state.selected[category];
+    });
+}
+
+/* ============================================================
+   PERFECT MATCH BONUS
+   ============================================================ */
+
+function getPerfectMatchBonus() {
+
+    if (!isPerfectChallengeMatch()) {
+        return 0;
+    }
+
+    return 100;
+}
+
+/* ============================================================
+   UPDATE PERFECT MATCH UI
+   ============================================================ */
+
+function updatePerfectMatchUI() {
+
+    const perfectMatch =
+        isPerfectChallengeMatch();
+
+    const bonus =
+        getPerfectMatchBonus();
+
+    const box =
+        document.getElementById(
+            "fashionPerfectMatchBox"
+        );
+
+    const title =
+        document.getElementById(
+            "fashionPerfectMatch"
+        );
+
+    const description =
+        document.getElementById(
+            "fashionPerfectMatchDescription"
+        );
+
+    const bonusElement =
+        document.getElementById(
+            "fashionPerfectBonus"
+        );
+
+
+    /* ========================================================
+       BONUS
+       ======================================================== */
+
+    if (bonusElement) {
+
+        bonusElement.textContent =
+            `+${bonus}`;
+
+    }
+
+
+    /* ========================================================
+       PERFECT MATCH STATE
+       ======================================================== */
+
+    if (!box) {
+        return;
+    }
+
+
+    if (perfectMatch) {
+
+        box.classList.add("active");
+
+        if (title) {
+
+            title.textContent =
+                "PERFECT MATCH";
+
+        }
+
+        if (description) {
+
+            description.textContent =
+                "All required items completed!";
+
+        }
+
+    } else {
+
+        box.classList.remove("active");
+
+        if (title) {
+
+            title.textContent =
+                "PERFECT MATCH";
+
+        }
+
+        if (description) {
+
+            description.textContent =
+                "Complete all required items";
+
+        }
+
+    }
+
+}
+
+/* ============================================================
+   CHALLENGE SCORE
+   ============================================================ */
+
+function calculateChallengeScore() {
+
+    /* ========================================================
+       BASE STYLE SCORE
+    ======================================================== */
+
+    const styleScore =
+        calculateScore();
+
+
+    /* ========================================================
+       NO CHALLENGE
+    ======================================================== */
+
+    if (!state.challenge) {
+
+        return {
+            styleScore: styleScore,
+            matchPercent: 0,
+            finalScore: styleScore,
+
+            // Format yang dibutuhkan finishChallenge
+            total: styleScore,
+            perfect: 0,
+            requirement: 0,
+            fashion: styleScore,
+            rarity: 0,
+            time: 0,
+            theme: 0
+        };
+
+    }
+
+
+    /* ========================================================
+       REQUIREMENTS
+    ======================================================== */
+
+    let matchedRequirements = 0;
+
+
+    /*
+     * FIX: data challenge (lihat startChallenge()) memakai
+     * field "required" — array nama kategori seperti
+     * ["dress","shoes","accessory"] — bukan "requirements"
+     * (array object {category, items}) yang dulu dibaca di
+     * sini. Karena "state.challenge.requirements" tidak
+     * pernah ada, requirements selalu kosong, sehingga
+     * matchPercent selalu 0% walaupun user sudah memakai
+     * semua item yang diminta. Sekarang dibaca dari field
+     * yang benar-benar dipakai: "required".
+     */
+
+    const requirements =
+        Array.isArray(
+            state.challenge.required
+        )
+            ? state.challenge.required
+            : [];
+
+
+    requirements.forEach(
+        category => {
+
+            if (
+                state.selected &&
+                state.selected[category]
+            ) {
+
+                matchedRequirements++;
+
+            }
+
+        }
+    );
+
+
+    /* ========================================================
+       MATCH PERCENTAGE
+    ======================================================== */
+
+    const totalRequirements =
+        requirements.length;
+
+
+    const matchPercent =
+        totalRequirements > 0
+            ? Math.round(
+                (
+                    matchedRequirements /
+                    totalRequirements
+                ) * 100
+            )
+            : 0;
+
+
+    /* ========================================================
+       CHALLENGE BONUS
+
+       Bonus maksimal = Style Score.
+
+       Contoh:
+
+       Style Score 15
+       Match 0%
+       Bonus 0
+       Total 15
+
+       Style Score 15
+       Match 100%
+       Bonus 15
+       Total 30
+    ======================================================== */
+
+    const challengeBonus =
+        Math.round(
+            styleScore *
+            (matchPercent / 100)
+        );
+
+
+    /*
+     * FIX: bonus perfect-match (dari getPerfectMatchBonus())
+     * dulu tidak pernah ditambahkan ke total/finalScore sama
+     * sekali, walaupun UI "PERFECT MATCH" (updatePerfectMatchUI)
+     * sudah menjanjikan bonus +100. Sekarang dihitung di sini
+     * dan langsung dimasukkan ke total.
+     */
+
+    const perfectBonus =
+        matchPercent === 100
+            ? getPerfectMatchBonus()
+            : 0;
+
+
+    /*
+     * NEW: rarity bonus, dari item yang sedang dipakai
+     * (lihat calculateRarityScore()). Dulu selalu 0.
+     */
+
+    const rarityScore =
+        calculateRarityScore();
+
+
+    const finalScore =
+        styleScore +
+        challengeBonus +
+        perfectBonus +
+        rarityScore;
+
+
+    return {
+
+        styleScore:
+            styleScore,
+
+        matchPercent:
+            matchPercent,
+
+        finalScore:
+            finalScore,
+
+
+        /* ====================================================
+           FORMAT UNTUK finishChallenge()
+        ==================================================== */
+
+        total:
+            finalScore,
+
+        /*
+         * FIX: dulu bernilai boolean (matchPercent === 100),
+         * padahal tempat pemakaiannya (updateChallengeScoreUI
+         * -> "+${score.perfect}", showDesignResultPopup ->
+         * "+${challengeData.perfect} bonus") mengharapkan
+         * ANGKA bonus, bukan true/false. Sekarang berupa
+         * angka bonus aktual (0 atau 100).
+         */
+
+        perfect:
+            perfectBonus,
+
+        requirement:
+            matchPercent,
+
+        fashion:
+            styleScore,
+
+        /*
+         * FIX: dulu hardcode 0 walaupun UI-nya punya kotak
+         * "rarity / 100". Sekarang dihitung dari rarity item
+         * yang sedang dipakai (lihat calculateRarityScore()).
+         */
+
+        rarity:
+            rarityScore,
+
+        time:
+            state.challengeTime || 0,
+
+        /*
+         * FIX: updateChallengeScoreUI() menampilkan
+         * "${score.theme} / 200" tapi field ini tidak pernah
+         * dikirim sebelumnya, sehingga selalu tampil sebagai
+         * teks "undefined / 200".
+         */
+
+        theme:
+            calculateThemeScore()
+
+    };
+
+}
+/* ============================================================
+   RARITY SCORE (NEW)
+   ------------------------------------------------------------
+   Sebelumnya field "rarity" di skor challenge selalu di-hardcode
+   ke 0, walaupun UI-nya ("fashionChallengeScore" panel) sudah
+   punya kotak "rarity / 100" — jadi rarity item yang dipakai
+   user sama sekali tidak berpengaruh ke skor. Sekarang dihitung
+   dari rarity setiap item yang sedang dipakai (common/rare/
+   epic/legendary/mythic), dijumlah, lalu dibatasi maksimal 100
+   supaya sesuai dengan label "/ 100" di UI.
+   ============================================================ */
+
+const RARITY_WEIGHTS = {
+
+    common: 6,
+
+    rare: 10,
+
+    epic: 15,
+
+    legendary: 20,
+
+    mythic: 26
+};
+
+
+function calculateRarityScore() {
+
+    let total = 0;
+
+
+    Object.values(
+        state.selected || {}
+    ).forEach(
+        itemId => {
+
+            if (!itemId) {
+                return;
+            }
+
+            const item =
+                getItem(itemId);
+
+            if (!item) {
+                return;
+            }
+
+            total +=
+                RARITY_WEIGHTS[item.rarity] || 0;
+
+        }
+    );
+
+
+    return Math.min(
+        100,
+        total
+    );
+}
+
+
+/* ============================================================
+   OUTFIT RARITY BADGE (NEW)
+   ------------------------------------------------------------
+   HTML sudah punya badge "#fashionRarity" (contoh: "COMMON",
+   class "rarity-common") di panel "My Design", tapi tidak ada
+   kode JS sama sekali yang mengisinya — jadi selalu tampil
+   hardcode "COMMON" walau outfit-nya sudah dipenuhi item
+   legendary/mythic. Sekarang dihitung dari rarity TERTINGGI
+   di antara semua item yang sedang dipakai.
+   ============================================================ */
+
+const RARITY_TIER_ORDER = [
+    "common",
+    "rare",
+    "epic",
+    "legendary",
+    "mythic"
+];
+
+
+function computeOutfitRarityTier() {
+
+    let highestIndex = 0;
+
+
+    Object.values(
+        state.selected || {}
+    ).forEach(
+        itemId => {
+
+            const item =
+                getItem(itemId);
+
+            if (!item) {
+                return;
+            }
+
+            const index =
+                RARITY_TIER_ORDER.indexOf(
+                    item.rarity
+                );
+
+            if (index > highestIndex) {
+
+                highestIndex = index;
+            }
+        }
+    );
+
+
+    return RARITY_TIER_ORDER[highestIndex];
+}
+
+
+function updateRarityBadge() {
+
+    const badge =
+        document.getElementById(
+            "fashionRarity"
+        );
+
+    if (!badge) {
+        return;
+    }
+
+    const tier =
+        computeOutfitRarityTier();
+
+    badge.textContent =
+        tier.toUpperCase();
+
+    RARITY_TIER_ORDER.forEach(
+        rarity => {
+
+            badge.classList.remove(
+                `rarity-${rarity}`
+            );
+        }
+    );
+
+    badge.classList.add(
+        `rarity-${tier}`
+    );
+}
+
+
+function calculateThemeScore() {
+
+    const challenge =
+        state.challenge;
+
+    if (
+        !challenge ||
+        !challenge.themeTags
+    ) {
+        return 0;
+    }
+
+    let matches = 0;
+    let possible = 0;
+
+    Object.values(
+        state.selected
+    ).forEach(itemId => {
+
+        if (!itemId) {
+            return;
+        }
+
+        const item =
+            getItem(itemId);
+
+        if (!item) {
+            return;
+        }
+
+        const itemTags =
+            getItemTags(item);
+
+        challenge.themeTags.forEach(tag => {
+
+            possible++;
+
+            if (
+                itemTags.includes(tag)
+            ) {
+
+                matches++;
+
+            }
+
+        });
+
+    });
+
+    if (possible <= 0) {
+        return 0;
+    }
+
+    return Math.round(
+        (matches / possible) * 200
+    );
+}
+
+/* ============================================================
+   UPDATE CHALLENGE SCORE UI
+   ============================================================ */
+
+function updateChallengeScoreUI() {
+
+    const score = calculateChallengeScore();
+
+    const totalEl =
+        document.getElementById(
+            "fashionChallengeScore"
+        );
+
+    const requirementEl =
+        document.getElementById(
+            "challengeRequirementScore"
+        );
+
+    const fashionEl =
+        document.getElementById(
+            "challengeFashionScore"
+        );
+
+    const rarityEl =
+        document.getElementById(
+            "challengeRarityScore"
+        );
+
+    const timeEl =
+        document.getElementById(
+            "challengeTimeScore"
+        );
+
+    const themeEl =
+    document.getElementById(
+        "challengeThemeScore"
+    );
+
+    const fillEl =
+        document.getElementById(
+            "fashionChallengeScoreFill"
+        );
+
+    const perfectEl =
+    document.getElementById(
+        "challengePerfectScore"
+    );
+
+if (perfectEl) {
+
+    perfectEl.textContent =
+        `+${score.perfect}`;
+
+}
+    if (totalEl) {
+        totalEl.textContent = score.total;
+    }
+
+    if (requirementEl) {
+        requirementEl.textContent =
+            `${score.requirement} / 500`;
+    }
+
+    if (fashionEl) {
+        fashionEl.textContent =
+            `${score.fashion} / 300`;
+    }
+
+    if (rarityEl) {
+        rarityEl.textContent =
+            `${score.rarity} / 100`;
+    }
+
+    if (timeEl) {
+        timeEl.textContent =
+            `${score.time} / 100`;
+    }
+
+    if (themeEl) {
+
+    themeEl.textContent =
+        `${score.theme} / 200`;
+
+}
+
+    if (fillEl) {
+        fillEl.style.width =
+            `${(score.total / 1000) * 100}%`;
+    }
+}
+
+function finishChallenge(
+    finalScore = null,
+    fromTimeout = false
+) {
+
+    /* ========================================================
+       VALIDATION
+    ======================================================== */
 
     if (!state.challenge) {
         return;
     }
 
-    const matched =
-        state.challenge.required.filter(
-            category =>
-                state.selected &&
-                state.selected[category]
-        ).length;
 
-    const percent =
-        Math.round(
-            (
-                matched /
-                state.challenge.required.length
-            ) * 100
+    /*
+     * Jangan proses dua kali.
+     */
+
+    if (
+        state.challengeFinished
+    ) {
+        return;
+    }
+
+
+    state.challengeFinished = true;
+
+
+    /*
+     * Challenge selesai.
+     */
+
+    state.challengeActive = false;
+
+
+    /* ========================================================
+       STOP TIMER
+    ======================================================== */
+
+    if (state.challengeTimer) {
+
+        clearInterval(
+            state.challengeTimer
         );
 
-    let medal = "🥉 Bronze";
+        state.challengeTimer = null;
 
-    if (percent >= 70) {
-
-        medal = "🥈 Silver";
     }
+
+
+    /* ========================================================
+       CALCULATE SCORE
+    ======================================================== */
+
+    let score;
+
+
+    /*
+     * Kalau submitDesign mengirim hasil object
+     */
+
+    if (
+        finalScore &&
+        typeof finalScore === "object"
+    ) {
+
+        score = finalScore;
+
+    }
+
+    /*
+     * Kalau belum ada hasil, hitung sekarang
+     */
+
+    else {
+
+        score =
+            calculateChallengeScore();
+
+    }
+
+
+    /*
+     * Pengaman.
+     */
+
+    if (
+        typeof score.total !== "number"
+    ) {
+
+        score.total =
+            Number(score.finalScore) || 0;
+
+    }
+
+
+    /* ========================================================
+       MATCH
+    ======================================================== */
+
+    const percent =
+        typeof score.matchPercent === "number"
+            ? score.matchPercent
+            : getChallengeMatchPercent();
+
+
+    /* ========================================================
+       MEDAL
+    ======================================================== */
+
+    let medal = "Bronze";
+
 
     if (percent >= 100) {
 
-        medal = "🥇 Gold";
+        medal = "Diamond";
+
     }
 
-    showToast(
-        "🏆",
-        `Challenge Complete! ${medal}`
+    else if (percent >= 75) {
+
+        medal = "Gold";
+
+    }
+
+    else if (percent >= 50) {
+
+        medal = "Silver";
+
+    }
+
+
+    /* ========================================================
+       REWARD
+    ======================================================== */
+
+    const pointsReward =
+        score.total;
+
+
+    const baseMoneyReward =
+        Math.round(
+            score.total * 0.5
+        );
+
+    /*
+     * Nilai ini dipakai untuk ditampilkan di popup hasil;
+     * kalau reward memang diberikan (belum pernah di-reward
+     * sebelumnya), akan diganti dengan hasil final dari
+     * applyProgressReward() (termasuk bonus combo).
+     */
+
+    let moneyReward =
+        baseMoneyReward;
+
+
+    /* ========================================================
+       GIVE REWARD ONCE
+    ======================================================== */
+
+    if (!state.challengeRewarded) {
+
+        /*
+         * FIX: level & combo sekarang lewat
+         * applyProgressReward() yang sama dipakai submit
+         * normal — level naik sesuai total poin (tidak lagi
+         * mentok di 2), combo jadi streak sungguhan.
+         */
+
+        const reward =
+            applyProgressReward(
+                pointsReward,
+                baseMoneyReward
+            );
+
+        moneyReward =
+            reward.moneyReward;
+
+
+        state.challengeRewarded =
+            true;
+
+    }
+
+
+    /* ========================================================
+       SAVE SCORE
+    ======================================================== */
+
+    state.challengeScore =
+        score.total;
+
+
+    state.score =
+        score.total;
+
+
+    /* ========================================================
+       RESULT POPUP
+    ======================================================== */
+
+    showDesignResultPopup(
+        score.total,
+        pointsReward,
+        moneyReward,
+        true,
+        {
+
+            medal:
+                medal,
+
+            match:
+                percent,
+
+            perfect:
+                score.perfect,
+
+            requirement:
+                score.requirement,
+
+            fashion:
+                score.fashion,
+
+            rarity:
+                score.rarity,
+
+            time:
+                score.time,
+
+            timeout:
+                fromTimeout
+
+        }
     );
 
-    const resultModal =
-        document.getElementById(
-            "fashionResultModal"
-        );
 
-    if (resultModal) {
+    /* ========================================================
+       UPDATE UI
+    ======================================================== */
 
-        resultModal.style.display =
-            "flex";
+    updateAllUI();
 
-        resultModal.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-    }
 
-    const title =
-        document.getElementById(
-            "fashionResultTitle"
-        );
+    saveTemporaryState();
 
-    if (title) {
-
-        title.textContent =
-            medal;
-    }
-
-    const desc =
-        document.getElementById(
-            "fashionResultDescription"
-        );
-
-    if (desc) {
-
-        desc.textContent =
-            `Challenge Score ${percent}%`;
-    }
 }
 
 /* ============================================================
@@ -8980,6 +12080,8 @@ function updateAllUI() {
 
     updateEquipment();
 
+    updateStageAvatarTitle();
+
     updateGenderUI();
 
     updateCategoryButtons();
@@ -8991,6 +12093,8 @@ function updateAllUI() {
     updateChallengeUI();
 
     updateWardrobeCount();
+
+    updateRarityBadge();
 }
 
 
@@ -9011,14 +12115,16 @@ function resizeThree() {
 
     if (!container) return;
 
-    const width = container.clientWidth || 800;
-    const height = container.clientHeight || 700;
+    // FIX: pakai getBoundingClientRect supaya dapat tinggi
+    // aktual meski clientHeight belum ter-update oleh browser.
+    const rect = container.getBoundingClientRect();
+
+    const width = rect.width || container.clientWidth || 800;
+    const height = rect.height || container.clientHeight || 700;
 
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
 
-    // NEW: di layar sempit (HP), mundurkan kamera default sedikit
-    // supaya avatar full-body tidak terpotong.
     if (width < 640) {
 
         const mobileDefault = 7.4;
@@ -9041,6 +12147,37 @@ function animate() {
         requestAnimationFrame(
             animate
         );
+
+
+    const delta =
+        clock
+            ? clock.getDelta()
+            : .016;
+
+
+    /*
+     * NEW: animasi partikel tema (sakura/salju/kilau/bokeh).
+     */
+
+    updateParticles(delta);
+
+
+    /*
+     * NEW: auto-rotate halus kalau avatar idle (tidak sedang
+     * di-drag/di-zoom) lebih dari 4 detik — kesan "showcase"
+     * seperti game fashion sungguhan, berhenti otomatis begitu
+     * user berinteraksi lagi (lihat setupStageControls()).
+     */
+
+    if (
+        Date.now() -
+        (state.lastInteraction || 0) >
+        4000
+    ) {
+
+        state.targetRotation +=
+            delta * .18;
+    }
 
 
     /*
@@ -9318,41 +12455,73 @@ function setupChallengeButton() {
 
 function openChallengeModal(challenge) {
 
-    console.log("OPEN MODAL");
-    console.log(challenge);
-
-    const modal =
-        document.getElementById(
-            "fashionChallengeModal"
-        );
-
-    console.log("MODAL =", modal);
-
-    const preview =
-        document.getElementById(
-            "challengePreview"
-        );
-
-    console.log("PREVIEW =", preview);
+    const modal = document.getElementById("fashionChallengeModal");
+    const preview = document.getElementById("challengePreview");
 
     if (!modal || !preview) {
-        console.error(
-            "Challenge modal element not found"
-        );
+        console.error("Challenge modal element not found");
         return;
     }
+
+    // Reset pilihan setiap kali modal dibuka
+    state.pendingChallengeGender = null;
 
     preview.innerHTML = `
         <h3>${challenge.name}</h3>
         <p>${challenge.description}</p>
+
+        <div class="challenge-gender-picker" style="display:flex;gap:8px;margin-top:14px;">
+            <button type="button" data-challenge-gender="female" class="challenge-gender-btn">♀ Female</button>
+            <button type="button" data-challenge-gender="male" class="challenge-gender-btn">♂ Male</button>
+        </div>
+
+        <p style="margin-top:8px;font-size:12px;color:rgba(180,205,235,.7);">
+            Pilih model dulu — gender tidak bisa diubah lagi setelah challenge dimulai.
+        </p>
     `;
 
-    modal.classList.add("show");
+    const startBtn = document.getElementById("challengeStartButton");
 
-    modal.setAttribute(
-        "aria-hidden",
-        "false"
-    );
+    if (startBtn) {
+        startBtn.disabled = true;
+        startBtn.style.opacity = ".5";
+        startBtn.style.cursor = "not-allowed";
+    }
+
+    preview.querySelectorAll("[data-challenge-gender]").forEach(button => {
+
+        Object.assign(button.style, {
+            flex: "1",
+            padding: "10px 12px",
+            borderRadius: "10px",
+            border: "1px solid rgba(100,180,255,.25)",
+            background: "rgba(255,255,255,.05)",
+            color: "#dceeff",
+            cursor: "pointer"
+        });
+
+        button.addEventListener("click", () => {
+
+            state.pendingChallengeGender = button.dataset.challengeGender;
+
+            preview.querySelectorAll("[data-challenge-gender]").forEach(btn => {
+
+                const active = btn.dataset.challengeGender === state.pendingChallengeGender;
+
+                btn.style.background = active ? "rgba(41,147,239,.35)" : "rgba(255,255,255,.05)";
+                btn.style.borderColor = active ? "rgba(100,180,255,.6)" : "rgba(100,180,255,.25)";
+            });
+
+            if (startBtn) {
+                startBtn.disabled = false;
+                startBtn.style.opacity = "";
+                startBtn.style.cursor = "pointer";
+            }
+        });
+    });
+
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden", "false");
 }
 
 function closeChallengeModal() {
@@ -9418,7 +12587,7 @@ function createZoomUIIfMissing() {
     if (!host) {
         return;
     }
-
+    
 
     /*
      * Jika HTML sudah punya zoom,
@@ -9692,23 +12861,13 @@ function createDefaultCoverage() {
      * mannequin telanjang.
      */
 
-    const material = fabricMaterial(
-        "white",
-        0.82
+    const material = fabric(
+        CONFIG.colors.white || "#ffffff"
     );
 
 
     /* -----------------------------------------------------
-       FEMALE / MALE SAFE COVERAGE
-       ----------------------------------------------------- */
-
-    const gender =
-        state?.gender ||
-        "female";
-
-
-    /* -----------------------------------------------------
-       LOWER COVERAGE
+       LOWER COVERAGE (sama untuk female & male)
        ----------------------------------------------------- */
 
     const lower = new THREE.Mesh(
@@ -9741,42 +12900,12 @@ function createDefaultCoverage() {
     bodyRoot.add(lower);
 
 
-    /* -----------------------------------------------------
-       FEMALE CHEST COVERAGE
-       ----------------------------------------------------- */
-
-    if (gender === "female") {
-
-        const chest = new THREE.Mesh(
-
-            new THREE.SphereGeometry(
-                0.72,
-                32,
-                24
-            ),
-
-            material
-        );
-
-        chest.position.set(
-            0,
-            2.55,
-            0.02
-        );
-
-        chest.scale.set(
-            0.98,
-            0.82,
-            0.70
-        );
-
-        chest.castShadow = true;
-        chest.receiveShadow = true;
-
-        bodyRoot.add(chest);
-
-    }
-
+    /*
+     * NEW: FEMALE CHEST COVERAGE DIHAPUS TOTAL — sebelumnya
+     * ada sphere tambahan khusus wanita di sini yang mengikuti
+     * bentuk bust. Karena bust silhouette sudah dihapus di
+     * createBaseBody(), tambahan ini juga tidak diperlukan lagi.
+     */
 }
 
 function createKimonoDress(item) {
@@ -10560,6 +13689,474 @@ function saveDesignAsImage() {
         "Design disimpan sebagai PNG"
     );
 }
+
+function showDesignResultPopup(
+    score,
+    points,
+    money,
+    isChallenge = false,
+    challengeData = null
+) {
+
+    const popup =
+        document.getElementById(
+            "designResultPopup"
+        );
+
+
+    if (!popup) {
+        return;
+    }
+
+
+    const scoreEl =
+        document.getElementById(
+            "designResultScore"
+        );
+
+
+    const pointsEl =
+        document.getElementById(
+            "designResultPoints"
+        );
+
+
+    const moneyEl =
+        document.getElementById(
+            "designResultMoney"
+        );
+
+
+    /*
+     * Score
+     */
+    if (scoreEl) {
+
+        scoreEl.textContent =
+            score;
+
+    }
+
+
+    /*
+     * Points
+     */
+    if (pointsEl) {
+
+        pointsEl.textContent =
+            `+${points}`;
+
+    }
+
+
+    /*
+     * Money
+     */
+    if (moneyEl) {
+
+        moneyEl.textContent =
+            `+${money}`;
+
+    }
+
+
+    /*
+     * Score maximum
+     */
+    const scoreMax =
+        popup.querySelector(
+            ".design-result-score-max"
+        );
+
+
+    if (scoreMax) {
+
+        scoreMax.textContent =
+            isChallenge
+                ? "/ 1000"
+                : "/ 100";
+
+    }
+
+
+    /* ========================================================
+       CHALLENGE RESULT
+    ======================================================== */
+
+    if (isChallenge) {
+
+        const kicker =
+            popup.querySelector(
+                ".design-result-kicker"
+            );
+
+
+        const title =
+            popup.querySelector(
+                ".design-result-card h2"
+            );
+
+
+        const message =
+            popup.querySelector(
+                ".design-result-message"
+            );
+
+
+        if (kicker) {
+
+            kicker.textContent =
+                "CHALLENGE COMPLETE";
+
+        }
+
+
+        if (title) {
+
+            title.textContent =
+                challengeData?.medal ||
+                "Challenge Complete";
+
+        }
+
+
+        if (message) {
+
+            if (
+                challengeData?.perfect > 0
+            ) {
+
+                message.textContent =
+                    `Perfect Match! +${challengeData.perfect} bonus`;
+
+            } else if (
+                challengeData?.timeout
+            ) {
+
+                message.textContent =
+                    `Time's up! Match ${challengeData.match}%`;
+
+            } else {
+
+                message.textContent =
+                    `Challenge completed with ${challengeData?.match || 0}% match.`;
+
+            }
+
+        }
+
+
+        /*
+         * Tambahkan class challenge
+         */
+        popup.classList.add(
+            "challenge-result"
+        );
+
+
+    } else {
+
+        /*
+         * Normal Design
+         */
+        const kicker =
+            popup.querySelector(
+                ".design-result-kicker"
+            );
+
+
+        const title =
+            popup.querySelector(
+                ".design-result-card h2"
+            );
+
+
+        const message =
+            popup.querySelector(
+                ".design-result-message"
+            );
+
+
+        if (kicker) {
+
+            kicker.textContent =
+                "DESIGN SUBMITTED";
+
+        }
+
+
+        if (title) {
+
+            title.textContent =
+                "Great Design!";
+
+        }
+
+
+        if (message) {
+
+            message.textContent =
+                "Your fashion design has been successfully submitted.";
+
+        }
+
+
+        popup.classList.remove(
+            "challenge-result"
+        );
+
+    }
+
+
+    /*
+     * Show popup
+     */
+    popup.classList.add(
+        "show"
+    );
+
+
+    popup.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+}
+
+function closeDesignResultPopup() {
+
+    const popup =
+        document.getElementById(
+            "designResultPopup"
+        );
+
+
+    if (!popup) {
+        return;
+    }
+
+
+    /*
+     * Close popup
+     */
+    popup.classList.remove(
+        "show"
+    );
+
+
+    popup.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    /*
+     * Remove challenge class
+     */
+    popup.classList.remove(
+        "challenge-result"
+    );
+
+
+    /*
+     * Reset outfit
+     */
+    resetDesignAfterSubmit();
+
+}
+
+function setupDesignResultPopup() {
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            const button =
+                event.target.closest(
+                    "#designResultContinue"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            closeDesignResultPopup();
+
+        }
+    );
+
+}
+
+function resetDesignAfterSubmit() {
+
+    /*
+     * NEW: auto-save outfit yang baru saja di-submit ke
+     * "Saved Outfit" (localStorage "naylaFashionSaved"),
+     * SEBELUM canvas/state dikosongkan di bawah. Jadi outfit
+     * hilang dari canvas setelah submit, tapi tetap ada di
+     * daftar Saved Outfit — bukan hilang total.
+     *
+     * Nama disesuaikan: kalau berasal dari challenge, pakai
+     * nama challenge-nya; kalau submit biasa, pakai nama
+     * tanggal seperti biasa. Skor yang disimpan memakai
+     * state.score (skor final yang baru saja ditampilkan di
+     * popup hasil), bukan calculateScore() ulang — karena
+     * pada titik ini outfit belum dikosongkan jadi hasilnya
+     * akan sama, tapi untuk skor challenge (yang sudah
+     * termasuk bonus match & perfect match) state.score
+     * adalah sumber yang benar.
+     */
+
+    const hasOutfit =
+        state.selected &&
+        Object.keys(state.selected)
+            .some(
+                category =>
+                    state.selected[category]
+            );
+
+
+    if (hasOutfit) {
+
+        const outfitName =
+            state.challenge
+                ? `${state.challenge.name} (Challenge)`
+                : undefined;
+
+
+        const snapshot =
+            buildOutfitSnapshot(
+                outfitName,
+                state.score
+            );
+
+
+        persistOutfitSnapshot(
+            snapshot
+        );
+
+
+        showToast(
+            "💾",
+            "Outfit disimpan ke Saved Outfit"
+        );
+
+    }
+
+
+    /*
+     * Clear outfit
+     */
+    state.selected = {};
+
+
+    /*
+     * Clear colors
+     */
+    state.colors = {};
+
+
+    /*
+     * Reset score
+     */
+    state.score = 0;
+
+
+    /*
+     * Reset challenge
+     */
+    state.challenge = null;
+
+    state.challengeActive = false;
+
+    state.challengeTime = 0;
+
+    state.challengeScore = 0;
+
+    state.challengeRewarded = false;
+
+
+    /*
+     * Stop timer
+     */
+    if (state.challengeTimer) {
+
+        clearInterval(
+            state.challengeTimer
+        );
+
+        state.challengeTimer = null;
+
+    }
+
+
+    /*
+     * Hide challenge panel
+     */
+    const panel =
+        document.getElementById(
+            "fashionChallengePanel"
+        );
+
+
+    if (panel) {
+
+        panel.classList.remove(
+            "show"
+        );
+
+        panel.hidden = true;
+
+    }
+
+
+    /*
+     * Reset avatar
+     */
+    updateAvatar();
+
+
+    /*
+     * Update UI
+     */
+    updateAllUI();
+
+
+    /*
+     * Save clean state
+     */
+    saveTemporaryState();
+
+}
+
+function setupMobileTabs() {
+
+    const tabs = $all(".fashion-mobile-tab");
+    const workspace = firstExisting([".fashion-workspace"]);
+
+    if (!tabs.length || !workspace) return;
+
+    workspace.classList.add("tab-stage");
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+
+            tabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            workspace.classList.remove("tab-stage", "tab-wardrobe", "tab-outfit");
+            workspace.classList.add("tab-" + tab.dataset.mobileTab);
+        });
+    });
+}
+
 /* ============================================================
    61. INITIALIZE
    ============================================================ */
@@ -10583,6 +14180,21 @@ function init() {
     setupKeyboard();
 
     setupChallengeButton();
+
+    setupDesignResultPopup();
+
+    setupMobileTabs();
+
+    /*
+     * NEW: hubungkan panel "Saved Outfits" (#fashionSavedOutfits
+     * / #fashionSavedCount) — sebelumnya tidak pernah dipanggil
+     * sama sekali sehingga panel itu selalu kosong walau data
+     * sudah tersimpan di localStorage.
+     */
+
+    setupSavedOutfitsEvents();
+
+    renderSavedOutfits();
 
     /*
      * Default hair tetap ada.
@@ -10639,8 +14251,3 @@ if (
 
     init();
 }
-
-
-/* ============================================================
-   END
-   ============================================================ */
