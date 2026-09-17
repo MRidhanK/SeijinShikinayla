@@ -2810,249 +2810,190 @@ function createStage() {
 
 function createAvatar() {
 
-    if (!scene) {
-        return;
-    }
+    if (!scene) return;
 
-    /* =====================================================
-       CLEAR OLD AVATAR
-       ===================================================== */
-
+    /* Clear avatar lama */
     if (avatar) {
-
         scene.remove(avatar);
-
         avatar.traverse((object) => {
-
-            if (object.geometry) {
-                object.geometry.dispose();
-            }
-
+            if (object.geometry) object.geometry.dispose();
             if (object.material) {
-
                 if (Array.isArray(object.material)) {
-
-                    object.material.forEach(
-                        material => material.dispose()
-                    );
-
+                    object.material.forEach(m => m.dispose());
                 } else {
-
                     object.material.dispose();
-
                 }
             }
         });
     }
 
-    /* =====================================================
-       MAIN AVATAR
-       ===================================================== */
-
-    avatar =
-        new THREE.Group();
-
-    avatar.position.y =
-        0.05;
-
+    avatar = new THREE.Group();
+    avatar.position.y = 0.05;
     scene.add(avatar);
 
-    /* =====================================================
-       AVATAR ROOT
-       ===================================================== */
+    avatarRoot = new THREE.Group();
+    avatar.add(avatarRoot);
 
-    avatarRoot =
-        new THREE.Group();
+    bodyRoot = new THREE.Group();
+    avatarRoot.add(bodyRoot);
 
-    avatar.add(
-        avatarRoot
-    );
+    clothingRoot = new THREE.Group();
+    avatarRoot.add(clothingRoot);
 
-    /* =====================================================
-       BODY
-       ===================================================== */
+    underLayerRoot = new THREE.Group();
+    avatarRoot.add(underLayerRoot);
 
-    bodyRoot =
-        new THREE.Group();
+    hairRoot = new THREE.Group();
+    hatRoot = new THREE.Group();
+    glassesRoot = new THREE.Group();
+    bagRoot = new THREE.Group();
+    accessoryRoot = new THREE.Group();
+    shoeRoot = new THREE.Group();
+    bottomRoot = new THREE.Group();
+    topRoot = new THREE.Group();
+    dressRoot = new THREE.Group();
+    jacketRoot = new THREE.Group();
 
-    avatarRoot.add(
-        bodyRoot
-    );
+    clothingRoot.add(hairRoot);
+    clothingRoot.add(hatRoot);
+    clothingRoot.add(glassesRoot);
+    clothingRoot.add(bagRoot);
+    clothingRoot.add(accessoryRoot);
+    clothingRoot.add(shoeRoot);
+    clothingRoot.add(bottomRoot);
+    clothingRoot.add(topRoot);
+    clothingRoot.add(dressRoot);
+    clothingRoot.add(jacketRoot);
 
-    /* =====================================================
-       CLOTHING
-       ===================================================== */
+    /*
+     * FIX: hapus panggilan createBaseBody(), createHair(),
+     * createDefaultShoes(), createBaseCoverage() dari sini.
+     * Semua sudah dilakukan oleh updateAvatar() di bawah.
+     */
 
-    clothingRoot =
-        new THREE.Group();
-
-    avatarRoot.add(
-        clothingRoot
-    );
-
-    /* =====================================================
-       UNDERLAYER
-       ===================================================== */
-
-    underLayerRoot =
-        new THREE.Group();
-
-    avatarRoot.add(
-        underLayerRoot
-    );
-
-    /* =====================================================
-       FASHION ROOTS
-       ===================================================== */
-
-    hairRoot =
-        new THREE.Group();
-
-    hatRoot =
-        new THREE.Group();
-
-    glassesRoot =
-        new THREE.Group();
-
-    bagRoot =
-        new THREE.Group();
-
-    accessoryRoot =
-        new THREE.Group();
-
-    shoeRoot =
-        new THREE.Group();
-
-    bottomRoot =
-        new THREE.Group();
-
-    topRoot =
-        new THREE.Group();
-
-    dressRoot =
-        new THREE.Group();
-
-    jacketRoot =
-        new THREE.Group();
-
-    /* =====================================================
-       ADD FASHION ROOTS
-       ===================================================== */
-
-    clothingRoot.add(
-        hairRoot
-    );
-
-    clothingRoot.add(
-        hatRoot
-    );
-
-    clothingRoot.add(
-        glassesRoot
-    );
-
-    clothingRoot.add(
-        bagRoot
-    );
-
-    clothingRoot.add(
-        accessoryRoot
-    );
-
-    clothingRoot.add(
-        shoeRoot
-    );
-
-    clothingRoot.add(
-        bottomRoot
-    );
-
-    clothingRoot.add(
-        topRoot
-    );
-
-    clothingRoot.add(
-        dressRoot
-    );
-
-    clothingRoot.add(
-        jacketRoot
-    );
-
-    /* =====================================================
-       BASE BODY
-       ===================================================== */
-
-    createBaseBody();
-
-    /* =====================================================
-       DEFAULT HAIR
-       ===================================================== */
-
-    createHair(
-        getItem("hair-soft-bob") || {
-            id: "default-hair",
-            type: "bob",
-            color: "#49342f"
-        }
-    );
-
-    /* =====================================================
-       DEFAULT SHOES
-       ===================================================== */
-
-    if (
-        typeof createDefaultShoes ===
-        "function"
-    ) {
-        createDefaultShoes();
-    }
-
-    /* =====================================================
-       BASE COVERAGE
-       ===================================================== */
-
-    createBaseCoverage();
-
-    /* =====================================================
-       UPDATE FASHION
-       ===================================================== */
-
-    if (
-        typeof updateAvatar ===
-        "function"
-    ) {
-        updateAvatar();
-    }
-
-    /* =====================================================
-       RENDER ORDER
-       ===================================================== */
-
+    /* Render order */
     underLayerRoot.renderOrder = 1;
-
     bottomRoot.renderOrder = 4;
-
     shoeRoot.renderOrder = 5;
-
     topRoot.renderOrder = 6;
-
     dressRoot.renderOrder = 7;
-
     jacketRoot.renderOrder = 8;
-
     hairRoot.renderOrder = 20;
-
     hatRoot.renderOrder = 22;
-
     glassesRoot.renderOrder = 23;
-
     accessoryRoot.renderOrder = 24;
-
     bagRoot.renderOrder = 25;
+
+    /* Satu-satunya panggilan — updateAvatar() sudah handle semuanya */
+    updateAvatar();
 }
 
 
+/* ============================================================
+   MALE ABS / SIX PACK
+   ============================================================ */
+
+/* ============================================================
+   MALE ABS / SIX PACK
+   ============================================================ */
+
+/* ============================================================
+   MALE ABS / NATURAL MUSCLE DEFINITION
+   ============================================================ */
+
+/* ============================================================
+   MALE ABS / SUBTLE BUT VISIBLE
+   ============================================================ */
+
+/* ============================================================
+   MALE ABS
+   Natural + Attached To Torso
+   ============================================================ */
+
+/* ============================================================
+   MALE ABS
+   Flat Muscle Definition
+   ============================================================ */
+
+function createMaleAbs() {
+
+    /* Hapus abs lama */
+    const oldAbs = bodyRoot.getObjectByName("maleAbs");
+    if (oldAbs) bodyRoot.remove(oldAbs);
+
+    if (state.gender !== "male") return;
+
+    /* ========================================================
+       KUNCI: cek semua slot atasan. Kalau ada yang terisi,
+       JANGAN gambar abs sama sekali.
+       ======================================================== */
+
+    const hasTop    = !!state.selected?.top;
+    const hasDress  = !!state.selected?.dress;
+    const hasJacket = !!state.selected?.jacket;
+
+    if (hasTop || hasDress || hasJacket) {
+        return;
+    }
+
+    const absRoot = new THREE.Group();
+    absRoot.name = "maleAbs";
+    bodyRoot.add(absRoot);
+
+    const muscleMat = fabric("#b97882");
+
+    /* FRONT_Z mengikuti torso pria baru (depth 0.44) */
+    const FRONT_Z = 0.445;
+
+    /* Center line */
+    const centerLine = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.016, 0.36),
+        muscleMat
+    );
+    centerLine.position.set(0, 2.76, FRONT_Z);
+    absRoot.add(centerLine);
+
+    /* Abs grooves */
+    const absLines = [
+        { y: 2.88, width: 0.18 },
+        { y: 2.76, width: 0.22 },
+        { y: 2.64, width: 0.20 }
+    ];
+
+    absLines.forEach(line => {
+
+        const leftLine = new THREE.Mesh(
+            new THREE.PlaneGeometry(line.width, 0.014),
+            muscleMat
+        );
+        leftLine.position.set(-(line.width / 2 + 0.03), line.y, FRONT_Z);
+        absRoot.add(leftLine);
+
+        const rightLine = new THREE.Mesh(
+            new THREE.PlaneGeometry(line.width, 0.014),
+            muscleMat
+        );
+        rightLine.position.set((line.width / 2 + 0.03), line.y, FRONT_Z);
+        absRoot.add(rightLine);
+    });
+
+    /* Obliques */
+    const leftOblique = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.014, 0.28),
+        muscleMat
+    );
+    leftOblique.position.set(-0.34, 2.76, FRONT_Z);
+    leftOblique.rotation.z = THREE.MathUtils.degToRad(-16);
+    absRoot.add(leftOblique);
+
+    const rightOblique = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.014, 0.28),
+        muscleMat
+    );
+    rightOblique.position.set(0.34, 2.76, FRONT_Z);
+    rightOblique.rotation.z = THREE.MathUtils.degToRad(16);
+    absRoot.add(rightOblique);
+}
 /* ============================================================
    14. BASE BODY
    ============================================================ */
@@ -3061,666 +3002,270 @@ function createBaseBody() {
 
     clearGroup(bodyRoot);
 
-    const skin =
-        skinMaterial();
-
-
-    /* ========================================================
-       TORSO
-       ======================================================== */
-
-    const torsoWidth =
-        state.gender === "female"
-            ? .72
-            : .76;
-
-    const torsoDepth =
-        state.gender === "female"
-            ? .51
-            : .53;
-
-    const torso =
-        sphere(
-            bodyRoot,
-
-            [
-                torsoWidth,
-                .83,
-                torsoDepth
-            ],
-
-            [
-                0,
-                2.67,
-                0
-            ],
-
-            skin
-        );
-
-
-    /*
-     * NEW: bust silhouette DIHAPUS TOTAL — sebelumnya di sini
-     * ada 2 sphere kecil untuk siluet dada wanita, tapi mudah
-     * "nembus" atau kelihatan aneh terutama saat dikombinasi
-     * dengan jaket/dress berlapis. Perbedaan gender tetap cukup
-     * terwakili lewat: lebar torso/pinggul, bentuk kepala, ukuran
-     * hidung, radius kaki, default hair, dan sekarang blush di
-     * pipi (lihat bagian BLUSH di bawah).
-     */
-
+    const skin = skinMaterial();
+    const isMale = state.gender === "male";
 
     /* ========================================================
-       WAIST / HIPS
+       TORSO — pria LEBAR & DATAR, tapi cukup tinggi
+       supaya langsung menyambung ke pinggul
        ======================================================== */
 
-    const hipWidth =
-        state.gender === "female"
-            ? .68
-            : .63;
+    const torsoW = isMale ? 0.68 : 0.60;
+    const torsoH = isMale ? 0.70 : 0.70;
+    const torsoD = isMale ? 0.42 : 0.40;
 
     sphere(
         bodyRoot,
-
-        [
-            hipWidth,
-            .43,
-            .47
-        ],
-
-        [
-            0,
-            2.02,
-            0
-        ],
-
+        [torsoW, torsoH, torsoD],
+        [0, 2.60, 0],       // ← turunkan ke 2.60 supaya bagian bawah menyentuh pinggul
         skin
     );
 
+    if (isMale) createMaleAbs();
 
     /* ========================================================
-       NECK
+       HIP — menyatu dengan torso (y = 2.10)
        ======================================================== */
 
-    cylinder(
-        bodyRoot,
-
-        .18,
-        .20,
-        .30,
-
-        [
-            0,
-            3.43,
-            0
-        ],
-
-        skin
-    );
-
-
-    /* ========================================================
-       HEAD
-       ======================================================== */
-
-    const headScale =
-        state.gender === "female"
-            ? [.61, .68, .57]
-            : [.66, .63, .60];
+    const hipW = isMale ? 0.48 : 0.60;
+    const hipH = isMale ? 0.30 : 0.36;
+    const hipD = isMale ? 0.40 : 0.42;
 
     sphere(
         bodyRoot,
-
-        headScale,
-
-        [
-            0,
-            4.16,
-            0
-        ],
-
+        [hipW, hipH, hipD],
+        [0, 2.12, 0],
         skin
     );
 
+    /* ========================================================
+       PELVIS BRIDGE — mengubungkan hip ke kaki
+       ======================================================== */
+
+    sphere(
+        bodyRoot,
+        isMale ? [0.42, 0.22, 0.36] : [0.52, 0.24, 0.40],
+        [0, 1.94, 0],
+        skin
+    );
+
+    /* ========================================================
+       BAHU — sphere
+       ======================================================== */
+
+    const shoulderX = isMale ? 0.62 : 0.56;
+    const shoulderY = 2.94;
+
+    sphere(bodyRoot, [0.20, 0.20, 0.20], [-shoulderX, shoulderY, 0], skin);
+    sphere(bodyRoot, [0.20, 0.20, 0.20], [ shoulderX, shoulderY, 0], skin);
+
+    /* ========================================================
+       NECK — pendek
+       ======================================================== */
+
+    cylinder(bodyRoot, 0.13, 0.15, 0.22, [0, 3.26, 0], skin, 24);
+
+    /* ========================================================
+       HEAD — kecil
+       ======================================================== */
+
+    const headScale = isMale
+        ? [0.48, 0.52, 0.46]
+        : [0.46, 0.52, 0.44];
+
+    const headY = 3.88;
+
+    sphere(bodyRoot, headScale, [0, headY, 0], skin);
 
     /* ========================================================
        EARS
        ======================================================== */
 
-    sphere(
-        bodyRoot,
-        [.10, .16, .12],
-        [-.59, 4.15, 0],
-        skin
-    );
-
-    sphere(
-        bodyRoot,
-        [.10, .16, .12],
-        [.59, 4.15, 0],
-        skin
-    );
-
+    sphere(bodyRoot, [0.07, 0.11, 0.08], [-0.46, headY, 0], skin);
+    sphere(bodyRoot, [0.07, 0.11, 0.08], [ 0.46, headY, 0], skin);
 
     /* ========================================================
        NOSE
        ======================================================== */
 
-    const noseScale =
-        state.gender === "female"
-            ? [.055, .085, .11]
-            : [.065, .095, .13];
-
-    const nosePosition =
-        state.gender === "female"
-            ? [0, 4.08, .56]
-            : [0, 4.06, .58];
-
     sphere(
         bodyRoot,
-        noseScale,
-        nosePosition,
+        isMale ? [0.055, 0.075, 0.10] : [0.045, 0.065, 0.09],
+        [0, headY - 0.10, 0.44],
         skin
     );
-
 
     /* ========================================================
        EYEBROWS
        ======================================================== */
 
-    const browMaterial =
-        getMaterial(
-            state.colors?.hair ||
-            "#3a2a26",
-            {
-                roughness: .75
-            }
-        );
+    const browMat = getMaterial(state.colors?.hair || "#3a2a26", { roughness: .75 });
 
-    const browScale =
-        state.gender === "female"
-            ? [.09, .018, .02]
-            : [.10, .028, .022];
-
-    const browY =
-        state.gender === "female"
-            ? 4.30
-            : 4.28;
-
-    box(
-        bodyRoot,
-        browScale,
-        [-.215, browY, .55],
-        browMaterial
-    );
-
-    box(
-        bodyRoot,
-        browScale,
-        [.215, browY, .55],
-        browMaterial
-    );
-
+    box(bodyRoot, [0.075, 0.016, 0.018], [-0.17, headY + 0.13, 0.42], browMat);
+    box(bodyRoot, [0.075, 0.016, 0.018], [ 0.17, headY + 0.13, 0.42], browMat);
 
     /* ========================================================
        EYES
        ======================================================== */
 
-    const eyeWhite =
-        getMaterial(
-            "#ffffff",
-            {
-                roughness: .28
-            }
-        );
+    const eyeWhite = getMaterial("#ffffff", { roughness: .28 });
+    const eyeDark  = getMaterial("#2c2630", { roughness: .30 });
 
-    const eyeDark =
-        getMaterial(
-            "#2c2630",
-            {
-                roughness: .3
-            }
-        );
+    const eyeScale = isMale ? [0.062, 0.068, 0.038] : [0.068, 0.075, 0.042];
+    const pupilScale = isMale ? [0.025, 0.032, 0.018] : [0.026, 0.036, 0.018];
 
-    const eyeScale =
-        state.gender === "female"
-            ? [.095, .105, .055]
-            : [.086, .090, .05];
+    const eyeY = headY + 0.05;
+    const eyeX = 0.165;
+    const eyeZ = 0.41;
 
-    const pupilScale =
-        state.gender === "female"
-            ? [.038, .052, .028]
-            : [.034, .046, .026];
-
-
-    sphere(
-        bodyRoot,
-        eyeScale,
-        [-.215, 4.22, .535],
-        eyeWhite
-    );
-
-    sphere(
-        bodyRoot,
-        eyeScale,
-        [.215, 4.22, .535],
-        eyeWhite
-    );
-
-
-    sphere(
-        bodyRoot,
-        pupilScale,
-        [-.215, 4.22, .585],
-        eyeDark
-    );
-
-    sphere(
-        bodyRoot,
-        pupilScale,
-        [.215, 4.22, .585],
-        eyeDark
-    );
-
+    sphere(bodyRoot, eyeScale, [-eyeX, eyeY, eyeZ], eyeWhite);
+    sphere(bodyRoot, eyeScale, [ eyeX, eyeY, eyeZ], eyeWhite);
+    sphere(bodyRoot, pupilScale, [-eyeX, eyeY, eyeZ + 0.04], eyeDark);
+    sphere(bodyRoot, pupilScale, [ eyeX, eyeY, eyeZ + 0.04], eyeDark);
 
     /* ========================================================
-       BLUSH (NEW — khusus wanita)
-       ------------------------------------------------------
-       Menggantikan peran bust silhouette sebagai penanda
-       gender yang lebih aman (tidak berisiko clipping/nembus
-       di baju). Berupa dua bulatan pink transparan tipis di
-       pipi, di bawah mata dan sedikit ke arah luar wajah.
-       Tidak dirender untuk model pria.
+       BLUSH (wanita saja)
        ======================================================== */
 
-    if (
-        state.gender === "female"
-    ) {
-
-        const blushMaterial =
-            getMaterial(
-                "#e8879a",
-                {
-                    roughness: .9,
-                    transparent: true,
-                    opacity: .38
-                }
-            );
-
-        sphere(
-            bodyRoot,
-            [.085, .06, .02],
-            [-.34, 4.10, .50],
-            blushMaterial,
-            20
-        );
-
-        sphere(
-            bodyRoot,
-            [.085, .06, .02],
-            [.34, 4.10, .50],
-            blushMaterial,
-            20
-        );
+    if (!isMale) {
+        const blushMat = getMaterial("#e8879a", {
+            roughness: .9, transparent: true, opacity: .35
+        });
+        sphere(bodyRoot, [0.06, 0.04, 0.015], [-0.27, headY - 0.04, 0.38], blushMat, 20);
+        sphere(bodyRoot, [0.06, 0.04, 0.015], [ 0.27, headY - 0.04, 0.38], blushMat, 20);
     }
-
 
     /* ========================================================
        MOUTH
        ======================================================== */
 
-    const mouthColor =
-        state.gender === "female"
-            ? "#a84e67"
-            : "#8a5a52";
-
-    const mouthScale =
-        state.gender === "female"
-            ? [.11, .028, .02]
-            : [.115, .020, .02];
-
-    const mouthY =
-        state.gender === "female"
-            ? 3.965
-            : 3.95;
-
+    const mouthColor = isMale ? "#8a5a52" : "#a84e67";
     box(
         bodyRoot,
-        mouthScale,
-        [0, mouthY, .575],
-        getMaterial(
-            mouthColor,
-            {
-                roughness: .4
-            }
-        )
+        isMale ? [0.09, 0.016, 0.018] : [0.085, 0.022, 0.018],
+        [0, headY - 0.19, 0.45],
+        getMaterial(mouthColor, { roughness: .4 })
     );
 
-
     /* ========================================================
-       ARMS
+       ARMS — DENGAN SIKU
        ======================================================== */
 
-    const arm =
-        .18;
+    const armR = isMale ? 0.13 : 0.12;
 
-    const SHOULDER_X = .60;
-    const SHOULDER_Y = 3.02;
+    const shoulderPos = new THREE.Vector3(shoulderX, shoulderY, 0);
+    const elbowPos    = new THREE.Vector3(shoulderX + 0.06, 2.52, 0);
+    const handPos     = new THREE.Vector3(shoulderX + 0.10, 2.08, 0);
 
-    const HAND_X = .82;
-    const HAND_Y = 2.05;
+    const upperMid = shoulderPos.clone().lerp(elbowPos, 0.5);
+    const upperLen = shoulderPos.distanceTo(elbowPos) - armR * 2;
+    const upperAngle = Math.atan2(
+        elbowPos.x - shoulderPos.x,
+        shoulderPos.y - elbowPos.y
+    );
 
-    const armMidX =
-        (SHOULDER_X + HAND_X) / 2;
+    const upperArmL = capsule(bodyRoot, armR, upperLen, [-upperMid.x, upperMid.y, 0], skin);
+    upperArmL.rotation.z = upperAngle;
 
-    const armMidY =
-        (SHOULDER_Y + HAND_Y) / 2;
+    const upperArmR = capsule(bodyRoot, armR, upperLen, [ upperMid.x, upperMid.y, 0], skin);
+    upperArmR.rotation.z = -upperAngle;
 
-    const armAngle =
-        Math.atan2(
-            HAND_X - SHOULDER_X,
-            SHOULDER_Y - HAND_Y
-        );
+    const lowerMid = elbowPos.clone().lerp(handPos, 0.5);
+    const lowerLen = elbowPos.distanceTo(handPos) - armR * 2;
+    const lowerAngle = Math.atan2(
+        handPos.x - elbowPos.x,
+        elbowPos.y - handPos.y
+    );
 
+    const lowerArmL = capsule(bodyRoot, armR, lowerLen, [-lowerMid.x, lowerMid.y, 0], skin);
+    lowerArmL.rotation.z = lowerAngle;
 
-    const leftArm =
-        capsule(
-            bodyRoot,
+    const lowerArmR = capsule(bodyRoot, armR, lowerLen, [ lowerMid.x, lowerMid.y, 0], skin);
+    lowerArmR.rotation.z = -lowerAngle;
 
-            arm,
+    sphere(bodyRoot, [armR, armR, armR], [-elbowPos.x, elbowPos.y, 0], skin);
+    sphere(bodyRoot, [armR, armR, armR], [ elbowPos.x, elbowPos.y, 0], skin);
 
-            1.05,
-
-            [
-                -armMidX,
-                armMidY,
-                0
-            ],
-
-            skin
-        );
-
-    leftArm.rotation.z =
-        armAngle;
-
-
-    const rightArm =
-        capsule(
-            bodyRoot,
-
-            arm,
-
-            1.05,
-
-            [
-                armMidX,
-                armMidY,
-                0
-            ],
-
-            skin
-        );
-
-    rightArm.rotation.z =
-        -armAngle;
-
+    sphere(bodyRoot, [0.12, 0.13, 0.11], [-handPos.x, handPos.y, 0], skin);
+    sphere(bodyRoot, [0.12, 0.13, 0.11], [ handPos.x, handPos.y, 0], skin);
 
     /* ========================================================
-       SHOULDER FILL
+       LEGS — DUA kaki, rapat
        ======================================================== */
 
-    sphere(
-        bodyRoot,
-        [.225, .225, .20],
-        [-SHOULDER_X, SHOULDER_Y, .04],
-        skin
-    );
+    const legR = isMale ? 0.18 : 0.17;
 
-    sphere(
-        bodyRoot,
-        [.225, .225, .20],
-        [SHOULDER_X, SHOULDER_Y, .04],
-        skin
-    );
-
+    capsule(bodyRoot, legR, 1.50, [-0.20, 1.10, 0], skin);
+    capsule(bodyRoot, legR, 1.50, [ 0.20, 1.10, 0], skin);
 
     /* ========================================================
-       HANDS
-       ======================================================== */
-
-    sphere(
-        bodyRoot,
-        [.205, .21, .19],
-        [-.82, 2.05, 0],
-        skin
-    );
-
-    sphere(
-        bodyRoot,
-        [.205, .21, .19],
-        [.82, 2.05, 0],
-        skin
-    );
-
-
-    /* ========================================================
-       LEGS
-       ======================================================== */
-
-    const legRadius =
-        state.gender === "female"
-            ? .27
-            : .29;
-
-
-    capsule(
-        bodyRoot,
-
-        legRadius,
-
-        1.35,
-
-        [
-            -.32,
-            1.17,
-            0
-        ],
-
-        skin
-    );
-
-    capsule(
-        bodyRoot,
-
-        legRadius,
-
-        1.35,
-
-        [
-            .32,
-            1.17,
-            0
-        ],
-
-        skin
-    );
-
-
-    /* ========================================================
-       MODEST BASE UNDERLAYER
+       UNDERLAYER
        ======================================================== */
 
     createBaseCoverage();
 }
-
 /* ============================================================
    15. BASE COVERAGE
    ============================================================ */
 
 function createBaseCoverage() {
 
-    if (!underLayerRoot) {
-        return;
-    }
+    if (!underLayerRoot) return;
 
-    clearGroup(
-        underLayerRoot
-    );
+    clearGroup(underLayerRoot);
 
-    const white =
-        fabric(
-            CONFIG.colors.white ||
-            "#ffffff"
-        );
+    const white = fabric(CONFIG.colors.white || "#ffffff");
+    const isMale = state.gender === "male";
 
+    const hasUpper = !!(state.selected.top || state.selected.dress || state.selected.jacket);
+    const hasLower = !!(state.selected.bottom || state.selected.dress);
 
-    const hasUpperClothing =
-        !!(
-            state.selected.top ||
-            state.selected.dress
-        );
+    /* ========================================================
+       UPPER COVERAGE — dada
+       Cuma digambar kalau benar-benar tidak ada baju atas.
+       ======================================================== */
 
-    const hasLowerClothing =
-        !!(
-            state.selected.bottom ||
-            state.selected.dress
-        );
+    if (!hasUpper) {
 
-
-    const jacketItem =
-        getSelected("jacket");
-
-    const upperCoverageColor =
-        jacketItem
-            ? (
-                state.colors[jacketItem.id] ||
-                jacketItem.colors?.[0] ||
-                (CONFIG.colors.white || "#ffffff")
-            )
-            : (CONFIG.colors.white || "#ffffff");
-
-    const upperCoverage =
-        fabric(upperCoverageColor);
-
-
-    /* =====================================================
-       UPPER COVERAGE
-       ===================================================== */
-
-    if (!hasUpperClothing) {
-
-        const upperCoverageScale =
-            hasLowerClothing
-                ? [
-                    state.gender === "female"
-                        ? .76
-                        : .78,
-
-                    .32,
-
-                    .55
-                ]
-                : [
-                    state.gender === "female"
-                        ? .76
-                        : .78,
-
-                    .73,
-
-                    .55
-                ];
-
-        const upperCoveragePositionY =
-            2.68;
+        const w = isMale ? 0.70 : 0.62;
+        const h = isMale ? 0.74 : 0.72;
+        const d = isMale ? 0.44 : 0.42;
 
         sphere(
             underLayerRoot,
-            upperCoverageScale,
-            [0, upperCoveragePositionY, .005],
-            upperCoverage
+            [w, h, d],
+            [0, 2.60, 0],
+            white
         );
 
-        /* ================================================
-           MIDRIFF BRIDGE
-           ================================================ */
-
-        if (hasLowerClothing) {
-
-            cylinder(
-                underLayerRoot,
-                .63,
-                .69,
-                .30,
-                [0, 2.38, 0],
-                upperCoverage,
-                48
-            );
-        }
-
-        /*
-         * NEW: FEMALE CHEST COVERAGE DIHAPUS TOTAL — dulu ada
-         * 2 sphere di sini mengikuti bentuk bust yang sekarang
-         * sudah tidak ada lagi (lihat createBaseBody()). Upper
-         * coverage sphere utama di atas sudah cukup menutupi
-         * torso tanpa perlu tambahan bentuk dada.
-         */
+        /* Pelvis bridge untuk kasus telanjang */
+        sphere(
+            underLayerRoot,
+            [0.44, 0.24, 0.38],
+            [0, 1.94, 0],
+            white
+        );
     }
 
-    /* =====================================================
-       LOWER COVERAGE
-       ===================================================== */
+    /* ========================================================
+       LOWER COVERAGE — pinggul
+       Cuma digambar kalau TIDAK ada baju bawah sama sekali.
+       ======================================================== */
 
-    if (!hasLowerClothing) {
+    if (!hasLower && !hasUpper) {
+
+        /* Cuma di mode telanjang total */
+        const w = isMale ? 0.48 : 0.60;
+        const h = isMale ? 0.30 : 0.34;
 
         sphere(
             underLayerRoot,
-
-            [
-                state.gender === "female"
-                    ? .67
-                    : .63,
-
-                .38,
-
-                .49
-            ],
-
-            [
-                0,
-                1.99,
-                .01
-            ],
-
+            [w, h, 0.40],
+            [0, 2.12, 0],
             white
         );
-
-    }
-
-    /* =====================================================
-       HIP COVERAGE
-       ===================================================== */
-
-    if (!hasLowerClothing) {
-
-        cylinder(
-            underLayerRoot,
-
-            .61,
-            .65,
-            .20,
-
-            [
-                0,
-                2.02,
-                0
-            ],
-
-            white
-        );
-
     }
 }
-
 /* ============================================================
    16. HAIR
    ============================================================ */
@@ -3748,7 +3293,6 @@ function createHair(item) {
         return;
     }
 
-
     /* =====================================================
        SAFE COLORS
        ===================================================== */
@@ -3763,29 +3307,18 @@ function createHair(item) {
         item.colors?.[0] ||
         "#49342f";
 
-    const mat =
-        fabric(color);
-
+    const mat = fabric(color);
 
     /* =====================================================
-       HAIR CAP
+       HAIR CAP — mengikuti kepala baru (y = 3.92, scale 0.50)
        ===================================================== */
 
     sphere(
         hairRoot,
-        [
-            .65,
-            .48,
-            .59
-        ],
-        [
-            0,
-            4.57,
-            -.015
-        ],
+        [.54, .40, .50],
+        [0, 4.06, -.01],
         mat
     );
-
 
     /* =====================================================
        HAIR TYPE
@@ -3796,7 +3329,6 @@ function createHair(item) {
         item.variant ||
         "bob";
 
-
     /* =====================================================
        BOB
        ===================================================== */
@@ -3805,54 +3337,26 @@ function createHair(item) {
 
         sphere(
             hairRoot,
-            [
-                .31,
-                .48,
-                .42
-            ],
-            [
-                -.48,
-                4.28,
-                .02
-            ],
+            [.26, .40, .35],
+            [-.40, 3.86, .015],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .31,
-                .48,
-                .42
-            ],
-            [
-                .48,
-                4.28,
-                .02
-            ],
+            [.26, .40, .35],
+            [.40, 3.86, .015],
             mat
         );
 
-
-        /* Bangs tidak menutup mata */
-
+        /* Bangs — tidak menutup mata (mata di y ≈ 3.98) */
         sphere(
             hairRoot,
-            [
-                .46,
-                .18,
-                .28
-            ],
-            [
-                0,
-                4.54,
-                .42
-            ],
+            [.39, .15, .24],
+            [0, 4.14, .35],
             mat
         );
-
     }
-
 
     /* =====================================================
        SIDE WAVE
@@ -3862,51 +3366,25 @@ function createHair(item) {
 
         sphere(
             hairRoot,
-            [
-                .34,
-                .65,
-                .38
-            ],
-            [
-                -.52,
-                4.24,
-                -.03
-            ],
+            [.29, .55, .32],
+            [-.44, 3.82, -.025],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .28,
-                .45,
-                .34
-            ],
-            [
-                .48,
-                4.31,
-                -.04
-            ],
+            [.24, .38, .29],
+            [.40, 3.88, -.035],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .25,
-                .18,
-                .26
-            ],
-            [
-                -.35,
-                4.55,
-                .42
-            ],
+            [.21, .15, .22],
+            [-.29, 4.15, .35],
             mat
         );
-
     }
-
 
     /* =====================================================
        SHORT
@@ -3916,51 +3394,25 @@ function createHair(item) {
 
         sphere(
             hairRoot,
-            [
-                .65,
-                .38,
-                .58
-            ],
-            [
-                0,
-                4.56,
-                0
-            ],
+            [.55, .32, .49],
+            [0, 4.15, 0],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .30,
-                .26,
-                .25
-            ],
-            [
-                -.48,
-                4.35,
-                .05
-            ],
+            [.25, .22, .21],
+            [-.40, 3.92, .04],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .30,
-                .26,
-                .25
-            ],
-            [
-                .48,
-                4.35,
-                .05
-            ],
+            [.25, .22, .21],
+            [.40, 3.92, .04],
             mat
         );
-
     }
-
 
     /* =====================================================
        LONG
@@ -3973,51 +3425,25 @@ function createHair(item) {
 
         sphere(
             hairRoot,
-            [
-                .67,
-                .50,
-                .60
-            ],
-            [
-                0,
-                4.55,
-                -.02
-            ],
+            [.56, .42, .50],
+            [0, 4.14, -.015],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .34,
-                .92,
-                .40
-            ],
-            [
-                -.53,
-                3.98,
-                -.02
-            ],
+            [.29, .78, .34],
+            [-.44, 3.62, -.015],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .34,
-                .92,
-                .40
-            ],
-            [
-                .53,
-                3.98,
-                -.02
-            ],
+            [.29, .78, .34],
+            [.44, 3.62, -.015],
             mat
         );
-
     }
-
 
     /* =====================================================
        PONYTAIL
@@ -4027,51 +3453,25 @@ function createHair(item) {
 
         sphere(
             hairRoot,
-            [
-                .65,
-                .45,
-                .58
-            ],
-            [
-                0,
-                4.57,
-                0
-            ],
+            [.55, .38, .49],
+            [0, 4.15, 0],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .29,
-                .75,
-                .30
-            ],
-            [
-                .48,
-                4.22,
-                -.30
-            ],
+            [.24, .63, .25],
+            [.40, 3.86, -.25],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .28,
-                .48,
-                .25
-            ],
-            [
-                .10,
-                4.53,
-                .43
-            ],
+            [.24, .40, .21],
+            [.08, 4.13, .36],
             mat
         );
-
     }
-
 
     /* =====================================================
        LOW PONY
@@ -4081,36 +3481,18 @@ function createHair(item) {
 
         sphere(
             hairRoot,
-            [
-                .65,
-                .44,
-                .58
-            ],
-            [
-                0,
-                4.57,
-                0
-            ],
+            [.55, .37, .49],
+            [0, 4.15, 0],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .34,
-                .68,
-                .32
-            ],
-            [
-                .52,
-                4.00,
-                -.28
-            ],
+            [.29, .57, .27],
+            [.44, 3.65, -.24],
             mat
         );
-
     }
-
 
     /* =====================================================
        PIXIE
@@ -4120,51 +3502,25 @@ function createHair(item) {
 
         sphere(
             hairRoot,
-            [
-                .66,
-                .45,
-                .59
-            ],
-            [
-                0,
-                4.58,
-                0
-            ],
+            [.56, .38, .50],
+            [0, 4.16, 0],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .25,
-                .28,
-                .28
-            ],
-            [
-                -.50,
-                4.35,
-                .05
-            ],
+            [.21, .24, .24],
+            [-.42, 3.92, .04],
             mat
         );
 
         sphere(
             hairRoot,
-            [
-                .25,
-                .28,
-                .28
-            ],
-            [
-                .50,
-                4.35,
-                .05
-            ],
+            [.21, .24, .24],
+            [.42, 3.92, .04],
             mat
         );
-
     }
-
 
     /* =====================================================
        CURLS
@@ -4174,40 +3530,31 @@ function createHair(item) {
 
         const positions = [
 
-            [-.48, 4.47, .03],
-            [-.28, 4.64, .10],
-            [0, 4.68, .05],
-            [.28, 4.64, .10],
-            [.48, 4.47, .03],
+            [-.40, 4.06, .025],
+            [-.24, 4.20, .085],
+            [0, 4.24, .04],
+            [.24, 4.20, .085],
+            [.40, 4.06, .025],
 
-            [-.56, 4.18, -.02],
-            [.56, 4.18, -.02],
+            [-.47, 3.82, -.015],
+            [.47, 3.82, -.015],
 
-            [-.46, 3.98, -.02],
-            [.46, 3.98, -.02]
-
+            [-.39, 3.65, -.015],
+            [.39, 3.65, -.015]
         ];
-
 
         positions.forEach(
             position => {
 
                 sphere(
                     hairRoot,
-                    [
-                        .23,
-                        .25,
-                        .23
-                    ],
+                    [.19, .21, .19],
                     position,
                     mat
                 );
-
             }
         );
-
     }
-
 
     /* =====================================================
        MALE HAIR
@@ -4222,19 +3569,10 @@ function createHair(item) {
 
         sphere(
             hairRoot,
-            [
-                .63,
-                .39,
-                .57
-            ],
-            [
-                0,
-                4.58,
-                0
-            ],
+            [.53, .33, .48],
+            [0, 4.16, 0],
             mat
         );
-
 
         /* =================================================
            MALE SIDE / WAVE
@@ -4247,21 +3585,11 @@ function createHair(item) {
 
             sphere(
                 hairRoot,
-                [
-                    .35,
-                    .15,
-                    .27
-                ],
-                [
-                    .28,
-                    4.53,
-                    .40
-                ],
+                [.29, .13, .23],
+                [.24, 4.11, .34],
                 mat
             );
-
         }
-
 
         /* =================================================
            MALE TEXTURED / WAVE
@@ -4274,35 +3602,25 @@ function createHair(item) {
 
             const spikes = [
 
-                [-.34, 4.78, .02],
-                [-.12, 4.82, .03],
-                [.12, 4.82, .03],
-                [.34, 4.77, .02]
-
+                [-.29, 4.32, .015],
+                [-.10, 4.36, .025],
+                [.10, 4.36, .025],
+                [.29, 4.32, .015]
             ];
-
 
             spikes.forEach(
                 p => {
 
                     sphere(
                         hairRoot,
-                        [
-                            .13,
-                            .23,
-                            .14
-                        ],
+                        [.11, .19, .12],
                         p,
                         mat
                     );
-
                 }
             );
-
         }
-
     }
-
 }
 
 const MALE_KIMONO_TYPES = [
@@ -4312,80 +3630,612 @@ const MALE_KIMONO_TYPES = [
 
 function createMaleKimonoTop(item) {
 
-    const color = state.colors[item.id] || item.colors?.[0] || "#18191f";
-    const mat = satin(color);
+    clearGroup(topRoot);
 
-    const isHaori = item.type.startsWith("haori");
-    const hasCrest = item.type.includes("Crest");
 
-    const innerMat = satin(item.colors?.[1] || "#30354a");
-    const crestColor = item.colors?.[2] || "#c9a34d";
+    const color =
+        state.colors[item.id] ||
+        item.colors?.[0] ||
+        "#18191f";
+
+
+    const mat =
+        satin(color);
+
+
+    const isHaori =
+        item.type.startsWith("haori");
+
+
+    const hasCrest =
+        item.type.includes("Crest");
+
+
+    const innerColor =
+        item.colors?.[1] ||
+        "#303543";
+
+
+    const innerMat =
+        satin(innerColor);
+
+
+    const crestColor =
+        item.colors?.[2] ||
+        "#c9a34d";
+
+
+    /* ========================================================
+       MAIN BODY
+       ======================================================== */
+
+    const bodyMain =
+        cylinder(
+            topRoot,
+            .60,
+            .78,
+            1.72,
+            [0, 2.30, 0],
+            mat,
+            48
+        );
+
+    bodyMain.scale.z =
+        .70;
+
+
+    /* ========================================================
+       CLOSED FRONT PANELS
+
+       Panel dibuat saling overlap supaya haori/kimono
+       TIDAK terlihat terbuka.
+       ======================================================== */
+
+    const leftFront =
+        box(
+            topRoot,
+
+            [
+                .40,
+                .78,
+                .075
+            ],
+
+            [
+                -.18,
+                2.58,
+                .48
+            ],
+
+            mat
+        );
+
+    leftFront.rotation.z =
+        -.16;
+
+
+    const rightFront =
+        box(
+            topRoot,
+
+            [
+                .40,
+                .78,
+                .075
+            ],
+
+            [
+                .18,
+                2.58,
+                .50
+            ],
+
+            mat
+        );
+
+    rightFront.rotation.z =
+        .16;
+
 
     /*
-     * BADAN UTAMA — satu cylinder tirus TUNGGAL dari bahu sampai
-     * pinggul, melebar ke bawah seperti jubah asli. TIDAK dipecah
-     * jadi beberapa box terpisah supaya tidak muncul celah/panel
-     * pipih seperti sebelumnya.
+     * Extra center overlap.
+     * Ini memastikan bagian dada tidak ada celah.
      */
 
-    const bodyMain = cylinder(topRoot, .58, .82, 1.75, [0, 2.25, 0], mat, 48);
-    bodyMain.scale.z = .68;
+    box(
+        topRoot,
 
-    /*
-     * KERAH V — dua box tipis miring membentuk kerah silang khas
-     * kimono/haori, menempel rapat ke bahu (bukan mengambang).
-     */
+        [
+            .24,
+            .70,
+            .06
+        ],
 
-    const collarLeft = box(topRoot, [.11, .80, .05], [-.16, 3.05, .38], innerMat);
-    collarLeft.rotation.z = .55;
+        [
+            0,
+            2.62,
+            .535
+        ],
 
-    const collarRight = box(topRoot, [.11, .80, .05], [.16, 3.05, .38], innerMat);
-    collarRight.rotation.z = -.55;
+        mat
+    );
 
-    /*
-     * LENGAN — cylinder tunggal per sisi, MENYATU ke badan lewat
-     * shoulderConnector radius besar (bukan capsule kecil terpisah
-     * jauh dari badan, yang tadi bikin kesan panel terpisah).
-     */
 
-    const leftSleeve = cylinder(topRoot, .30, .40, 1.20, [-.90, 2.45, 0], mat, 40);
-    leftSleeve.rotation.z = -.06;
-    leftSleeve.scale.z = .62;
+    /* ========================================================
+       COLLAR
+       ======================================================== */
 
-    const rightSleeve = cylinder(topRoot, .30, .40, 1.20, [.90, 2.45, 0], mat, 40);
-    rightSleeve.rotation.z = .06;
-    rightSleeve.scale.z = .62;
+    const collarLeft =
+        box(
+            topRoot,
 
-    shoulderConnector(topRoot, -.72, 2.98, .04, mat, .34);
-    shoulderConnector(topRoot, .72, 2.98, .04, mat, .34);
+            [
+                .10,
+                .72,
+                .06
+            ],
 
-    const leftCuff = cylinder(topRoot, .34, .34, .08, [-.90, 1.87, 0], mat, 40);
-    leftCuff.scale.z = .62;
+            [
+                -.18,
+                3.05,
+                .53
+            ],
 
-    const rightCuff = cylinder(topRoot, .34, .34, .08, [.90, 1.87, 0], mat, 40);
-    rightCuff.scale.z = .62;
+            innerMat
+        );
 
-    /*
-     * OBI / HIMO
-     */
+    collarLeft.rotation.z =
+        .48;
+
+
+    const collarRight =
+        box(
+            topRoot,
+
+            [
+                .10,
+                .72,
+                .06
+            ],
+
+            [
+                .18,
+                3.05,
+                .54
+            ],
+
+            innerMat
+        );
+
+    collarRight.rotation.z =
+        -.48;
+
+
+    /* ========================================================
+       SLEEVES
+       ======================================================== */
+
+    const leftSleeve =
+        cylinder(
+            topRoot,
+            .32,
+            .40,
+            1.18,
+            [-.88, 2.46, 0],
+            mat,
+            40
+        );
+
+    leftSleeve.rotation.z =
+        -.08;
+
+    leftSleeve.scale.z =
+        .68;
+
+
+    const rightSleeve =
+        cylinder(
+            topRoot,
+            .32,
+            .40,
+            1.18,
+            [.88, 2.46, 0],
+            mat,
+            40
+        );
+
+    rightSleeve.rotation.z =
+        .08;
+
+    rightSleeve.scale.z =
+        .68;
+
+
+    /* ========================================================
+       SHOULDER CONNECTION
+       ======================================================== */
+
+    shoulderConnector(
+        topRoot,
+        -.70,
+        2.98,
+        .04,
+        mat,
+        .35
+    );
+
+
+    shoulderConnector(
+        topRoot,
+        .70,
+        2.98,
+        .04,
+        mat,
+        .35
+    );
+
+
+    /* ========================================================
+       SLEEVE CUFF
+       ======================================================== */
+
+    const leftCuff =
+        cylinder(
+            topRoot,
+            .35,
+            .35,
+            .08,
+            [-.88, 1.88, 0],
+            mat,
+            40
+        );
+
+    leftCuff.scale.z =
+        .68;
+
+
+    const rightCuff =
+        cylinder(
+            topRoot,
+            .35,
+            .35,
+            .08,
+            [.88, 1.88, 0],
+            mat,
+            40
+        );
+
+    rightCuff.scale.z =
+        .68;
+
+
+    /* ========================================================
+       HAORI FASTENER
+       ======================================================== */
 
     if (isHaori) {
 
-        box(topRoot, [.48, .045, .035], [0, 2.85, .38], satin(crestColor));
-        sphere(topRoot, [.05, .05, .04], [0, 2.81, .41], metal(crestColor), 16);
+        /*
+         * Tali pengikat di depan.
+         */
+
+        box(
+            topRoot,
+
+            [
+                .50,
+                .045,
+                .04
+            ],
+
+            [
+                0,
+                2.73,
+                .58
+            ],
+
+            satin(crestColor)
+        );
+
+
+        sphere(
+            topRoot,
+
+            [
+                .055,
+                .055,
+                .04
+            ],
+
+            [
+                0,
+                2.73,
+                .62
+            ],
+
+            metal(crestColor),
+            16
+        );
 
     } else {
 
-        const obi = cylinder(topRoot, .60, .64, .30, [0, 1.95, 0], satin(item.colors?.[2] || "#1b1c20"), 48);
-        obi.scale.z = .68;
+        /*
+         * OBI KIMONO
+         */
+
+        const obi =
+            cylinder(
+                topRoot,
+                .62,
+                .65,
+                .28,
+                [0, 1.98, 0],
+                satin(
+                    item.colors?.[2] ||
+                    "#1b1c20"
+                ),
+                48
+            );
+
+        obi.scale.z =
+            .70;
+
     }
+
+
+    /* ========================================================
+       CREST
+       ======================================================== */
 
     if (hasCrest) {
 
-        sphere(topRoot, [.055, .055, .02], [0, 2.72, .44], metal(crestColor), 20);
-        sphere(topRoot, [.045, .045, .018], [-.58, 2.70, .08], metal(crestColor), 16);
-        sphere(topRoot, [.045, .045, .018], [.58, 2.70, .08], metal(crestColor), 16);
+        sphere(
+            topRoot,
+
+            [
+                .055,
+                .055,
+                .02
+            ],
+
+            [
+                0,
+                2.95,
+                .60
+            ],
+
+            metal(crestColor),
+            20
+        );
+
     }
+
+}
+
+
+
+/* ============================================================
+   MALE CLASSIC WHITE SHIRT
+   LONG SLEEVE
+   ============================================================ */
+
+function createMaleClassicShirt(item) {
+
+    clearGroup(topRoot);
+
+    const mainColor   = state.colors[item.id] || item.colors?.[0] || "#f7f5ef";
+    const accentColor = item.colors?.[1] || "#d9e6ef";
+
+    const mainMat   = fabric(mainColor);
+    const accentMat = fabric(accentColor);
+    const buttonMat = metal("#eeeeee");
+
+    const shoulderX = 0.62;
+    const shoulderY = 2.94;
+    const elbowX    = shoulderX + 0.06;
+    const elbowY    = 2.52;
+    const handX     = shoulderX + 0.10;
+    const handY     = 2.08;
+
+    /* TORSO — ikuti body + 0.05 */
+    sphere(topRoot, [0.73, 0.75, 0.47], [0, 2.60, 0], mainMat);
+
+    /* HIP COVER */
+    sphere(topRoot, [0.53, 0.35, 0.45], [0, 2.12, 0], mainMat);
+
+    /* PELVIS */
+    sphere(topRoot, [0.47, 0.27, 0.41], [0, 1.94, 0], mainMat);
+
+    /* WAIST TAPER */
+    cylinder(topRoot, 0.72, 0.54, 0.55, [0, 2.35, 0], mainMat, 40);
+
+    /* SHOULDERS */
+    sphere(topRoot, [0.25, 0.25, 0.25], [-shoulderX, shoulderY, 0], mainMat);
+    sphere(topRoot, [0.25, 0.25, 0.25], [ shoulderX, shoulderY, 0], mainMat);
+
+    /* SLEEVES */
+    const armR = 0.165;
+
+    const upperMidX = (shoulderX + elbowX) / 2;
+    const upperMidY = (shoulderY + elbowY) / 2;
+    const upperLen  = Math.hypot(elbowX - shoulderX, shoulderY - elbowY) - armR * 2;
+    const upperAngle = Math.atan2(elbowX - shoulderX, shoulderY - elbowY);
+
+    const upperL = capsule(topRoot, armR, upperLen, [-upperMidX, upperMidY, 0], mainMat);
+    upperL.rotation.z = upperAngle;
+    const upperR = capsule(topRoot, armR, upperLen, [ upperMidX, upperMidY, 0], mainMat);
+    upperR.rotation.z = -upperAngle;
+
+    const lowerMidX = (elbowX + handX) / 2;
+    const lowerMidY = (elbowY + handY) / 2;
+    const lowerLen  = Math.hypot(handX - elbowX, elbowY - handY) - armR * 2;
+    const lowerAngle = Math.atan2(handX - elbowX, elbowY - handY);
+
+    const lowerL = capsule(topRoot, armR, lowerLen, [-lowerMidX, lowerMidY, 0], mainMat);
+    lowerL.rotation.z = lowerAngle;
+    const lowerR = capsule(topRoot, armR, lowerLen, [ lowerMidX, lowerMidY, 0], mainMat);
+    lowerR.rotation.z = -lowerAngle;
+
+    sphere(topRoot, [armR, armR, armR], [-elbowX, elbowY, 0], mainMat);
+    sphere(topRoot, [armR, armR, armR], [ elbowX, elbowY, 0], mainMat);
+
+    /* CUFFS */
+    const cuffT = 0.95;
+    const cuffX = elbowX + (handX - elbowX) * cuffT;
+    const cuffY = elbowY + (handY - elbowY) * cuffT;
+
+    const cuffL = cylinder(topRoot, 0.17, 0.17, 0.10, [-cuffX, cuffY, 0], accentMat, 32);
+    cuffL.rotation.z = lowerAngle;
+    const cuffR = cylinder(topRoot, 0.17, 0.17, 0.10, [ cuffX, cuffY, 0], accentMat, 32);
+    cuffR.rotation.z = -lowerAngle;
+
+    /* PLACKET & BUTTONS */
+    box(topRoot, [0.028, 1.30, 0.02], [0, 2.55, 0.48], accentMat);
+    [2.94, 2.74, 2.54, 2.34, 2.16].forEach(y => {
+        sphere(topRoot, [0.022, 0.022, 0.013], [0, y, 0.50], buttonMat, 16);
+    });
+
+    /* COLLAR */
+    const collarL = box(topRoot, [0.13, 0.26, 0.04], [-0.14, 3.06, 0.38], accentMat);
+    collarL.rotation.z = THREE.MathUtils.degToRad(-30);
+    const collarR = box(topRoot, [0.13, 0.26, 0.04], [ 0.14, 3.06, 0.38], accentMat);
+    collarR.rotation.z = THREE.MathUtils.degToRad(30);
+
+    torus(topRoot, 0.18, 0.03, [0, 3.12, 0.08], [Math.PI / 2, 0, 0], accentMat);
+
+    /* POCKET */
+    box(topRoot, [0.15, 0.12, 0.015], [-0.22, 2.70, 0.47], mainMat);
+    box(topRoot, [0.17, 0.012, 0.012], [-0.22, 2.77, 0.48], accentMat);
+
+    topRoot.traverse(child => {
+        if (child.isMesh) child.userData.clothing = "male-classic-shirt";
+    });
+}
+
+
+/* ============================================================
+   MALE BUSINESS SHIRT (FIXED — properly wraps the body)
+   ============================================================ */
+
+function createMaleBusinessShirt(item) {
+
+    clearGroup(topRoot);
+
+    const mainColor   = state.colors?.[item.id] || item.colors?.[0] || "#5F87A8";
+    const collarColor = item.colors?.[1] || "#4E7392";
+
+    const mainMat   = fabric(mainColor);
+    const collarMat = fabric(collarColor);
+    const buttonMat = getMaterial("#EAF0F5", { roughness: 0.55 });
+
+    const shoulderX = 0.62;
+    const shoulderY = 2.94;
+    const elbowX    = shoulderX + 0.06;
+    const elbowY    = 2.52;
+    const handX     = shoulderX + 0.10;
+    const handY     = 2.08;
+
+    /* ========================================================
+       TORSO — body + 0.05  (TIDAK ada cylinder waist!)
+       ======================================================== */
+
+    sphere(
+        topRoot,
+        [0.73, 0.75, 0.47],
+        [0, 2.60, 0],
+        mainMat
+    );
+
+    /* HIP COVER — body + 0.05 */
+    sphere(
+        topRoot,
+        [0.53, 0.35, 0.45],
+        [0, 2.12, 0],
+        mainMat
+    );
+
+    /* PELVIS COVER — body + 0.05 */
+    sphere(
+        topRoot,
+        [0.47, 0.27, 0.41],
+        [0, 1.94, 0],
+        mainMat
+    );
+
+    /* ❌ TIDAK ADA cylinder waist di sini. Torso sphere
+       + hip sphere sudah saling overlap, tidak perlu
+       penyambung. Cylinder penyambung itulah yang
+       sebelumnya membentuk "mangkuk". */
+
+    /* ========================================================
+       SHOULDERS
+       ======================================================== */
+
+    sphere(topRoot, [0.25, 0.25, 0.25], [-shoulderX, shoulderY, 0], mainMat);
+    sphere(topRoot, [0.25, 0.25, 0.25], [ shoulderX, shoulderY, 0], mainMat);
+
+    /* ========================================================
+       SLEEVES
+       ======================================================== */
+
+    const armR = 0.165;
+
+    const upperMidX = (shoulderX + elbowX) / 2;
+    const upperMidY = (shoulderY + elbowY) / 2;
+    const upperLen  = Math.hypot(elbowX - shoulderX, shoulderY - elbowY) - armR * 2;
+    const upperAngle = Math.atan2(elbowX - shoulderX, shoulderY - elbowY);
+
+    const upperL = capsule(topRoot, armR, upperLen, [-upperMidX, upperMidY, 0], mainMat);
+    upperL.rotation.z = upperAngle;
+    const upperR = capsule(topRoot, armR, upperLen, [ upperMidX, upperMidY, 0], mainMat);
+    upperR.rotation.z = -upperAngle;
+
+    const lowerMidX = (elbowX + handX) / 2;
+    const lowerMidY = (elbowY + handY) / 2;
+    const lowerLen  = Math.hypot(handX - elbowX, elbowY - handY) - armR * 2;
+    const lowerAngle = Math.atan2(handX - elbowX, elbowY - handY);
+
+    const lowerL = capsule(topRoot, armR, lowerLen, [-lowerMidX, lowerMidY, 0], mainMat);
+    lowerL.rotation.z = lowerAngle;
+    const lowerR = capsule(topRoot, armR, lowerLen, [ lowerMidX, lowerMidY, 0], mainMat);
+    lowerR.rotation.z = -lowerAngle;
+
+    sphere(topRoot, [armR, armR, armR], [-elbowX, elbowY, 0], mainMat);
+    sphere(topRoot, [armR, armR, armR], [ elbowX, elbowY, 0], mainMat);
+
+    /* CUFFS */
+    const cuffT = 0.95;
+    const cuffX = elbowX + (handX - elbowX) * cuffT;
+    const cuffY = elbowY + (handY - elbowY) * cuffT;
+
+    const cuffL = cylinder(topRoot, 0.17, 0.17, 0.10, [-cuffX, cuffY, 0], collarMat, 32);
+    cuffL.rotation.z = lowerAngle;
+    const cuffR = cylinder(topRoot, 0.17, 0.17, 0.10, [ cuffX, cuffY, 0], collarMat, 32);
+    cuffR.rotation.z = -lowerAngle;
+
+    /* PLACKET & BUTTONS */
+    box(topRoot, [0.028, 1.30, 0.02], [0, 2.55, 0.48], collarMat);
+
+    [2.94, 2.74, 2.54, 2.34, 2.16].forEach(y => {
+        sphere(topRoot, [0.022, 0.022, 0.013], [0, y, 0.50], buttonMat, 16);
+    });
+
+    /* COLLAR */
+    const collarL = box(topRoot, [0.13, 0.26, 0.04], [-0.14, 3.06, 0.38], collarMat);
+    collarL.rotation.z = THREE.MathUtils.degToRad(-30);
+
+    const collarR = box(topRoot, [0.13, 0.26, 0.04], [ 0.14, 3.06, 0.38], collarMat);
+    collarR.rotation.z = THREE.MathUtils.degToRad(30);
+
+    torus(topRoot, 0.18, 0.03, [0, 3.12, 0.08], [Math.PI / 2, 0, 0], collarMat);
+
+    /* POCKET */
+    box(topRoot, [0.15, 0.12, 0.015], [-0.22, 2.70, 0.47], mainMat);
+    box(topRoot, [0.17, 0.012, 0.012], [-0.22, 2.77, 0.48], collarMat);
+
+    topRoot.traverse(child => {
+        if (child.isMesh) child.userData.clothing = "male-business-shirt";
+    });
 }
 
 /* ============================================================
@@ -4394,27 +4244,95 @@ function createMaleKimonoTop(item) {
 
 function createTop(item) {
 
-    clearGroup(topRoot);
+    clearGroup(
+        topRoot
+    );
+
 
     if (!item) {
         return;
     }
 
-    if (MALE_KIMONO_TYPES.includes(item.type)) {
-        createMaleKimonoTop(item);
+
+    /* ========================================================
+       MALE BUSINESS SHIRTS
+       ======================================================== */
+
+    if (
+
+        state.gender === "male" &&
+
+        (
+            item.type === "businessBlue" ||
+            item.type === "executiveShirt"
+        )
+
+    ) {
+
+        createMaleBusinessShirt(
+            item
+        );
+
         return;
+
     }
+
+
+    /* ========================================================
+       MALE CLASSIC WHITE SHIRT
+       ======================================================== */
+
+    if (
+
+        state.gender === "male" &&
+
+        item.type === "shirt"
+
+    ) {
+
+        createMaleClassicShirt(
+            item
+        );
+
+        return;
+
+    }
+
+
+    /* ========================================================
+       MALE KIMONO / HAORI
+       ======================================================== */
+
+    if (
+        MALE_KIMONO_TYPES.includes(
+            item.type
+        )
+    ) {
+
+        createMaleKimonoTop(
+            item
+        );
+
+        return;
+
+    }
+
+
+    /* ========================================================
+       KODE CREATE TOP LAMA KAMU
+       ======================================================== */
+
 
     const color =
         state.colors[item.id] ||
         item.colors?.[0] ||
         "#ffffff";
 
+
     const mat =
         item.type === "satin"
             ? satin(color)
             : fabric(color);
-
 
     /*
      * TOP BASE
@@ -5061,10 +4979,44 @@ function createJacket(item) {
 
     const isSuit = ["executiveSuit", "greySuit", "doubleBreasted"].includes(item.type);
 
-    // BADAN — tetap sphere, TIDAK diubah dari versi yang sudah benar
-    sphere(jacketRoot, [.83, .79, .64], [0, 2.70, .045], mat);
+    /*
+     * BADAN — FIX: sebelumnya dua box() bertumpuk (kotak/persegi).
+     * Sekarang pakai sphere (torso) + cylinder (waist) yang
+     * mengikuti bentuk badan asli (lihat createBaseBody: torso
+     * sphere + hip sphere), diperbesar sedikit supaya membungkus
+     * badan tanpa kulit terlihat, tapi tidak kotak lagi.
+     */
 
-    // LENGAN — tetap pakai sudut natural, TIDAK diubah
+    const chestW      = isSuit ? .80 : .88;
+    const chestHeight = isSuit ? .86 : .92;
+    const chestDepth  = isSuit ? .58 : .64;
+
+    const waistW      = isSuit ? .70 : .80;
+    const waistDepth  = isSuit ? .54 : .60;
+
+    // TORSO — bulat, membungkus dada-punggung-bahu jadi satu bentuk
+    sphere(
+        jacketRoot,
+        [chestW, chestHeight, chestDepth],
+        [0, 2.68, .01],
+        mat
+    );
+
+    // WAIST — tirus menyambung ke bawah torso, menutup ke pinggul
+    cylinder(
+        jacketRoot,
+        waistW * .90,
+        waistW,
+        .48,
+        [0, 2.10, 0],
+        mat,
+        48
+    );
+
+    const frontZ = chestDepth;
+
+
+    // LENGAN — posisi tetap sama seperti badan asli, tidak diubah
     const arm = isSuit ? .23 : .245;
 
     const SHOULDER_X = .60, SHOULDER_Y = 3.02;
@@ -5086,52 +5038,66 @@ function createJacket(item) {
     cylinder(jacketRoot, .25, .25, .13, [-.85, 2.34, 0], mat);
     cylinder(jacketRoot, .25, .25, .13, [.85, 2.34, 0], mat);
 
+
     /*
-     * ===== DARI SINI DETAIL JAS DITAMBAHKAN =====
-     * Semua posisi Y disesuaikan ke pusat sphere badan (y=2.70)
-     * dan permukaan depannya (z≈.60-.66), bukan angka sembarangan.
+     * DETAIL DEPAN — posisi z sekarang pakai frontZ (=chestDepth)
+     * mengikuti permukaan sphere torso, bukan box.
      */
+
     if (isSuit) {
 
-        const shirtColor = "#f5f5f5";
-        const lapelColor = item.colors?.[1] || "#2d3544";
-        const tieColor = item.colors?.[2] || "#8a1f2b";
-        const buttonColor = item.colors?.[2] || "#c4cad3";
+        const shirtMat = fabric("#f5f5f5");
+        const lapelMat = satin(item.colors?.[1] || color);
+        const tieMat = satin(item.colors?.[2] || "#8a1f2b");
         const isDoubleBreasted = item.type === "doubleBreasted";
 
-        const texture = buildSuitFrontTexture(shirtColor, lapelColor, tieColor, buttonColor, isDoubleBreasted);
+        box(jacketRoot, [.28, 1.00, .04], [0, 2.85, frontZ + .02], shirtMat);
+        box(jacketRoot, [.09, .58, .045], [0, 2.78, frontZ + .05], tieMat);
+        box(jacketRoot, [.14, .10, .05], [0, 3.10, frontZ + .05], tieMat);
 
-        const planeGeo = new THREE.PlaneGeometry(.85, 1.28);
+        const leftLapel = box(jacketRoot, [.16, .68, .055], [-.24, 3.02, frontZ - .02], lapelMat);
+        leftLapel.rotation.z = -.32;
 
-        const planeMat = new THREE.MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-            side: THREE.DoubleSide
-        });
+        const rightLapel = box(jacketRoot, [.16, .68, .055], [.24, 3.02, frontZ - .02], lapelMat);
+        rightLapel.rotation.z = .32;
 
-        const plane = new THREE.Mesh(planeGeo, planeMat);
-        plane.position.set(0, 2.82, .70);
+        const buttonColor = item.colors?.[2] || "#c4cad3";
+        const buttonCount = isDoubleBreasted ? 3 : 2;
 
-        jacketRoot.add(plane);
+        for (let i = 0; i < buttonCount; i++) {
+
+            const y = 2.58 - i * .20;
+            const bz = frontZ + .06;
+
+            if (isDoubleBreasted) {
+                sphere(jacketRoot, [.04, .04, .03], [-.15, y, bz], metal(buttonColor), 16);
+                sphere(jacketRoot, [.04, .04, .03], [.15, y, bz], metal(buttonColor), 16);
+            } else {
+                sphere(jacketRoot, [.04, .04, .03], [.05, y, bz], metal(buttonColor), 16);
+            }
+        }
+
+        box(jacketRoot, [.13, .03, .03], [-.44, 2.90, frontZ], lapelMat);
+        box(jacketRoot, [.045, .06, .03], [-.44, 2.96, frontZ + .01], getMaterial("#ffffff"));
 
     } else if (item.type === "blazer" || item.type === "trench") {
 
         const lapelMat = satin(color);
 
-        const leftLapel = box(jacketRoot, [.16, .68, .055], [-.24, 3.02, .60], lapelMat);
+        const leftLapel = box(jacketRoot, [.16, .68, .055], [-.24, 3.02, frontZ - .02], lapelMat);
         leftLapel.rotation.z = -.32;
 
-        const rightLapel = box(jacketRoot, [.16, .68, .055], [.24, 3.02, .60], lapelMat);
+        const rightLapel = box(jacketRoot, [.16, .68, .055], [.24, 3.02, frontZ - .02], lapelMat);
         rightLapel.rotation.z = .32;
 
         for (let i = 0; i < 3; i++) {
-            sphere(jacketRoot, [.045, .045, .035], [0, 2.98 - i * .22, .69],
+            sphere(jacketRoot, [.045, .045, .035], [0, 2.98 - i * .22, frontZ + .05],
                 metal(item.type === "blazer" ? "#d3aa58" : "#ece7df"), 16);
         }
 
     } else if (item.type === "bomber" || item.type === "leather" || item.type === "denim") {
 
-        box(jacketRoot, [.035, .66, .035], [0, 2.72, .69],
+        box(jacketRoot, [.035, .66, .035], [0, 2.72, frontZ + .05],
             metal(item.type === "leather" ? "#c3a66a" : "#e7e2d9"));
     }
 
@@ -5139,7 +5105,6 @@ function createJacket(item) {
         box(jacketRoot, [1.15, .09, .68], [0, 2.35, .02], mat);
     }
 }
-
 const HAKAMA_TYPES = ["hakama", "hakamaModern", "hakamaCharcoal", "hakamaCrest"];
 
 function createHakamaBottom(item) {
@@ -5147,14 +5112,34 @@ function createHakamaBottom(item) {
     const color = state.colors[item.id] || item.colors?.[0] || "#101115";
     const mat = fabric(color);
 
-    // tali pinggang (himo)
-    box(bottomRoot, [.66, .10, .50], [0, 2.10, 0], satin(item.colors?.[1] || "#3a3a45"));
+    /*
+     * PELVIS FILL (NEW) — menutup penuh hip sphere skin dari
+     * createBaseBody() supaya tidak ada celah kulit di sisi
+     * kiri/kanan saat memakai hakama, terutama dikombinasikan
+     * dengan jaket/atasan yang torsonya tidak turun sampai
+     * area ini.
+     */
+    sphere(
+        bottomRoot,
+        [
+            (state.gender === "female" ? .68 : .63) * 1.15,
+            .46,
+            .52
+        ],
+        [0, 2.04, 0],
+        mat,
+        32
+    );
 
-    // panel lebar depan — ciri khas hakama, bukan dua kaki terpisah
-    box(bottomRoot, [1.05, 1.55, .30], [0, 1.35, .22], mat);
+    // tali pinggang (himo) — sedikit dilebarkan mengikuti pelvis fill
+    box(bottomRoot, [.74, .12, .56], [0, 2.10, 0], satin(item.colors?.[1] || "#3a3a45"));
 
-    // panel belakang sedikit lebih sempit
-    box(bottomRoot, [.95, 1.50, .26], [0, 1.32, -.18], mat);
+    // panel lebar depan — dilebarkan dari 1.05 -> 1.30 supaya
+    // menutup penuh lebar pinggul (termasuk pria, ±0.63*1.06)
+    box(bottomRoot, [1.30, 1.60, .34], [0, 1.35, .22], mat);
+
+    // panel belakang — dilebarkan dari .95 -> 1.20
+    box(bottomRoot, [1.20, 1.55, .30], [0, 1.32, -.18], mat);
 
     // lipatan vertikal (pleats)
     for (let i = -3; i <= 3; i++) {
@@ -5442,87 +5427,30 @@ function createBottom(item) {
 
 function createShoes(item) {
 
-    clearGroup(
-        shoeRoot
-    );
+    clearGroup(shoeRoot);
+    if (!item) return;
 
-    if (!item) {
-        return;
-    }
-
-    const color =
-        state.colors[item.id] ||
-        item.colors?.[0] ||
-        "#ffffff";
-
-    const mat =
-        fabric(color);
-
+    const color = state.colors[item.id] || item.colors?.[0] || "#ffffff";
+    const mat = fabric(color);
 
     function createOne(x) {
 
-        box(
-            shoeRoot,
-            [.48, .17, .76],
-            [x, .30, .13],
-            mat
-        );
+        box(shoeRoot, [0.34, 0.13, 0.55], [x, 0.26, 0.10], mat);
+        sphere(shoeRoot, [0.18, 0.09, 0.22], [x, 0.30, 0.30], mat);
 
-
-        sphere(
-            shoeRoot,
-            [.25, .13, .29],
-            [x, .34, .42],
-            mat
-        );
-
-
-        if (
-            item.type === "heels"
-        ) {
-
-            box(
-                shoeRoot,
-                [.12, .35, .12],
-                [x, .17, -.15],
-                metal(color)
-            );
+        if (item.type === "heels") {
+            box(shoeRoot, [0.09, 0.28, 0.09], [x, 0.14, -0.12], metal(color));
         }
-
-
-        if (
-            item.type === "boots"
-        ) {
-
-            capsule(
-                shoeRoot,
-                .22,
-                .38,
-                [x, .58, -.05],
-                mat
-            );
+        if (item.type === "boots") {
+            capsule(shoeRoot, 0.16, 0.28, [x, 0.48, -0.03], mat);
         }
-
-
-        if (
-            item.type === "sneaker"
-        ) {
-
-            box(
-                shoeRoot,
-                [.34, .06, .38],
-                [x, .43, .28],
-                getMaterial(
-                    "#ffffff"
-                )
-            );
+        if (item.type === "sneaker") {
+            box(shoeRoot, [0.25, 0.05, 0.28], [x, 0.36, 0.20], getMaterial("#ffffff"));
         }
     }
 
-
-    createOne(-.33);
-
-    createOne(.33);
+    createOne(-0.20);
+    createOne(0.20);
 }
 
 
@@ -7284,24 +7212,97 @@ function getItemGenderRestriction(item) {
         return null;
     }
 
+
+    /* ========================================================
+       EXPLICIT GENDER
+       ======================================================== */
+
     if (item.gender) {
         return item.gender;
     }
 
-    // NEW: bag & accessory umum (tas, kalung, ribbon, brooch, scarf)
-    // defaultnya feminin kecuali ditag "male" secara eksplisit —
-    // sama seperti aturan dress.
+
+    /* ========================================================
+       FEMALE-ONLY DRESSES
+       ======================================================== */
+
     if (
-        item.category === "dress" ||
+        item.category === "dress"
+    ) {
+        return "female";
+    }
+
+
+    /* ========================================================
+       LEGACY TOPS
+
+       Semua top lama tanpa gender dianggap female.
+
+       Male hanya memakai top yang memang
+       gender: "male".
+       ======================================================== */
+
+    if (
+        item.category === "top"
+    ) {
+        return "female";
+    }
+
+
+    /* ========================================================
+       LEGACY JACKETS
+
+       Jacket lama dianggap koleksi female/unisex lama.
+
+       Male gunakan jacket dengan gender: male.
+       ======================================================== */
+
+    if (
+        item.category === "jacket"
+    ) {
+        return "female";
+    }
+
+
+    /* ========================================================
+       FEMALE BOTTOMS
+       ======================================================== */
+
+    if (
+        item.type === "pleated" ||
+        item.type === "skirt"
+    ) {
+        return "female";
+    }
+
+
+    /* ========================================================
+       FEMALE SHOES
+       ======================================================== */
+
+    if (
+        item.type === "heels" ||
+        item.type === "sandals"
+    ) {
+        return "female";
+    }
+
+
+    /* ========================================================
+       FEMALE BAGS & ACCESSORIES
+       ======================================================== */
+
+    if (
         item.category === "bag" ||
         item.category === "accessory"
     ) {
         return "female";
     }
 
-    return null;
-}
 
+    return null;
+
+}
 
 /* ============================================================
    28. ITEM SELECTION
@@ -12587,10 +12588,49 @@ function createZoomUIIfMissing() {
     if (!host) {
         return;
     }
-    
+
 
     /*
-     * Jika HTML sudah punya zoom,
+     * FIX: sebelumnya cuma cek "[data-fashion-zoom]", jadi kalau
+     * kontrol zoom versi HTML asli (yang punya bar/slider vertikal
+     * di tengah) TIDAK memakai attribute itu, fungsi ini gagal
+     * mendeteksinya dan membuat SET KEDUA tombol zoom di atasnya —
+     * makanya muncul 5+5 tombol dobel seperti di screenshot.
+     *
+     * Sekarang deteksi diperluas: kalau ada elemen apa pun di
+     * dalam host yang kelihatan seperti kontrol zoom (id/class
+     * umum, atau slider/range), anggap sudah ada dan JANGAN buat
+     * kontrol baru lagi.
+     */
+
+    const existingZoomControl =
+        host.querySelector(
+            "[data-fashion-zoom], " +
+            ".fashion-runtime-zoom, " +
+            ".fashion-zoom-controls, " +
+            ".fashion-zoom, " +
+            "#fashionZoomControls, " +
+            "input[type='range'], " +
+            ".fashion-zoom-slider, " +
+            "[data-fashion-zoom-slider]"
+        );
+
+    if (existingZoomControl) {
+
+        /*
+         * Kontrol zoom (versi HTML dengan bar) sudah ada.
+         * Cukup pastikan event handler-nya jalan, tanpa
+         * membuat set tombol baru.
+         */
+
+        setupZoomButtons();
+
+        return;
+    }
+
+
+    /*
+     * Kalau HTML sudah punya zoom lain,
      * jangan membuat duplikat.
      */
 
@@ -12842,71 +12882,7 @@ function createGenderUIIfMissing() {
 
     setupGenderEvents();
 }
-
-/* =========================================================
-   SAFE DEFAULT COVERAGE
-   ========================================================= */
-
-function createDefaultCoverage() {
-
-    if (!bodyRoot) {
-        return;
-    }
-
-    /*
-     * Pakaian dasar putih.
-     *
-     * Tujuannya supaya ketika semua fashion item
-     * dihapus, avatar tidak terlihat seperti
-     * mannequin telanjang.
-     */
-
-    const material = fabric(
-        CONFIG.colors.white || "#ffffff"
-    );
-
-
-    /* -----------------------------------------------------
-       LOWER COVERAGE (sama untuk female & male)
-       ----------------------------------------------------- */
-
-    const lower = new THREE.Mesh(
-
-        new THREE.CapsuleGeometry(
-            0.43,
-            0.28,
-            8,
-            24
-        ),
-
-        material
-    );
-
-    lower.position.set(
-        0,
-        1.15,
-        0.01
-    );
-
-    lower.scale.set(
-        1.0,
-        0.75,
-        0.82
-    );
-
-    lower.castShadow = true;
-    lower.receiveShadow = true;
-
-    bodyRoot.add(lower);
-
-
-    /*
-     * NEW: FEMALE CHEST COVERAGE DIHAPUS TOTAL — sebelumnya
-     * ada sphere tambahan khusus wanita di sini yang mengikuti
-     * bentuk bust. Karena bust silhouette sudah dihapus di
-     * createBaseBody(), tambahan ini juga tidak diperlukan lagi.
-     */
-}
+    
 
 function createKimonoDress(item) {
 
